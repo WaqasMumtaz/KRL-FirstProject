@@ -1,25 +1,24 @@
 import React from 'react';
-import { StyleSheet, Text, View , Button,ScrollView,Dimensions } from 'react-native';
-
+import { StyleSheet, Text, View,Button,Dimensions} from 'react-native';
 const screenWidth=Dimensions.get('window').width;
 const screenHeight=Dimensions.get('window').height;
-class Details extends React.Component{
-  
+
+class Homescreen extends React.Component{
+  static navigationOptions = ({ navigation }) => {
+    return {
+       header: () => null
+    } 
+}
     render() {
-      const { navigate } = this.props.navigation;
-      
         return (
-          <ScrollView>
           <View style={styles.container}>
-            <Text style={styles.welcome}>Details Page</Text>
-            {/* <Button title='SignUp'/> */}
+            <Text style={styles.welcome}>Home Screen</Text>
           </View>
-          </ScrollView>
         );
       }
 }
 
-export default Details;
+export default Homescreen;
 
 const styles = StyleSheet.create({
   container: {

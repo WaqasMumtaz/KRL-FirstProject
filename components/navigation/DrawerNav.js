@@ -1,13 +1,15 @@
 import * as React from 'react';
 import {createDrawerNavigator,createAppContainer} from 'react-navigation';
-import Login from '../screens/Login';
-import Signup from '../screens/SignUp';
-import Dashboard from '../screens/Dashboard';
+import Options from '../screens/Options';
+// import Login from '../screens/Login';
+// import Signup from '../screens/SignUp';
+// import Dashboard from '../screens/Dashboard';
 
 const MainNavigator=  createDrawerNavigator({
-    Login: {screen: Login},
-    Signup:{screen:Signup},
-    Dashboard:{screen:Dashboard}
+    Options:{screen:Options}
+    // Login: {screen: Login},
+    // Signup:{screen:Signup},
+    // Dashboard:{screen:Dashboard}
   
     
   });

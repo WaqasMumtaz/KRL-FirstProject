@@ -3,24 +3,29 @@ import { StyleSheet, Text, View,Button,Dimensions} from 'react-native';
 const screenWidth=Dimensions.get('window').width;
 const screenHeight=Dimensions.get('window').height;
 
-class Dashboard extends React.Component{
+class Chatscreen extends React.Component{
+  static navigationOptions = ({ navigation }) => {
+    return {
+       header: () => null
+    } 
+}
     render() {
         return (
           <View style={styles.container}>
-            <Text style={styles.welcome}>Dashboard Page</Text>
+            <Text style={styles.welcome}>Chat Page</Text>
           </View>
         );
       }
 }
 
-export default Dashboard;
+export default Chatscreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ff7f50',
+    backgroundColor: 'green',
     width:screenWidth,
     height:screenHeight
   },
