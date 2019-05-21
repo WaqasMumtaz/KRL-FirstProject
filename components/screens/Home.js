@@ -1,18 +1,27 @@
 import React from 'react';
 import { StyleSheet, Text, View,Button,Dimensions} from 'react-native';
+//import console = require('console');
+//import console = require('console');
+import homeIcon from '../icons/home-active.png';
 const screenWidth=Dimensions.get('window').width;
 const screenHeight=Dimensions.get('window').height;
 
 class Homescreen extends React.Component{
-  static navigationOptions = ({ navigation }) => {
-    return {
-       header: () => null
-    } 
-}
+   constructor(props){
+     super(props);
+
+   }
+  //  onChangeTab=(value)=>{
+  //   console.log(value)
+  // }
     render() {
+      const {navigation}=this.props;
+      const routes=navigation;
+      console.log(routes);
         return (
           <View style={styles.container}>
             <Text style={styles.welcome}>Home Screen</Text>
+      
           </View>
         );
       }

@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   textLogin: {
     // fontSize: 25,
     fontFamily: "MontserratExtraBold",
-    fontSize:17,
+    fontSize:23,
     color: 'white',
     marginLeft: 20
   },
@@ -121,7 +121,8 @@ const styles = StyleSheet.create({
   },
   paraText: {
     fontFamily: 'MontserratLight',
-    color: 'white',
+    fontSize:23,
+    color: '#A6A6A6',
     marginLeft: 20,
     marginRight: 20
   },
@@ -137,6 +138,8 @@ const styles = StyleSheet.create({
   inputTexts: {
     flex: 1,
     fontFamily: 'MontserratLight',
+    Color: '#666666',
+    fontSize:23,
     marginLeft: 20,
     height: 40,
     borderColor: 'gray',
@@ -179,7 +182,8 @@ const styles = StyleSheet.create({
   },
   textsStyles: {
     fontFamily: 'MontserratLight',
-    color: 'white',
+    fontSize:23,
+    color: '#A6A6A6',
     marginLeft: 20
   },
   resetPassContainer: {
@@ -192,7 +196,7 @@ const styles = StyleSheet.create({
   },
   resetPasswrdTextStyle: {
     fontFamily: 'MontserratMedium',
-    color: '#FF7F50',
+    color: '#FF6200',
     marginLeft: 20
   },
   btnContainer:{

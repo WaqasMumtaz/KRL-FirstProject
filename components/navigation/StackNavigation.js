@@ -8,27 +8,27 @@ import Setupscreen from '../screens/SetUpScreen';
 //import PickerInput from '../../Picker/PickerInput';
 import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 import BottomTabe from '../navigation/tabNav';
+//import console = require('console');
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
 //import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
 
-
+console.log('hello World')
 
 
 const MainNavigator= createStackNavigator({
   //Setupscreen:{screen:Setupscreen}, 
+  BottomTabe:{screen:BottomTabe,
+    navigationOptions:{
+          //elevation:0,
+          header:null       
+    }
+  },
   Login: {screen: Login},
   Resetpassword:{screen:Resetpassword},
   Setupscreen:{screen:Setupscreen},
   ConfirmResetPassword:{screen:ConfirmResetPassword},
-  BottomTabe:{screen:BottomTabe,
-     navigationOptions:{
-       headerStyle:{
-           elevation:0,
-         }
-       
-     }
-   }
+  
   }
 );
 

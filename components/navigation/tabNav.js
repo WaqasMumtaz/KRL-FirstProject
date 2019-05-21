@@ -1,74 +1,108 @@
 import * as React from 'react';
 import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigation';
-//import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Image } from 'react-native';
 import Chatscreen from '../screens/Chat';
 import Reportscreen from '../screens/Reports';
 import Homescreen from '../screens/Home';
 import Options from '../screens/Options';
-//import { tsPropertySignature } from '@babel/types';
-//import DrawerNav from '../navigation/DrawerNav';
+
+const activeHome= <Image source={require('../icons/home-active.png')} style={{ width: 26, height: 26 }}/>
+const inactiveHome= <Image source={require('../icons/home-inactive.png')} style={{ width: 26, height: 26 }}/>
+const activeChat=<Image source={require('../icons/chat-active.png')} style={{ width: 26, height: 26 }}/>
+const inactiveChat=<Image source={require('../icons/chat-inactive.png')} style={{ width: 26, height: 26 }}/>
+const activeReports=<Image source={require('../icons/reports-active.png')} style={{ width: 26, height: 26 }}/>
+const inactiveReports=<Image source={require('../icons/reports-inactive.png')} style={{ width: 26, height: 26 }}/>
+const activeMore=<Image source={require('../icons/more-active.png')} style={{ width: 26, height: 26 }}/>
+const inactiveMore=<Image source={require('../icons/more-inactive.png')} style={{ width: 26, height: 26 }}/>
 
 const MainNavigator = createMaterialTopTabNavigator({
-  // Login: {screen: Login,
-  // navigationOptions:{
-  //   tabBarLabel:<Image source={require('../icons/login.png')} style={{width: 26, height: 26}}/>,
-  //   showIcon:true,  
-  // tabBarIcon: ({ tintColor }) => (  
-  //     <View>  
-  //         <Icon style={[{color: tintColor}]} size={25} name={'Login'}/>  
-  //     </View>),  
-  // }
-  // },
+  
   Homescreen: {
     screen: Homescreen,
-    navigationOptions: {
-      tabBarLabel: <Image source={require('../icons/home-active.png')} style={{ width: 26, height: 26 }} />,
-      showLabel: true,
-    
+    navigationOptions:{
+      tabBarIcon: (navigation) => {
+        //console.log('focused value--->', navigation.focused)
+        const forFocused =navigation.focused;
+        const renderHome = forFocused ? activeHome : inactiveHome;
+      return(
+        renderHome
+      )
+      }
+
+      
+  
     }
-  },
+ 
+  },    
   Chatscreen:{screen:Chatscreen,
   navigationOptions:{
-    tabBarLabel:<Image source={require('../icons/chat-active.png')} style={{ width: 26, height: 26 }}/>,
-    showIcon:true,
+    tabBarIcon:(navigation)=>{
+      const forFocused =navigation.focused;
+      const renderChat = forFocused ? activeChat : inactiveChat;
+      return(
+        renderChat
+      )
+    }
     
   }
+
 },
 Reportscreen: {
     screen: Reportscreen,
     navigationOptions: {
-      tabBarLabel: <Image source={require('../icons/reports-active.png')} style={{ width: 26, height: 26 }} />,
-      showIcon: true,
+      tabBarIcon:(navigation)=>{
+        const forFocused =navigation.focused;
+        const renderReports = forFocused ? activeReports : inactiveReports;
+        return(
+          renderReports
+        )
+      }
+    
     }
   },
   Options: {
     screen: Options,
     navigationOptions: {
-      header:{
-        style:{
+      headerStyle:{
           elevation:0
-        }
       },
-      tabBarLabel: <Image source={require('../icons/more-active.png')} style={{ width: 26, height: 26 }} /> ,
-      showIcon: true,
+      tabBarIcon:(navigation)=>{
+        const forFocused =navigation.focused;
+        const renderMore = forFocused ? activeMore : inactiveMore;
+        return(
+          renderMore
+        )
+      }
       
     },
-  }
+  },
+  // navigationOptions:({navigation})=>({
+  //   tabBarIcon:({focused,tintColor})=>{
+  //     const {routeName}=navigation.state;
+  //     let iconName;
+  //     if(routeName === Homescreen){
+  //         iconName = `ios-information-circle${focused ? '' : '-outline'}`;
+  //     }
+  //     return <Ionicons name={iconName} size={25} color={tintColor} />;
+  //   }
+  // })
+  
 },
   {
     tabBarPosition: 'bottom',
     swipeEnabled: true,
     animationEnabled: true,
     tabBarOptions: {
-      activeTintColor:'#FFF',
-      activeBackgroundColor: "#FFF",
-      //inactiveTintColor:'white',
-      inactiveTintColor: '#FFF',
-      //inactiveTintColor: 'white',
+      showIcon:true,
+      showLabel:false,
+      activeTintColor:'blue',
+      inactiveTintColor:'red',
       tabStyle:{
         backgroundColor:'white',
-        // inactiveBackgroundColor:'white'
+      },
+      style:{
+        inactiveHome:'white'
       },
 
       labelStyle: {

@@ -5,12 +5,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 const screenWidth=Dimensions.get('window').width;
 const screenHeight=Dimensions.get('window').height;
 class Options extends React.Component{
-//  static navigationOptions={
-//     headerStyle:{
-//         elevation:0,
-//       }
-    
-//   }
+ static navigationOptions={
+      
+  }
     render() {
       const { navigate } = this.props.navigation;
       
@@ -22,7 +19,7 @@ class Options extends React.Component{
                  <View style={styles.heading}><Text style={styles.headingText}>More Options</Text></View>
                  <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity><Text>Calories Limit</Text></TouchableOpacity></View>
                  <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity><Text>BMI Calculator</Text></TouchableOpacity></View>
-                 <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity><Text>Profile</Text></TouchableOpacity></View>
+                 <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity ><Text>Profile</Text></TouchableOpacity></View>
                  <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity><Text>Payment </Text></TouchableOpacity></View>
                  <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity><Text>Invoices</Text></TouchableOpacity></View>
                  <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity><Text>Settings</Text></TouchableOpacity></View>

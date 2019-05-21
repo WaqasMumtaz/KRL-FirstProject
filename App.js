@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import AppContainer from './components/navigation/StackNavigation';
+//import console = require('console');
 //import InputImgsScreen from './components/screens/InputImgs';
 //import {createBottomTabNavigator, createAppContainer} from 'react-navigation';
 //import {TabNavigator,createAppContainer} from 'react-navigation';
@@ -10,7 +11,16 @@ import AppContainer from './components/navigation/StackNavigation';
 
 
 class App extends Component {
+  constructor(props){
+    super(props);
+
+    this.state={
+      name:'waqas mumtaz'
+    }
+  }
  render() {
+   const {name}=this.state
+   console.log(name);
     return <AppContainer/>
   }
 }
