@@ -1,13 +1,22 @@
 import React from 'react';
 import {StyleSheet, Text, View,TouchableOpacity} from 'react-native';
+//import console = require('console');
 // const screenWidth=Dimensions.get('window').width;
 // const screenHeight=Dimensions.get('window').height;
 
 const CaloriesSetupBtn = (props)=>{
+  console.log(props)
   return(
       <View style={styles.mainContainer}>
               <View style={{flex:1}}></View>
-              <TouchableOpacity style={styles.btnStyle} onPress={()=>{props.goToHome('BottomTabe')}}><Text style={{fontFamily: "MontserratExtraBold",color:'white'}}>Set Up & Use App</Text></TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.btnStyle} 
+                onPress={props.onPress}>
+                  <Text 
+                    style={{fontFamily: "MontserratExtraBold",color:'#FFF'}} >
+                    {props.title}
+                  </Text>
+              </TouchableOpacity>
               <View style={{flex:1}}></View>
       </View>
   )
@@ -26,7 +35,7 @@ const styles = StyleSheet.create({
         flex:2,
         height:40,
         justifyContent:'center',
-        backgroundColor: '#FF7F50',
+        backgroundColor: '#FF6200',
         alignItems:'center',
         borderRadius:5
         

@@ -128,7 +128,7 @@ class Setupscreen extends React.Component {
                 </View>
                 <View style={styles.buttonContainer}>
                     {/* <Text style={styles.buttonContainerStyle}>This is Button</Text> */}
-                    <CaloriesSetupBtn goToHome={navigate}/>
+                    <CaloriesSetupBtn onPress={()=> {navigate('BottomTabe')}}  title='Set Up & Use App'/>
                 </View>
 
             </ScrollView>
