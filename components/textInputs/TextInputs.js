@@ -17,7 +17,9 @@ class TextInputs extends React.Component {
         //  const { navigate } = this.props.navigation;
   return (
     <View style={styles.mainContainer}>
-            <TextInput placeholder="waqas@gmail.com" style={styles.inputTextStyle} />
+            {/* <Text>{this.props.label}</Text>
+            <Text>{"\n"}</Text> */}
+            <TextInput placeholder={this.props.placeholder} style={styles.inputTextStyle} />
     </View>
   )
 }
@@ -32,18 +34,19 @@ const styles = StyleSheet.create({
     // height: screenHeight,
     flexDirection:'row',
     justifyContent:'center',
-    marginTop:4
+    // marginTop:4
 
   },
   inputTextStyle:{
     flex: 1,
     fontFamily: 'MontserratLight',
-    marginLeft: 20,
+    // marginLeft: 20,
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#1a1a1a',
     backgroundColor: '#808080',
-    borderWidth: 2,
-    marginRight: 20,
+    //backgroundColor: '#1a1a1a',
+    borderWidth: 1,
+    //marginRight: 20,
     paddingLeft: 16
   }
 })  

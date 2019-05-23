@@ -10,6 +10,8 @@ import Setupscreen from '../screens/SetUpScreen';
 //import PickerInput from '../../Picker/PickerInput';
 import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 import BottomTabe from '../navigation/tabNav';
+import Setupscreen1 from '../screens/SetUpScreen1';
+import LastSetUpScreen from '../screens/SetUpLastScreen';
 //import console = require('console');
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
 //import Resetpassword from '../screens/ResetPasswrd';
@@ -19,20 +21,21 @@ console.log('hello World')
 
 
 const MainNavigator= createStackNavigator({
-  //Setupscreen:{screen:Setupscreen},
+  LastSetUpScreen:{screen:LastSetUpScreen},
   Login: {screen: Login},
-  Signup:{screen:Signup}, 
-  Resetpassword:{screen:Resetpassword},
+  Signup:{screen:Signup},
+  Setupscreen1:{screen:Setupscreen1}, 
   Setupscreen:{screen:Setupscreen},
+  Resetpassword:{screen:Resetpassword},
   ConfirmResetPassword:{screen:ConfirmResetPassword},
   BottomTabe:{screen:BottomTabe},
   },
   {
-    headerMode: 'none',
-    mode: 'modal',
-    defaultNavigationOptions: {
-      gesturesEnabled: false,
-    },
+    // headerMode: 'none',
+    // mode: 'modal',
+    // defaultNavigationOptions: {
+    //   gesturesEnabled: false,
+    // },
     transitionConfig: () => ({
       transitionSpec: {
         duration: 750,

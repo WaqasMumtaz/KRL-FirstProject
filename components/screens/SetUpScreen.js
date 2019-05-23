@@ -110,14 +110,14 @@ class Setupscreen extends React.Component {
                         {/* <InputImgsScreen /> */}
                     </View>
                 </View>
-                <Text style={styles.textInputOneStyle}>BMI</Text>
-                <View style={styles.textInputOne}>
+                {/* <Text style={styles.textInputOneStyle}>BMI</Text> */}
+                {/* <View style={styles.textInputOne}> */}
                     {/* <TextInputs /> */}
-                    <TextInput placeholder="type BMI" style={styles.textInputStyle}/>
-                </View>
-                <Text style={styles.textInputTwoStyle}>Daily calories limit</Text>
+                    {/* <TextInput placeholder="type BMI" style={styles.textInputStyle}/> */}
+                {/* </View> */}
+                {/* <Text style={styles.textInputTwoStyle}>Daily calories limit</Text>
                 <View style={styles.textInputTwo}>
-                    {/* <TextInputs /> */}
+                    
                     <TextInput placeholder="type calories" style={styles.textInputStyle}/>
                 </View>
                 <View style={styles.lastParaGraph}>
@@ -125,10 +125,13 @@ class Setupscreen extends React.Component {
                     calculated by the app using your BMI. If your coach has set for you another limit ,
                     please enter it please enter it above.
                 </Text>
-                </View>
+                </View> */}
                 <View style={styles.buttonContainer}>
                     {/* <Text style={styles.buttonContainerStyle}>This is Button</Text> */}
-                    <CaloriesSetupBtn onPress={()=> {navigate('BottomTabe')}}  title='Set Up & Use App'/>
+                    <CaloriesSetupBtn  title='Last Step'/>
+                </View>
+                <View style={{flex:14}}>
+
                 </View>
 
             </ScrollView>
@@ -165,9 +168,11 @@ const styles = StyleSheet.create({
         //backgroundColor: 'black'
     },
     headingStyle: {
-        color: 'white',
-        marginLeft: 20,
         fontFamily: "MontserratExtraBold",
+         fontSize:20,
+         color: '#A6A6A6',
+        marginLeft: 20,
+        
     },
     paraGraph: {
         flex: 2,

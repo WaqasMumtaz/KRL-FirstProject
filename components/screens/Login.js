@@ -72,13 +72,13 @@ class Login extends React.Component {
           </TouchableOpacity>
           <View style={{ flex: 1 }}></View>
         </View>
-        <View style={{flex:2}}></View>
+        <View style={{ flex: 2 }}></View>
         <View style={styles.btnContainer}>
           <Text style={styles.accountText}>Don't have account?</Text>
-          <TouchableOpacity onPress={()=>{navigate('Signup')}}><Text style={styles.registerText}>Register here.</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => { navigate('Signup') }}><Text style={styles.registerText}>Register here.</Text></TouchableOpacity>
           {/* <SkipButton gotToSetUpScreen={navigate} /> */}
         </View>
-        <View style={{flex:3}}></View>
+        <View style={{ flex: 3 }}></View>
       </ScrollView>
 
 
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     width: screenWidth,
-    
+
     backgroundColor: '#000000'
 
   },
@@ -209,15 +209,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center'
   },
-  accountText:{
+  accountText: {
     // fontSize:23,
-    fontFamily:'MontserratLight',
-    color:'#A6A6A6'
+    fontFamily: 'MontserratLight',
+    color: '#A6A6A6'
   },
-  registerText:{
+  registerText: {
     // fontSize:23,
-    fontFamily:'MontserratMedium',
-    color:'#FF6200'
+    fontFamily: 'MontserratMedium',
+    color: '#FF6200'
   }
 
 

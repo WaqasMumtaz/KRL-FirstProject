@@ -2,6 +2,7 @@ import React from 'react';
 import { Alert, StyleSheet, Text, View, ScrollView, Button, TextInput, Dimensions, TouchableOpacity } from 'react-native';
 import { Image } from 'react-native';
 import CaloriesSetupBtn from '../buttons/setUpBtn'
+import { NavigationEvents } from 'react-navigation';
 const screenWidth = Dimensions.get('window').width;
 const { height } = Dimensions.get('window');
 
@@ -21,7 +22,8 @@ class Signup extends React.Component {
 
     // }
     render() {
-        const { goBack } = this.props.navigation;
+        // const { navigate }= this.props.navigation;
+        const { goBack ,navigate} = this.props.navigation;
 
         return (
 
@@ -63,7 +65,7 @@ class Signup extends React.Component {
                     </View>
                     <View style={styles.buttonContainer}>
                     
-                    <CaloriesSetupBtn  title='Create Account'/>
+                    <CaloriesSetupBtn  title='Create Account' onPress={()=>{navigate('Setupscreen1')}}/>
                      </View>
                      <View style={{flex:2}}></View>
                      <View style={styles.accountLinkContainer}>
