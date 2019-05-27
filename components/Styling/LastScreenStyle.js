@@ -1,26 +1,31 @@
 import React from 'react';
-import { Alert, StyleSheet,} from 'react-native';
+import { Alert, StyleSheet,Dimensions} from 'react-native';
+const screenWidth = Dimensions.get('window').width;
 
 const styles=StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'white',
-        marginHorizontal:20
+        //backgroundColor:'white',
+        marginHorizontal:20,
+        // width:screenWidth
     },
     headingContainer:{
-        flex:0.3,
-        backgroundColor:'skyblue',
+        flex:1,
+        //backgroundColor:'skyblue',
+        height:70
 
     },
     headingStyle:{
         fontSize: 20,
         fontFamily: "MontserratExtraBold",
-        color: '#A6A6A6',
+        // color: '#A6A6A6',
+         color: 'white',
+         opacity:0.65
     },
     paraContainer: {
-        flex: 0.25,
-        backgroundColor: 'pink',
-
+        flex: 1,
+       // backgroundColor: 'pink',
+         height:60
     },
     paraStyle: {
         fontFamily: 'MontserratLight',
@@ -28,33 +33,123 @@ const styles=StyleSheet.create({
         color: '#A6A6A6',
     },
     activityContainer:{
-        flex:0.3,
+        flex:1,
         justifyContent:'space-between',
-        backgroundColor:'gray',
-        flexDirection:'row'
+        //backgroundColor:'red',
+        flexDirection:'row',
+        marginTop:10
+        
     },
     scndActivity:{
         flex:0.5,
         justifyContent:'space-between',
-        backgroundColor:'purple',
-        flexDirection:'row'
+        //backgroundColor:'yellow',
+        flexDirection:'row',
+        marginTop:10,
+        height:120
     },
     macrosContainer:{
-        flex:2,
-        backgroundColor:'yellow'
+        flex:0.8,
+        backgroundColor:'black',
+        // borderColor:'gray',
+        borderWidth:5,
+        borderRadius:10,
+        flexDirection:'row',
+        flexWrap:'wrap',
+        alignItems:'center',
+        //opacity:0.3,
+        marginTop:10
     },
     btnContainer:{
         flex:1,
-        backgroundColor:'green'
+        marginTop:15
+        //backgroundColor:'green'
     },
     touchOpacityStyle:{
         borderWidth:2,
         height:100,
         width:150,
-        borderBottomColor:'red',
-        borderRadius:5
+        borderColor:'white',
+        backgroundColor:'white',
+        borderRadius:5,
+         opacity:0.3
+    },
+    headerTextStyle:{
+        paddingLeft:8,
+        paddingTop:8,
+        fontSize:15,
+        fontFamily: 'MontserratLight',
+        color: 'white',
+        opacity:0.8
+    },
+    textStyle:{
+        paddingLeft:8,
+        paddingTop:5,
+        fontFamily: 'MontserratLight',
+        color: 'white',
+        opacity:0.65
+    },
+    // textInputStyle:{
+    //       height: 80,
+    //       width:150,
+    //       backgroundColor:'white',
+    //       opacity:0.3
+
+          
+    // },
+    textInputOne:{
+          height: 80,
+          width:150,
+          flexWrap:'wrap',
+          paddingBottom:28,
+          borderTopLeftRadius:5,
+        //   borderTopRightRadius:20,
+          color: 'white',
+          backgroundColor:'white',
+        //   paddingRight:5,
+          opacity:0.3
+    },
+    textInputTwo:{
+        height: 80,
+          width:160,
+          //backgroundColor:'gray',
+          flexWrap:'wrap',
+          //marginLeft:10,
+          paddingBottom:28,
+          borderTopRightRadius:5,
+          backgroundColor:'white',
+          paddingLeft:15,
+          opacity:0.3
+    },
+    textInputThree:{
+        height: 80,
+          width:150,
+         // backgroundColor:'gray',
+          flexWrap:'wrap',
+          paddingBottom:28,
+          backgroundColor:'white',
+          borderBottomLeftRadius:5,
+          //paddingRight:5,
+          opacity:0.3
+    },
+    textInputFour:{
+         height: 80,
+          width:160,
+          //backgroundColor:'gray',
+          flexWrap:'wrap',
+          //marginLeft:10,
+          paddingBottom:28,
+          backgroundColor:'white',
+          borderBottomRightRadius:5,
+          paddingLeft:15,
+          opacity:0.3
+          
+    },
+    inputTextColor:{
+        color:'yellow',
+        opacity:1
+        
     }
-    
 })
 
 export default styles;

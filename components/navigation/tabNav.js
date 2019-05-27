@@ -29,8 +29,6 @@ const MainNavigator = createMaterialTopTabNavigator({
         renderHome
       )
       }
-
-      
   
     }
  
@@ -77,17 +75,7 @@ Reportscreen: {
       
     },
   },
-  // navigationOptions:({navigation})=>({
-  //   tabBarIcon:({focused,tintColor})=>{
-  //     const {routeName}=navigation.state;
-  //     let iconName;
-  //     if(routeName === Homescreen){
-  //         iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-  //     }
-  //     return <Ionicons name={iconName} size={25} color={tintColor} />;
-  //   }
-  // })
-  
+    
 },
   {
     tabBarPosition: 'bottom',
@@ -96,13 +84,15 @@ Reportscreen: {
     tabBarOptions: {
       showIcon:true,
       showLabel:false,
-      activeTintColor:'blue',
-      inactiveTintColor:'red',
+       //activeTintColor:'white',
+      // inactiveTintColor:'red',
       tabStyle:{
-        backgroundColor:'white',
+        backgroundColor:'#fff',
+      
       },
       style:{
-        inactiveHome:'white'
+        //inactiveHome:'#fff',
+        backgroundColor:'#fff'
       },
 
       labelStyle: {

@@ -12,23 +12,37 @@ import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 import BottomTabe from '../navigation/tabNav';
 import Setupscreen1 from '../screens/SetUpScreen1';
 import LastSetUpScreen from '../screens/SetUpLastScreen';
+import AddExercise from '../screens/AddExercise';
+//import Wheelspiner from '../Progress Wheel/Progress';
 //import console = require('console');
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
 //import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
 
-console.log('hello World')
+//console.log('hello World')
 
 
 const MainNavigator= createStackNavigator({
-  LastSetUpScreen:{screen:LastSetUpScreen},
-  Login: {screen: Login},
-  Signup:{screen:Signup},
-  Setupscreen1:{screen:Setupscreen1}, 
-  Setupscreen:{screen:Setupscreen},
-  Resetpassword:{screen:Resetpassword},
-  ConfirmResetPassword:{screen:ConfirmResetPassword},
-  BottomTabe:{screen:BottomTabe},
+  // Login: {screen: Login},
+  // Signup:{screen:Signup},
+  // Setupscreen1:{screen:Setupscreen1}, 
+  // Setupscreen:{screen:Setupscreen},
+  // LastSetUpScreen:{screen:LastSetUpScreen},
+  // Resetpassword:{screen:Resetpassword},
+  // ConfirmResetPassword:{screen:ConfirmResetPassword},
+  //Wheelspiner:{screen:Wheelspiner},
+  BottomTabe:{screen:BottomTabe,
+    navigationOptions:{
+      header:null
+    }
+  },
+   AddExercise:{screen:AddExercise,
+    navigationOptions:{
+      headerStyle:{
+        elevation:0
+      }
+    }
+  },
   },
   {
     // headerMode: 'none',

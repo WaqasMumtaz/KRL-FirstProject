@@ -217,7 +217,8 @@ const styles = StyleSheet.create({
   registerText: {
     // fontSize:23,
     fontFamily: 'MontserratMedium',
-    color: '#FF6200'
+    color: '#FF6200',
+    
   }
 
 

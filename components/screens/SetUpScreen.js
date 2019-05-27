@@ -9,21 +9,10 @@ const { height } = Dimensions.get('window');
 
 
 
-// <View style={styles.mainContainer}>
-//  <ScrollView style={{ flex: 1 }}
-//  contentContainerStyle={{ flexGrow: 1 }}
-//      scrollEnabled={scrollEnabled}
-//      onContentSizeChange={this.onContentSizeChange}> 
-{/* <View style={styles.childContainer}>
-        
-     </View>  */}
 
 
 
 
-
-//  </ScrollView> 
-// </View>
 class Setupscreen extends React.Component {
     static navigationOptions = () => ({
 
@@ -128,7 +117,7 @@ class Setupscreen extends React.Component {
                 </View> */}
                 <View style={styles.buttonContainer}>
                     {/* <Text style={styles.buttonContainerStyle}>This is Button</Text> */}
-                    <CaloriesSetupBtn  title='Last Step'/>
+                    <CaloriesSetupBtn  title='Last Step' onPress={()=>navigate('LastSetUpScreen')}/>
                 </View>
                 <View style={{flex:14}}>
 
