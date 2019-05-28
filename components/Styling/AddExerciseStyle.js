@@ -9,19 +9,21 @@ const styles =StyleSheet.create({
          width:screenWidth
      },
      childContainer:{
+         flex:1,
          marginHorizontal:20
      },
      headingContainer:{
-         height:'20%',
-         backgroundColor:'red'
+         flex:0.5,
+         height:'6%',
+         //backgroundColor:'red'
      },
      headingStyle:{
          fontSize:20,
          color:'black',
-         fontFaimly:'MontserratExtraBold'
+         fontFamily: "MontserratExtraBold",
      },
      arrowContainer:{
-        height:'10%',
+        flex:0.2,
         //backgroundColor:'red',
         flexDirection:'row',
         justifyContent:'center',
@@ -32,9 +34,36 @@ const styles =StyleSheet.create({
         width:15,
     },
     bodyContainer:{
+        flex:0.2,
+        //height:'7%',
+        marginTop:18,
+        //backgroundColor:'gray',
+        flexDirection:'row',
+        
+    },
+    
+    inputFieldStyle:{
         flex:1,
-        backgroundColor:'green'
+        //borderWidth:2,
+        height:40,
+        // borderColor:'black',
+        paddingLeft:16,
+         backgroundColor:'gray',
+        opacity:0.2
+    },
+    listsContainer:{
+        flex:1.5,
+        backgroundColor:'gray',
+        justifyContent:'space-evenly',
+        opacity:0.2,
+        // marginTop:10
+    },
+    listsTextStyle:{
+        fontFamily:'MontserratMedium',
+        color:'black',
+        opacity:1
     }
+
     
 })
 

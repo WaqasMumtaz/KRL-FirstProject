@@ -13,6 +13,7 @@ import BottomTabe from '../navigation/tabNav';
 import Setupscreen1 from '../screens/SetUpScreen1';
 import LastSetUpScreen from '../screens/SetUpLastScreen';
 import AddExercise from '../screens/AddExercise';
+import BriskScreen from '../screens/BriskScreen';
 //import Wheelspiner from '../Progress Wheel/Progress';
 //import console = require('console');
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
@@ -31,6 +32,7 @@ const MainNavigator= createStackNavigator({
   // Resetpassword:{screen:Resetpassword},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
   //Wheelspiner:{screen:Wheelspiner},
+  BriskScreen:{screen:BriskScreen},
   BottomTabe:{screen:BottomTabe,
     navigationOptions:{
       header:null
