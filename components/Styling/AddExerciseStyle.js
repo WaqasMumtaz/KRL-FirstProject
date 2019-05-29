@@ -62,6 +62,18 @@ const styles =StyleSheet.create({
         fontFamily:'MontserratMedium',
         color:'black',
         opacity:1
+    },
+    cardContainer:{
+        flex:1.5,
+        flexDirection:'row'
+    },
+    headerIconContainer:{
+        marginRight:25,
+        marginBottom:8
+    },
+    headerIcon:{
+        height:18,
+        width:18
     }
 
     

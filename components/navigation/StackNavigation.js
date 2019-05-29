@@ -32,7 +32,7 @@ const MainNavigator= createStackNavigator({
   // Resetpassword:{screen:Resetpassword},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
   //Wheelspiner:{screen:Wheelspiner},
-  BriskScreen:{screen:BriskScreen},
+  //BriskScreen:{screen:BriskScreen},
   BottomTabe:{screen:BottomTabe,
     navigationOptions:{
       header:null
@@ -41,8 +41,9 @@ const MainNavigator= createStackNavigator({
    AddExercise:{screen:AddExercise,
     navigationOptions:{
       headerStyle:{
-        elevation:0
+        elevation:0,
       }
+    
     }
   },
   },
