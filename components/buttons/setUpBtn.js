@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
       flexDirection:'row'      
     },
     btnStyle:{
-        flex:2,
+        flex:3,
         height:40,
         justifyContent:'center',
         backgroundColor: '#FF6200',

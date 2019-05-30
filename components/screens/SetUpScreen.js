@@ -54,7 +54,12 @@ class Setupscreen extends React.Component {
 
                     <View style={{ flex: 1, marginLeft: 20, marginRight: 16 }}>
                         <Text style={{ color: 'white', fontFamily: 'MontserratLight' }}>Height</Text>
-                        <InputImgsScreen />
+                        <InputImgsScreen iconMinus={require('../icons/minus.png')} 
+                        iconPlus={require('../icons/plus.png')} 
+                        style={styles.textInputStyleParent} 
+                        touchableOpacityOne={styles.touchableOpacityOne}
+                        touchableOpacityTwo={styles.touchableOpacityTwo}
+                        />
                     </View>
                     {/* <View><Text>Height</Text></View>      */}
                     <View style={{ flex: 1, marginRight: 20 }}>
@@ -70,12 +75,17 @@ class Setupscreen extends React.Component {
                     {/* <Text style={styles.inputFieldTwoStyle}>Input Fields Two</Text> */}
                     <View style={{ flex: 1, marginLeft: 20, marginRight: 16 }}>
                         <Text style={{ color: 'white', fontFamily: 'MontserratLight' }}>Current Weight</Text>
-                        <InputImgsScreen />
+                        <InputImgsScreen iconMinus={require('../icons/minus.png')}
+                         iconPlus={require('../icons/plus.png')}
+                          style={styles.textInputStyleParent} 
+                          touchableOpacityOne={styles.touchableOpacityOne}
+                          touchableOpacityTwo={styles.touchableOpacityTwo}
+                          />
                     </View>
                     {/* <View><Text>Height</Text></View>      */}
                     <View style={{ flex: 1, marginRight: 20 }}>
                         <Text style={{ color: 'white', fontFamily: 'MontserratLight' }}>Unit</Text>
-                        <Picker selectedValue={this.state.user} onValueChange={this.updateUser} style={styles.pickerStyle}>
+                        <Picker selectedValue={this.state.user} onValueChange={this.updateUser}>
                             <Picker.Item label="KG" value="kg" />
                             {/* <Picker.Item label = "" value = "centimeter" /> */}
                         </Picker>
@@ -87,7 +97,11 @@ class Setupscreen extends React.Component {
                     {/* <Text style={styles.inputFieldTwoStyle}>Input Fields Two</Text> */}
                     <View style={{ flex: 1, marginLeft: 20, marginRight: 16 }}>
                         <Text style={{ color: 'white', fontFamily: 'MontserratLight' }}>Goal Weight</Text>
-                        <InputImgsScreen />
+                        <InputImgsScreen iconMinus={require('../icons/minus.png')} iconPlus={require('../icons/plus.png')} 
+                        style={styles.textInputStyleParent}
+                        touchableOpacityOne={styles.touchableOpacityOne}
+                        touchableOpacityTwo={styles.touchableOpacityTwo}
+                        />
                     </View>
                     {/* <View><Text>Height</Text></View>      */}
                     <View style={{ flex: 1, marginRight: 20 }}>
@@ -273,5 +287,43 @@ const styles = StyleSheet.create({
         marginTop: 5,
         color: 'white',
         backgroundColor: 'gray'
-    }
+    },
+    textInputStyleParent:{
+        flex:1,
+        height: 40,
+        textAlign: 'center', 
+        backgroundColor: 'white',
+        opacity:0.3
+    },
+    touchableOpacityOne:{
+        flex: 1,
+        padding: 5,
+        marginVertical: 5,
+        backgroundColor:'gray',
+        paddingLeft:10,
+        height:40 ,
+        opacity:0.6
+        
+        
+    },
+    touchableOpacityTwo:{
+        flex: 1,
+        padding: 5, 
+        marginVertical: 5,
+        alignItems:'flex-end',
+        backgroundColor:'gray',
+        paddingRight:10,
+        marginRight:12,
+        height:40 ,
+        opacity:0.6
+    },
+    // touchableOpacityTwo:{
+    //     flex: 1,
+    //     // padding: 5, 
+    //     marginVertical: 5,
+    //     alignItems:'flex-end',
+    //     backgroundColor:'gray',
+    //     height:40 ,
+    //     opacity:0.6
+    // },
 })

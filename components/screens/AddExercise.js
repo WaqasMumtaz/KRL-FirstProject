@@ -5,19 +5,26 @@ import BriskScreen from '../screens/BriskScreen';
 import HighpacejoggingScreen from './HighPaceJogging';
 import Pushups from './PushUps';
 import Bicepcurls from './BicepCurls';
+//import console = require('console');
 const { height } = Dimensions.get('window');
 
+
 class AddExercise extends React.Component {
-    static navigationOptions = {
-        headerRight:(
-             <TouchableOpacity style={styles.headerIconContainer}><Image source={require('../icons/tick.png')} style={styles.headerIcon}/></TouchableOpacity>
-        ),
+    static navigationOptions =(navigation)=> {   
+        //const { params = {} } = navigation.state;
+        const {navigate} = navigation.navigation.navigate
+return{
+        headerRight:
+             <TouchableOpacity style={styles.headerIconContainer}>
+                 <Image source={require('../icons/tick.png')} style={styles.headerIcon}/>
+             </TouchableOpacity>,
+     
         headerStyle: {
            // backgroundColor: 'black'
            
           },
-        headerTintColor:'gray',
-          
+         headerTintColor:'gray',
+}    
 
     };
     constructor(props) {
@@ -30,8 +37,19 @@ class AddExercise extends React.Component {
                 pushups:false,
                 bicep:false,
                 iconShow:false,
+                logExercise:false,
         }
     }
+
+    exerciseLog=()=>{
+          this.setState({show:false, logExercise:true})
+    }    
+
+// componentDidMount(){
+//     this.props.navigation.setParams({exerciseLog:this.exerciseLog})
+// }
+
+
     showFields=()=>{
         this.setState({show:false,showCard:true})
     }
@@ -58,7 +76,7 @@ class AddExercise extends React.Component {
     }
 
     render() {
-           const {show,showCard,jogging,pushups,bicep}=this.state;
+           const {show,showCard,jogging,pushups,bicep,logExercise}=this.state;
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.childContainer}>
@@ -94,6 +112,10 @@ class AddExercise extends React.Component {
                     </View>}
                     {bicep && <View style={styles.cardContainer} >
                         <Bicepcurls backFunc={this.bicepToHome}/>
+                    </View>}
+
+                    {logExercise && <View style={styles.cardContainer} >
+                        <Bicepcurls />
                     </View>}
 
 

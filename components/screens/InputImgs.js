@@ -22,14 +22,14 @@ class InputImgsScreen extends React.Component {
                 {/* <View style={{ flexDirection: 'row', backgroundColor: 'white' }}> */}
                 {/* <View style={{ flex: 1,flexDirection:'row'}}></View> */}
                 {/* <View style={{ flex: 1.5, borderColor: 'gray', borderWidth: 1, flexDirection: 'row',borderRadius:2 ,backgroundColor:'gray'}}> */}
-                    <TouchableOpacity style={styles.touchableOpacityOne}>
-                        <Image source={require('../icons/minus.png')} style={styles.forImg} />
+                    <TouchableOpacity style={this.props.touchableOpacityOne}>
+                        <Image source={this.props.iconMinus} style={styles.forImg} />
                     </TouchableOpacity>
                     <View style={styles.textInputContainer }>
-                        <TextInput keyboardType = 'numeric' maxLength={3} placeholder='22' style={styles.textInputStyle} />
+                        <TextInput keyboardType = 'numeric' maxLength={3} placeholder='22' style={this.props.style} />
                     </View>
-                    <TouchableOpacity style={styles.touchableOpacityTwo}>
-                        <Image source={require('../icons/plus.png')} style={styles.forImg} />
+                    <TouchableOpacity style={this.props.touchableOpacityTwo}>
+                        <Image source={this.props.iconPlus} style={styles.forImg} />
                     </TouchableOpacity>
                 {/* </View> */}
                     
@@ -61,27 +61,33 @@ const styles = StyleSheet.create({
         padding: 5,
         marginVertical: 5,
         backgroundColor:'gray',
-        height:40 
+        height:40 ,
+        opacity:0.6
+        
+        
     },
     textInputContainer:{
         flex: 2, 
         justifyContent: 'center',
         flexDirection:'row',
         marginVertical:5,
-        borderRadius:2
+        //borderRadius:2
     },
-    textInputStyle:{
-        flex:1,
-        height: 40,
-        textAlign: 'center', 
-        backgroundColor: 'gray'
-    },
+    // textInputStyle:{
+    //     flex:1,
+    //     height: 40,
+    //     textAlign: 'center', 
+    //     backgroundColor: 'gray',
+        
+    // },
     touchableOpacityTwo:{
         flex: 1,
         padding: 5, 
         marginVertical: 5,
         alignItems:'flex-end',
         backgroundColor:'gray',
+        paddingRight:5,
+        marginRight:12,
         height:40 
     },
 })
