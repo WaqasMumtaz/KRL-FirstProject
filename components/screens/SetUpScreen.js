@@ -85,7 +85,7 @@ class Setupscreen extends React.Component {
                     {/* <View><Text>Height</Text></View>      */}
                     <View style={{ flex: 1, marginRight: 20 }}>
                         <Text style={{ color: 'white', fontFamily: 'MontserratLight' }}>Unit</Text>
-                        <Picker selectedValue={this.state.user} onValueChange={this.updateUser}>
+                        <Picker selectedValue={this.state.user} onValueChange={this.updateUser} style={styles.pickerStyle}>
                             <Picker.Item label="KG" value="kg" />
                             {/* <Picker.Item label = "" value = "centimeter" /> */}
                         </Picker>
@@ -131,7 +131,7 @@ class Setupscreen extends React.Component {
                 </View> */}
                 <View style={styles.buttonContainer}>
                     {/* <Text style={styles.buttonContainerStyle}>This is Button</Text> */}
-                    <CaloriesSetupBtn  title='Last Step' onPress={()=>navigate('LastSetUpScreen')}/>
+                    <CaloriesSetupBtn  title='Last Step' onPress={()=>navigate('LastSetUpScreen')} caloriesBtnStyle={styles.caloriesBtnStyle}/>
                 </View>
                 <View style={{flex:14}}>
 
@@ -282,11 +282,13 @@ const styles = StyleSheet.create({
 
     // },
     pickerStyle: {
-        width: 155,
+        width: 150,
         height: 40,
         marginTop: 5,
-        color: 'white',
-        backgroundColor: 'gray'
+        color: '#A6A6A6',
+        backgroundColor: 'white',
+        opacity:0.3
+
     },
     textInputStyleParent:{
         flex:1,
@@ -317,13 +319,12 @@ const styles = StyleSheet.create({
         height:40 ,
         opacity:0.6
     },
-    // touchableOpacityTwo:{
-    //     flex: 1,
-    //     // padding: 5, 
-    //     marginVertical: 5,
-    //     alignItems:'flex-end',
-    //     backgroundColor:'gray',
-    //     height:40 ,
-    //     opacity:0.6
-    // },
+    caloriesBtnStyle:{
+        flex:1,
+        height:40,
+        justifyContent:'center',
+        backgroundColor: '#FF6200',
+        alignItems:'center',
+        borderRadius:5
+      }
 })

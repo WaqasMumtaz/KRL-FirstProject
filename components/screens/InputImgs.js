@@ -22,13 +22,13 @@ class InputImgsScreen extends React.Component {
                 {/* <View style={{ flexDirection: 'row', backgroundColor: 'white' }}> */}
                 {/* <View style={{ flex: 1,flexDirection:'row'}}></View> */}
                 {/* <View style={{ flex: 1.5, borderColor: 'gray', borderWidth: 1, flexDirection: 'row',borderRadius:2 ,backgroundColor:'gray'}}> */}
-                    <TouchableOpacity style={this.props.touchableOpacityOne}>
+                    <TouchableOpacity style={this.props.touchableOpacityOne} activeOpacity={0.8}>
                         <Image source={this.props.iconMinus} style={styles.forImg} />
                     </TouchableOpacity>
                     <View style={styles.textInputContainer }>
                         <TextInput keyboardType = 'numeric' maxLength={3} placeholder='22' style={this.props.style} />
                     </View>
-                    <TouchableOpacity style={this.props.touchableOpacityTwo}>
+                    <TouchableOpacity style={this.props.touchableOpacityTwo} activeOpacity={0.8}>
                         <Image source={this.props.iconPlus} style={styles.forImg} />
                     </TouchableOpacity>
                 {/* </View> */}

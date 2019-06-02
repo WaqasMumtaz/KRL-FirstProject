@@ -37,7 +37,7 @@ class Homescreen extends React.Component{
                 <TouchableOpacity style={styles.cardThree} onPress={()=>navigate('Logweight')}>
                 <Image source={require('../icons/log-weight.png')} style={styles.imgsStyle}/> 
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.cardFive}>
+                  <TouchableOpacity style={styles.cardFive} onPress={()=>navigate('Macrocalculator')}>
                   <Image source={require('../icons/calc-macros.png')} style={styles.imgsStyle}/>
               </TouchableOpacity>
               </View>

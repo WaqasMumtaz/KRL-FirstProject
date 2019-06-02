@@ -32,7 +32,7 @@ class Logweight extends React.Component {
                              <TextInput placeholder="Enter today's weight here" placeholderTextColor="black" style={styles.inputTextStyle}/>
                              
                     </View>
-                    <CaloriesSetupBtn title="Save Today's Weight"/>
+                    <CaloriesSetupBtn title="Save Today's Weight" caloriesBtnStyle={styles.caloriesBtnStyle}/>
                    <View style={styles.weightListsContainer}>
                        <View style={styles.weightListOne}>
                        <Text style={styles.weightNumberStyle}>68 KG</Text>

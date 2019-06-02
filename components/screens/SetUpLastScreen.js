@@ -61,7 +61,7 @@ class LastSetUpScreen extends React.Component {
                         your coach has set another limit for you , please enter it above.
                     </Text>
                     <View style={styles.btnContainer}>
-                          <CaloriesSetupBtn title="Set Up & Use App" onPress={()=>navigate('BottomTabe')}/>
+                          <CaloriesSetupBtn title="Set Up & Use App" onPress={()=>navigate('BottomTabe')} caloriesBtnStyle={styles.caloriesBtnStyle}/>
                     </View>
                      
                 </View>

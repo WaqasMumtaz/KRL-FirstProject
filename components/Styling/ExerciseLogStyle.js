@@ -87,7 +87,8 @@ const styles =StyleSheet.create({
         marginLeft:10,
         color:'#a6a6a6',
         fontFamily:'MontserratLight'
-    }
+    },
+    
 })
 
 export default styles;

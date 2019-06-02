@@ -30,13 +30,13 @@ const MainNavigator= createStackNavigator({
   // Login: {screen: Login},
   // Signup:{screen:Signup},
   // Setupscreen1:{screen:Setupscreen1}, 
-   Setupscreen:{screen:Setupscreen},
+  // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen:{screen:LastSetUpScreen},
   // Resetpassword:{screen:Resetpassword},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
   //Wheelspiner:{screen:Wheelspiner},
   //BriskScreen:{screen:BriskScreen},
-  Macrocalculator:{screen:Macrocalculator},
+  
   BottomTabe:{screen:BottomTabe,
     navigationOptions:{
       header:null
@@ -66,6 +66,15 @@ const MainNavigator= createStackNavigator({
     
     }
   },
+  Macrocalculator:{screen:Macrocalculator,
+    navigationOptions:{
+      headerStyle:{
+        elevation:0,
+      }
+    
+    }
+  },
+
   },
 
 

@@ -10,7 +10,7 @@ const CaloriesSetupBtn = (props)=>{
       <View style={styles.mainContainer}>
               <View style={{flex:1}}></View>
               <TouchableOpacity 
-                style={styles.btnStyle} 
+                style={props.caloriesBtnStyle} 
                 onPress={props.onPress}>
                   <Text 
                     style={{fontFamily: "MontserratExtraBold",color:'#FFF'}} >

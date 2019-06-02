@@ -149,7 +149,15 @@ const styles=StyleSheet.create({
         color:'yellow',
         opacity:1
         
-    }
+    },
+    caloriesBtnStyle:{
+        flex:2,
+        height:40,
+        justifyContent:'center',
+        backgroundColor: '#FF6200',
+        alignItems:'center',
+        borderRadius:5
+      }
 })
 
 export default styles;

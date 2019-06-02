@@ -45,11 +45,6 @@ return{
           this.setState({show:false, logExercise:true})
     }    
 
-// componentDidMount(){
-//     this.props.navigation.setParams({exerciseLog:this.exerciseLog})
-// }
-
-
     showFields=()=>{
         this.setState({show:false,showCard:true})
     }

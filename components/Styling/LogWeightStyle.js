@@ -81,7 +81,15 @@ const styles =StyleSheet.create({
     weightTextStyle:{
         color:'#a6a6a6',
         fontFamily:'MontserratLight'
-    }
+    },
+    caloriesBtnStyle:{
+        flex:3,
+        height:40,
+        justifyContent:'center',
+        backgroundColor: '#FF6200',
+        alignItems:'center',
+        borderRadius:5
+      }
 
 
 })   

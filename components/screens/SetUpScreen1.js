@@ -47,7 +47,7 @@ class Setupscreen1 extends React.Component {
                           </View>
                         <View style={styles.btnContainer}>
                             {/* <Text>For Button</Text> */}
-                            <CaloriesSetupBtn title="Next Step" onPress={()=>{navigate('Setupscreen')}}/>
+                            <CaloriesSetupBtn title="Next Step" onPress={()=>{navigate('Setupscreen')}} caloriesBtnStyle={styles.caloriesBtnStyle}/>
                         </View>
 
                     </View>

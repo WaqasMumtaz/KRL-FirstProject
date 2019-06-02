@@ -90,7 +90,15 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20
 
-    }
+    },
+    caloriesBtnStyle:{
+        flex:2,
+        height:40,
+        justifyContent:'center',
+        backgroundColor: '#FF6200',
+        alignItems:'center',
+        borderRadius:5
+      }
 })
 
 export default styles;

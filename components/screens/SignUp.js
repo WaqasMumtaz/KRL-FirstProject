@@ -65,7 +65,7 @@ class Signup extends React.Component {
                     </View>
                     <View style={styles.buttonContainer}>
                     
-                    <CaloriesSetupBtn  title='Create Account' onPress={()=>{navigate('Setupscreen1')}}/>
+                    <CaloriesSetupBtn  title='Create Account' onPress={()=>{navigate('Setupscreen1')}} caloriesBtnStyle={styles.caloriesBtnStyle}/>
                      </View>
                      <View style={{flex:2}}></View>
                      <View style={styles.accountLinkContainer}>
@@ -182,6 +182,14 @@ const styles = StyleSheet.create({
         // fontSize:23,
         fontFamily:'MontserratMedium',
         color:'#FF6200'
+      },
+      caloriesBtnStyle:{
+        flex:2,
+        height:40,
+        justifyContent:'center',
+        backgroundColor: '#FF6200',
+        alignItems:'center',
+        borderRadius:5
       }
     
 })
