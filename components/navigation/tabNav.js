@@ -18,34 +18,34 @@ const inactiveMore=<Image source={require('../icons/more-inactive.png')} style={
 
 const MainNavigator = createMaterialTopTabNavigator({
   
-  Homescreen: {
-    screen: Homescreen,
-    navigationOptions:{
-      tabBarIcon: (navigation) => {
-        //console.log('focused value--->', navigation.focused)
-        const forFocused =navigation.focused;
-        const renderHome = forFocused ? activeHome : inactiveHome;
-      return(
-        renderHome
-      )
-      }
+//   Homescreen: {
+//     screen: Homescreen,
+//     navigationOptions:{
+//       tabBarIcon: (navigation) => {
+//         //console.log('focused value--->', navigation.focused)
+//         const forFocused =navigation.focused;
+//         const renderHome = forFocused ? activeHome : inactiveHome;
+//       return(
+//         renderHome
+//       )
+//       }
   
-    }
+//     }
  
-  },    
-  Chatscreen:{screen:Chatscreen,
-  navigationOptions:{
-    tabBarIcon:(navigation)=>{
-      const forFocused =navigation.focused;
-      const renderChat = forFocused ? activeChat : inactiveChat;
-      return(
-        renderChat
-      )
-    }
+//   },    
+//   Chatscreen:{screen:Chatscreen,
+//   navigationOptions:{
+//     tabBarIcon:(navigation)=>{
+//       const forFocused =navigation.focused;
+//       const renderChat = forFocused ? activeChat : inactiveChat;
+//       return(
+//         renderChat
+//       )
+//     }
     
-  }
+//   }
 
-},
+// },
 Reportscreen: {
     screen: Reportscreen,
     navigationOptions: {

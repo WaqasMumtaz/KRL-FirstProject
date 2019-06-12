@@ -17,6 +17,7 @@ import BriskScreen from '../screens/BriskScreen';
 import Exerciselog from '../screens/ExerciseLog';
 import Logweight from '../screens/LogWeight';
 import Macrocalculator from '../screens/MacroCalculator';
+ import chartScreen from '../BarChart/BarChart';
 //import Wheelspiner from '../Progress Wheel/Progress';
 //import console = require('console');
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
@@ -36,7 +37,7 @@ const MainNavigator= createStackNavigator({
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
   //Wheelspiner:{screen:Wheelspiner},
   //BriskScreen:{screen:BriskScreen},
-  
+   chartScreen:{screen:chartScreen},
   BottomTabe:{screen:BottomTabe,
     navigationOptions:{
       header:null
