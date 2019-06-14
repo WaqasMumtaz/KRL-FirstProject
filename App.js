@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import AppContainer from './components/navigation/StackNavigation';
+import ChartScreen from './components/BarChart/BarChart';
 //import console = require('console');
 //import InputImgsScreen from './components/screens/InputImgs';
 //import {createBottomTabNavigator, createAppContainer} from 'react-navigation';

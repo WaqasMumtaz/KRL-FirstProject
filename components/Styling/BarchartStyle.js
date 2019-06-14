@@ -5,6 +5,8 @@ const screenWidth = Dimensions.get('window').width;
 const styles =StyleSheet.create({
      mainContainer:{
          flex:1,
+         justifyContent:'center',
+         alignItems:'center'
          //backgroundColor:'red'
          //width:screenWidth
          

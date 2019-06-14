@@ -1,40 +1,63 @@
 import React from 'react';
-import { StyleSheet, Text, View,ScrollView,Button,Dimensions,Image,TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Button, Dimensions, Image, TouchableOpacity, animation } from 'react-native';
 import styles from '../Styling/BarchartStyle';
-import BarChart from 'react-native-charts';
-//import PropTypes from 'prop-types';
+import { BarChart } from 'react-native-charts';
 
-class chartScreen extends React.Component{
- constructor(props){
-     super(props);
+class ChartScreen extends React.Component {
+  constructor(props) {
+    super(props);
 
-     this.state={
+    this.state = {
 
-     }
- }
- render(){
-     return(
-         <View style={styles.mainContainer}>
-             <BarChart 
-             dataSets={[
-                {
-                    fillColor:'#FF6200',
-                    data:[
-                        {value:15},
-                        {value:18},
-                        {value:14},
-                        {value:13}
+    };
+  }
+  render() {
+    return (
+      <View style={styles.mainContainer}>
+
+
+        <BarChart
+          dataSets={[
+            {
+              fillColor: '#FF6200',
+              data: [
+                { value: 6 },
+                { value: 0 },
+              ]
+            },
+            {
+              fillColor: '#FF6200',
+              data: [
+                { value: 0 },
+                // { value: 0 },
+              ]
+            },
+            {
+              fillColor: '#a6a6a6',
+              
+              data: [
+                { value: 6,
             
-                    ]
-                }
-            ]}
+                },
+              ]
+            },
+          ]}
+          graduation={1}
+          horizontal={false}
+          showGrid={true}
+          barSpacing={8}
+          style={{
+            height: 90,
+            margin: 15,
+            width: 140,
             
-             
-             />
-         </View>
-     )
- }
+          }} />
+
+
+      </View>
+    )
+  }
 
 }
 
-export default chartScreen;
+export default ChartScreen;

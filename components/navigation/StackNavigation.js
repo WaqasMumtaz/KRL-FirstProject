@@ -17,7 +17,8 @@ import BriskScreen from '../screens/BriskScreen';
 import Exerciselog from '../screens/ExerciseLog';
 import Logweight from '../screens/LogWeight';
 import Macrocalculator from '../screens/MacroCalculator';
- import chartScreen from '../BarChart/BarChart';
+import BMICalculator from '../screens/CalculateBMI';
+//import ChartScreen from '../BarChart/BarChart';
 //import Wheelspiner from '../Progress Wheel/Progress';
 //import console = require('console');
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
@@ -37,7 +38,8 @@ const MainNavigator= createStackNavigator({
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
   //Wheelspiner:{screen:Wheelspiner},
   //BriskScreen:{screen:BriskScreen},
-   chartScreen:{screen:chartScreen},
+  //ChartScreen:{screen:ChartScreen},
+  
   BottomTabe:{screen:BottomTabe,
     navigationOptions:{
       header:null
@@ -68,6 +70,14 @@ const MainNavigator= createStackNavigator({
     }
   },
   Macrocalculator:{screen:Macrocalculator,
+    navigationOptions:{
+      headerStyle:{
+        elevation:0,
+      }
+    
+    }
+  },
+  BMICalculator:{screen:BMICalculator,
     navigationOptions:{
       headerStyle:{
         elevation:0,
