@@ -2,8 +2,11 @@ import React from 'react';
 import { Alert, StyleSheet, Text, View, ScrollView, Button, TextInput, Dimensions, TouchableOpacity } from 'react-native';
 import { Image } from 'react-native';
 import CaloriesSetupBtn from '../buttons/setUpBtn'
-import { NavigationEvents } from 'react-navigation';
-const screenWidth = Dimensions.get('window').width;
+//import { NavigationEvents } from 'react-navigation';
+import styles from '../Styling/SignUpStyle';
+import HttpUtilsFile from '../Services/HttpUtils';
+console.log(HttpUtilsFile);
+// const screenWidth = Dimensions.get('window').width;
 const { height } = Dimensions.get('window');
 
 class Signup extends React.Component {
@@ -14,17 +17,145 @@ class Signup extends React.Component {
         super(props);
 
         this.state = {
-            screenHeight: 0,
+            name:'',
+            nameValidate:true,
+            email:'',
+            emailValidate:true,
+            mobile:'',
+            mobileValidate:true,
+            newPasswrd:'',
+            passwrdValidate:true,
+            cnfrmPasswrd:'',
+            cnfrmPasswrdValidate:true,
+            psswrdInstruction:false,
+            passNotMatch:false
         }
     }
-    //   onContentSizeChange = (contentHeight, contentWidth) => {
-    //     this.setState({ screenHeight: contentHeight })
 
-    // }
+    signUpFunction= async ()=>{
+        const {name,email,mobile,newPasswrd,cnfrmPasswrd,nameValidate,emailValidate,mobileValidate,passwrdValidate,cnfrmPasswrdValidate}=this.state;
+        if(name ===''|| email ===''|| mobile ===''|| newPasswrd ===''|| cnfrmPasswrd ===''){
+           alert('Please Fill All Fields');
+        }
+        else if(newPasswrd !== cnfrmPasswrd){
+              this.setState({
+                passNotMatch:true
+              }) 
+            if(newPasswrd === cnfrmPasswrd){
+                this.setState({
+                    passNotMatch:false
+                  })
+            } 
+
+        }
+        // else if(newPasswrd === cnfrmPasswrd){
+        //     this.setState({
+        //         passNotMatch:false
+        //       })
+        // }
+        else if (nameValidate !== true || emailValidate !== true || mobileValidate !== true || passwrdValidate !== true || cnfrmPasswrdValidate !== true){
+               alert('Please Enter Correct Field')
+        }
+        else {
+            const userObj ={
+                name:name,
+                email:email,
+                mobileNo:mobile,
+                password:newPasswrd
+            }
+            console.log(userObj)
+           try {
+            let dataUser = await HttpUtilsFile.post('signup',userObj)
+            console.log(dataUser)
+           } catch (error){
+               console.log(error);
+           }
+           
+        }
+    }
+    checkValidateFunc=(text, type)=>{
+      let alpha=/^[a-zA-Z]+$/;
+      let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+      let mobileNum=/^[0-9]+$/;
+      let passwrd=/^[A-Za-z]\w{7,14}$/;
+      if(type === 'username'){
+          if(alpha.test(text)){
+           this.setState({
+               nameValidate:true,
+           })
+          }
+          else {
+              this.setState({
+                  nameValidate:false
+              })
+          }
+      }
+      else if(type === 'email'){
+        if(reg.test(text)){
+            this.setState({
+                emailValidate:true,
+            })
+           }
+           else {
+               this.setState({
+                   emailValidate:false
+               })
+           }
+      }
+      else if(type === 'mobile'){
+        if(mobileNum.test(text)){
+            this.setState({
+                mobileValidate:true,
+            })
+           }
+           else {
+               this.setState({
+                   mobileValidate:false
+               })
+           }
+      }
+      else if(type === 'password'){
+          if(passwrd.test(text)){
+              this.setState({
+                  passwrdValidate:true
+              })
+          }
+          else {
+              this.setState({
+                  passwrdValidate:false
+              })
+          }
+      }
+      else if(type === 'confirm password'){
+        if(passwrd.test(text)){
+            this.setState({
+                cnfrmPasswrdValidate:true
+            })
+        }
+        else {
+            this.setState({
+                cnfrmPasswrdValidate:false
+            })
+        }
+
+    }
+
+
+
+    }
+    
+    forFocus=()=>{
+     this.setState({psswrdInstruction:true})
+    }
+    forBlur=()=>{
+        this.setState({psswrdInstruction:false})
+    }
+    
     render() {
-        // const { navigate }= this.props.navigation;
+        
         const { goBack ,navigate} = this.props.navigation;
-
+        const { name,email,mobile,newPasswrd,cnfrmPasswrd,psswrdInstruction,passNotMatch}=this.state;
+        // console.log('New Pass===>>>',newPasswrd , 'Confrm Pass===>>>', cnfrmPasswrd);
         return (
 
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
@@ -44,28 +175,83 @@ class Signup extends React.Component {
                  </Text>
                     </View>
                     {/* <View style={{ flex: 0.2 }}></View> */}
-                    <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                        <Text style={styles.textsStyles}>Email or phone</Text>
+                    <View style={{ flexDirection: 'row', marginVertical:8}}>
+                        <Text style={styles.textsStyles}>Name</Text>
                     </View>
                     <View style={styles.inputFields}>
-                        <TextInput keyboardType='email-address' placeholder="waqas@gmail.com" style={styles.inputTexts} />
+                        <TextInput onChangeText={text => {this.checkValidateFunc(text, 'username'),this.setState({name:text})}} 
+                        placeholder="Name" 
+                        placeholderTextColor="#A6A6A6"
+                        value={name}
+                        style={[styles.inputTexts,!this.state.nameValidate? styles.errorInput:null]} />
+                    </View>
+                    <View style={{ flexDirection: 'row', marginVertical:8 }}>
+                        <Text style={styles.textsStyles}>Email</Text>
+                    </View>
+                    <View style={styles.inputFields}>
+                        <TextInput onChangeText={text => {this.checkValidateFunc(text, 'email'),this.setState({email:text})}} 
+                        keyboardType='email-address' placeholder="waqas@gmail.com"
+                         placeholderTextColor="#A6A6A6" 
+                         autoCapitalize="none" 
+                         autoCorrect={false}
+                         value={email}
+                         style={[styles.inputTexts,!this.state.emailValidate ? styles.errorInput:null]} 
+                         />
+                    </View>
+                    <View style={{ flexDirection: 'row', marginVertical:8 }}>
+                        <Text style={styles.textsStyles}>Mobile</Text>
+                    </View>
+                    <View style={styles.inputFields}>
+                        <TextInput onChangeText={text => {this.checkValidateFunc(text, 'mobile'),this.setState({mobile:text})}} 
+                        keyboardType='phone-pad'
+                        placeholder="+92-333-444444444" 
+                        placeholderTextColor="#A6A6A6"
+                        value={mobile} 
+                        style={[styles.inputTexts,!this.state.mobileValidate ? styles.errorInput:null]} 
+                        />
                     </View>
                     {/* <View style={{ flex: 0.5 }}></View> */}
-                    <View style={{ flexDirection: 'row',  marginBottom: 10 }}>
+                    <View style={{ flexDirection: 'row',  marginVertical:8 }}>
                         <Text style={styles.textsStyles}>New Password</Text>
                     </View>
                     <View style={styles.inputFields}>
-                        <TextInput secureTextEntry={true} placeholder="password" style={styles.inputTexts} />
+                        <TextInput onChangeText={text => {this.checkValidateFunc(text, 'password'),this.setState({newPasswrd:text})}}
+                         secureTextEntry={true}
+                        placeholder="new password" 
+                        placeholderTextColor="#A6A6A6" 
+                        style={[styles.inputTexts,!this.state.passwrdValidate ? styles.errorInput:null]} 
+                        onFocus={this.forFocus}
+                        onBlur={this.forBlur}
+                        />
                     </View>
-                    <View style={{ flexDirection: 'row',  marginBottom: 10 }}>
+                   {psswrdInstruction && <View style={styles.passwrdInstructionContainer}>
+                         <Text style={styles.instructionStyle}>
+                         Input Password and Submit [7 to 15 characters which contain only characters,
+                          numeric digits, underscore and first character must be a letter]
+                         </Text>
+                    </View>}
+                    <View style={{ flexDirection: 'row',  marginVertical:8 }}>
                         <Text style={styles.textsStyles}>Confirm New Password</Text>
                     </View>
                     <View style={styles.inputFields}>
-                        <TextInput secureTextEntry={true} placeholder="password" style={styles.inputTexts} />
+                        <TextInput onChangeText={text => {this.checkValidateFunc(text, 'confirm password'),
+                        this.setState({cnfrmPasswrd:text})}} 
+                        secureTextEntry={true}
+                        placeholder="confirm password" 
+                        placeholderTextColor="#A6A6A6" 
+                        style={[styles.inputTexts,!this.state.cnfrmPasswrdValidate ? styles.errorInput:null]}
+                        />
                     </View>
+                    {passNotMatch &&<View style={styles.passNotMatchContainer}>
+                       <Text style={styles.passNotMatchStyle}>
+                          Password Not Match
+                       </Text>
+                    </View>}
                     <View style={styles.buttonContainer}>
-                    
-                    <CaloriesSetupBtn  title='Create Account' onPress={()=>{navigate('Setupscreen1')}} caloriesBtnStyle={styles.caloriesBtnStyle}/>
+                    <CaloriesSetupBtn  title='Create Account' 
+                    onPress={this.signUpFunction} 
+                    caloriesBtnStyle={styles.caloriesBtnStyle}
+                    />
                      </View>
                      <View style={{flex:2}}></View>
                      <View style={styles.accountLinkContainer}>
@@ -86,110 +272,3 @@ class Signup extends React.Component {
 export default Signup;
 
 
-const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1,
-        //backgroundColor: 'red',
-        marginLeft: 20,
-        marginRight: 20
-    },
-    signUpTextContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        marginTop:10
-    },
-    signUpText: {
-        fontFamily: "MontserratExtraBold",
-         fontSize:20,
-        color: '#A6A6A6',
-    },
-    logoContainer: {
-        flex: 1,
-        //backgroundColor:'red',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 10
-    },
-    forImages: {
-        flex: 1,
-        height: 100,
-        width: 120,
-        alignSelf: 'stretch',
-        // marginBottom: 4
-    },
-    paraContainer: {
-        flex: 1,
-        //backgroundColor:'blue',
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-    
-      },
-      paraText: {
-        fontFamily: 'MontserratLight',
-        // fontSize: 23,
-        color: '#A6A6A6',
-        // marginLeft: 20,
-        // marginRight: 20
-      },
-    
-      inputFields: {
-        flex: 1,
-        //backgroundColor:'gray',
-        flexDirection: 'row',
-        justifyContent: 'center',
-    
-    
-      },
-      inputTexts: {
-        flex: 1,
-        fontFamily: 'MontserratLight',
-        color: '#666666',
-        // fontSize: 23,
-        //marginLeft: 20,
-        height: 40,
-        borderColor: 'gray',
-        backgroundColor: '#808080',
-        borderWidth: 2,
-        //marginRight: 20,
-        paddingLeft: 16
-      },
-      textsStyles: {
-        fontFamily: 'MontserratLight',
-        // fontSize: 23,
-        color: '#A6A6A6',
-        // marginLeft: 20
-      },
-      buttonContainer:{
-        flex:2,
-        marginTop:10
-    },
-      accountLinkContainer:{
-          flex:1,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          marginTop:20,
-          //backgroundColor:'white',
-          //alignItems:'center'
-        
-      },
-      
-      accountText:{
-        // fontSize:23,
-        fontFamily:'MontserratLight',
-        color:'#A6A6A6'
-      },
-      registerText:{
-        // fontSize:23,
-        fontFamily:'MontserratMedium',
-        color:'#FF6200'
-      },
-      caloriesBtnStyle:{
-        flex:2,
-        height:40,
-        justifyContent:'center',
-        backgroundColor: '#FF6200',
-        alignItems:'center',
-        borderRadius:5
-      }
-    
-})

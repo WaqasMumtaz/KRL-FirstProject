@@ -1,6 +1,6 @@
 import { AsyncStorage } from '@callstack/async-storage'
 
-const BASE_URL = 'http://localhost:8000/api';
+const BASE_URL = 'https://getfit-server.herokuapp.com';
 // const BASE_URL = 'https://pakjazba.com/api';
  //const BASE_URL = 'https://pure-hollows-17968.herokuapp.com/api';
 
@@ -50,7 +50,7 @@ const hitEndpoint = (method, endpoint, token, body) => {
     });
 }
 
-export const HttpUtils = {
+ const HttpUtilsFile = {
     get: (endpoint, token) => hitEndpoint('GET', endpoint, token),
     delete: (endpoint, token) => hitEndpoint('DELETE', endpoint, token),
     post: (endpoint, data, token) => {
@@ -62,3 +62,5 @@ export const HttpUtils = {
         return hitEndpoint('PUT', endpoint, token, body)
     }
 }
+
+export default HttpUtilsFile;

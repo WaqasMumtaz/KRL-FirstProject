@@ -5,7 +5,7 @@ import {StyleSheet, Text, View,TouchableOpacity} from 'react-native';
 // const screenHeight=Dimensions.get('window').height;
 
 const CaloriesSetupBtn = (props)=>{
-  console.log(props)
+  //console.log(props)
   return(
       <View style={styles.mainContainer}>
               <View style={{flex:1}}></View>

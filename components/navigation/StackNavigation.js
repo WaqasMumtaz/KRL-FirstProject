@@ -30,7 +30,7 @@ import BMICalculator from '../screens/CalculateBMI';
 
 const MainNavigator= createStackNavigator({
   // Login: {screen: Login},
-  // Signup:{screen:Signup},
+   Signup:{screen:Signup},
   // Setupscreen1:{screen:Setupscreen1}, 
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen:{screen:LastSetUpScreen},
