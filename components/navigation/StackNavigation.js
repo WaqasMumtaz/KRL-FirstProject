@@ -18,6 +18,7 @@ import Exerciselog from '../screens/ExerciseLog';
 import Logweight from '../screens/LogWeight';
 import Macrocalculator from '../screens/MacroCalculator';
 import BMICalculator from '../screens/CalculateBMI';
+import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
 //import ChartScreen from '../BarChart/BarChart';
 //import Wheelspiner from '../Progress Wheel/Progress';
 //import console = require('console');
@@ -29,8 +30,9 @@ import BMICalculator from '../screens/CalculateBMI';
 
 
 const MainNavigator= createStackNavigator({
-  // Login: {screen: Login},
-   Signup:{screen:Signup},
+  //ActivateSpinner:{screen:ActivateSpinner},
+   Login: {screen: Login},
+  // Signup:{screen:Signup},
   // Setupscreen1:{screen:Setupscreen1}, 
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen:{screen:LastSetUpScreen},

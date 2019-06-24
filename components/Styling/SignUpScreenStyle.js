@@ -1,7 +1,6 @@
-import React from 'react';
+
 import { Alert, StyleSheet,Dimensions,Platform} from 'react-native';
-const screenWidth = Dimensions.get('window').width;
-const screenHight =Dimensions.get('window').height;
+
 
 const styles =StyleSheet.create({
     mainContainer: {
@@ -123,7 +122,7 @@ const styles =StyleSheet.create({
         fontFamily:'MontserratLight',
         color:'#FF6200'
       },
-      passNotMatchContainer:{
+      passMatchContainer:{
         marginVertical:8,
         alignItems:'center',
       },
@@ -131,7 +130,31 @@ const styles =StyleSheet.create({
         fontSize:12,
         fontFamily:'MontserratLight',
         color:'#FF6200'
+      },
+      spinerContainer:{
+        flex: 1,
+        justifyContent: 'center'
+      },
+      horizontal: {
+        flexDirection: 'row',
+        // justifyContent: 'space-around',
+        padding: 10
+      },
+      passMatchStyle:{
+        fontSize:12,
+        fontFamily:'MontserratLight',
+        color:'green'
+      },
+      emailExistContainer:{
+        marginVertical:8,
+        alignItems:'center',
+      },
+      emailNotExistStyle:{
+        fontSize:12,
+        fontFamily:'MontserratLight',
+        color:'#FF6200'
       }
+
 
 })
 
