@@ -1,10 +1,12 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, View, ScrollView, Button, TextInput, Dimensions, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, Text, View, ScrollView, Button, TextInput, Dimensions, TouchableOpacity,ActivityIndicator} from 'react-native';
 import { Image } from 'react-native';
 //import Resetpassword from './ResetPasswrd';
 //import SkipButton from '../buttons/buttons';
 //import TextInputs from '../textInputs/TextInputs'
 import styles from '../Styling/LoginScreenStyle';
+import HttpUtilsFile from '../Services/HttpUtils';
+//console.log(HttpUtilsFile);
 
 const { height } = Dimensions.get('window');
 class Login extends React.Component {
@@ -19,12 +21,63 @@ class Login extends React.Component {
       emailValidate: true,
       password:'',
       passwrdValidate: true,
-      psswrdInstruction:false
+      psswrdInstruction:false,
+      isLoading: false,
+      passwordNotMatch:'',
+      psswrdNotMatchShow:false
     }
   }
 
   loginFunc=async ()=>{
-      
+    const {email,password,emailValidate,passwrdValidate}=this.state;
+      if(email =='' || password == ''){
+        Alert.alert('Please Fill All Fields')
+           if(emailValidate !== true || passwrdValidate !== true){
+           Alert.alert('Fill Correct Fields')
+           }
+      }
+      else {
+         this.setState({
+           isLoading:true
+         })
+         const userObj={
+           email:email,
+           password:password
+         }
+         try {
+            let dataUser = await HttpUtilsFile.post('signin',userObj)
+           // console.log(dataUser);
+            let getUserCode = dataUser.code;
+            let userWrong = dataUser.Match;
+            let userMsg = dataUser.msg;
+            if(getUserCode){
+            this.setState({isLoading:false})
+            console.log(getUserCode)
+            }
+            else if(userWrong == false){
+              this.setState({
+                isLoading:false,
+                passwordNotMatch:userMsg,
+                psswrdNotMatchShow:true
+              },()=>{
+                setTimeout(()=>{
+                  this.setState({
+                    psswrdNotMatchShow:false
+                  })
+                },3000)
+              })
+              console.log(dataUser);
+            }
+
+         }
+         catch(error){
+           console.log(error)
+         }
+         this.setState({
+           email:'',
+           password:''
+         })
+      }
   }
 
   checkValidateFunc=(text, type)=>{
@@ -70,7 +123,7 @@ class Login extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
-    const {email, password,psswrdInstruction} = this.state;
+    const {email, password,psswrdInstruction,isLoading,passwordNotMatch,psswrdNotMatchShow} = this.state;
 
     return (
 
@@ -121,6 +174,14 @@ class Login extends React.Component {
           value={password}
           style={[styles.inputTexts,!this.state.passwrdValidate ? styles.errorInput : null]} />
         </View>
+        {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
+                        <ActivityIndicator size='large' color="#FF6200" />
+                    </View>}
+         {psswrdNotMatchShow && <View style={styles.passMatchContainer}>
+                 <Text style={styles.passNotMatchStyle}>
+                           {passwordNotMatch}
+                 </Text> 
+         </View>}           
         {psswrdInstruction && <View style={styles.passwrdInstructionContainer}>
                         <Text style={styles.instructionStyle}>
                             Password strength is required maximum 9 and greater then 4
@@ -129,13 +190,13 @@ class Login extends React.Component {
         <View style={{ flex: 1 }}></View>
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1 }}></View>
-          <TouchableOpacity style={styles.loginButtonContainer} onPress={() => { navigate('Setupscreen') }}>
+          <TouchableOpacity style={styles.loginButtonContainer} onPress={this.loginFunc}>
             <Text style={styles.loginButton}>Log In</Text>
           </TouchableOpacity>
           <View style={{ flex: 1 }}></View>
         </View>
         <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-start', marginTop: 35, marginBottom: 12 }}>
-          <TouchableOpacity style={styles.resetPassContainer} onPress={() => { navigate('Resetpassword') }} >
+          <TouchableOpacity style={styles.resetPassContainer} onPress={() => { navigate('ResetpasswordScreen') }} >
             <Text style={styles.resetPasswrdTextStyle}>Forgot password ? </Text>
           </TouchableOpacity>
           <View style={{ flex: 1 }}></View>

@@ -8,7 +8,6 @@ import Signup from '../screens/SignUp';
 //import TextInputs from '../textInputs/TextInputs';
 import Setupscreen from '../screens/SetUpScreen';
 //import PickerInput from '../../Picker/PickerInput';
-import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 import BottomTabe from '../navigation/tabNav';
 import Setupscreen1 from '../screens/SetUpScreen1';
 import LastSetUpScreen from '../screens/SetUpLastScreen';
@@ -18,7 +17,9 @@ import Exerciselog from '../screens/ExerciseLog';
 import Logweight from '../screens/LogWeight';
 import Macrocalculator from '../screens/MacroCalculator';
 import BMICalculator from '../screens/CalculateBMI';
-import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
+//import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
+import ResetpasswordScreen from '../screens/ResetPasswrd';
+import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 //import ChartScreen from '../BarChart/BarChart';
 //import Wheelspiner from '../Progress Wheel/Progress';
 //import console = require('console');
@@ -31,13 +32,13 @@ import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
 
 const MainNavigator= createStackNavigator({
   //ActivateSpinner:{screen:ActivateSpinner},
-   Login: {screen: Login},
+  // Login: {screen: Login},
   // Signup:{screen:Signup},
   // Setupscreen1:{screen:Setupscreen1}, 
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen:{screen:LastSetUpScreen},
-  // Resetpassword:{screen:Resetpassword},
-  // ConfirmResetPassword:{screen:ConfirmResetPassword},
+  ResetpasswordScreen:{screen:ResetpasswordScreen},
+  ConfirmResetPassword:{screen:ConfirmResetPassword},
   //Wheelspiner:{screen:Wheelspiner},
   //BriskScreen:{screen:BriskScreen},
   //ChartScreen:{screen:ChartScreen},

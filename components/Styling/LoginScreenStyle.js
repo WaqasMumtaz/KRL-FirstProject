@@ -148,6 +148,24 @@ const styles =StyleSheet.create({
       fontFamily:'MontserratLight',
       color:'#FF6200'
     },
+    spinerContainer:{
+      flex: 1,
+      justifyContent: 'center'
+    },
+    horizontal: {
+      flexDirection: 'row',
+      // justifyContent: 'space-around',
+      padding: 10
+    },
+    passMatchContainer:{
+      marginVertical:8,
+      alignItems:'center',
+    },
+    passNotMatchStyle:{
+      fontSize:12,
+      fontFamily:'MontserratLight',
+      color:'#FF6200'
+    },
     
 })
 
