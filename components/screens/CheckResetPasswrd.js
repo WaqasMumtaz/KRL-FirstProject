@@ -1,8 +1,19 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, View, TextInput, Dimensions, ScrollView, TouchableOpacity,Image } from 'react-native';
-//import Button from 'apsl-react-native-button';
-import TextInputs from '../textInputs/TextInputs'
-const screenWidth = Dimensions.get('window').width;
+import { 
+  Alert, 
+  Text, 
+  View, 
+  TextInput, 
+  Dimensions, 
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity, 
+  Image 
+} from 'react-native';
+import styles from '../Styling/ConfirmResetPasswordStyle';
+import CaloriesSetupBtn from '../buttons/setUpBtn';
+import HttpUtilsFile from '../Services/HttpUtils';
+console.log(HttpUtilsFile)
 const { height } = Dimensions.get('window');
 
 
@@ -18,55 +29,298 @@ class ConfirmResetPassword extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      newPassword:'',
+      newPasswordValidate:true,
+      retypePassword:'',
+      retypePasswordValidate:true,
+      emailCode:'',
+      psswrdInstruction:false,
+      passNotMatch:false,
+      isLoading:false,
+      emailCodeNotValid:false,
+      successPassChange:'',
+      changePassword:false
 
     }
 
 
   }
 
+  confirmResetPassword=async ()=>{
+    const {navigate}=this.props.navigation;
+    const {newPassword,retypePassword,emailCode,newPasswordValidate,retypePasswordValidate,isLoading}=this.state;
+    if(newPassword == '' || retypePassword == '' || emailCode == ''){
+      Alert.alert('Please fill input field')
+      if(newPasswordValidate != true || retypePasswordValidate != true){
+         Alert.alert('Please correct input field')
+      }
+    }
+  else {
+      this.setState({
+         isLoading:true
+      })
+      const userObj={
+        code:emailCode,
+        newPassword:newPassword
+      }
+      try{
+         let userData = await HttpUtilsFile.post('changepassword',userObj)
+        console.log(userData);
+        let userDataRespons = userData.code;
+       if(userDataRespons){
+        this.setState({
+          isLoading:false,
+          emailCode:'',
+          newPassword:'',
+          retypePassword:'',
+          successPassChange:userData.msg,
+          changePassword:true
+        })
+        setTimeout(()=>{
+          navigate('Login')
+        },5000)
+
+       }
+       else if(userData == undefined){
+        this.setState({
+          isLoading:false,
+          emailCodeNotValid:true,
+          emailCode:'',
+          newPassword:'',
+          retypePassword:''
+        })
+         
+       } 
+           
+         
+      }
+      catch(error){
+        console.log(error)
+        if(error){
+          this.setState({
+            isLoading:false,
+            emailCode:'',
+           newPassword:'',
+           retypePassword:''
+          })
+          Alert.alert('Something went wrong');
+        }
+      }
+      this.setState({
+        emailCode:'',
+        newPassword:'',
+        retypePassword:''
+      })  
+    ss
+  }
+  
+  }
+
+
+
+  newPasswrdInputValueHandle=(text)=>{
+      this.setState({
+        newPassword:text
+      },()=>{
+        const {newPassword ,retypePassword }=this.state;
+        if (newPassword.length < 4) {
+          this.setState({
+            newPasswordValidate: false,
+              psswrdInstruction: true
+          })
+      }
+      if (newPassword.length >= 4) {
+          this.setState({
+            newPasswordValidate: true,
+              psswrdInstruction: false
+          })
+      }
+      if (newPassword.length > 9) {
+          this.setState({
+            newPasswordValidate: false,
+            psswrdInstruction: true
+          })
+      }
+
+      if (retypePassword != newPassword) {
+          this.setState({
+              passNotMatch: true,
+              passMatch: false
+          })
+      }
+      if (retypePassword == newPassword) {
+          this.setState({
+              passNotMatch: false,
+              passMatch: true
+          })
+      }
+
+      if (retypePassword == '') {
+          this.setState({
+              passNotMatch: false,
+              passMatch: false
+          })
+      }
+      })
+  }
+
+  retypePasswordInputHandle=(text)=>{
+     this.setState({
+      retypePassword:text
+     },()=>{
+       const {retypePassword , newPassword}=this.state;
+       if (retypePassword.length < 4) {
+        this.setState({
+          retypePasswordValidate: false,
+
+            // psswrdInstruction:true
+        })
+    }
+    if (retypePassword.length >= 4) {
+        this.setState({
+          retypePasswordValidate: true,
+            //    psswrdInstruction:false
+        })
+    }
+
+    if (retypePassword.length > 9) {
+        this.setState({
+          retypePasswordValidate: false,
+            //    psswrdInstruction:true
+        })
+    }
+    if (retypePassword != newPassword) {
+        this.setState({
+            passNotMatch: true,
+            passMatch: false
+        })
+    }
+    if (retypePassword == newPassword) {
+        this.setState({
+            passNotMatch: false,
+            passMatch: true
+        }, () => {
+            setTimeout(() => {
+                this.setState({
+                    passMatch: false
+                })
+            }, 5000)
+
+        }
+        )
+    }
+
+
+
+     })
+  }
+ 
+
   render() {
+    
+    const {
+      newPassword,
+      retypePassword,
+      psswrdInstruction,
+      passNotMatch,
+      passMatch,
+      isLoading,
+      emailCode,
+      emailCodeNotValid,
+      successPassChange,
+      changePassword
+    }=this.state;
+      
+    // console.log('new password--->',newPassword , 'retype password--->',retypePassword, 'email code--->',emailCode)
+
     return (
-      <ScrollView style={{ flex: 1,backgroundColor:'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
-        <View style={styles.container}>
-          <View style={styles.heading}>
-            <Text style={styles.headingStyle}>Set New Password</Text>
-          </View>
-          <View style={styles.firstPara}>
-            <Text style={styles.firstParaStyle}>
-              Enter a new password for your GetFitAthletic account .
+      <View style={styles.mainContainer}>
+        <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
+          <View style={styles.container}>
+            <View style={styles.heading}>
+              <Text style={styles.headingStyle}>Set New Password</Text>
+            </View>
+            <View style={styles.firstPara}>
+              <Text style={styles.firstParaStyle}>
+                Enter a new password for your GetFitAthletic account .
             </Text>
-          </View>
-          <Text style={styles.newPasswordText}>New Password</Text>
-          <View style={styles.newPasswordField}>
-            {/* <Text>For new password input</Text> */}
+           
+            </View>
+            <Text style={styles.emailCodeText}>Email Code</Text>
+            <View style={styles.emailCodeContainer}>
+              {/* <Text>For new password input</Text> */}
+
+              <TextInput
+                onChangeText={(text)=>{this.setState({emailCode:text})}}
+                keyboardType="numeric"
+                placeholder="e.g:4567"
+                style={styles.emailCodeInputStyle} />
+
+            </View>
+             <View>
+              {emailCodeNotValid && <Text style={styles.emailNotValidTextStyle}>
+                Email Code Not Valide
+              </Text>}
+             </View>
+            <Text style={styles.newPasswordText}>New Password</Text>
+            <View style={styles.newPasswordField}>
+
+              <TextInput
+                onChangeText={text => this.newPasswrdInputValueHandle(text)}
+                secureTextEntry={true}
+                placeholder="type new password"
+                style={[styles.newPasswordFieldStyle, !this.state.newPasswordValidate ? styles.errorInput : null]} />
+
+            </View>
+            {psswrdInstruction && <View style={styles.passwrdInstructionContainer}>
+                        <Text style={styles.instructionStyle}>
+                            {/* Input Password and Submit [7 to 15 characters which contain only characters,
+                          numeric digits, underscore and first character must be a letter] */}
+                            Password strength is required maximum 9 and greater then 4
+                         </Text>
+                    </View>}
+            <Text style={styles.newPasswordText}>Retype new password</Text>
+            <View style={styles.retypePasswrdField}>
+
+              <TextInput
+                onChangeText={(text)=>{this.retypePasswordInputHandle(text)}}
+                secureTextEntry={true}
+                placeholder="retype new password"
+                style={[styles.newPasswordFieldStyle,!this.state.retypePasswordValidate ? styles.errorInput : null]}
+                underlineColorAndroid="transparent"
+              />
+            </View>
+            <View style={styles.passMatchContainer}>
+            {passNotMatch &&<Text style={styles.passNotMatchStyle}>
+                            Password Not Match
+                       </Text>}
+                    </View>
+                    <View style={styles.passMatchContainer}>
+                    {passMatch &&  <Text style={styles.passMatchStyle}>
+                            Password Match
+                       </Text>}
+                    </View>
+                    {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
+                        <ActivityIndicator size='large' color="#FF6200" />
+                    </View>}
+              <View style={styles.passMatchContainer}>
+              {changePassword && <Text style={styles.passChangeTextStyle}>
+                {successPassChange}
+              </Text>}
+            </View>        
             
-            <TextInput secureTextEntry={true}  placeholder="type new password" style={styles.newPasswordFieldStyle}/>
-            {/* <Image source={require('../icons/eyetrue.png')} style={styles.forImg}/> */}
-          </View>
-          <Text style={styles.newPasswordText}>Retype new password</Text>
-          <View style={styles.retypePasswrdField}>
-            {/* <Text>For retype new password input</Text> */}
+            <View style={styles.btnContainer}>
+              <CaloriesSetupBtn
+                title='Reset Password'
+                caloriesBtnStyle={styles.caloriesBtnStyle}
+                onPress={this.confirmResetPassword}
+              />
+            </View>
 
-            <TextInput secureTextEntry={true}  placeholder="retype new password" style={styles.newPasswordFieldStyle} underlineColorAndroid="transparent"/>
           </View>
-          <View style={styles.instructionCotainer}>
-            <Text style={styles.instructionStyle}>The password must be atleast 8 characters long</Text>
-          </View>
-          <View style={styles.btnContainer}>
-            {/* <Text>For Button</Text> */}
-            <View style={{flex:1}}></View>
-              <TouchableOpacity style={styles.btnStyle}><Text style={{fontFamily: "MontserratExtraBold",color:'white'}}>Reset Password</Text></TouchableOpacity>
-              <View style={{flex:1}}></View>
-          </View>
-        </View>
-        
-          {/* <Text style={{fontSize:50}}>
-            jkajdlkaj;kdjal;kjdla;kjd;lkjaldjalkjdlkajldkjalkjdlkajldkjaldjlajdlkajldkjaaldjlajdlkkajdlkjalkdj
-            lajdlkjfalkdjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjakdl
-            kjadklllllllllllllllllllllllllllllllllllllllllllllla
-          </Text> */}
-
-      </ScrollView>
+          
+        </ScrollView>
+      </View>
     )
   }
 
@@ -74,97 +328,3 @@ class ConfirmResetPassword extends React.Component {
 
 export default ConfirmResetPassword;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    //backgroundColor: 'red'
-  },
-  heading: {
-    flex: 0.3,
-   // backgroundColor: 'yellow'
-  },
-  headingStyle:{
-    color: 'white',
-    marginLeft: 20,
-    fontFamily: "MontserratExtraBold",
-    fontSize:17
-  },
-  firstPara:{
-    flex:0.1,
-    //backgroundColor:'green'
-  },
-  firstParaStyle:{
-    color: 'white',
-    marginLeft: 20,
-    fontFamily: 'MontserratLight',
-  },
-  newPasswordField:{
-      flex:0.1,
-      //backgroundColor:'pink',
-      flexDirection:'row',
-      justifyContent:'center',
-
-  },
-  newPasswordFieldStyle:{
-      flex: 1,
-      fontFamily: 'MontserratLight',
-      marginLeft: 20,
-      height: 40,
-      borderColor: 'gray',
-      backgroundColor: '#808080',
-      borderWidth: 2,
-      marginRight: 20,
-      paddingLeft: 16,
-      marginTop:7,
-      
-  },
-  newPasswordText:{
-    color: 'white',
-    marginLeft: 20,
-    fontFamily: 'MontserratLight',
-  },
-  retypePasswrdField:{
-   flex:0.1,
-  // backgroundColor:'blue',
-   flexDirection:'row'
-  },
-  retypePasswrdFieldStyle:{
-
-  },
-  retypePasswordText:{
-    color: 'white',
-    marginLeft: 20,
-    fontFamily: 'MontserratLight',
-  },
-  instructionCotainer:{
-       flex:0.1,
-       //backgroundColor:'white'
-  },
-  instructionStyle:{
-    color: 'white',
-    marginLeft: 20,
-    fontFamily: 'MontserratLight',
-  },
-  btnContainer:{
-         flex:0.25,
-         //backgroundColor:'black',
-         flexDirection:'row'
-  },
-    btnStyle:{
-      flex:2,
-      height:40,
-      justifyContent:'center',
-      backgroundColor: '#FF7F50',
-      alignItems:'center',
-      borderRadius:5
-  },
-  forImg:{
-    // padding: 10,
-    margin: 5,
-    height: 20,
-    width: 20,
-    resizeMode: 'stretch',
-    alignItems: 'center',
-    backgroundColor:'gray'
-  }
-})

@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
         fontSize:12,
         fontFamily:'MontserratLight',
         color:'#FF6200'
-      }
+      },
+      
     
 
 })  

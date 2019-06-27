@@ -182,7 +182,7 @@ class ResetpasswordScreen extends React.Component {
                             <TextInput
                                 onChangeText={(text) => {
                                     this.emailHandleFunc(text),
-                                        this.resetPasswordCheckValidate(text, 'email')
+                                    this.resetPasswordCheckValidate(text, 'email')
                                 }}
                                 placeholder="waqas@gmail.com"
                                 placeholderTextColor="#A6A6A6"

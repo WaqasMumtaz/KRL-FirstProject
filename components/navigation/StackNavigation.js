@@ -31,14 +31,14 @@ import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 
 
 const MainNavigator= createStackNavigator({
+  Login: {screen: Login},
+  ResetpasswordScreen:{screen:ResetpasswordScreen},
+  ConfirmResetPassword:{screen:ConfirmResetPassword},
+  Signup:{screen:Signup},
   //ActivateSpinner:{screen:ActivateSpinner},
-  // Login: {screen: Login},
-  // Signup:{screen:Signup},
   // Setupscreen1:{screen:Setupscreen1}, 
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen:{screen:LastSetUpScreen},
-  ResetpasswordScreen:{screen:ResetpasswordScreen},
-  ConfirmResetPassword:{screen:ConfirmResetPassword},
   //Wheelspiner:{screen:Wheelspiner},
   //BriskScreen:{screen:BriskScreen},
   //ChartScreen:{screen:ChartScreen},

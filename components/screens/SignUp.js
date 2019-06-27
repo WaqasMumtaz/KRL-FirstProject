@@ -74,14 +74,14 @@ class Signup extends React.Component {
                     passMatch: false
                 })
             }
-            if (cnfrmPasswrd === newPasswrd) {
+            if (cnfrmPasswrd == newPasswrd) {
                 this.setState({
                     passNotMatch: false,
                     passMatch: true
                 })
             }
 
-            if (cnfrmPasswrd === '') {
+            if (cnfrmPasswrd == '') {
                 this.setState({
                     passNotMatch: false,
                     passMatch: false
@@ -115,13 +115,13 @@ class Signup extends React.Component {
                     //    psswrdInstruction:true
                 })
             }
-            if (cnfrmPasswrd !== newPasswrd) {
+            if (cnfrmPasswrd != newPasswrd) {
                 this.setState({
                     passNotMatch: true,
                     passMatch: false
                 })
             }
-            if (cnfrmPasswrd === newPasswrd) {
+            if (cnfrmPasswrd == newPasswrd) {
                 this.setState({
                     passNotMatch: false,
                     passMatch: true
@@ -309,7 +309,8 @@ class Signup extends React.Component {
                         <Text style={styles.textsStyles}>Name</Text>
                     </View>
                     <View style={styles.inputFields}>
-                        <TextInput onChangeText={text => { this.checkValidateFunc(text, 'username'), this.setState({ name: text }) }}
+                        <TextInput onChangeText={text => { this.checkValidateFunc(text, 'username'),
+                           this.setState({ name: text }) }}
                             placeholder="Name"
                             placeholderTextColor="#A6A6A6"
                             value={name}
@@ -387,16 +388,16 @@ class Signup extends React.Component {
                             style={[styles.inputTexts, !this.state.cnfrmPasswrdValidate ? styles.errorInput : null]}
                         />
                     </View>
-                    {passNotMatch && <View style={styles.passMatchContainer}>
-                        <Text style={styles.passNotMatchStyle}>
+                     <View style={styles.passMatchContainer}>
+                     {passNotMatch &&<Text style={styles.passNotMatchStyle}>
                             Password Not Match
-                       </Text>
-                    </View>}
-                    {passMatch && <View style={styles.passMatchContainer}>
-                        <Text style={styles.passMatchStyle}>
+                       </Text>}
+                    </View>
+                     <View style={styles.passMatchContainer}>
+                     {passMatch &&<Text style={styles.passMatchStyle}>
                             Password Match
-                       </Text>
-                    </View>}
+                       </Text>}
+                    </View>
                     {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
                         <ActivityIndicator size='large' color="#FF6200" />
                     </View>}

@@ -123,7 +123,8 @@ const styles =StyleSheet.create({
         color:'#FF6200'
       },
       passMatchContainer:{
-        marginVertical:8,
+        
+        marginVertical:10,
         alignItems:'center',
       },
       passNotMatchStyle:{
