@@ -61,7 +61,7 @@ class ConfirmResetPassword extends React.Component {
       })
       const userObj={
         code:emailCode,
-        newPassword:newPassword
+        password:newPassword
       }
       try{
          let userData = await HttpUtilsFile.post('changepassword',userObj)
