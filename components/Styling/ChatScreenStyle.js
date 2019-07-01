@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     iconStyle:{
-        width:21,
-        height:30
+        width:20,
+        height:25
     },
     orangeMicContainer:{
         width:45,
