@@ -11,8 +11,20 @@ import {
 } from 'react-native';
 import styles from '../Styling/ChatScreenStyle';
 import io from 'socket.io-client';
-const client = io('ws://echo.websocket.org');
-var socket = io.connect();
+//import io from 'socket.io/socket.io.js'
+const socket = io.connect("http://192.168.100.24:3000",
+ { 
+  jsonp: false, 
+  transports: ['websocket']
+ });
+
+//const socket = io.connect('http://localhost:3000');
+// socket.on('EVENT_CONNECT', () => { console.log(socket.connected);  });
+// socket.on("testing", function(d) {
+//   console.log(d);
+// });
+//const client = io('ws://echo.websocket.org');
+//const socket = io('http://localhost');
 //const io = require('socket.io-client/dist/socket.io');
 //import io from 'socket.io-client/dist/socket.io'
 //const screenWidth = Dimensions.get('window').width;
@@ -47,26 +59,35 @@ class Chatscreen extends React.Component {
       orangeMicContainer: false,
       recodringBody: false
     }
-    this.socket = io("http://192.168.100.24:3000")
-     console.log(this.socket = io("http://192.168.100.24:3000",socket.connected))
-     this.socket.on('connect', () => {
-     console.log('Connected user',socket.connected)
-})
+    
+    //this.socket = io("http://192.168.100.24:3000")
+    //  this.socket = io("http://localhost:3000")
+    // console.log(socket)
+    // this.socket.on('connect', ()=>{
+    //   console.log('user is connected')
+    // })
+     //console.log(this.socket = io("http://localhost:3000"))
+//      this.socket.on('connect', () => {
+//      console.log('Connected user',socket.connected)
+// })
 
   }
 
-  // componentDidMount() {
-  //   this.socket = io("http://192.168.100.24:3000")
-   
-  // }
+   componentDidMount() {
+    socket.on('connect', ()=>{
+      console.log('Congrates!! user connected');
+      console.log(socket.connected)
+    })
+    
+   }
 
   sendMessage = () => {
     console.log(this.state.textMessage)
-    this.socket.on('connect', () => {
-      //this.socket.emit('message', "test");
-      console.log('Connected user')
-    })
-    //this.socket.emit("chat message", "Channel1 emitting is working");
+    socket.emit("chat message", this.state.textMessage);
+    console.log(socket.connected);
+    
+    
+    
     // this.socket.on('userData',data =>{
     //   console.log(data)
       
