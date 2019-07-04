@@ -12,30 +12,20 @@ import {
 import styles from '../Styling/ChatScreenStyle';
 import io from 'socket.io-client';
 //import io from 'socket.io/socket.io.js'
-const socket = io.connect("http://192.168.100.24:3000",
+ const socket = io.connect("http://192.168.100.24:3000",
+//const socket = io.connect("http://localhost:3000",
  { 
   jsonp: false, 
   transports: ['websocket']
  });
 
-//const socket = io.connect('http://localhost:3000');
-// socket.on('EVENT_CONNECT', () => { console.log(socket.connected);  });
-// socket.on("testing", function(d) {
-//   console.log(d);
-// });
-//const client = io('ws://echo.websocket.org');
-//const socket = io('http://localhost');
-//const io = require('socket.io-client/dist/socket.io');
-//import io from 'socket.io-client/dist/socket.io'
-//const screenWidth = Dimensions.get('window').width;
-// const { height } = Dimensions.get('window');
-const connectionConfig = {
-  jsonp: false,
-  reconnection: true,
-  reconnectionDelay: 100,
-  reconnectionAttempts: 100000,
-  transports: ['websocket'], // you need to explicitly tell it to use websockets
- };
+// const connectionConfig = {
+//   jsonp: false,
+//   reconnection: true,
+//   reconnectionDelay: 100,
+//   reconnectionAttempts: 100000,
+//   transports: ['websocket'], // you need to explicitly tell it to use websockets
+//  };
 
 
 class Chatscreen extends React.Component {
@@ -52,24 +42,17 @@ class Chatscreen extends React.Component {
     this.state = {
       textMessage: '',
       chatMessages: [],
+      //repMessages:[],
       sendIcon: false,
       micIcon: true,
       micOrange: false,
       sendBtnContainer: true,
       orangeMicContainer: false,
-      recodringBody: false
+      recodringBody: false,
+      messagContainer:false
     }
     
-    //this.socket = io("http://192.168.100.24:3000")
-    //  this.socket = io("http://localhost:3000")
-    // console.log(socket)
-    // this.socket.on('connect', ()=>{
-    //   console.log('user is connected')
-    // })
-     //console.log(this.socket = io("http://localhost:3000"))
-//      this.socket.on('connect', () => {
-//      console.log('Connected user',socket.connected)
-// })
+    
 
   }
 
@@ -77,24 +60,33 @@ class Chatscreen extends React.Component {
     socket.on('connect', ()=>{
       console.log('Congrates!! user connected');
       console.log(socket.connected)
+      socket.on('chat message',msg =>{
+        this.setState({
+          chatMessages:[...this.state.chatMessages, msg],
+
+        })
+      })
+      
     })
+    // socket.on('repmsg', msg =>{
+    //   this.setState({
+    //     repMessages:[...this.state.repMessages, msg]
+    //   })
+    // })
+    
     
    }
-
+   
   sendMessage = () => {
     console.log(this.state.textMessage)
     socket.emit("chat message", this.state.textMessage);
     console.log(socket.connected);
     
-    
-    
-    // this.socket.on('userData',data =>{
-    //   console.log(data)
-      
-    // })
+  
     
     this.setState({
-      textMessage: ''
+      textMessage: '',
+      messagContainer:true,
     }, () => {
       const { textMessage } = this.state;
       if (textMessage == '') {
@@ -118,18 +110,7 @@ class Chatscreen extends React.Component {
     })
   }
 
-  // onFocus=()=>{
-  //   this.setState({
-  //     sendIcon:true,
-  //     micIcon:false
-  //   })
-  // }
-  // onBlur=()=>{
-  //   this.setState({
-  //     micIcon:true,
-  //     sendIcon:false
-  //   })
-  // }
+  
   toggelMic = () => {
 
     this.setState({
@@ -161,9 +142,15 @@ class Chatscreen extends React.Component {
       sendBtnContainer,
       orangeMicContainer,
       recodringBody,
-      chatMessages
+      messagContainer,
+      repMessages
     } = this.state;
-    //console.log(chatMessages);
+  const chatMessages = this.state.chatMessages.map(message => (
+     <Text key={message} style={styles.msgsTextStyle}>
+    {message}
+       </Text>
+    ))
+  //const replyMessages = repMessages.map(items => <Text key={items} style={styles.replyMessagesStyle}>{items}</Text>) 
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={styles.scrollContainer} contentContainerStyle={{ flexGrow: 1 }} >
@@ -171,6 +158,11 @@ class Chatscreen extends React.Component {
             {recodringBody && <View style={styles.recordingContainer}>
 
             </View>}
+            {/* {messagContainer && <View style={styles.chatMessagsContainer}>
+                     {chatMessages}
+            </View>} */}
+             {chatMessages}
+             {replyMessages}
             <View style={styles.textInputContainer}>
               <TextInput
                 onChangeText={(textMessage) => { this.setState({ textMessage }) }}

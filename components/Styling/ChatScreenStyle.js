@@ -71,6 +71,34 @@ const styles = StyleSheet.create({
         //borderWidth:2,
         backgroundColor:'#e5e5e5',
         marginBottom:30
+    },
+    // chatMessagsContainer:{
+    //     marginBottom:10,
+    //     backgroundColor:'black',
+    //     marginLeft:'50%',
+    //     borderBottomLeftRadius:6,
+    //     borderBottomRightRadius:6
+
+    // },
+    msgsTextStyle:{
+        padding:10,
+        color: '#A6A6A6',
+        fontFamily: 'MontserratLight',
+        marginBottom:10,
+        marginLeft:'50%',
+        backgroundColor:'black',
+        borderRadius:10
+        // borderBottomLeftRadius:6,
+        // borderBottomRightRadius:6
+    },
+    replyMessagesStyle:{
+        padding:10,
+        color: '#4f4f4f',
+        fontFamily: 'MontserratLight',
+        marginBottom:10,
+        marginRight:'45%',
+        backgroundColor:'#e5e5e5',
+        borderRadius:10
     }
 
     
