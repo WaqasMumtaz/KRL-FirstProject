@@ -99,6 +99,12 @@ const styles = StyleSheet.create({
         marginRight:'45%',
         backgroundColor:'#e5e5e5',
         borderRadius:10
+    },
+    fileAttachContainer:{
+        height:45,
+        borderColor:'black',
+        borderWidth:1,
+        width:45
     }
 
     

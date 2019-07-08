@@ -174,7 +174,9 @@ class Chatscreen extends React.Component {
                 //onBlur={()=>{this.onBlur()}}
                 style={styles.inputStyle}
               />
-
+               <TouchableOpacity style={styles.fileAttachContainer}>
+                
+               </TouchableOpacity>
               {sendBtnContainer && <View style={styles.sentBtnContainer}>
                 {sendIcon && <TouchableOpacity onPress={this.sendMessage}>
                   <Image source={require('../icons/send-btn.png')} style={styles.iconStyle} />
