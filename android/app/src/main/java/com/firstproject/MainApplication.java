@@ -3,6 +3,7 @@ package com.firstproject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 
 //import com.github.reactNativeMPAndroidChart.MPAndroidChartPackage;
 
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ImagePickerPackage(),
             // new MPAndroidChartPackage(),
             // new MPAndroidChartPackage(),
             // new VectorIconsPackage(),
