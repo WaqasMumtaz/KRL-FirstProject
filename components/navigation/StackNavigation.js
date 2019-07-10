@@ -1,7 +1,7 @@
 import * as React from 'react';
 // import { Text, View, StyleSheet, Button, Alert } from 'react-native';
-import { Easing ,Animated} from 'react-native';
-import {createStackNavigator,createAppContainer} from 'react-navigation';
+import { Easing, Animated } from 'react-native';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Resetpassword from '../screens/ResetPasswrd';
 import Login from '../screens/Login';
 import Signup from '../screens/SignUp';
@@ -20,78 +20,82 @@ import BMICalculator from '../screens/CalculateBMI';
 //import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
 import ResetpasswordScreen from '../screens/ResetPasswrd';
 import ConfirmResetPassword from '../screens/CheckResetPasswrd';
-//import ChartScreen from '../BarChart/BarChart';
-//import Wheelspiner from '../Progress Wheel/Progress';
+import ChartScreen from '../BarChart/BarChart';
+import Wheelspiner from '../Progress Wheel/Progress';
 //import console = require('console');
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
-//import Resetpassword from '../screens/ResetPasswrd';
+// import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
 
 //console.log('hello World')
 
 
-const MainNavigator= createStackNavigator({
+const MainNavigator = createStackNavigator({
   // Login: {screen: Login},
   // ResetpasswordScreen:{screen:ResetpasswordScreen},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
   // Signup:{screen:Signup},
-  //ActivateSpinner:{screen:ActivateSpinner},
+  // ActivateSpinner:{screen:ActivateSpinner},
   // Setupscreen1:{screen:Setupscreen1}, 
   // Setupscreen:{screen:Setupscreen},
-  // LastSetUpScreen:{screen:LastSetUpScreen},
-  //Wheelspiner:{screen:Wheelspiner},
-  //BriskScreen:{screen:BriskScreen},
-  //ChartScreen:{screen:ChartScreen},
-  
-  BottomTabe:{screen:BottomTabe,
-    navigationOptions:{
-      header:null
+  LastSetUpScreen: { screen: LastSetUpScreen },
+  // Wheelspiner:{screen:Wheelspiner},
+  BriskScreen: { screen: BriskScreen },
+  ChartScreen: { screen: ChartScreen },
+
+  BottomTabe: {
+    screen: BottomTabe,
+    navigationOptions: {
+      header: null
     }
   },
-   AddExercise:{screen:AddExercise,
-    navigationOptions:{
-      headerStyle:{
-        elevation:0,
+  AddExercise: {
+    screen: AddExercise,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
       }
-    
+
     }
   },
-  Exerciselog:{screen:Exerciselog,
-    navigationOptions:{
-      headerStyle:{
-        elevation:0,
+  Exerciselog: {
+    screen: Exerciselog,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
       }
-    
+
     }
   },
-  Logweight:{screen:Logweight,
-    navigationOptions:{
-      headerStyle:{
-        elevation:0,
+  Logweight: {
+    screen: Logweight,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
       }
-    
+
     }
   },
-  Macrocalculator:{screen:Macrocalculator,
-    navigationOptions:{
-      headerStyle:{
-        elevation:0,
+  Macrocalculator: {
+    screen: Macrocalculator,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
       }
-    
+
     }
   },
-  BMICalculator:{screen:BMICalculator,
-    navigationOptions:{
-      headerStyle:{
-        elevation:0,
+  BMICalculator: {
+    screen: BMICalculator,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
       }
-    
+
     }
   },
 
-  },
-
-
+},
 
   {
     // headerMode: 'none',
@@ -104,7 +108,7 @@ const MainNavigator= createStackNavigator({
         duration: 750,
         easing: Easing.out(Easing.poly(4)),
         timing: Animated.timing,
-        useNativeDriver:true
+        useNativeDriver: true
       },
       screenInterpolator: sceneProps => {
         const { layout, position, scene } = sceneProps;
@@ -112,9 +116,9 @@ const MainNavigator= createStackNavigator({
 
         const height = layout.initHeight;
         const translateY = position.interpolate({
-           inputRange: [index - 1, index, index + 1],
+          inputRange: [index - 1, index, index + 1],
           // inputRange: [index - 1, index],
-          outputRange: [height, 0,2],
+          outputRange: [height, 0, 2],
         });
 
         const opacity = position.interpolate({
@@ -126,8 +130,8 @@ const MainNavigator= createStackNavigator({
       },
     }),
   }
-  
-  
+
+
 );
 
 const AppContainer = createAppContainer(MainNavigator);
