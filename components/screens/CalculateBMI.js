@@ -7,7 +7,6 @@ const { height } = Dimensions.get('window');
 
 class BMICalculator extends React.Component {
     static navigationOptions = () => ({
-
         headerStyle: {
             backgroundColor: 'white'
         },
@@ -15,7 +14,6 @@ class BMICalculator extends React.Component {
     })
     constructor(props) {
         super(props);
-
         this.state = {
             user: '',
             height: 0,
@@ -27,55 +25,68 @@ class BMICalculator extends React.Component {
             mgs: false,
         }
     }
+    //increament the  height
     increamentHeight = () => {
-        const height = Number(this.state.height)
+        const height = Number(this.state.height) + 1
+        let heightVal = height.toString()
         this.setState({
-            height: height + 1
+            height: heightVal
         })
     }
+    //increament the  Weight
     increamentWeight = () => {
-        const weight = Number(this.state.weight)
+        const weight = Number(this.state.weight) + 1
+        let weightVal = weight.toString()
         this.setState({
-            weight: weight + 1
+            weight: weightVal
         })
     }
+    // decrement the Height
     decrementHeight = () => {
-        const height = Number(this.state.height)
+        const height = Number(this.state.height) - 1
+        let heightVal = height.toString()
         this.setState({
-            height: height - 1
+            height: heightVal
         })
     }
+    // decrement the weight
     decrementWeight = () => {
-        const weight = Number(this.state.weight)
+        const weight = Number(this.state.weight) - 1
+        let weightVal = weight.toString()
         this.setState({
-            height: weight + 1
+            weight: weightVal
         })
     }
+    //update height unit
     updateHeight = (e) => {
         this.setState({
             heightUnit: e
         })
     }
+    //update Weight unit
     updateWeight = (e) => {
         this.setState({
             weightUnit: e
         })
     }
 
+    //calculate the BMI
     calculateBmi = () => {
         const { height, weight, heightUnit, weightUnit } = this.state;
         let bmiValue
         if (heightUnit == 'inches' && weightUnit == 'pound') {
             bmiValue = (weight / height / height) * 703
+            let bmiVal = bmiValue.toString();
             this.setState({
-                bmi: bmiValue,
+                bmi: bmiVal,
                 mgs: false
             })
         }
         else if (heightUnit == 'centimeter' && weightUnit == 'kg') {
             bmiValue = (weight / height / height) * 10000
+            let bmiVal = bmiValue.toString();
             this.setState({
-                bmi: bmiValue,
+                bmi: bmiVal,
                 mgs: false
             })
         }
@@ -83,12 +94,14 @@ class BMICalculator extends React.Component {
             this.setState({
                 showMgs: "Select Weight Unit In Pounds",
                 mgs: true,
+                bmi: ''
             })
         }
         else if (heightUnit == 'centimeter' && weightUnit == 'pound') {
             this.setState({
                 showMgs: "Select Weight Unit In KG,s",
                 mgs: true,
+                bmi: ''
             })
         }
     }
@@ -129,7 +142,7 @@ class BMICalculator extends React.Component {
                                     <Image source={require('../icons/minus.png')} style={styles.forImg} />
                                 </TouchableOpacity>
                                 <View style={styles.textInputContainer}>
-                                    <TextInput keyboardType='numeric' maxLength={3} style={styles.textInputStyleParent}
+                                    <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
                                         type="number"
                                         onChangeText={(height) => this.setState({ height: height })}
                                         value={this.state.height}

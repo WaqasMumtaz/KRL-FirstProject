@@ -18,153 +18,383 @@ class Macrocalculator extends React.Component {
 
         this.state = {
             user: '',
+            dob: '',
+            gender: '',
+            height: '',
+            currentWeight: '',
+            goalWeight: '',
+            heightUnit: '',
+            currentWeightUnit: '',
+            goalWeightUnit: '',
+            activityLevel: '',
+            dobValidation: false,
+            genderValidation: false,
+            heightValidation: false,
+            currentWeightValidation: false,
+            goalWeightValidation: false,
+            heightUnitValidation: false,
+            currentWeightUnitValidation: false,
+            goalWeightUnitValidation: false,
+            activityLevelValidation: false,
+            male: false,
+            female: false,
+            moderate: false,
+            sedentary: false,
+            light: false,
+            extreme: false
+        }
+    }
+    calulateMacro = () => {
+        const { dob, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit, activityLevel } = this.state
+        if (dob == '') {
+            this.setState({
+                dobValidation: true
+            })
+        }
+        if (gender == '') {
+            this.setState({
+                genderValidation: true
+            })
+        }
+        if (height == '') {
+            this.setState({
+                heightValidation: true
+            })
+        }
+        if (currentWeight == '') {
+            this.setState({
+                currentWeightValidation: true
+            })
+        }
+        if (goalWeight == '') {
+            this.setState({
+                goalWeightValidation: true
+            })
+        }
+        if (heightUnit == '') {
+            this.setState({
+                heightUnitValidation: true
+            })
+        }
+        if (currentWeightUnit == '') {
+            this.setState({
+                currentWeightUnitValidation: true
+            })
+        }
+        if (goalWeightUnit == '') {
+            this.setState({
+                goalWeightUnitValidation: true
+            })
+        }
+        if (activityLevel == '') {
+            this.setState({
+                activityLevelValidation: true
+            })
+        }
+
+        console.log('press')
+    }
+    getGender(gender) {
+        if (gender == 'male') {
+            this.setState({
+                male: true,
+                female: false
+            })
+        }
+        else if (gender == 'female') {
+            this.setState({
+                male: false,
+                female: true
+            })
+        }
+    }
+    activityLevel(activity) {
+        // console.log(activity, 'activity')
+        if (activity == 'moderate') {
+            this.setState({
+                moderate: true,
+                sedentary: false,
+                light: false,
+                extreme: false
+            })
+        }
+        else if (activity == 'sedentary') {
+            this.setState({
+                moderate: false,
+                sedentary: true,
+                light: false,
+                extreme: false
+            })
+        }
+        else if (activity == 'light') {
+            this.setState({
+                moderate: false,
+                sedentary: false,
+                light: true,
+                extreme: false
+            })
+        }
+        else if (activity == 'extreme') {
+            this.setState({
+                moderate: false,
+                sedentary: false,
+                light: false,
+                extreme: true
+            })
         }
     }
     render() {
+        const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation,
+            currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation, male, female,
+            moderate, sedentary, light, extreme } = this.state
         return (
             // <View style={styles.mainContainer}>
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.mainContainer}>
-                <View style={styles.childContainer}>
-                    <View style={styles.headingContainer}>
-                        <Text style={styles.headingStyle}>
-                            Macro Calculator
+                    <View style={styles.childContainer}>
+                        <View style={styles.headingContainer}>
+                            <Text style={styles.headingStyle}>
+                                Macro Calculator
                             </Text>
-                    </View>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.textStyle}>Enter your height and weight below to re-calculate
+                        </View>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.textStyle}>Enter your height and weight below to re-calculate
                             your daily macro limit </Text>
+                        </View>
+                        <View style={styles.dateBirth}>
+                            <Text style={styles.textStyle}>Date Of Birth</Text>
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <TextInput placeholder="Tap to set..." placeholderTextColor="gray" style={styles.inputStyle} />
+                        </View>
+                        {dobValidation ?
+                            <View>
+                                <Text>
+                                    Please fill the date of birth
+                                    </Text>
+                            </View>
+                            : null}
+                        <Text style={styles.genderTextStyle}>Gender</Text>
                     </View>
-                    <View style={styles.dateBirth}>
-                        <Text style={styles.textStyle}>Date Of Birth</Text>
-                    </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput placeholder="Tap to set..." placeholderTextColor="gray" style={styles.inputStyle} />
-                    </View>
-                    <Text style={styles.genderTextStyle}>Gender</Text>
-                    </View>
-
                     <View style={styles.genderContainer}>
+                        {/* <View malestyle={male ? styles.clickBtnStyle : styles.maleContainer}> */}
                         <View style={styles.maleContainer}>
-                            <TouchableOpacity style={styles.maleTouchableOpacity}>
+                            <TouchableOpacity style={male ? styles.clickBtnStyle : styles.maleTouchableOpacity} onPress={this.getGender.bind(this, 'male')}>
                                 <Text style={styles.maleTextStyle}>
                                     Male
-                                          </Text>
+                                </Text>
                             </TouchableOpacity>
+                            {genderValidation ?
+                                <View>
+                                    <Text>
+                                        Please select the gender
+                                    </Text>
+                                </View>
+                                : null}
                             <Text style={styles.heightStyle}>Height</Text>
                             <View style={styles.inputContainer}>
-                                <InputImgsScreen iconMinus={require('../icons/minus-gray.png')}
+                                {/* <InputImgsScreen iconMinus={require('../icons/minus-gray.png')}
                                     iconPlus={require('../icons/plus-gray.png')}
                                     touchableOpacityOne={styles.touchableOpacityOne}
                                     style={styles.textInputStyleParent}
                                     touchableOpacityTwo={styles.touchableOpacityTwo}
-                                />
-
+                                /> */}
+                                <View style={styles.container}>
+                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}>
+                                        <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                    <View style={styles.textInputContainer}>
+                                        <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                            type="number"
+                                        // onChangeText={this.props.getHeightWeight}
+                                        />
+                                    </View>
+                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                    >
+                                        <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
+                            {heightValidation ?
+                                <View>
+                                    <Text>
+                                        Please fill your height
+                                    </Text>
+                                </View>
+                                : null}
                             <Text style={styles.textStyle}>Current Weight</Text>
                             <View style={styles.inputContainer}>
-                                <InputImgsScreen iconMinus={require('../icons/minus-gray.png')}
+                                {/* <InputImgsScreen iconMinus={require('../icons/minus-gray.png')}
                                     iconPlus={require('../icons/plus-gray.png')}
                                     touchableOpacityOne={styles.touchableOpacityOne}
                                     style={styles.textInputStyleParent}
                                     touchableOpacityTwo={styles.touchableOpacityTwo}
-                                />
-
+                                /> */}
+                                <View style={styles.container}>
+                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}>
+                                        <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                    <View style={styles.textInputContainer}>
+                                        <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                            type="number"
+                                        // onChangeText={this.props.getHeightWeight}
+                                        />
+                                    </View>
+                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}>
+                                        <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
+                            {currentWeightValidation ?
+                                <View>
+                                    <Text>
+                                        Please fill your weight
+                                    </Text>
+                                </View>
+                                : null}
                             <Text style={styles.textStyle}>Goal Weight</Text>
                             <View style={styles.inputContainer}>
-                                <InputImgsScreen iconMinus={require('../icons/minus-gray.png')}
+                                {/* <InputImgsScreen iconMinus={require('../icons/minus-gray.png')}
                                     iconPlus={require('../icons/plus-gray.png')}
                                     touchableOpacityOne={styles.touchableOpacityOne}
                                     style={styles.textInputStyleParent}
                                     touchableOpacityTwo={styles.touchableOpacityTwo}
-                                />
-
+                                /> */}
+                                <View style={styles.container}>
+                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}>
+                                        <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                    <View style={styles.textInputContainer}>
+                                        <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                            type="number"
+                                        // onChangeText={this.props.getHeightWeight}
+                                        />
+                                    </View>
+                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}>
+                                        <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
+                            {goalWeightValidation ?
+                                <View>
+                                    <Text>
+                                        Please fill your goal weight
+                                    </Text>
+                                </View>
+                                : null}
                             <Text style={styles.textStyle}>Activity Level</Text>
-                            <TouchableOpacity style={styles.sedetaryContainer}>
+                            <TouchableOpacity style={sedentary ? styles.clickBtnStyle : styles.sedetaryContainer} onPress={this.activityLevel.bind(this, 'sedentary')}>
                                 <Text style={styles.activityChildsTextStyle}>
                                     Sedentary
-                                          </Text>
+                                </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.moderateContainer}>
+                            <TouchableOpacity style={moderate ? styles.clickBtnStyle : styles.moderateContainer} onPress={this.activityLevel.bind(this, 'moderate')}>
                                 <Text style={styles.activityChildsTextStyle}>
                                     Moderate
-                                          </Text>
+                                </Text>
                             </TouchableOpacity>
-
+                            {activityLevelValidation ?
+                                <View>
+                                    <Text>
+                                        Please select activity level
+                                    </Text>
+                                </View>
+                                : null}
                         </View>
-                        <View style={{ flex: 1,  }}>
-                            <TouchableOpacity style={styles.femaleContainer}>
+                        <View style={{ flex: 1, }}>
+                            <TouchableOpacity style={female ? styles.clickBtnStyle : styles.femaleContainer} onPress={this.getGender.bind(this, 'female')}>
                                 <Text style={styles.maleTextStyle}>Female</Text>
                             </TouchableOpacity>
+                            <View><Text></Text></View>
                             <View style={{ marginTop: 44 }}>
                                 <Picker selectedValue={this.state.user}
-                                 onValueChange={this.updateUser} 
-                                 style={styles.pickerStyle}>
+                                    onValueChange={this.updateUser}
+                                    style={styles.pickerStyle}>
+                                    <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="Inches" value="inches" />
                                     <Picker.Item label="Centimeter" value="centimeter" />
                                 </Picker>
                             </View>
+                            {heightUnitValidation ?
+                                <View>
+                                    <Text>
+                                        Please select height unit
+                                    </Text>
+                                </View>
+                                : null}
                             <View style={{ marginTop: 50 }}>
-                                <Picker selectedValue={this.state.user} 
-                                onValueChange={this.updateUser} 
-                                style={styles.pickerStyle}>
+                                <Picker selectedValue={this.state.user}
+                                    onValueChange={this.updateUser}
+                                    style={styles.pickerStyle}>
+                                    <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="KG" value="kg" />
                                     {/* <Picker.Item label="Centimeter" value="centimeter" /> */}
                                 </Picker>
                             </View>
+                            {currentWeightUnitValidation ?
+                                <View>
+                                    <Text>
+                                        Please select weight unit
+                                    </Text>
+                                </View>
+                                : null}
                             <View style={{ marginTop: 50 }}>
-                                <Picker selectedValue={this.state.user} 
-                                onValueChange={this.updateUser} 
-                                style={styles.pickerStyle}>
+                                <Picker selectedValue={this.state.user}
+                                    onValueChange={this.updateUser}
+                                    style={styles.pickerStyle}>
+                                    <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="KG" value="kg" />
                                     {/* <Picker.Item label="Centimeter" value="centimeter" /> */}
                                 </Picker>
                             </View>
-                            <View style={{ marginTop: 42,marginLeft:16 }}>
-                            <TouchableOpacity style={styles.lightTouchableStyle}>
-                                <Text style={styles.lightTextStyle}>
-                                    Light
+                            {goalWeightUnitValidation ?
+                                <View>
+                                    <Text>
+                                        Please select goal weight unit
+                                    </Text>
+                                </View>
+                                : null}
+                            <View style={{ marginTop: 42, marginLeft: 16 }}>
+                                <TouchableOpacity style={light ? styles.clickBtnStyle : styles.lightTouchableStyle} onPress={this.activityLevel.bind(this, 'light')}>
+                                    <Text style={styles.lightTextStyle}>
+                                        Light
                                           </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.extremTouchableStyle}>
-                                <Text style={styles.lightTextStyle}>
-                                    Extreme
-                                          </Text>
-                            </TouchableOpacity>
-
+                                </TouchableOpacity>
+                                <TouchableOpacity style={extreme ? styles.clickBtnStyle : styles.extremTouchableStyle} onPress={this.activityLevel.bind(this, 'extreme')}>
+                                    <Text style={styles.lightTextStyle}>
+                                        Extreme
+                                    </Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
-                    <View style={{marginTop: 15}}>
-                    <Text style={styles.macroTextStyle}>Your Daily Macros*</Text>
+                    <View style={{ marginTop: 15 }}>
+                        <Text style={styles.macroTextStyle}>Your Daily Macros*</Text>
                     </View>
-    
                     <View style={styles.inputCaloriesContainer}>
                         {/* <Text style={{ borderWidth:2,borderColor:'black',color: '#4f4f4f', marginLeft: 20, marginVertical: 5,fontFamily: 'MontserratLight' }}>1640 Kcal{'\n'}Calories</Text> */}
-                        <TextInput placeholder={"1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne}/>
+                        <TextInput placeholder={"1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} />
                         <TextInput placeholder={"149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} />
-                        <TextInput placeholder={"107 g\Protein"} style={styles.inputCaloriesStyleThree}/>
-                        <TextInput placeholder={"51 g\nFat"} style={styles.inputCaloriesStyleFour}/>
+                        <TextInput placeholder={"107 g\Protein"} style={styles.inputCaloriesStyleThree} />
+                        <TextInput placeholder={"51 g\nFat"} style={styles.inputCaloriesStyleFour} />
                         {/* <Text style={{ color: '#4f4f4f', marginLeft: '20%', marginVertical: 5,fontFamily: 'MontserratLight' }}>159 g{'\n'}Carbohydrates</Text> */}
                     </View>
                     <View style={styles.lastParaContainer}>
-                      <Text style={styles.lastParaStyle}>
-                          *This is the daily calories limit as calculated by the app using the above infromation.
-                          If your coach has set another limit for you, please enter it above.
+                        <Text style={styles.lastParaStyle}>
+                            *This is the daily calories limit as calculated by the app using the above infromation.
+                            If your coach has set another limit for you, please enter it above.
                       </Text>
                     </View>
                     <View style={styles.btnContainer}>
-                    <CaloriesSetupBtn title='Set Up & Use App' caloriesBtnStyle={styles.caloriesBtnStyle}/>
+                        <CaloriesSetupBtn title='Set Up & Use App' caloriesBtnStyle={styles.caloriesBtnStyle} onPress={this.calulateMacro} />
                     </View>
 
-               <View style={{flex:2,marginBottom:30}}>
-                  
-               </View>
-               </View>
+                    <View style={{ flex: 2, marginBottom: 30 }}>
+
+                    </View>
+                </View>
             </ScrollView>
-        
+
         )
     }
 

@@ -19,10 +19,7 @@ class InputImgsScreen extends React.Component {
         // console.log(this.state.username)
         return (
             <View style={styles.container}>
-                {/* <Text>Wellcom</Text> */}
-                {/* <View style={{ flexDirection: 'row', backgroundColor: 'white' }}> */}
-                {/* <View style={{ flex: 1,flexDirection:'row'}}></View> */}
-                {/* <View style={{ flex: 1.5, borderColor: 'gray', borderWidth: 1, flexDirection: 'row',borderRadius:2 ,backgroundColor:'gray'}}> */}
+                
                 <TouchableOpacity style={this.props.touchableOpacityOne} activeOpacity={0.8}
                     onPress={this.props.decreamentValue}>
                     <Image source={this.props.iconMinus} style={styles.forImg} />
@@ -31,19 +28,15 @@ class InputImgsScreen extends React.Component {
                     <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={this.props.style}
                         type="number"
                         onChangeText={this.props.getHeightWeight}
-                        // value = {this.state.height}
+                        
                     />
-                    {/* {this.props.height} */}
+                    
                 </View>
                 <TouchableOpacity style={this.props.touchableOpacityTwo} activeOpacity={0.8}
                     onPress={this.props.increamentValue}>
                     <Image source={this.props.iconPlus} style={styles.forImg} />
                 </TouchableOpacity>
-                {/* </View> */}
-
-                {/* </View> */}
-                {/* <View style={{ flex: 1,flexDirection:'row'}}></View> */}
-
+            
             </View>
         )
     }
@@ -74,7 +67,7 @@ const styles = StyleSheet.create({
 
     },
     textInputContainer: {
-        flex: 2,
+        flex: 1,
         justifyContent: 'center',
         flexDirection: 'row',
         marginVertical: 5,

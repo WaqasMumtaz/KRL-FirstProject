@@ -18,6 +18,12 @@ const styles =StyleSheet.create({
         
         //backgroundColor:'green'
     },
+    container: {
+        flex: 1,
+        flexDirection: 'row'
+        // width: screenWidth,
+        // height: screenHeight
+    },
     headingContainer:{
         flex:1.5,
         //height:'7%',
@@ -272,10 +278,28 @@ const styles =StyleSheet.create({
         flex:1,
         flexDirection:'row',
         marginTop:10
+    },
+    forImg: {
+        width: 16,
+        height: 16,
+        marginVertical: 5
+
+    },
+    textInputContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        flexDirection: 'row',
+        marginVertical: 5,
+        //borderRadius:2
+    },
+    clickBtnStyle:{
+        height: 38,
+        width: '90%', 
+        justifyContent:'center',
+        backgroundColor: '#FF6200',
+        alignItems:'center',
+        borderRadius:3
     }
-
-
-      
 
 })
 
