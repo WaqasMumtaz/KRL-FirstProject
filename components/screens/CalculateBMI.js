@@ -22,18 +22,10 @@ class BMICalculator extends React.Component {
             weight: 0,
             bmi: '',
             heightUnit: '',
-            weightUnit: ''
+            weightUnit: '',
+            showMgs: '',
+            mgs: false,
         }
-    }
-    getHeight = (e) => {
-        this.setState({
-            height: e
-        })
-    }
-    getWeight = (e) => {
-        this.setState({
-            weight: e
-        })
     }
     increamentHeight = () => {
         const height = Number(this.state.height)
@@ -59,46 +51,49 @@ class BMICalculator extends React.Component {
             height: weight + 1
         })
     }
-    calculateBmi = () => {
-        console.log('calculateBmi')
-        // if (heightUnit == 'inches' && weight == 'kg') {
-
-        // }
-        // else if (heightUnit == 'inches' && weight == 'pound') {
-
-        // }
-        // else if (heightUnit == 'centimeter' && weight == 'kg') {
-
-        // }
-        // else if (heightUnit == 'centimeter' && weight == 'pound') {
-
-        // }
-    }
     updateHeight = (e) => {
-        const { height, weight, heightUnit, weightUnit } = this.state
-        console.log(e, 'updateHeight')
         this.setState({
             heightUnit: e
         })
-        if (weight != 0 && height != 0 && heightUnit != '' && weightUnit != '') {
-            this.calculateBmi()
-        }
     }
     updateWeight = (e) => {
-        const { height, weight, heightUnit, weightUnit } = this.state
-        console.log(e, 'updateWeight')
         this.setState({
             weightUnit: e
         })
-        if (weight != 0 && height != 0 && heightUnit != '' && weightUnit != '') {
-            this.calculateBmi()
+    }
+
+    calculateBmi = () => {
+        const { height, weight, heightUnit, weightUnit } = this.state;
+        let bmiValue
+        if (heightUnit == 'inches' && weightUnit == 'pound') {
+            bmiValue = (weight / height / height) * 703
+            this.setState({
+                bmi: bmiValue,
+                mgs: false
+            })
+        }
+        else if (heightUnit == 'centimeter' && weightUnit == 'kg') {
+            bmiValue = (weight / height / height) * 10000
+            this.setState({
+                bmi: bmiValue,
+                mgs: false
+            })
+        }
+        else if (heightUnit == 'inches' && weightUnit == 'kg') {
+            this.setState({
+                showMgs: "Select Weight Unit In Pounds",
+                mgs: true,
+            })
+        }
+        else if (heightUnit == 'centimeter' && weightUnit == 'pound') {
+            this.setState({
+                showMgs: "Select Weight Unit In KG,s",
+                mgs: true,
+            })
         }
     }
     render() {
-        // const { height, weight } = this.state;
-        console.log(this.state.height, 'height')
-        console.log(this.state.weight, 'weight')
-
+        const { showMgs, mgs } = this.state;
         return (
             // <View style={styles.mainContainer}>
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -111,7 +106,6 @@ class BMICalculator extends React.Component {
                     <View style={styles.textContainer}>
                         <Text style={styles.textStyle}>Enter your height and weight below to calculate your BMI </Text>
                     </View>
-
                     <View style={styles.inputMainContainer}>
                         <View style={styles.leftContainer}>
                             <View style={styles.container}>
@@ -137,19 +131,15 @@ class BMICalculator extends React.Component {
                                 <View style={styles.textInputContainer}>
                                     <TextInput keyboardType='numeric' maxLength={3} style={styles.textInputStyleParent}
                                         type="number"
-                                        // onChangeText={this.getHeight}
-                                        onChangeText={(heig) => this.setState({ height: heig })}
+                                        onChangeText={(height) => this.setState({ height: height })}
                                         value={this.state.height}
-                                    // placeholderTextColor = 'black'
                                     />
-                                    {/* {this.props.height} */}
                                 </View>
                                 <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
                                     onPress={this.increamentHeight}>
                                     <Image source={require('../icons/plus.png')} style={styles.forImg} />
                                 </TouchableOpacity>
                             </View>
-
                             <View style={styles.container}>
                                 <Text style={styles.textStyle}>Weight</Text>
                                 {/* <InputImgsScreen
@@ -169,10 +159,9 @@ class BMICalculator extends React.Component {
                                 <View style={styles.textInputContainer}>
                                     <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
                                         type="number"
-                                        onChangeText={this.getWeight}
-                                    // value = {this.state.height}
+                                        onChangeText={(weight) => this.setState({ weight: weight })}
+                                        value={this.state.weight}
                                     />
-                                    {/* {this.props.height} */}
                                 </View>
                                 <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
                                     onPress={this.increamentWeight}>
@@ -181,12 +170,12 @@ class BMICalculator extends React.Component {
                             </View>
                         </View>
                         <View style={styles.rightContainer}>
-
                             <Text style={styles.nuitTextStyleOne}>Unit</Text>
                             <View style={styles.pickerContainerOne}>
                                 <Picker selectedValue={this.state.heightUnit}
                                     onValueChange={this.updateHeight}
                                     style={styles.pickerStyle}>
+                                    <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="Inches" value="inches" />
                                     <Picker.Item label="Centimeter" value="centimeter" />
                                 </Picker>
@@ -196,17 +185,30 @@ class BMICalculator extends React.Component {
                                 <Picker selectedValue={this.state.weightUnit}
                                     onValueChange={this.updateWeight}
                                     style={styles.pickerStyle}>
+                                    <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="KG" value="kg" />
                                     <Picker.Item label="Pound" value="pound" />
                                 </Picker>
                             </View>
                         </View>
                     </View>
+                    <View>
+                        {mgs ?
+                            <Text>
+                                {showMgs}
+                            </Text>
+                            : null}
+                    </View>
                     <Text style={styles.bmiTextStyle}>BMI</Text>
                     <View style={styles.bmiInputContainer}>
-                        <TextInput placeholder="c.g 22" placeholderTextColor="#4f4f4f" style={styles.inputStyle} />
+                        <TextInput placeholder="c.g 22"
+                            placeholderTextColor="#4f4f4f"
+                            style={styles.inputStyle}
+                            value={this.state.bmi}
+                        />
                     </View>
-
+                    <Button title='Calculate' onPress={this.calculateBmi}>
+                    </Button>
                 </View>
             </ScrollView>
         )

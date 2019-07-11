@@ -20,7 +20,6 @@ class InputImgsScreen extends React.Component {
         return (
             <View style={styles.container}>
                 {/* <Text>Wellcom</Text> */}
-
                 {/* <View style={{ flexDirection: 'row', backgroundColor: 'white' }}> */}
                 {/* <View style={{ flex: 1,flexDirection:'row'}}></View> */}
                 {/* <View style={{ flex: 1.5, borderColor: 'gray', borderWidth: 1, flexDirection: 'row',borderRadius:2 ,backgroundColor:'gray'}}> */}
