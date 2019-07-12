@@ -31,9 +31,9 @@ import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 
 
 const MainNavigator= createStackNavigator({
-  // Login: {screen: Login},
-  // ResetpasswordScreen:{screen:ResetpasswordScreen},
-  // ConfirmResetPassword:{screen:ConfirmResetPassword},
+   Login: {screen: Login},
+  //  ResetpasswordScreen:{screen:ResetpasswordScreen},
+  //  ConfirmResetPassword:{screen:ConfirmResetPassword},
   // Signup:{screen:Signup},
   //ActivateSpinner:{screen:ActivateSpinner},
   // Setupscreen1:{screen:Setupscreen1}, 

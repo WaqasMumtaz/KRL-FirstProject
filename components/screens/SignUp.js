@@ -14,6 +14,9 @@ import CaloriesSetupBtn from '../buttons/setUpBtn'
 import styles from '../Styling/SignUpScreenStyle';
 import HttpUtilsFile from '../Services/HttpUtils';
 import { Dialog } from 'react-native-simple-dialogs';
+// import * as firebase from 'firebase';
+// import 'firebase/firestore';
+import firebase from 'react-native-firebase';
 //console.log(HttpUtilsFile)
 const { height } = Dimensions.get('window');
 

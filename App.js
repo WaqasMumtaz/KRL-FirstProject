@@ -3,6 +3,10 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import AppContainer from './components/navigation/StackNavigation';
 import ChartScreen from './components/BarChart/BarChart';
+import config from './Config/ApiKeys';
+import * as firebase from 'firebase';
+//import firebase from 'react-native-firebase';
+
 //import console = require('console');
 //import InputImgsScreen from './components/screens/InputImgs';
 //import {createBottomTabNavigator, createAppContainer} from 'react-navigation';
@@ -17,6 +21,12 @@ class App extends Component {
 
     this.state={
       name:'waqas mumtaz'
+    }
+    if(!firebase.apps.length) {
+      //console.log(!firebase.apps.length)
+     // firebase.initializeApp(ApiKeys.FirebaseConfig);
+      firebase.initializeApp(config);
+      //console.log(firebase.initializeApp)
     }
   }
  render() {
