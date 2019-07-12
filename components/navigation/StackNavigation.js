@@ -37,7 +37,7 @@ const MainNavigator = createStackNavigator({
   // Signup:{screen:Signup},
   // ActivateSpinner:{screen:ActivateSpinner},
   // Setupscreen1:{screen:Setupscreen1}, 
-  // Setupscreen:{screen:Setupscreen},
+  Setupscreen:{screen:Setupscreen},
   LastSetUpScreen: { screen: LastSetUpScreen },
   // Wheelspiner:{screen:Wheelspiner},
   BriskScreen: { screen: BriskScreen },

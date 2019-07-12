@@ -18,7 +18,7 @@ class Macrocalculator extends React.Component {
 
         this.state = {
             user: '',
-            dob: '',
+            age: '',
             gender: '',
             height: '',
             currentWeight: '',
@@ -46,6 +46,9 @@ class Macrocalculator extends React.Component {
     }
     calulateMacro = () => {
         const { dob, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit, activityLevel } = this.state
+        // console.log(gender, 'gender', height, 'height', currentWeight, 'currentWeight',
+        //     goalWeight, 'goalWeight', heightUnit, 'heightUnit', currentWeightUnit, 'currentWeightUnit', goalWeightUnit, 'goalWeightUnit',
+        //     activityLevel, 'activityLevel')
         if (dob == '') {
             this.setState({
                 dobValidation: true
@@ -98,13 +101,15 @@ class Macrocalculator extends React.Component {
         if (gender == 'male') {
             this.setState({
                 male: true,
-                female: false
+                female: false,
+                gender: 'male'
             })
         }
         else if (gender == 'female') {
             this.setState({
                 male: false,
-                female: true
+                female: true,
+                gender: 'female'
             })
         }
     }
@@ -115,7 +120,8 @@ class Macrocalculator extends React.Component {
                 moderate: true,
                 sedentary: false,
                 light: false,
-                extreme: false
+                extreme: false,
+                activityLevel: 'moderate'
             })
         }
         else if (activity == 'sedentary') {
@@ -123,7 +129,8 @@ class Macrocalculator extends React.Component {
                 moderate: false,
                 sedentary: true,
                 light: false,
-                extreme: false
+                extreme: false,
+                activityLevel: 'sedentary'
             })
         }
         else if (activity == 'light') {
@@ -131,7 +138,8 @@ class Macrocalculator extends React.Component {
                 moderate: false,
                 sedentary: false,
                 light: true,
-                extreme: false
+                extreme: false,
+                activityLevel: 'light'
             })
         }
         else if (activity == 'extreme') {
@@ -139,9 +147,73 @@ class Macrocalculator extends React.Component {
                 moderate: false,
                 sedentary: false,
                 light: false,
-                extreme: true
+                extreme: true,
+                activityLevel: 'extreme'
             })
         }
+    }
+    increamentVal(value) {
+        const { height, currentWeight, goalWeight } = this.state;
+        if (value == 'height') {
+            const heightNum = Number(height) + 1
+            let heightVal = heightNum.toString()
+            this.setState({
+                height: heightVal
+            })
+        }
+        else if (value == 'currentWeight') {
+            const currentWeightNum = Number(currentWeight) + 1
+            let currentWeightVal = currentWeightNum.toString()
+            this.setState({
+                currentWeight: currentWeightVal
+            })
+        }
+        else if (value == 'goalWeight') {
+            const goalWeightNum = Number(goalWeight) + 1
+            let goalWeightVal = goalWeightNum.toString()
+            this.setState({
+                goalWeight: goalWeightVal
+            })
+        }
+    }
+    decrementVal(value) {
+        const { height, currentWeight, goalWeight } = this.state;
+        if (value == 'height') {
+            const heightNum = Number(height) - 1
+            let heightVal = heightNum.toString()
+            this.setState({
+                height: heightVal
+            })
+        }
+        else if (value == 'currentWeight') {
+            const currentWeightNum = Number(currentWeight) - 1
+            let currentWeightVal = currentWeightNum.toString()
+            this.setState({
+                currentWeight: currentWeightVal
+            })
+        }
+        else if (value == 'goalWeight') {
+            const goalWeightNum = Number(goalWeight) - 1
+            let goalWeightVal = goalWeightNum.toString()
+            this.setState({
+                goalWeight: goalWeightVal
+            })
+        }
+    }
+    updateHeight = (e) => {
+        this.setState({
+            heightUnit: e
+        })
+    }
+    updateCurrentWeight = (e) => {
+        this.setState({
+            currentWeightUnit: e
+        })
+    }
+    updateGoalWeight = (e) => {
+        this.setState({
+            goalWeightUnit: e
+        })
     }
     render() {
         const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation,
@@ -162,10 +234,11 @@ class Macrocalculator extends React.Component {
                             your daily macro limit </Text>
                         </View>
                         <View style={styles.dateBirth}>
-                            <Text style={styles.textStyle}>Date Of Birth</Text>
+                            <Text style={styles.textStyle}>Age</Text>
                         </View>
                         <View style={styles.inputContainer}>
-                            <TextInput placeholder="Tap to set..." placeholderTextColor="gray" style={styles.inputStyle} />
+                            <TextInput placeholder="Tap to set..." placeholderTextColor="gray" style={styles.inputStyle} 
+                            onChangeText={(age) => this.setState({ age: age })}/>
                         </View>
                         {dobValidation ?
                             <View>
@@ -200,17 +273,19 @@ class Macrocalculator extends React.Component {
                                     touchableOpacityTwo={styles.touchableOpacityTwo}
                                 /> */}
                                 <View style={styles.container}>
-                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}>
+                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                        onPress={this.decrementVal.bind(this, 'height')}>
                                         <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
                                     <View style={styles.textInputContainer}>
                                         <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
                                             type="number"
-                                        // onChangeText={this.props.getHeightWeight}
+                                            onChangeText={(height) => this.setState({ height: height })}
+                                            value={this.state.height}
                                         />
                                     </View>
                                     <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
-                                    >
+                                        onPress={this.increamentVal.bind(this, 'height')}>
                                         <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
                                 </View>
@@ -231,16 +306,19 @@ class Macrocalculator extends React.Component {
                                     touchableOpacityTwo={styles.touchableOpacityTwo}
                                 /> */}
                                 <View style={styles.container}>
-                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}>
+                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                        onPress={this.decrementVal.bind(this, 'currentWeight')}>
                                         <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
                                     <View style={styles.textInputContainer}>
                                         <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
                                             type="number"
-                                        // onChangeText={this.props.getHeightWeight}
+                                            onChangeText={(currentWeight) => this.setState({ currentWeight: currentWeight })}
+                                            value={this.state.currentWeight}
                                         />
                                     </View>
-                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}>
+                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                        onPress={this.increamentVal.bind(this, 'currentWeight')}>
                                         <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
                                 </View>
@@ -261,16 +339,19 @@ class Macrocalculator extends React.Component {
                                     touchableOpacityTwo={styles.touchableOpacityTwo}
                                 /> */}
                                 <View style={styles.container}>
-                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}>
+                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                        onPress={this.decrementVal.bind(this, 'goalWeight')}>
                                         <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
                                     <View style={styles.textInputContainer}>
                                         <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
                                             type="number"
-                                        // onChangeText={this.props.getHeightWeight}
+                                            onChangeText={(goalWeight) => this.setState({ goalWeight: goalWeight })}
+                                            value={this.state.goalWeight}
                                         />
                                     </View>
-                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}>
+                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                        onPress={this.increamentVal.bind(this, 'goalWeight')}>
                                         <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
                                 </View>
@@ -307,8 +388,8 @@ class Macrocalculator extends React.Component {
                             </TouchableOpacity>
                             <View><Text></Text></View>
                             <View style={{ marginTop: 44 }}>
-                                <Picker selectedValue={this.state.user}
-                                    onValueChange={this.updateUser}
+                                <Picker selectedValue={this.state.heightUnit}
+                                    onValueChange={this.updateHeight}
                                     style={styles.pickerStyle}>
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="Inches" value="inches" />
@@ -323,11 +404,12 @@ class Macrocalculator extends React.Component {
                                 </View>
                                 : null}
                             <View style={{ marginTop: 50 }}>
-                                <Picker selectedValue={this.state.user}
-                                    onValueChange={this.updateUser}
+                                <Picker selectedValue={this.state.currentWeightUnit}
+                                    onValueChange={this.updateCurrentWeight}
                                     style={styles.pickerStyle}>
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="KG" value="kg" />
+                                    <Picker.Item label="Pound" value="pound" />
                                     {/* <Picker.Item label="Centimeter" value="centimeter" /> */}
                                 </Picker>
                             </View>
@@ -339,11 +421,12 @@ class Macrocalculator extends React.Component {
                                 </View>
                                 : null}
                             <View style={{ marginTop: 50 }}>
-                                <Picker selectedValue={this.state.user}
-                                    onValueChange={this.updateUser}
+                                <Picker selectedValue={this.state.goalWeightUnit}
+                                    onValueChange={this.updateGoalWeight}
                                     style={styles.pickerStyle}>
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="KG" value="kg" />
+                                    <Picker.Item label="Pound" value="pound" />
                                     {/* <Picker.Item label="Centimeter" value="centimeter" /> */}
                                 </Picker>
                             </View>
