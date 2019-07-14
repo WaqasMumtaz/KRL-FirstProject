@@ -1,4 +1,4 @@
-import { Alert, StyleSheet,} from 'react-native';
+import { Alert, StyleSheet, } from 'react-native';
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -36,21 +36,21 @@ const styles = StyleSheet.create({
     dateOfBirthContainer: {
         flex: 0.3,
         //backgroundColor: 'skyblue',
-        marginTop:10,
+        marginTop: 10,
         justifyContent: 'center',
         flexDirection: 'row'
 
     },
     genderContainer: {
-        flex: 0.5,
+        flex: 2,
         //backgroundColor: 'green',
-        marginTop:10,
+        marginTop: 10,
         flexDirection: 'row',
-        
+
 
     },
     genderInputStyleMale: {
-         flex: 1,
+        flex: 1,
         fontFamily: 'MontserratLight',
         color: '#666666',
         height: 40,
@@ -59,27 +59,27 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         marginRight: 20,
         // paddingLeft: 16,
-        textAlign:'center'
-        
+        textAlign: 'center'
+
     },
     genderInputStyleFemale: {
         flex: 1,
-       fontFamily: 'MontserratLight',
-       color: '#666666',
-       //marginLeft: 20,
-       height: 40,
-       borderColor: 'gray',
-       backgroundColor: '#808080',
-       borderWidth: 2,
-       //marginRight: 20,
-    //    paddingLeft: 16,
-       textAlign:'center'
-       
-   },
-   textsStyle:{
-    fontFamily: 'MontserratLight',
-    color: '#A6A6A6',
-   },
+        fontFamily: 'MontserratLight',
+        color: '#666666',
+        //marginLeft: 20,
+        height: 40,
+        borderColor: 'gray',
+        backgroundColor: '#808080',
+        borderWidth: 2,
+        //marginRight: 20,
+        //    paddingLeft: 16,
+        textAlign: 'center'
+
+    },
+    textsStyle: {
+        fontFamily: 'MontserratLight',
+        color: '#A6A6A6',
+    },
     btnContainer: {
         flex: 0.5,
         //backgroundColor: 'gray'
@@ -91,14 +91,58 @@ const styles = StyleSheet.create({
         marginRight: 20
 
     },
-    caloriesBtnStyle:{
-        flex:2,
-        height:40,
-        justifyContent:'center',
+    caloriesBtnStyle: {
+        flex: 2,
+        height: 40,
+        justifyContent: 'center',
         backgroundColor: '#FF6200',
-        alignItems:'center',
-        borderRadius:5
-      }
+        alignItems: 'center',
+        borderRadius: 5
+    },
+    maleContainer: {
+        flex: 1
+    },
+    maleTouchableOpacity: {
+        height: 38,
+        width: '90%',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        marginTop: 5,
+        borderRadius: 3,
+        // opacity: 0.3
+    },
+    maleTextStyle: {
+        textAlign: 'center',
+        color: 'black',
+        fontFamily: 'MontserratLight',
+        // opacity:0.3
+    },
+    femaleContainer: {
+        height: 38,
+        width: '90%',
+        marginLeft: 16,
+        justifyContent: 'center',
+        backgroundColor: '#e5e5e5',
+        marginTop: 5,
+        borderRadius: 3
+    },
+    clickBtnStyle: {
+        // height: 38,
+        // width: '90%', 
+        // justifyContent:'center',
+        // backgroundColor: '#FF6200',
+        // alignItems:'center',
+        // borderRadius:3
+        // flex:2,
+        height: 38,
+        justifyContent: 'center',
+        backgroundColor: '#FF6200',
+        alignItems: 'center',
+        borderRadius: 3,
+        marginTop: 5,
+        width: '90%',
+        // opacity: 2.5
+    }
 })
 
 export default styles;
