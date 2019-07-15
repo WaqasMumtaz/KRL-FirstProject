@@ -22,7 +22,6 @@ import ResetpasswordScreen from '../screens/ResetPasswrd';
 import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 import ChartScreen from '../BarChart/BarChart';
 import Wheelspiner from '../Progress Wheel/Progress';
-//import console = require('console');
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
 // import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
