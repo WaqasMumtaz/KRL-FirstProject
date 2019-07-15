@@ -10,6 +10,7 @@ import {
   TouchableHighlight,
   Image
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import styles from '../Styling/ChatScreenStyle';
 import ImagePicker from 'react-native-image-picker';
 console.ignoredYellowBox = ['Remote debugger'];
@@ -18,14 +19,22 @@ console.disableYellowBox = true;
 YellowBox.ignoreWarnings([
   'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
 ]);
-import io from 'socket.io-client';
+const BASE_URL = 'https://getfit-server.herokuapp.com';
+//import io from 'socket.io-client';
 //import io from 'socket.io/socket.io.js'
-const socket = io.connect("http://192.168.100.9:3000",
+//const socket = io.connect("192.168.100.9:3000",
+// const socket = io.connect("https://getfit-server.herokuapp.com:3000",
+//  {
+//     jsonp: false,
+//     transports: ['websocket']
+//   }
+// )
+
 //const socket = io.connect("http://localhost:3000",
-  {
-    jsonp: false,
-    transports: ['websocket']
-  });
+  // {
+  //   jsonp: false,
+  //   transports: ['websocket']
+  //});
 
 // const connectionConfig = {
 //   jsonp: false,
@@ -62,25 +71,37 @@ class Chatscreen extends React.Component {
       attachOrange: false,
       shareFiles: false,
       avatarSource:null,
-      expand:false
+      expand:false,
+      date:''
     }
 
 
 
   }
-
+ 
   componentDidMount() {
-    socket.on('connect', () => {
-      console.log('Congrates!! user connected');
-      console.log(socket.connected)
-      socket.on('chat message', data => {
-        this.setState({
-          chatMessages: [...this.state.chatMessages, data],
-
-        })
-      })
-
+    const date = new Date().getDate(); //Current Date
+    const month = new Date().getMonth() + 1; //Current Month
+    const year = new Date().getFullYear(); //Current Year
+    const hours = new Date().getHours(); //Current Hours
+    const min = new Date().getMinutes(); //Current Minutes
+    const sec = new Date().getSeconds(); //Current Seconds
+    this.setState({
+      date:date + '/' + month + '/' + year + ' ' + hours + ':' + min + ':' + sec,
     })
+
+    // socket.on('connect', () => {
+    //   console.log('Congrates!! user connected');
+    //   console.log(socket.connected);
+      
+    //   socket.on('chat message', data => {
+    //     this.setState({
+    //       chatMessages: [...this.state.chatMessages, data],
+
+    //     })
+    //   })
+
+    // })
     // socket.on('repmsg', msg =>{
     //   this.setState({
     //     repMessages:[...this.state.repMessages, msg]
@@ -90,10 +111,33 @@ class Chatscreen extends React.Component {
 
   }
 
-  sendMessage = () => {
-    console.log(this.state.textMessage)
-    socket.emit("chat message", this.state.textMessage);
-    console.log(socket.connected);
+  // componentWillMount(){
+  //   socket.on('connect', ()=>{
+  //     const nRoom = "nRoom";
+  //     socket.emit('nRoom', nRoom)
+  //     socket.on('one new user', data =>{
+  //       console.log(data);
+  //     })
+  //   })
+  // }
+
+  sendMessage = async () => {
+    // const {date,textMessage} = this.state;
+    // const item =await AsyncStorage.getItem('currentUser');
+    // const dataParse = await JSON.parse(item);
+    // const getUserName = dataParse.name;
+    // const userMsgs=[];
+    // userMsgs.push(textMessage);
+
+    //  let senderChatMessages=  {
+    //   type:'sender',
+    //   msg:textMessage,
+    //   name:getUserName,
+    //   date:date
+    // }
+    // console.log(senderChatMessages)
+    // socket.emit("chat message", senderChatMessages);
+    // console.log(socket.connected);
 
     this.setState({
       textMessage: '',

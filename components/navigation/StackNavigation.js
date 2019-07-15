@@ -29,10 +29,17 @@ import Wheelspiner from '../Progress Wheel/Progress';
 //console.log('hello World')
 
 
+<<<<<<< HEAD
+const MainNavigator= createStackNavigator({
+   Login: {screen: Login},
+  //  ResetpasswordScreen:{screen:ResetpasswordScreen},
+  //  ConfirmResetPassword:{screen:ConfirmResetPassword},
+=======
 const MainNavigator = createStackNavigator({
   // Login: {screen: Login},
   // ResetpasswordScreen:{screen:ResetpasswordScreen},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
+>>>>>>> 9a846f531d4b1d9fb8ccaf5d12f99a5edc84eb3a
   // Signup:{screen:Signup},
   // ActivateSpinner:{screen:ActivateSpinner},
   // Setupscreen1:{screen:Setupscreen1}, 

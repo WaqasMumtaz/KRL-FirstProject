@@ -8,14 +8,20 @@
   },
   "dependencies": {
     "@callstack/async-storage": "^1.1.0",
+    "@react-native-community/async-storage": "^1.5.1",
     "AsyncStorage": "^0.1.5",
     "apsl-react-native-button": "^3.1.1",
+    "firebase": "^6.3.0",
     "prop-types": "^15.7.2",
     "react": "16.8.6",
     "react-native": "0.59.5",
     "react-native-charts": "^3.0.0",
     "react-native-charts-wrapper": "^0.5.5",
+<<<<<<< HEAD
+    "react-native-firebase": "^5.5.5",
+=======
     "react-native-datepicker": "^1.7.2",
+>>>>>>> 9a846f531d4b1d9fb8ccaf5d12f99a5edc84eb3a
     "react-native-gesture-handler": "^1.2.1",
     "react-native-image-picker": "^0.28.1",
     "react-native-progress-wheel": "^1.0.4",
