@@ -20,7 +20,7 @@ import BMICalculator from '../screens/CalculateBMI';
 //import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
 import ResetpasswordScreen from '../screens/ResetPasswrd';
 import ConfirmResetPassword from '../screens/CheckResetPasswrd';
-import ChartScreen from '../BarChart/BarChart';
+// import ChartScreen from '../BarChart/BarChart';
 import Wheelspiner from '../Progress Wheel/Progress';
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
 // import Resetpassword from '../screens/ResetPasswrd';
@@ -29,17 +29,14 @@ import Wheelspiner from '../Progress Wheel/Progress';
 //console.log('hello World')
 
 
-<<<<<<< HEAD
 const MainNavigator= createStackNavigator({
    Login: {screen: Login},
   //  ResetpasswordScreen:{screen:ResetpasswordScreen},
   //  ConfirmResetPassword:{screen:ConfirmResetPassword},
-=======
-const MainNavigator = createStackNavigator({
+// const MainNavigator = createStackNavigator({
   // Login: {screen: Login},
   // ResetpasswordScreen:{screen:ResetpasswordScreen},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
->>>>>>> 9a846f531d4b1d9fb8ccaf5d12f99a5edc84eb3a
   // Signup:{screen:Signup},
   // ActivateSpinner:{screen:ActivateSpinner},
   // Setupscreen1:{screen:Setupscreen1}, 
@@ -47,7 +44,7 @@ const MainNavigator = createStackNavigator({
   LastSetUpScreen: { screen: LastSetUpScreen },
   // Wheelspiner:{screen:Wheelspiner},
   BriskScreen: { screen: BriskScreen },
-  ChartScreen: { screen: ChartScreen },
+  // ChartScreen: { screen: ChartScreen },
 
   BottomTabe: {
     screen: BottomTabe,

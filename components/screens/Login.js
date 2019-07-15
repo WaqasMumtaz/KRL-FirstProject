@@ -68,25 +68,23 @@ class Login extends React.Component {
         let userMsg = dataUser.msg;
 
         if (getUserCode) {
-          
+
           let userDataSave = {
             token: dataUser.token,
             email: dataUser.email,
             name: dataUser.name,
-            id: dataUser._id
-
+            id: dataUser._id,
           }
-        //  console.log(userDataSave)
-
+          await AsyncStorage.setItem('currentUser', JSON.stringify(userDataSave));
+          
           db.collection('users').add({
-            userDataSave
-          }).then( ()=> {
-            AsyncStorage.setItem('currentUser', JSON.stringify(userDataSave));
+            dataUser
+          }).then(() => {
             this.setState({ isLoading: false })
             alert("Successfully Login!");
             navigate('BottomTabe')
           })
-            .catch( ()=> {
+            .catch(() => {
               this.setState({ isLoading: false })
               alert('Something went wrong!')
               console.error("Error writing document: ", error);
@@ -159,19 +157,19 @@ class Login extends React.Component {
     })
   }
 
-// componentWillMount(){
-//   const  config ={  
-//     apiKey: "AIzaSyCrtuXYX_EYef2zSbdKnbKMROkH65pFrX4",
-//     authDomain: "getfit-application.firebaseapp.com",
-//     databaseURL: "https://getfit-application.firebaseio.com",
-//     projectId: "getfit-application",
-//     storageBucket: "getfit-application-react-native-appspot.com",
-//     messagingSenderId: "253025208867",
-//     appId: "1:253025208867:web:bd3b867d48f7fe6e"
-  
-// }
-// firebase.initializeApp(config)
-// }
+  // componentWillMount(){
+  //   const  config ={  
+  //     apiKey: "AIzaSyCrtuXYX_EYef2zSbdKnbKMROkH65pFrX4",
+  //     authDomain: "getfit-application.firebaseapp.com",
+  //     databaseURL: "https://getfit-application.firebaseio.com",
+  //     projectId: "getfit-application",
+  //     storageBucket: "getfit-application-react-native-appspot.com",
+  //     messagingSenderId: "253025208867",
+  //     appId: "1:253025208867:web:bd3b867d48f7fe6e"
+
+  // }
+  // firebase.initializeApp(config)
+  // }
 
 
 
