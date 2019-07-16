@@ -11,10 +11,11 @@ import {
   Image
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import SoundRecorder from 'react-native-sound-recorder';
 import styles from '../Styling/ChatScreenStyle';
 import ImagePicker from 'react-native-image-picker';
 console.ignoredYellowBox = ['Remote debugger'];
-import { YellowBox } from 'react-native';
+import { YellowBox, PermissionsAndroid } from 'react-native';
 console.disableYellowBox = true;
 YellowBox.ignoreWarnings([
   'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
@@ -60,7 +61,6 @@ class Chatscreen extends React.Component {
   };
   constructor(props) {
     super(props);
-
     this.state = {
       textMessage: '',
       chatMessages: [],
@@ -79,7 +79,9 @@ class Chatscreen extends React.Component {
       expand: false,
       date: '',
       time: '',
-      fetchChats: false
+      fetchChats: false,
+      userId: '',
+      opponentId: '',
     }
   }
 
@@ -112,46 +114,11 @@ class Chatscreen extends React.Component {
     //     repMessages:[...this.state.repMessages, msg]
     //   })
     // })
-    // AsyncStorage.getItem("currentUser").then(value => {
-    //   const chatArrayTemp = [];
-    //   const replyArrayTemp = [];
-    //   let tainnyId;
-    //   if (value) {
-    //     data = JSON.parse(value);
-    //     // console.log(data, 'data')
-    //     // db.collection('chatRoom').get().then((snapshot) => {
-    //     //   snapshot.docs.forEach(doc => {
-    //     //     let items = doc.data();
-    //     //     console.log(items, 'items')
-    //     //     if (items.mgs.userId == data.id) {
-    //     //       console.log(items.mgs.textMessage, 'items without snap shot');
-    //     //       chatArrayTemp.push(items.mgs.textMessage)
-    //     //       tainnyId = items.mgs.tainnyId;
-    //     //     }
-    //     //     if (tainnyId == items.mgs.userId) {
-    //     //       console.log('condition true')
-    //     //       replyArrayTemp.push(items.mgs.textMessage)
-    //     //     }
-    //     //   });
-    //     // console.log(replyArrayTemp, 'replyArrayTemp')
-    //     // this.setState({
-    //     //   chatMessages: chatArrayTemp,
-    //     //   repMessages: replyArrayTemp
-    //     // })
-    //     // });
-
-    //   }
-    // });
   }
 
   componentWillMount() {
     let chatArrayTemp = [];
-    let replyArrayTemp = [];
     let dataFromLocalStorage;
-    console.log('componentWillMount')
-    // if(chatArrayTemp > 0){
-    //   console.log('condition truee array is not empty')
-    // }
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         dataFromLocalStorage = JSON.parse(value);
@@ -162,24 +129,40 @@ class Chatscreen extends React.Component {
       for (var i in data) {
         let firbaseData = data[i]
         if (firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage._id) {
-          chatArrayTemp.push(firbaseData.textMessage)
+          chatArrayTemp.push(firbaseData)
+          this.setState({
+            sender: true,
+            receiver: false
+          })
         }
-        console.log(firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.trainnerId)
-        console.log(firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.tainnyId)
 
         if (firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.trainnerId || firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.tainnyId) {
-          console.log('reciver condition true')
-          chatArrayTemp.push(firbaseData.textMessage)
+          // console.log('reciver condition true')
+          chatArrayTemp.push(firbaseData)
+          this.setState({
+            receiver: true,
+            sender: false
+          })
         }
+      }
+      if (dataFromLocalStorage.trainnerId) {
+        this.setState({
+          opponentId: dataFromLocalStorage.trainnerId,
+        })
+      }
+      else if (dataFromLocalStorage.tainnyId) {
+        this.setState({
+          opponentId: dataFromLocalStorage.tainnyId,
+        })
       }
       this.setState({
         chatMessages: chatArrayTemp,
-        // repMessages: replyArrayTemp
+        userId: dataFromLocalStorage._id,
+
+
       })
       chatArrayTemp = [];
-      replyArrayTemp = [];
     });
-    console.log(chatArrayTemp, 'chatArrayTemp')
     // socket.on('connect', ()=>{
     //   const nRoom = "nRoom";
     //   socket.emit('nRoom', nRoom)
@@ -216,73 +199,11 @@ class Chatscreen extends React.Component {
           mgs.time = time;
           db.ref(`chatRoom/`).push(mgs);
         }
-
-
-
-
-        // console.log(data, 'data')
-        //   db.collection('users').get().then((snapshot) => {
-        //     snapshot.docs.forEach(doc => {
-        //       let items = doc.data();
-        //       console.log(items, 'items without snap shot')
-        //       if (items.dataUser._id == data.id) {
-        //         if (items.dataUser.trainnerId != undefined && items.dataUser.assignTrainner != undefined) {
-        //           mgs.trainnerId = items.dataUser.trainnerId;
-        //           mgs.assignTrainner = items.dataUser.assignTrainner;
-        //           mgs.userId = items.dataUser._id;
-        //           mgs.name = data.name;
-        //           mgs.textMessage = textMessage
-        //         }
-        //         else {
-        //           mgs.tainnyId = items.dataUser.tainnyId;
-        //           mgs.assignTrainny = items.dataUser.assignTrainny;
-        //           mgs.userId = items.dataUser._id;
-        //           mgs.name = data.name;
-        //           mgs.textMessage = textMessage
-        //         }
-        //       }
-        //     });
-        //     db.collection('chatRoom').add({
-        //       mgs
-        //     }).then(() => {
-        //       // alert("Successfully Login!");
-        //     })
-        //       .catch(() => {
-        //         alert('Something went wrong!')
-        //       });
-        //   });
       }
     });
-    // db.collection("users").doc('').get().then(function (doc) {
-    //   console.log(doc.data())
-    //   if (doc.exists) {
-    //     console.log("Document data:", doc.data());
-    //   } else {
-    //     // doc.data() will be undefined in this case
-    //     console.log("No such document!");
-    //   }
-    // }).catch(function (error) {
-    //   console.log("Error getting document:", error);
-    // });
-
-    // db.collection('users').get()
-
-    // const {date,textMessage} = this.state;
-    // const item =await AsyncStorage.getItem('currentUser');
-    // const dataParse = await JSON.parse(item);
-    // const getUserName = dataParse.name;
-    // const userMsgs=[];
-    // userMsgs.push(textMessage);
-
-    //  let senderChatMessages=  {
-    //   type:'sender',
-    //   msg:textMessage,
-    //   name:getUserName,
-    //   date:date
-    // }
-    // console.log(senderChatMessages)
     // socket.emit("chat message", senderChatMessages);
     // console.log(socket.connected);
+
 
     this.setState({
       textMessage: '',
@@ -311,7 +232,32 @@ class Chatscreen extends React.Component {
   }
 
 
-  toggelMic = () => {
+  toggelMic = async () => {
+    if (Platform.OS !== 'android') {
+      return Promise.resolve(true);
+    }
+
+    let result;
+    try {
+      result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        { title: 'Microphone Permission', message: 'Enter the Gunbook needs access to your microphone so you can search with voice.' });
+    } catch (error) {
+      console.error('failed getting permission, result:', result);
+    }
+    console.log('permission result:', result);
+    (result === true || result === PermissionsAndroid.RESULTS.GRANTED);
+    SoundRecorder.start(SoundRecorder.PATH_DOCUMENT + '/test.mp4')
+      .then(function () {
+        console.log('started recording');
+      });
+    setTimeout(() => {
+      SoundRecorder.stop()
+        .then(function (result) {
+          console.log('stopped recording, audio file saved at: ' + result.path);
+        });
+    }, 6000);
+
+
 
     this.setState({
       micIcon: false,
@@ -384,16 +330,22 @@ class Chatscreen extends React.Component {
   }
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
-      attachGray, attachOrange, shareFiles, avatarSource, expand } = this.state;
+      attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId } = this.state;
     const chatMessages = this.state.chatMessages.map((message, key) => (
-      <Text key={key} style={styles.msgsTextStyle}>
-        {message}
-      </Text>
+      <View>
+        {message.senderId == userId && <Text key={key} style={styles.msgsTextStyle}>
+          {message.textMessage}
+        </Text>}
+        {message.senderId == opponentId && <Text key={key} style={styles.replyMessagesStyle}>
+          {message.textMessage}
+        </Text>}
+      </View>
+      // console.log(message)
     ))
-    const replyMessages = this.state.repMessages.map((items, key) =>
-      <Text key={key} style={styles.replyMessagesStyle}>
-        {items}
-      </Text>)
+    // const replyMessages = this.state.repMessages.map((items, key) =>
+    //   <Text key={key} style={styles.replyMessagesStyle}>
+    //     {items}
+    //   </Text>)
     return (
       <View style={styles.mainContainer}>
         <View style={styles.childMainContainer}>
@@ -428,7 +380,7 @@ class Chatscreen extends React.Component {
               {expand &&
                 <Image source={{ uri: this.state.avatarSource }} style={styles.canvas} />
               }
-              {replyMessages}
+              {/* {replyMessages} */}
               {shareFiles && <View style={styles.sendFielsTypeContainer}>
                 <Text style={styles.shareTextStyle}>Share...</Text>
                 <View style={styles.filesContainer}>
