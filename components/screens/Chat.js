@@ -22,7 +22,8 @@ YellowBox.ignoreWarnings([
 const BASE_URL = 'https://getfit-server.herokuapp.com';
 import firebase from '../../Config/Firebase';
 import 'firebase/firestore';
-const db = firebase.firestore();
+// const db = firebase.firestore();
+const db = firebase.database();
 
 //import io from 'socket.io-client';
 //import io from 'socket.io/socket.io.js'
@@ -76,7 +77,9 @@ class Chatscreen extends React.Component {
       shareFiles: false,
       avatarSource: null,
       expand: false,
-      date: ''
+      date: '',
+      time: '',
+      fetchChats: false
     }
   }
 
@@ -88,7 +91,8 @@ class Chatscreen extends React.Component {
     const min = new Date().getMinutes(); //Current Minutes
     const sec = new Date().getSeconds(); //Current Seconds
     this.setState({
-      date: date + '/' + month + '/' + year + ' ' + hours + ':' + min + ':' + sec,
+      date: date + '/' + month + '/' + year,
+      time: hours + ':' + min + ':' + sec
     })
 
     // socket.on('connect', () => {
@@ -108,86 +112,145 @@ class Chatscreen extends React.Component {
     //     repMessages:[...this.state.repMessages, msg]
     //   })
     // })
-    AsyncStorage.getItem("currentUser").then(value => {
-      const chatArrayTemp = [];
-      const replyArrayTemp = [];
-      let tainnyId;
-      if (value) {
-        data = JSON.parse(value);
-        // console.log(data, 'data')
-        db.collection('chatRoom').get().then((snapshot) => {
-          snapshot.docs.forEach(doc => {
-            let items = doc.data();
-            console.log(items, 'items')
-            if (items.mgs.userId == data.id) {
-              console.log(items.mgs.textMessage, 'items without snap shot');
-              chatArrayTemp.push(items.mgs.textMessage)
-              tainnyId = items.mgs.tainnyId;
-            }
-            if (tainnyId == items.mgs.userId) {
-              console.log('condition true')
-              replyArrayTemp.push(items.mgs.textMessage)
-            }
-          });
-          console.log(replyArrayTemp, 'replyArrayTemp')
-          this.setState({
-            chatMessages: chatArrayTemp,
-            repMessages: replyArrayTemp
-          })
-        });
+    // AsyncStorage.getItem("currentUser").then(value => {
+    //   const chatArrayTemp = [];
+    //   const replyArrayTemp = [];
+    //   let tainnyId;
+    //   if (value) {
+    //     data = JSON.parse(value);
+    //     // console.log(data, 'data')
+    //     // db.collection('chatRoom').get().then((snapshot) => {
+    //     //   snapshot.docs.forEach(doc => {
+    //     //     let items = doc.data();
+    //     //     console.log(items, 'items')
+    //     //     if (items.mgs.userId == data.id) {
+    //     //       console.log(items.mgs.textMessage, 'items without snap shot');
+    //     //       chatArrayTemp.push(items.mgs.textMessage)
+    //     //       tainnyId = items.mgs.tainnyId;
+    //     //     }
+    //     //     if (tainnyId == items.mgs.userId) {
+    //     //       console.log('condition true')
+    //     //       replyArrayTemp.push(items.mgs.textMessage)
+    //     //     }
+    //     //   });
+    //     // console.log(replyArrayTemp, 'replyArrayTemp')
+    //     // this.setState({
+    //     //   chatMessages: chatArrayTemp,
+    //     //   repMessages: replyArrayTemp
+    //     // })
+    //     // });
 
-      }
-    });
+    //   }
+    // });
   }
 
-  // componentWillMount(){
-  //   socket.on('connect', ()=>{
-  //     const nRoom = "nRoom";
-  //     socket.emit('nRoom', nRoom)
-  //     socket.on('one new user', data =>{
-  //       console.log(data);
-  //     })
-  //   })
-  // }
+  componentWillMount() {
+    let chatArrayTemp = [];
+    let replyArrayTemp = [];
+    let dataFromLocalStorage;
+    console.log('componentWillMount')
+    // if(chatArrayTemp > 0){
+    //   console.log('condition truee array is not empty')
+    // }
+    AsyncStorage.getItem("currentUser").then(value => {
+      if (value) {
+        dataFromLocalStorage = JSON.parse(value);
+      }
+    });
+    db.ref('chatRoom').on("value", snapshot => {
+      let data = snapshot.val()
+      for (var i in data) {
+        let firbaseData = data[i]
+        if (firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage._id) {
+          chatArrayTemp.push(firbaseData.textMessage)
+        }
+        console.log(firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.trainnerId)
+        console.log(firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.tainnyId)
 
+        if (firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.trainnerId || firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.tainnyId) {
+          console.log('reciver condition true')
+          chatArrayTemp.push(firbaseData.textMessage)
+        }
+      }
+      this.setState({
+        chatMessages: chatArrayTemp,
+        // repMessages: replyArrayTemp
+      })
+      chatArrayTemp = [];
+      replyArrayTemp = [];
+    });
+    console.log(chatArrayTemp, 'chatArrayTemp')
+    // socket.on('connect', ()=>{
+    //   const nRoom = "nRoom";
+    //   socket.emit('nRoom', nRoom)
+    //   socket.on('one new user', data =>{
+    //     console.log(data);
+    //   })
+    // })
+
+  }
   sendMessage = async () => {
-    const { textMessage } = this.state;
+    const { textMessage, date, time } = this.state;
     let mgs = {}
     let data;
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         data = JSON.parse(value);
+        if (data.assignTrainner != undefined && data.trainnerId != undefined) {
+          mgs.textMessage = textMessage;
+          mgs.assignTrainner = data.assignTrainner;
+          mgs.reciverId = data.trainnerId;
+          mgs.name = data.name;
+          mgs.senderId = data._id;
+          mgs.date = date;
+          mgs.time = time;
+          db.ref(`chatRoom/`).push(mgs);
+        }
+        else if (data.assignTrainny != undefined && data.tainnyId != undefined) {
+          mgs.textMessage = textMessage;
+          mgs.assignTrainny = data.assignTrainny;
+          mgs.reciverId = data.tainnyId;
+          mgs.name = data.name;
+          mgs.senderId = data._id;
+          mgs.date = date;
+          mgs.time = time;
+          db.ref(`chatRoom/`).push(mgs);
+        }
+
+
+
+
         // console.log(data, 'data')
-        db.collection('users').get().then((snapshot) => {
-          snapshot.docs.forEach(doc => {
-            let items = doc.data();
-            console.log(items, 'items without snap shot')
-            if (items.dataUser._id == data.id) {
-              if (items.dataUser.trainnerId != undefined && items.dataUser.assignTrainner != undefined) {
-                mgs.trainnerId = items.dataUser.trainnerId;
-                mgs.assignTrainner = items.dataUser.assignTrainner;
-                mgs.userId = items.dataUser._id;
-                mgs.name = data.name;
-                mgs.textMessage = textMessage
-              }
-              else {
-                mgs.tainnyId = items.dataUser.tainnyId;
-                mgs.assignTrainny = items.dataUser.assignTrainny;
-                mgs.userId = items.dataUser._id;
-                mgs.name = data.name;
-                mgs.textMessage = textMessage
-              }
-            }
-          });
-          db.collection('chatRoom').add({
-            mgs
-          }).then(() => {
-            // alert("Successfully Login!");
-          })
-            .catch(() => {
-              alert('Something went wrong!')
-            });
-        });
+        //   db.collection('users').get().then((snapshot) => {
+        //     snapshot.docs.forEach(doc => {
+        //       let items = doc.data();
+        //       console.log(items, 'items without snap shot')
+        //       if (items.dataUser._id == data.id) {
+        //         if (items.dataUser.trainnerId != undefined && items.dataUser.assignTrainner != undefined) {
+        //           mgs.trainnerId = items.dataUser.trainnerId;
+        //           mgs.assignTrainner = items.dataUser.assignTrainner;
+        //           mgs.userId = items.dataUser._id;
+        //           mgs.name = data.name;
+        //           mgs.textMessage = textMessage
+        //         }
+        //         else {
+        //           mgs.tainnyId = items.dataUser.tainnyId;
+        //           mgs.assignTrainny = items.dataUser.assignTrainny;
+        //           mgs.userId = items.dataUser._id;
+        //           mgs.name = data.name;
+        //           mgs.textMessage = textMessage
+        //         }
+        //       }
+        //     });
+        //     db.collection('chatRoom').add({
+        //       mgs
+        //     }).then(() => {
+        //       // alert("Successfully Login!");
+        //     })
+        //       .catch(() => {
+        //         alert('Something went wrong!')
+        //       });
+        //   });
       }
     });
     // db.collection("users").doc('').get().then(function (doc) {
@@ -322,14 +385,13 @@ class Chatscreen extends React.Component {
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
       attachGray, attachOrange, shareFiles, avatarSource, expand } = this.state;
-    const chatMessages = this.state.chatMessages.map(message => (
-      <Text key={message} style={styles.msgsTextStyle}>
+    const chatMessages = this.state.chatMessages.map((message, key) => (
+      <Text key={key} style={styles.msgsTextStyle}>
         {message}
       </Text>
     ))
-    console.log(this.state.chatMessages, 'chatMessages')
-    const replyMessages = this.state.repMessages.map(items =>
-      <Text key={items} style={styles.replyMessagesStyle}>
+    const replyMessages = this.state.repMessages.map((items, key) =>
+      <Text key={key} style={styles.replyMessagesStyle}>
         {items}
       </Text>)
     return (

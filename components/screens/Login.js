@@ -21,7 +21,8 @@ import HttpUtilsFile from '../Services/HttpUtils';
 import firebase from '../../Config/Firebase';
 import 'firebase/firestore';
 //console.log(HttpUtilsFile);
-const db = firebase.firestore();
+// const db = firebase.firestore();
+const db = firebase.database();
 
 const { height } = Dimensions.get('window');
 class Login extends React.Component {
@@ -75,20 +76,22 @@ class Login extends React.Component {
             name: dataUser.name,
             id: dataUser._id,
           }
-          await AsyncStorage.setItem('currentUser', JSON.stringify(userDataSave));
+          await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
           
-          db.collection('users').add({
-            dataUser
-          }).then(() => {
-            this.setState({ isLoading: false })
-            alert("Successfully Login!");
-            navigate('BottomTabe')
-          })
-            .catch(() => {
-              this.setState({ isLoading: false })
-              alert('Something went wrong!')
-              console.error("Error writing document: ", error);
-            });
+          db.ref(`users/`).push(dataUser)
+          navigate('BottomTabe')
+          // db.collection('users').add({
+          //   dataUser
+          // }).then(() => {
+          //   this.setState({ isLoading: false })
+          //   alert("Successfully Login!");
+          //   navigate('BottomTabe')
+          // })
+          //   .catch(() => {
+          //     this.setState({ isLoading: false })
+          //     alert('Something went wrong!')
+          //     console.error("Error writing document: ", error);
+          //   });
 
         }
         else if (userWrong == false) {
