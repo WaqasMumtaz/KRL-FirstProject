@@ -116,6 +116,15 @@ const styles = StyleSheet.create({
         backgroundColor:'#e5e5e5',
         borderRadius:10
     },
+    mgsImges:{
+        padding:20,
+        color: '#A6A6A6',
+        marginBottom:20,
+        marginLeft:'50%',
+        borderRadius:10,
+        width: 150, 
+        height: 150
+    },
     fileAttachContainer:{
         height:44,
         //borderColor:'black',

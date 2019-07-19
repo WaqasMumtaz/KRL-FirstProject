@@ -25,6 +25,7 @@ import firebase from '../../Config/Firebase';
 import 'firebase/firestore';
 // const db = firebase.firestore();
 const db = firebase.database();
+import RNFS from 'react-native-fs';
 
 //import io from 'socket.io-client';
 //import io from 'socket.io/socket.io.js'
@@ -136,7 +137,8 @@ class Chatscreen extends React.Component {
           })
         }
 
-        if (firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.trainnerId || firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.tainnyId) {
+        if (firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.trainnerId ||
+          firbaseData.reciverId && firbaseData.senderId == dataFromLocalStorage.tainnyId) {
           // console.log('reciver condition true')
           chatArrayTemp.push(firbaseData)
           this.setState({
@@ -256,9 +258,6 @@ class Chatscreen extends React.Component {
           console.log('stopped recording, audio file saved at: ' + result.path);
         });
     }, 6000);
-
-
-
     this.setState({
       micIcon: false,
       micOrange: true,
@@ -294,13 +293,80 @@ class Chatscreen extends React.Component {
   }
 
   choosePhotoFunc = () => {
+    const { date, time } = this.state;
+    let data;
+    let imgBase644;
+    let mgs = {}
     const options = {
       noData: true,
       mediaType: 'photo'
     }
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response Image Picker --->>>', response)
+    ImagePicker.showImagePicker(options, async (response) => {
+      let res = await RNFS.readFile(response.uri, 'base64')
+      imgBase644 = `data:image/jpg;base64,${res}`;
 
+      AsyncStorage.getItem("currentUser").then(value => {
+        if (value) {
+          data = JSON.parse(value);
+
+          // const task = storage
+          // .child(`images/${id}`)
+          // .put(ownerImage.fileList[0]);
+          // task.on(
+          //   "state_changed",
+          //   function (snapshot) { },
+          //   function (error) { },
+          //   function () {
+          //     task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+          //       console.log("uploaded the owner image with URL: " + downloadURL);
+          //       docRef
+          //         .update({
+          //           ownerImage: downloadURL
+          //         })
+          //         .then(() => {
+          //           console.log(
+          //             "updated the owner document with owner image url."
+          //           );
+          //           //upload animals
+          //           console.log("uploading animals");
+
+          //           Promise.all(uploadAnimals(docRef, animalDetails)).then(
+          //             childAnimalDocRef => {
+          //               docRef
+          //                 .update({
+          //                   animals: [...childAnimalDocRef]
+          //                 })
+          //                 .then(() => {
+          //                   resolve("Form has been submitted successfully");
+          //                 });
+          //             }
+          //           );
+          //         });
+          //     });
+          //   }
+          // );
+          if (data.assignTrainner != undefined && data.trainnerId != undefined) {
+            mgs.image = imgBase644;
+            mgs.assignTrainner = data.assignTrainner;
+            mgs.reciverId = data.trainnerId;
+            mgs.name = data.name;
+            mgs.senderId = data._id;
+            mgs.date = date;
+            mgs.time = time;
+            db.ref(`chatRoom/`).push(mgs);
+          }
+          else if (data.assignTrainny != undefined && data.tainnyId != undefined) {
+            mgs.image = imgBase644;
+            mgs.assignTrainny = data.assignTrainny;
+            mgs.reciverId = data.tainnyId;
+            mgs.name = data.name;
+            mgs.senderId = data._id;
+            mgs.date = date;
+            mgs.time = time;
+            db.ref(`chatRoom/`).push(mgs);
+          }
+        }
+      });
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -311,9 +377,9 @@ class Chatscreen extends React.Component {
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.setState({
-          avatarSource: response.uri,
-          attachOrange: false,
-          shareFiles: false
+          avatarSource: imgBase644,
+          attachOrange: true,
+          shareFiles: true
         });
       }
 
@@ -331,21 +397,24 @@ class Chatscreen extends React.Component {
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
       attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId } = this.state;
+      console.log(this.state.chatMessages , 'chat messages')
     const chatMessages = this.state.chatMessages.map((message, key) => (
       <View>
-        {message.senderId == userId && <Text key={key} style={styles.msgsTextStyle}>
-          {message.textMessage}
-        </Text>}
+        {message.senderId == userId &&
+          // <Text key={key} style={styles.msgsTextStyle}>
+          //   {message.textMessage}
+          // </Text> 
+          <Image key={key} style={styles.mgsImges} source={{
+            uri:`${message.image}` }}/>}
+        {/* {message.image &&  } */}
+        {/* {message.senderId == userId && <Text key={key} style={styles.msgsTextStyle}>
+          {message.textMessage || <Image source={{ uri: message.image }} />}
+        </Text>} */}
         {message.senderId == opponentId && <Text key={key} style={styles.replyMessagesStyle}>
-          {message.textMessage}
+          {message.textMessage || message.image}
         </Text>}
       </View>
-      // console.log(message)
     ))
-    // const replyMessages = this.state.repMessages.map((items, key) =>
-    //   <Text key={key} style={styles.replyMessagesStyle}>
-    //     {items}
-    //   </Text>)
     return (
       <View style={styles.mainContainer}>
         <View style={styles.childMainContainer}>
@@ -374,6 +443,8 @@ class Chatscreen extends React.Component {
                 onPress={this.expandImg}
               >
                 <Image source={{ uri: avatarSource }}
+                  // {/* <Image source={{ uri: `data:image/gif;base64,${avatarSource}` }} /> */}
+
                   style={styles.photoContainer} />
               </TouchableOpacity>}
 

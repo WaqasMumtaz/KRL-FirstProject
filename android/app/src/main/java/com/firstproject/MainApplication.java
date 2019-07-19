@@ -3,6 +3,7 @@ package com.firstproject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
 import com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
 
 import io.invertase.firebase.RNFirebasePackage;
@@ -40,6 +41,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFSPackage(),
             new RNSoundRecorderPackage(),
             new RNFirebaseAdMobPackage(),
              new RNFirebasePackage(),
