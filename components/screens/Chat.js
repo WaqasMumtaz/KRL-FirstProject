@@ -26,6 +26,10 @@ import 'firebase/firestore';
 // const db = firebase.firestore();
 const db = firebase.database();
 import RNFS from 'react-native-fs';
+import FilePickerManager from 'react-native-file-picker';
+import FileViewer from 'react-native-file-viewer';
+import { Linking } from 'react-native';
+import FileOpener from 'react-native-file-opener';
 
 //import io from 'socket.io-client';
 //import io from 'socket.io/socket.io.js'
@@ -83,6 +87,7 @@ class Chatscreen extends React.Component {
       fetchChats: false,
       userId: '',
       opponentId: '',
+      file: '',
     }
   }
 
@@ -98,6 +103,37 @@ class Chatscreen extends React.Component {
       time: hours + ':' + min + ':' + sec
     })
 
+
+
+    // const path = 'https://res.cloudinary.com/dxk0bmtei/image/upload/v1563776758/print_3_a6qjwn.ai';
+    // const FileMimeType = 'pdf'
+
+    // FileOpener.open(
+    //   path,
+    //   FileMimeType
+    // ).then((msg) => {
+    //   console.log('success!!' , msg)
+    // }, (msg) => {
+    //   console.log('error!!' , msg)
+    // });
+    // Linking.openURL(path).catch((err) => {
+    //   console.log(err)
+    // });
+
+    // console.log('componentDidMount')
+    // console.log(path ,'path')
+
+
+    // FileViewer.open(path.slice(0, path.length))
+
+    //   .then((res) => {
+    //     console.log(res, 'respone')
+    //     // success
+    //   })
+    //   .catch(error => {
+    //     console.log(error, 'error')
+    //     // error
+    //   });
     // socket.on('connect', () => {
     //   console.log('Congrates!! user connected');
     //   console.log(socket.connected);
@@ -308,43 +344,6 @@ class Chatscreen extends React.Component {
       AsyncStorage.getItem("currentUser").then(value => {
         if (value) {
           data = JSON.parse(value);
-
-          // const task = storage
-          // .child(`images/${id}`)
-          // .put(ownerImage.fileList[0]);
-          // task.on(
-          //   "state_changed",
-          //   function (snapshot) { },
-          //   function (error) { },
-          //   function () {
-          //     task.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-          //       console.log("uploaded the owner image with URL: " + downloadURL);
-          //       docRef
-          //         .update({
-          //           ownerImage: downloadURL
-          //         })
-          //         .then(() => {
-          //           console.log(
-          //             "updated the owner document with owner image url."
-          //           );
-          //           //upload animals
-          //           console.log("uploading animals");
-
-          //           Promise.all(uploadAnimals(docRef, animalDetails)).then(
-          //             childAnimalDocRef => {
-          //               docRef
-          //                 .update({
-          //                   animals: [...childAnimalDocRef]
-          //                 })
-          //                 .then(() => {
-          //                   resolve("Form has been submitted successfully");
-          //                 });
-          //             }
-          //           );
-          //         });
-          //     });
-          //   }
-          // );
           if (data.assignTrainner != undefined && data.trainnerId != undefined) {
             mgs.image = imgBase644;
             mgs.assignTrainner = data.assignTrainner;
@@ -375,7 +374,6 @@ class Chatscreen extends React.Component {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.setState({
           avatarSource: imgBase644,
           attachOrange: true,
@@ -387,32 +385,131 @@ class Chatscreen extends React.Component {
   }
 
   expandImg = () => {
+    const { expand } = this.state;
+    console.log('function called')
+    // if (expand) {
     this.setState({
       expand: true,
     })
+    // }
+    // else {
+    //   this.setState({
+    //     expand: false,
+    //   })
+    // }
   }
   shortPic = (e) => {
     console.log(e)
   }
+
+  fileUpload = (e) => {
+    console.log(e, 'file upload')
+    FilePickerManager.showFilePicker(null, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled file picker');
+      }
+      else if (response.error) {
+        console.log('FilePickerManager Error: ', response.error);
+      }
+      else {
+
+        this.setState({
+          file: response
+        });
+        this.funcForUpload()
+      }
+    });
+  }
+
+  async funcForUpload(values, key) {
+    const { file } = this.state;
+    Promise.all(file.map((val) => {
+      return this.uploadFile(val).then((result) => {
+        return result.body.url
+      })
+    })).then((results) => {
+      console.log(results)
+      // this.postData(values, results, key)
+    })
+  }
+
+  uploadFile = (files) => {
+    const image = files.originFileObj
+    const cloudName = 'dxk0bmtei'
+    const url = 'https://api.cloudinary.com/v1_1/' + cloudName + '/image/upload'
+    const timestamp = Date.now() / 1000
+    const uploadPreset = 'toh6r3p2'
+    const paramsStr = 'timestamp=' + timestamp + '&upload_preset=' + uploadPreset + 'U8W4mHcSxhKNRJ2_nT5Oz36T6BI'
+    const signature = sha1(paramsStr)
+    const params = {
+      'api_key': '878178936665133',
+      'timestamp': timestamp,
+      'upload_preset': uploadPreset,
+      'signature': signature
+    }
+    return new Promise((res, rej) => {
+      let uploadRequest = superagent.post(url)
+      uploadRequest.attach('file', image)
+      Object.keys(params).forEach((key) => {
+        uploadRequest.field(key, params[key])
+      })
+
+      uploadRequest.end((err, resp) => {
+        err ? rej(err) : res(resp);
+      })
+    })
+  }
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
       attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId } = this.state;
-      console.log(this.state.chatMessages , 'chat messages')
+
     const chatMessages = this.state.chatMessages.map((message, key) => (
       <View>
         {message.senderId == userId &&
-          // <Text key={key} style={styles.msgsTextStyle}>
-          //   {message.textMessage}
-          // </Text> 
-          <Image key={key} style={styles.mgsImges} source={{
-            uri:`${message.image}` }}/>}
-        {/* {message.image &&  } */}
-        {/* {message.senderId == userId && <Text key={key} style={styles.msgsTextStyle}>
-          {message.textMessage || <Image source={{ uri: message.image }} />}
-        </Text>} */}
-        {message.senderId == opponentId && <Text key={key} style={styles.replyMessagesStyle}>
-          {message.textMessage || message.image}
-        </Text>}
+
+          message.textMessage ?
+          <Text key={key} style={styles.msgsTextStyle}>
+            {message.textMessage}
+          </Text>
+          :
+          // expand ?
+          //   <TouchableOpacity activeOpacity={0.5}
+          //     style={styles.showPhotoContainer}
+          //     onPress={this.expandImg}
+          //   >
+          //     <Image key={key} style={styles.canvas} source={{
+          //       uri: `${message.image}`
+          //     }} />
+          //   </TouchableOpacity>
+          //   :
+          <TouchableOpacity activeOpacity={0.5}
+            style={styles.showPhotoContainer}
+            onPress={this.expandImg}
+          >
+            <Image key={key} style={styles.mgsImges} source={{
+              uri: `${message.image}`
+            }} />
+          </TouchableOpacity>
+        }
+        {message.senderId == opponentId &&
+          // message.textMessage ?
+          <Text key={key} style={styles.replyMessagesStyle}>
+            {message.textMessage}
+          </Text>
+          // :
+
+          // <TouchableOpacity activeOpacity={0.5}
+          //   style={styles.showPhotoContainer}
+          //   onPress={this.expandImg.bind(this, )}
+          // >
+          //   <Image key={key} style={styles.mgsImges} source={{
+          //     uri: `${message.image}`
+          //   }} /> 
+          //   </TouchableOpacity>
+        }
+
       </View>
     ))
     return (
@@ -460,7 +557,7 @@ class Chatscreen extends React.Component {
                       style={styles.attachFilesStyle}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={this.fileUpload}>
                     <Image source={require('../icons/attach-file.png')}
                       style={styles.attachFilesStyle}
                     />

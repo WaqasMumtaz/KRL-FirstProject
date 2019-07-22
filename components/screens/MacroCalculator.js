@@ -27,6 +27,7 @@ class Macrocalculator extends React.Component {
             currentWeightUnit: '',
             goalWeightUnit: '',
             activityLevel: '',
+            calculteCalries: '',
             dobValidation: false,
             genderValidation: false,
             heightValidation: false,
@@ -45,8 +46,8 @@ class Macrocalculator extends React.Component {
         }
     }
     calulateMacro = () => {
-        const { dob, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit, activityLevel } = this.state
-        if (dob == '') {
+        const { age, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit, activityLevel } = this.state
+        if (age == '') {
             this.setState({
                 dobValidation: true
             })
@@ -92,7 +93,27 @@ class Macrocalculator extends React.Component {
             })
         }
 
-        console.log('press')
+        if (gender == 'male') {
+            if (age != '' && height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' &&
+                currentWeightUnit != '' && goalWeightUnit != '' && activityLevel != '') {
+                let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age + 5
+                this.setState({
+                    calculteCalries: calculteCalries
+                })
+            }
+        }
+        else if (gender == 'female') {
+            if (age != '' && height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' &&
+                currentWeightUnit != '' && goalWeightUnit != '' && activityLevel != '') {
+                let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age - 161
+                this.setState({
+                    calculteCalries: calculteCalries
+                })
+            }
+        }
+        // console.log('press')
+        // 10 x weight (kg) + 6.25 x height (cm) – 5 x age (y) + 5 = REE for male
+        // 10 x weight (kg) + 6.25 x height (cm) – 5 x age (y) – 161 = REE for female
     }
     getGender(gender) {
         if (gender == 'male') {
@@ -196,20 +217,22 @@ class Macrocalculator extends React.Component {
             })
         }
     }
-    updateHeight = (e) => {
-        this.setState({
-            heightUnit: e
-        })
-    }
-    updateCurrentWeight = (e) => {
-        this.setState({
-            currentWeightUnit: e
-        })
-    }
-    updateGoalWeight = (e) => {
-        this.setState({
-            goalWeightUnit: e
-        })
+    updateUnits(e, givenUnit) {
+        if (e == "height Unit") {
+            this.setState({
+                heightUnit: givenUnit
+            })
+        }
+        else if (e == 'current weight Unit') {
+            this.setState({
+                currentWeightUnit: givenUnit
+            })
+        }
+        else if (e == 'goal weight Unit') {
+            this.setState({
+                goalWeightUnit: givenUnit
+            })
+        }
     }
     render() {
         const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation,
@@ -238,7 +261,7 @@ class Macrocalculator extends React.Component {
                         {dobValidation ?
                             <View>
                                 <Text>
-                                    Please fill the date of birth
+                                    Please fill age
                                     </Text>
                             </View>
                             : null}
@@ -366,11 +389,10 @@ class Macrocalculator extends React.Component {
                             <View><Text></Text></View>
                             <View style={{ marginTop: 44 }}>
                                 <Picker selectedValue={this.state.heightUnit}
-                                    onValueChange={this.updateHeight}
+                                    onValueChange={this.updateUnits.bind(this, 'height Unit')}
                                     style={styles.pickerStyle}>
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="Inches" value="inches" />
-                                    <Picker.Item label="Centimeter" value="centimeter" />
                                 </Picker>
                             </View>
                             {heightUnitValidation ?
@@ -382,11 +404,10 @@ class Macrocalculator extends React.Component {
                                 : null}
                             <View style={{ marginTop: 50 }}>
                                 <Picker selectedValue={this.state.currentWeightUnit}
-                                    onValueChange={this.updateCurrentWeight}
+                                    onValueChange={this.updateUnits.bind(this, 'current weight Unit')}
                                     style={styles.pickerStyle}>
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="KG" value="kg" />
-                                    <Picker.Item label="Pound" value="pound" />
                                 </Picker>
                             </View>
                             {currentWeightUnitValidation ?
@@ -398,11 +419,10 @@ class Macrocalculator extends React.Component {
                                 : null}
                             <View style={{ marginTop: 50 }}>
                                 <Picker selectedValue={this.state.goalWeightUnit}
-                                    onValueChange={this.updateGoalWeight}
+                                  onValueChange={this.updateUnits.bind(this, 'goal weight Unit')}
                                     style={styles.pickerStyle}>
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="KG" value="kg" />
-                                    <Picker.Item label="Pound" value="pound" />
                                 </Picker>
                             </View>
                             {goalWeightUnitValidation ?

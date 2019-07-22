@@ -3,6 +3,9 @@ package com.firstproject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.fileopener.FileOpenerPackage;
+import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
+import com.filepicker.FilePickerPackage;
 import com.rnfs.RNFSPackage;
 import com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
 
@@ -41,6 +44,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new FileOpenerPackage(),
+            new RNFileViewerPackage(),
+            new FilePickerPackage(),
             new RNFSPackage(),
             new RNSoundRecorderPackage(),
             new RNFirebaseAdMobPackage(),

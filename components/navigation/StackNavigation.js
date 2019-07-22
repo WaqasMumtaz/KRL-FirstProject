@@ -17,7 +17,7 @@ import Exerciselog from '../screens/ExerciseLog';
 import Logweight from '../screens/LogWeight';
 import Macrocalculator from '../screens/MacroCalculator';
 import BMICalculator from '../screens/CalculateBMI';
-//import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
+import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
 import ResetpasswordScreen from '../screens/ResetPasswrd';
 import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 // import ChartScreen from '../BarChart/BarChart';
@@ -38,8 +38,8 @@ const MainNavigator= createStackNavigator({
   // ResetpasswordScreen:{screen:ResetpasswordScreen},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
   Signup:{screen:Signup},
-  // ActivateSpinner:{screen:ActivateSpinner},
-  // Setupscreen1:{screen:Setupscreen1}, 
+  ActivateSpinner:{screen:ActivateSpinner},
+  Setupscreen1:{screen:Setupscreen1}, 
   Setupscreen:{screen:Setupscreen},
   LastSetUpScreen: { screen: LastSetUpScreen },
   // Wheelspiner:{screen:Wheelspiner},

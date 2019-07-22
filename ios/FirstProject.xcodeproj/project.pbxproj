@@ -64,6 +64,8 @@
 		A5BFDEEDAC294804BCF9E247 /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D51D10A55D04319BAAB88CB /* libRNFirebase.a */; };
 		62EC9ADEE1F64EB5AC1E852E /* libRNSoundRecorder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D8159E3F0A640E9ABEE4D17 /* libRNSoundRecorder.a */; };
 		A13009CDE28549FD92F0CCE0 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D9F4233AE943E9A5D094B3 /* libRNFS.a */; };
+		9ED8F8E9961B495ABBCD5C97 /* libRNFileViewer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18019CFE567F474295A61965 /* libRNFileViewer.a */; };
+		B56A75454A8F4EEE8EA182C3 /* libRNFileOpener.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC65B80F578345B4885FC41E /* libRNFileOpener.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -403,6 +405,10 @@
 		3D8159E3F0A640E9ABEE4D17 /* libRNSoundRecorder.a */ = {isa = PBXFileReference; name = "libRNSoundRecorder.a"; path = "libRNSoundRecorder.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		6E87E135F6354F42B02BDC4B /* RNFS.xcodeproj */ = {isa = PBXFileReference; name = "RNFS.xcodeproj"; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		E9D9F4233AE943E9A5D094B3 /* libRNFS.a */ = {isa = PBXFileReference; name = "libRNFS.a"; path = "libRNFS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		0AB70A4F84644442A438C3D9 /* RNFileViewer.xcodeproj */ = {isa = PBXFileReference; name = "RNFileViewer.xcodeproj"; path = "../node_modules/react-native-file-viewer/ios/RNFileViewer.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		18019CFE567F474295A61965 /* libRNFileViewer.a */ = {isa = PBXFileReference; name = "libRNFileViewer.a"; path = "libRNFileViewer.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		1B5311AFBC194FEA97C37881 /* RNFileOpener.xcodeproj */ = {isa = PBXFileReference; name = "RNFileOpener.xcodeproj"; path = "../node_modules/react-native-file-opener/ios/RNFileOpener.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		CC65B80F578345B4885FC41E /* libRNFileOpener.a */ = {isa = PBXFileReference; name = "libRNFileOpener.a"; path = "libRNFileOpener.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -438,6 +444,8 @@
 				A5BFDEEDAC294804BCF9E247 /* libRNFirebase.a in Frameworks */,
 				62EC9ADEE1F64EB5AC1E852E /* libRNSoundRecorder.a in Frameworks */,
 				A13009CDE28549FD92F0CCE0 /* libRNFS.a in Frameworks */,
+				9ED8F8E9961B495ABBCD5C97 /* libRNFileViewer.a in Frameworks */,
+				B56A75454A8F4EEE8EA182C3 /* libRNFileOpener.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,6 +647,8 @@
 				095CCB790FF44799A1190BE8 /* RNFirebase.xcodeproj */,
 				12F6633643C7441292899150 /* RNSoundRecorder.xcodeproj */,
 				6E87E135F6354F42B02BDC4B /* RNFS.xcodeproj */,
+				0AB70A4F84644442A438C3D9 /* RNFileViewer.xcodeproj */,
+				1B5311AFBC194FEA97C37881 /* RNFileOpener.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1310,6 +1320,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1320,6 +1332,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound-recorder\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
+					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
+					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 				);
 			};
 			name = Debug;
@@ -1344,6 +1358,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1354,6 +1370,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound-recorder\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
+					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
+					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 				);
 			};
 			name = Release;
@@ -1383,6 +1401,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound-recorder\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
+					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
+					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 				);
 			};
 			name = Debug;
@@ -1411,6 +1431,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound-recorder\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
+					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
+					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 				);
 			};
 			name = Release;
@@ -1443,6 +1465,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1453,6 +1477,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound-recorder\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
+					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
+					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 				);
 			};
 			name = Debug;
@@ -1485,6 +1511,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1495,6 +1523,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound-recorder\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
+					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
+					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 				);
 			};
 			name = Release;
@@ -1526,6 +1556,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1536,6 +1568,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound-recorder\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
+					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
+					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 				);
 			};
 			name = Debug;
@@ -1567,6 +1601,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1577,6 +1613,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 					"$(SRCROOT)\..\node_modules\react-native-sound-recorder\ios",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
+					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
+					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 				);
 			};
 			name = Release;

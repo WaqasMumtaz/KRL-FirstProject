@@ -157,7 +157,47 @@ const styles=StyleSheet.create({
         backgroundColor: '#FF6200',
         alignItems:'center',
         borderRadius:5
-      }
+      },
+      clickBtnStyle:{
+        height: 38,
+        width: '90%', 
+        justifyContent:'center',
+        backgroundColor: '#FF6200',
+        alignItems:'center',
+        borderRadius:3
+    },
+    sedetaryContainer:{
+        height: 38, 
+        width: '90%', 
+        justifyContent: 'center', 
+        backgroundColor: '#e5e5e5', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    moderateContainer:{
+        height: 38, 
+        width: '90%', 
+        justifyContent: 'center', 
+        backgroundColor: '#e5e5e5', 
+        marginTop: 10, 
+        borderRadius: 3 
+    },
+    lightTouchableStyle:{
+        height: 38, 
+        width: '100%', 
+        justifyContent: 'center', 
+        backgroundColor: '#e5e5e5', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    extremTouchableStyle:{
+        height: 38, 
+        width: '100%', 
+        justifyContent: 'center', 
+        backgroundColor: '#e5e5e5', 
+        marginTop: 10, 
+        borderRadius: 3 
+    }
 })
 
 export default styles;
