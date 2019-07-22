@@ -92,17 +92,18 @@ class Chatscreen extends React.Component {
   }
 
   componentDidMount() {
-    const date = new Date().getDate(); //Current Date
-    const month = new Date().getMonth() + 1; //Current Month
-    const year = new Date().getFullYear(); //Current Year
-    const hours = new Date().getHours(); //Current Hours
-    const min = new Date().getMinutes(); //Current Minutes
-    const sec = new Date().getSeconds(); //Current Seconds
+    const date = new Date().getDate(); 
+    const month = new Date().getMonth() + 1; 
+    const year = new Date().getFullYear(); 
+    const hours = new Date().getHours(); 
+    const min = new Date().getMinutes();
+    const sec = new Date().getSeconds(); 
     this.setState({
       date: date + '/' + month + '/' + year,
       time: hours + ':' + min + ':' + sec
     })
 
+<<<<<<< HEAD
 
 
     // const path = 'https://res.cloudinary.com/dxk0bmtei/image/upload/v1563776758/print_3_a6qjwn.ai';
@@ -151,6 +152,9 @@ class Chatscreen extends React.Component {
     //     repMessages:[...this.state.repMessages, msg]
     //   })
     // })
+=======
+    
+>>>>>>> c97ec2bd47bcd83edaa87eca4b6b95e3564c2e28
   }
 
   componentWillMount() {
@@ -201,13 +205,7 @@ class Chatscreen extends React.Component {
       })
       chatArrayTemp = [];
     });
-    // socket.on('connect', ()=>{
-    //   const nRoom = "nRoom";
-    //   socket.emit('nRoom', nRoom)
-    //   socket.on('one new user', data =>{
-    //     console.log(data);
-    //   })
-    // })
+    
 
   }
   sendMessage = async () => {
@@ -239,8 +237,7 @@ class Chatscreen extends React.Component {
         }
       }
     });
-    // socket.emit("chat message", senderChatMessages);
-    // console.log(socket.connected);
+    
 
 
     this.setState({
