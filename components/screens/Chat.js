@@ -301,7 +301,7 @@ class Chatscreen extends React.Component {
 
   fileUpload = (e) => {
     console.log(e, 'file upload')
-    FilePickerManager.showFilePicker(null, (response) => {
+    FilePickerManager.showFilePicker(null, async (response) => {
       if (response.didCancel) {
         console.log('User cancelled file picker');
       }
@@ -312,6 +312,9 @@ class Chatscreen extends React.Component {
         console.log(response, 'responnse')
         // const files = Array.from(response)
         // const formData = new FormData()
+        // for(var name in response) {
+        //   formData.append(name, response[name]);
+        // }
 
         // files.forEach((response, i) => {
         //   formData.append(i, response)
@@ -342,58 +345,78 @@ class Chatscreen extends React.Component {
         //   xhr.send(formdata);
         // }
 
-        // const data = new FormData();
+        // const dataForm = new FormData();
         // const unsignedUploadPreset = "toh6r3p2"
-        // // data.append('file', { uri: 'file://' + response.uri, name: response.fileName, type: response.type , });
-        // // data.append('upload_preset' ,unsignedUploadPreset )
+        // dataForm.append('file', { uri: 'file://' + response.uri, name: response.fileName, type: response.type , });
+        // dataForm.append('upload_preset' ,unsignedUploadPreset )
         // data.append({name: 'file', filename: response.name, type: response.type, data: response.uri}),
         // data.append({name: 'upload_preset', data: 'toh6r3p2'})
-        // console.log(data ,'form dat')
+        // let a = { uri: 'file://' + response.uri, name: response.fileName, type: response.type, }
+        // console.log(a, 'form dat')
 
         // let url = response.uri
         // const cleanURL = url.replace("content://", "");
 
-        // let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
-        // let data = {
-        //   'file': cleanURL,
-        //   "upload_preset": "toh6r3p2",
+        // const formData = new FormData()
+        // for(var name in response) {
+        //   formData.append(name, response[name]);
         // }
 
-      //   fetch(apiUrl, {
-      //     body: JSON.stringify(data),
-      //     headers: {
-      //       'content-type': 'application/json'
-      //     },
-      //     method: 'POST',
-      //   }).then(async r => {
-      //     let data = await r.json()
-      //     console.log(data, 'data')
-      //     return data.secure_url
-      //   }).catch(err => console.log(err))
+        let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
 
-      let timestamp = (Date.now() / 1000 | 0).toString();
-      let api_key = '878178936665133'
-      // let api_secret = 'your api secret'
-      let cloud = 'dxk0bmtei'
-      const uploadPreset = 'toh6r3p2'
-      // let hash_string = 'timestamp=' + timestamp + api_secret
-      // let signature = CryptoJS.SHA1(hash_string).toString();
-      let upload_url = 'https://api.cloudinary.com/v1_1/' + cloud + '/image/upload'
-    
-      let xhr = new XMLHttpRequest();
-      xhr.open('POST', upload_url);
-      xhr.onload = () => {
-        console.log(xhr);
-      };
-      let formdata = new FormData();
-      formdata.append('file', {uri: response.uri, type: response.type, name: response.fileName});
-      // formdata.append('timestamp', timestamp);
-      formdata.append('api_key', api_key);
-      formdata.append('uploadPreset' , uploadPreset)
-      // formdata.append('signature', signature);
-      xhr.send(formdata);
+        // var fileName = response.uri.substring(response.uri.lastIndexOf("/") + 1);
+        // var fsPath = response.uri;
+
+        // const path = response.uri + response.filename;
+        const path = response.uri;
+
+        const contents = await RNFS.readFileSync(path,{ encoding: 'utf8' });
+        console.log(contents, 'contents')
+        let data = {
+          'file': fsPath,
+          "upload_preset": "toh6r3p2",
+          'name': fileName,
+          // 'type': response.type,
+        }
+
+        fetch(apiUrl, {
+          body: JSON.stringify(data),
+          headers: {
+            'content-type': 'application/json'
+            // 'content-type': response.type
+            // 'Content-Type': 'multipart/form-data'
+            // 'content-type': 'application/x-www-form-urlencoded'
+          },
+          method: 'POST',
+        }).then(async r => {
+          let data = await r.json()
+          console.log(data, 'data')
+          return data.secure_url
+        }).catch(err => console.log(err))
+
+        // let timestamp = (Date.now() / 1000 | 0).toString();
+        // let api_key = '878178936665133'
+        // // let api_secret = 'your api secret'
+        // let cloud = 'dxk0bmtei'
+        // const uploadPreset = 'toh6r3p2'
+        // // let hash_string = 'timestamp=' + timestamp + api_secret
+        // // let signature = CryptoJS.SHA1(hash_string).toString();
+        // let upload_url = 'https://api.cloudinary.com/v1_1/' + cloud + '/image/upload'
+
+        // let xhr = new XMLHttpRequest();
+        // xhr.open('POST', upload_url);
+        // xhr.onload = () => {
+        //   console.log(xhr);
+        // };
+        // let formdata = new FormData();
+        // formdata.append('file', {uri: response.uri, type: response.type, name: response.fileName});
+        // // formdata.append('timestamp', timestamp);
+        // formdata.append('api_key', api_key);
+        // formdata.append('uploadPreset' , uploadPreset)
+        // // formdata.append('signature', signature);
+        // console.log(formdata , 'formdata')
+        // xhr.send(formdata);
       }
-      // })
 
       // this.setState({
       //   file: response
