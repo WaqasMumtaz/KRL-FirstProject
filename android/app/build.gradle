@@ -122,6 +122,12 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    //pre build AndroidX object custom file viewer
+    preBuild.doFirst {
+    ant.replaceregexp(match:'androidx.core.content.', replace:'android.support.v4.content.', flags:'g', byline:true) {
+        fileset(dir: '../../node_modules/react-native-file-viewer/android/src/main/java/com/vinzscam/reactnativefileviewer', includes: '*.java')
+    }
+}
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -138,6 +144,9 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-file-opener')
+    implementation project(':react-native-file-viewer')
+    implementation project(':react-native-file-picker')
     implementation project(':react-native-fs')
     implementation project(':react-native-sound-recorder')
     implementation project(':react-native-firebase')

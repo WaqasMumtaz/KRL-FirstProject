@@ -17,9 +17,13 @@ import Exerciselog from '../screens/ExerciseLog';
 import Logweight from '../screens/LogWeight';
 import Macrocalculator from '../screens/MacroCalculator';
 import BMICalculator from '../screens/CalculateBMI';
+<<<<<<< HEAD
 import Profile from '../screens/ProfilScreen';
 import EditProfileScreen from '../screens/EditableProfileScreen';
 //import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
+=======
+import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
+>>>>>>> 19e27e541947588e4f690cb5c90e4612215123bf
 import ResetpasswordScreen from '../screens/ResetPasswrd';
 import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 // import ChartScreen from '../BarChart/BarChart';
@@ -52,8 +56,13 @@ const MainNavigator= createStackNavigator({
   //Signup:{screen:Signup},
   // ActivateSpinner:{screen:ActivateSpinner},
   // Setupscreen1:{screen:Setupscreen1}, 
+<<<<<<< HEAD
   //Setupscreen:{screen:Setupscreen},
   //LastSetUpScreen: { screen: LastSetUpScreen },
+=======
+  // Setupscreen:{screen:Setupscreen},
+  // LastSetUpScreen: { screen: LastSetUpScreen },
+>>>>>>> 19e27e541947588e4f690cb5c90e4612215123bf
   // Wheelspiner:{screen:Wheelspiner},
   //BriskScreen: { screen: BriskScreen },
   // ChartScreen: { screen: ChartScreen },

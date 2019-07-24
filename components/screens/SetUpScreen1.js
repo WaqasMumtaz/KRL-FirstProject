@@ -46,7 +46,7 @@ class Setupscreen1 extends React.Component {
 
     nextStep = () => {
         const { dob, gender } = this.state;
-        const { navigate } = this.props.navigation;
+        // const { navigate } = this.props.navigation;
         if (dob == '') {
             this.setState({
                 dobValidation: true
@@ -58,13 +58,16 @@ class Setupscreen1 extends React.Component {
             })
         }
         if (dob != '' && gender != '') {
-            navigate('Setupscreen')
+            this.props.navigation.navigate('Setupscreen', {
+                dob: dob,
+                gender: gender,
+              });
+            // navigate('Setupscreen')
         }
     }
 
     render() {
         const { dobValidation, genderValidation, male, female } = this.state;
-        console.log(this.state.dob, 'date of birth')
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
                 <View style={styles.mainContainer}>

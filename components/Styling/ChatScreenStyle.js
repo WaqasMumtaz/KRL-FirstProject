@@ -224,22 +224,19 @@ const styles = StyleSheet.create({
         marginBottom:20
     },
     canvas:{
-        position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    marginVertical:25
-    
-    }
-
-
-
-    
-
-    
-
-    
+    position: 'absolute',
+    // top: 0,
+    // left: 0,
+    // bottom: 0,
+    // right: 0,
+    // marginVertical:25,
+    // color: '#A6A6A6',
+    // marginBottom: 20,
+    // marginLeft: '50%',
+    // borderRadius: 10,
+    // width: 250,
+    // height: 350
+    }    
 });
 
 export default styles;
