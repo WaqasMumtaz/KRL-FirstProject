@@ -19,7 +19,7 @@ class Options extends React.Component{
                  <View style={styles.heading}><Text style={styles.headingText}>More Options</Text></View>
                  <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('Macrocalculator')}}><Text>Calories Limit</Text></TouchableOpacity></View>
                  <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('BMICalculator')}}><Text>BMI Calculator</Text></TouchableOpacity></View>
-                 <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity ><Text>Profile</Text></TouchableOpacity></View>
+                 <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('Profile')}}><Text>Profile</Text></TouchableOpacity></View>
                  <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity><Text>Payment </Text></TouchableOpacity></View>
                  <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity><Text>Invoices</Text></TouchableOpacity></View>
                  <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity><Text>Settings</Text></TouchableOpacity></View>

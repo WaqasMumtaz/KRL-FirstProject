@@ -64,56 +64,37 @@ const styles =StyleSheet.create({
         fontFamily: 'MontserratLight',
         color:'#4f4f4f',
     },
-    inputLabelsStyle:{
-        fontFamily: 'MontserratLight',
-        color:'#4f4f4f',
+    profileContainer:{
+        flex:0.25,
+        //backgroundColor:'red'
+    },
+    userInfoContainer:{
+        flex:4,
+        //backgroundColor:'yellow'
     },
     emailContainer:{
         flex:1,
-        marginTop:8
+        backgroundColor:'blue'
     },
-    inputTextStyle:{
-        flex: 1,
+    labelStyle:{
+        fontFamily:'MontserratMedium',
+        // color: '#A6A6A6',
+        color: '#4f4f4f',
+    },
+    userInsertedValueStyle:{
         fontFamily: 'MontserratLight',
+        color: '#4f4f4f',
+        marginTop:7,
+        //marginLeft:7,
+        backgroundColor:'#e5e5e5',
+        padding:10,
+        paddingLeft:16,
         borderRadius:3,
-        height: 40,
-        backgroundColor: '#e5e5e5',
-        paddingLeft: 16,
-        marginTop:5,
-      },
-      passwrdContainer:{
-        flex:1,
-        marginTop:18
-      },
-      addressContainer:{
-          flex:1,
-          marginTop:18
-      },
-      contactNumberContainer:{
-          flex:1,
-          marginTop:18
-      },
-      genderContainer:{
-          flex:1,
-          marginTop:18
-      },
-      blankContainer:{
-          flex:2,
-          marginBottom:30
-      },
-      btnContainer:{
-         flex:2, 
-         marginTop:20,
-      },
-      caloriesBtnStyle:{
-        flex:2,
-        height:40,
-        justifyContent:'center',
-        backgroundColor: '#FF6200',
-        alignItems:'center',
-        borderRadius:5
-      },
 
+    },
+    viewBlock:{
+        marginTop:12
+    }
 })
 
 export default styles;

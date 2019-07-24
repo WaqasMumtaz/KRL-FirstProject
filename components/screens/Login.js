@@ -77,7 +77,6 @@ class Login extends React.Component {
             id: dataUser._id,
           }
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
-          
           db.ref(`users/`).push(dataUser)
           navigate('BottomTabe')
           // db.collection('users').add({
