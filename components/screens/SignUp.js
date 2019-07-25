@@ -146,9 +146,9 @@ class Signup extends React.Component {
 
     signUpFunction = async () => {
         const { name, email, mobile, newPasswrd, cnfrmPasswrd, nameValidate, emailValidate, mobileValidate, passwrdValidate, cnfrmPasswrdValidate, isLoading } = this.state;
-        if (name === '' || email === '' || mobile === '' || newPasswrd === '' || cnfrmPasswrd === '') {
+        if (name == '' || email == '' || mobile == '' || newPasswrd == '' || cnfrmPasswrd == '') {
             alert('Please Fill All Fields');
-            if (nameValidate !== true || emailValidate !== true || mobileValidate !== true || passwrdValidate !== true || cnfrmPasswrdValidate !== true) {
+            if (nameValidate != true || emailValidate != true || mobileValidate != true || passwrdValidate != true || cnfrmPasswrdValidate != true) {
                 alert('Please Enter Correct Field');
             }
 
@@ -232,7 +232,7 @@ class Signup extends React.Component {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         let mobileNum = /^[0-9]+$/;
         //let passwrd=/^[A-Za-z]\w{7,14}$/;
-        if (type === 'username') {
+        if (type == 'username') {
             if (alpha.test(text)) {
                 this.setState({
                     nameValidate: true,
@@ -244,7 +244,7 @@ class Signup extends React.Component {
                 })
             }
         }
-        else if (type === 'email') {
+        else if (type == 'email') {
             if (reg.test(text)) {
                 this.setState({
                     emailValidate: true,
@@ -256,7 +256,7 @@ class Signup extends React.Component {
                 })
             }
         }
-        else if (type === 'mobile') {
+        else if (type == 'mobile') {
             if (mobileNum.test(text)) {
                 this.setState({
                     mobileValidate: true,
@@ -366,15 +366,11 @@ class Signup extends React.Component {
                             placeholderTextColor="#A6A6A6"
                             value={this.state.newPasswrd}
                             style={[styles.inputTexts, !this.state.passwrdValidate ? styles.errorInput : null]}
-                        //onKeyPress={(keypress) => { this.pressHandle(keypress) }}
-                        //onFocus={this.forFocus}
-                        // onBlur={this.forBlur}
+                        
                         />
                     </View>
                     {psswrdInstruction && <View style={styles.passwrdInstructionContainer}>
                         <Text style={styles.instructionStyle}>
-                            {/* Input Password and Submit [7 to 15 characters which contain only characters,
-                          numeric digits, underscore and first character must be a letter] */}
                             Password strength is required maximum 9 and greater then 4
                          </Text>
                     </View>}

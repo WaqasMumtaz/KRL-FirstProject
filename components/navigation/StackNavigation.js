@@ -17,7 +17,13 @@ import Exerciselog from '../screens/ExerciseLog';
 import Logweight from '../screens/LogWeight';
 import Macrocalculator from '../screens/MacroCalculator';
 import BMICalculator from '../screens/CalculateBMI';
+<<<<<<< HEAD
+import Profile from '../screens/ProfilScreen';
+import EditProfileScreen from '../screens/EditableProfileScreen';
+//import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
+=======
 import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
+>>>>>>> 19e27e541947588e4f690cb5c90e4612215123bf
 import ResetpasswordScreen from '../screens/ResetPasswrd';
 import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 // import ChartScreen from '../BarChart/BarChart';
@@ -30,20 +36,35 @@ import Wheelspiner from '../Progress Wheel/Progress';
 
 
 const MainNavigator= createStackNavigator({
-   Login: {screen: Login},
+  // Profile:{screen:Profile},
+  //  Login: {screen: Login},
+   EditProfileScreen:{
+    screen:EditProfileScreen,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
+
   //  ResetpasswordScreen:{screen:ResetpasswordScreen},
   //  ConfirmResetPassword:{screen:ConfirmResetPassword},
-// const MainNavigator = createStackNavigator({
+ //const MainNavigator = createStackNavigator({
   // Login: {screen: Login},
   // ResetpasswordScreen:{screen:ResetpasswordScreen},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
-  Signup:{screen:Signup},
+  //Signup:{screen:Signup},
   // ActivateSpinner:{screen:ActivateSpinner},
   // Setupscreen1:{screen:Setupscreen1}, 
+<<<<<<< HEAD
+  //Setupscreen:{screen:Setupscreen},
+  //LastSetUpScreen: { screen: LastSetUpScreen },
+=======
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen: { screen: LastSetUpScreen },
+>>>>>>> 19e27e541947588e4f690cb5c90e4612215123bf
   // Wheelspiner:{screen:Wheelspiner},
-  BriskScreen: { screen: BriskScreen },
+  //BriskScreen: { screen: BriskScreen },
   // ChartScreen: { screen: ChartScreen },
 
   BottomTabe: {
@@ -97,8 +118,25 @@ const MainNavigator= createStackNavigator({
 
     }
   },
+  Profile:{
+    screen:Profile,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
+  EditProfileScreen:{
+    screen:EditProfileScreen,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  }
 
 },
+
 
   {
     // headerMode: 'none',

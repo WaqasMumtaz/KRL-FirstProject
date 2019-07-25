@@ -1,110 +1,125 @@
 import React from 'react';
-import { StyleSheet, Text, View,ScrollView,Button,Dimensions,Image,TouchableOpacity,} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Button, Dimensions, Image, TouchableOpacity, TextInput } from 'react-native';
 import TextInputs from '../textInputs/TextInputs';
 // import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/ProfilScreenStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
+import AsyncStorage from '@react-native-community/async-storage';
+import { thisExpression } from '@babel/types';
+
+
 const { height } = Dimensions.get('window');
 
-class Profile extends React.Component{
-  static navigationOptions =(navigation)=> {   
-    //const { params = {} } = navigation.state;
-    const {navigate} = navigation.navigation.navigate
-return{
-    headerRight:
-         <TouchableOpacity style={styles.headerIconContainer}>
-             <Image source={require('../icons/edit-pencil.png')} style={styles.headerIcon}/>
-         </TouchableOpacity>,
- 
-    headerStyle: {
+class Profile extends React.Component {
+  static navigationOptions = (navigation) => {
+    const { params = {} } = navigation.navigation.state;
+    console.log(params);
+    let headerRight = <TouchableOpacity
+      style={styles.headerIconContainer}
+      onPress={
+        params.showEditForm
+      }
+    >
+      <Image source={require('../icons/edit-pencil.png')} style={styles.headerIcon} />
+    </TouchableOpacity>
+    return {
+      headerRight,
+      headerStyle: {
         backgroundColor: 'white'
-       
+
       },
-     headerTintColor:'gray',
-}   
+      headerTintColor: 'gray',
+    }
+
 
   }
-   constructor(props){
-     super(props);
+  constructor(props) {
+    super(props);
 
-   }
-  //  onChangeTab=(value)=>{
-  //   console.log(value)
-  // }
-    render() {
-      const {navigate}=this.props.navigation;
-      
-      // console.log(routes);
-        return (
-          
-          <View style={styles.mainContainer}>
-            <View style={styles.headingContainer}>
-                        <Text style={styles.headingStyle}>
-                          My Profile
+    this.state = {
+      name: '',
+      show: false
+    }
+
+  }
+
+  componentWillMount() {
+    AsyncStorage.getItem('currentUser').then((value) => {
+      let userData = JSON.parse(value);
+      let userName = userData.name;
+      this.setState({
+        name: userName
+      })
+    })
+
+  }
+  editForm = () => {
+    console.log('helloo')
+    this.props.navigation.navigate('EditProfileScreen');
+
+
+  }
+
+  componentDidMount() {
+    const { show } = this.state;
+    this.props.navigation.setParams({ showEditForm: this.editForm, })
+  }
+
+  render() {
+    const { navigate } = this.props.navigation;
+    const { show } = this.state;
+    // console.log(routes);
+    return (
+
+      <View style={styles.mainContainer}>
+        <View style={styles.headingContainer}>
+          <Text style={styles.headingStyle}>
+            My Profile
                             </Text>
-                    </View>
-           <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
-           
-              <View style={styles.profilPicContainer}>
-                  <Image source={require('../icons/Profil.jpg')} style={styles.profilPicStyle}/>
-                  <View style={styles.nameContainer}>
-                   <Text style={styles.nameStyle}>Waqas Mumtaz</Text>
-                  </View>
-                  <View style={styles.userTitle}>
-                    <Text style={styles.userTitleStyle}>Trainee</Text>
-                  </View>
+        </View>
+        <ScrollView
+          style={{
+            flex: 1,
+            backgroundColor: 'white', height: height
+          }}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <View style={styles.profileContainer}>
+            <View style={styles.profilPicContainer}>
+              <Image source={require('../icons/profile.png')} style={styles.profilPicStyle} />
+              <View style={styles.nameContainer}>
+                <Text style={styles.nameStyle}>{this.state.name}</Text>
               </View>
-              <View style={styles.emailContainer}>
-                <Text style={styles.inputLabelsStyle}>Email</Text>
-                <TextInputs placeholder="waqas@gmail.com" 
-                inputTextStyle={styles.inputTextStyle} 
-                keyboardType="email-address"
-                placeholderColor="#4f4f4f"
-                />
+              <View style={styles.userTitle}>
+                <Text style={styles.userTitleStyle}>Trainee</Text>
               </View>
-              <View style={styles.passwrdContainer}>
-                <Text style={styles.inputLabelsStyle}>Password</Text>
-                <TextInputs placeholder="password" 
-                inputTextStyle={styles.inputTextStyle} 
-                secureTextEntry={true}
-                placeholderColor="#4f4f4f"
-                />
-              </View>
-              <View style={styles.addressContainer}>
-               <Text style={styles.inputLabelsStyle}>Address</Text>
-               <TextInputs placeholder="Type here your address..." 
-                inputTextStyle={styles.inputTextStyle} 
-                placeholderColor="#4f4f4f"
-                />
-              </View>
-              <View style={styles.contactNumberContainer}>
-               <Text style={styles.inputLabelsStyle}>Contact Number</Text>
-               <TextInputs placeholder="+92-333-1122223" 
-                inputTextStyle={styles.inputTextStyle} 
-                placeholderColor="#4f4f4f"
-                />
-              </View>
-              <View style={styles.genderContainer}>
-               <Text style={styles.inputLabelsStyle}>Gender</Text>
-               <TextInputs placeholder="Male" 
-                inputTextStyle={styles.inputTextStyle} 
-                placeholderColor="#4f4f4f"
-                />
-              </View>
-              <View style={styles.btnContainer}>
-              <CaloriesSetupBtn title='Set Up & Use App' caloriesBtnStyle={styles.caloriesBtnStyle}/>  
-              </View>
-
-              <View style={styles.blankContainer}>
-                     
-              </View>
-              
-
-           </ScrollView>
+            </View>
           </View>
-        )
- }
- 
+          <View style={styles.userInfoContainer}>
+                 <View>
+                   <Text style={styles.labelStyle}>Email</Text>
+                   <Text style={styles.userInsertedValueStyle}>waqas@gmail.com</Text>
+                 </View>
+                 <View style={styles.viewBlock}>
+                   <Text style={styles.labelStyle}>Address</Text>
+                   <Text style={styles.userInsertedValueStyle}>57-C, Lane 15 , khayban-e-badar , DHA , Karachi</Text>
+                 </View>
+                 <View style={styles.viewBlock}>
+                   <Text style={styles.labelStyle}>Contact Number</Text>
+                   <Text style={styles.userInsertedValueStyle}>0333-444444443</Text>
+                 </View>
+                 <View style={styles.viewBlock}>
+                   <Text style={styles.labelStyle}>Gender</Text>
+                   <Text style={styles.userInsertedValueStyle}>Male</Text>
+                 </View>
+          </View>
+        </ScrollView>
+
+
+      </View>
+    )
+  }
+
 }
 
 export default Profile;
