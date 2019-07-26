@@ -35,22 +35,22 @@ import Wheelspiner from '../Progress Wheel/Progress';
 const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
   //  Login: {screen: Login},
-   EditProfileScreen:{
-    screen:EditProfileScreen,
-    navigationOptions: {
-      headerStyle: {
-        elevation: 0,
-      }
-    }
-  },
+  //  EditProfileScreen:{
+  //   screen:EditProfileScreen,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
+  //   }
+  // },
 
   //  ResetpasswordScreen:{screen:ResetpasswordScreen},
   //  ConfirmResetPassword:{screen:ConfirmResetPassword},
  //const MainNavigator = createStackNavigator({
-  // Login: {screen: Login},
+  // Login: {/screen: Login},
   // ResetpasswordScreen:{screen:ResetpasswordScreen},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
-  //Signup:{screen:Signup},
+  // Signup:{screen:Signup},
   // ActivateSpinner:{screen:ActivateSpinner},
   // Setupscreen1:{screen:Setupscreen1}, 
   //Setupscreen:{screen:Setupscreen},

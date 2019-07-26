@@ -28,6 +28,7 @@ class Macrocalculator extends React.Component {
             goalWeightUnit: '',
             activityLevel: '',
             calculteCalries: '',
+            tdee: { sedentary: 1.2, lightActivity: 1.375, active: 1.55, veryActive: 1.725 },
             dobValidation: false,
             genderValidation: false,
             heightValidation: false,
@@ -46,7 +47,7 @@ class Macrocalculator extends React.Component {
         }
     }
     calulateMacro = () => {
-        const { age, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit, activityLevel } = this.state
+        const { age, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit, activityLevel, tdee } = this.state
         if (age == '') {
             this.setState({
                 dobValidation: true
@@ -96,7 +97,14 @@ class Macrocalculator extends React.Component {
         if (gender == 'male') {
             if (age != '' && height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' &&
                 currentWeightUnit != '' && goalWeightUnit != '' && activityLevel != '') {
-                let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age + 5
+                let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age + 5;
+                if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
+                    for (var value in tdee) {
+                        // console.log(tdee[value])
+                        console.log(tdee)
+                        console.log(activityLevel)
+                    }
+                }
                 this.setState({
                     calculteCalries: calculteCalries
                 })
@@ -111,9 +119,6 @@ class Macrocalculator extends React.Component {
                 })
             }
         }
-        // console.log('press')
-        // 10 x weight (kg) + 6.25 x height (cm) – 5 x age (y) + 5 = REE for male
-        // 10 x weight (kg) + 6.25 x height (cm) – 5 x age (y) – 161 = REE for female
     }
     getGender(gender) {
         if (gender == 'male') {
@@ -132,13 +137,13 @@ class Macrocalculator extends React.Component {
         }
     }
     activityLevel(activity) {
-        if (activity == 'moderate') {
+        if (activity == 'active') {
             this.setState({
                 moderate: true,
                 sedentary: false,
                 light: false,
                 extreme: false,
-                activityLevel: 'moderate'
+                activityLevel: 'active'
             })
         }
         else if (activity == 'sedentary') {
@@ -150,22 +155,22 @@ class Macrocalculator extends React.Component {
                 activityLevel: 'sedentary'
             })
         }
-        else if (activity == 'light') {
+        else if (activity == 'lightActivity') {
             this.setState({
                 moderate: false,
                 sedentary: false,
                 light: true,
                 extreme: false,
-                activityLevel: 'light'
+                activityLevel: 'lightActivity'
             })
         }
-        else if (activity == 'extreme') {
+        else if (activity == 'veryActive') {
             this.setState({
                 moderate: false,
                 sedentary: false,
                 light: false,
                 extreme: true,
-                activityLevel: 'extreme'
+                activityLevel: 'veryActive'
             })
         }
     }
@@ -369,7 +374,7 @@ class Macrocalculator extends React.Component {
                                     Sedentary
                                 </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={moderate ? styles.clickBtnStyle : styles.moderateContainer} onPress={this.activityLevel.bind(this, 'moderate')}>
+                            <TouchableOpacity style={moderate ? styles.clickBtnStyle : styles.moderateContainer} onPress={this.activityLevel.bind(this, 'lightActivity')}>
                                 <Text style={styles.activityChildsTextStyle}>
                                     Moderate
                                 </Text>
@@ -419,7 +424,7 @@ class Macrocalculator extends React.Component {
                                 : null}
                             <View style={{ marginTop: 50 }}>
                                 <Picker selectedValue={this.state.goalWeightUnit}
-                                  onValueChange={this.updateUnits.bind(this, 'goal weight Unit')}
+                                    onValueChange={this.updateUnits.bind(this, 'goal weight Unit')}
                                     style={styles.pickerStyle}>
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="KG" value="kg" />
@@ -433,12 +438,12 @@ class Macrocalculator extends React.Component {
                                 </View>
                                 : null}
                             <View style={{ marginTop: 42, marginLeft: 16 }}>
-                                <TouchableOpacity style={light ? styles.clickBtnStyle : styles.lightTouchableStyle} onPress={this.activityLevel.bind(this, 'light')}>
+                                <TouchableOpacity style={light ? styles.clickBtnStyle : styles.lightTouchableStyle} onPress={this.activityLevel.bind(this, 'active')}>
                                     <Text style={styles.lightTextStyle}>
                                         Light
                                           </Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={extreme ? styles.clickBtnStyle : styles.extremTouchableStyle} onPress={this.activityLevel.bind(this, 'extreme')}>
+                                <TouchableOpacity style={extreme ? styles.clickBtnStyle : styles.extremTouchableStyle} onPress={this.activityLevel.bind(this, 'veryActive')}>
                                     <Text style={styles.lightTextStyle}>
                                         Extreme
                                     </Text>

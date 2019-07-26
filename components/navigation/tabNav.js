@@ -33,19 +33,19 @@ const MainNavigator = createMaterialTopTabNavigator({
   //   }
  
   // },    
-//   Chatscreen:{screen:Chatscreen,
-//   navigationOptions:{
-//     tabBarIcon:(navigation)=>{
-//       const forFocused =navigation.focused;
-//       const renderChat = forFocused ? activeChat : inactiveChat;
-//       return(
-//         renderChat
-//       )
-//     }
+  Chatscreen:{screen:Chatscreen,
+  navigationOptions:{
+    tabBarIcon:(navigation)=>{
+      const forFocused =navigation.focused;
+      const renderChat = forFocused ? activeChat : inactiveChat;
+      return(
+        renderChat
+      )
+    }
     
-//   }
+  }
 
-// },
+},
 Reportscreen: {
     screen: Reportscreen,
     navigationOptions: {
