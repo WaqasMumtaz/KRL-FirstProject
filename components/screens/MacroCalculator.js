@@ -28,7 +28,11 @@ class Macrocalculator extends React.Component {
             goalWeightUnit: '',
             activityLevel: '',
             calculteCalries: '',
-            tdee: { sedentary: 1.2, lightActivity: 1.375, active: 1.55, veryActive: 1.725 },
+            totalDEE: '',
+            fatMass: '',
+            proteins: '',
+            carbohydrates: '',
+            tdeeObj: { sedentary: 1.2, lightActivity: 1.375, active: 1.55, veryActive: 1.725 },
             dobValidation: false,
             genderValidation: false,
             heightValidation: false,
@@ -47,7 +51,8 @@ class Macrocalculator extends React.Component {
         }
     }
     calulateMacro = () => {
-        const { age, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit, activityLevel, tdee } = this.state
+        const { age, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit,
+            activityLevel, tdeeObj } = this.state
         if (age == '') {
             this.setState({
                 dobValidation: true
@@ -99,24 +104,43 @@ class Macrocalculator extends React.Component {
                 currentWeightUnit != '' && goalWeightUnit != '' && activityLevel != '') {
                 let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age + 5;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
-                    for (var value in tdee) {
-                        // console.log(tdee[value])
-                        console.log(tdee)
-                        console.log(activityLevel)
-                    }
+                    let tdee = calculteCalries * tdeeObj[activityLevel]
+                    let fatCalries = tdee * 0.25;
+                    let fat = fatCalries / 9
+                    let proteinCalries = calculteCalries * 0.25;
+                    let protein = proteinCalries / 4;
+                    let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
+                    let carbohydrate = carbohydratesCalries / 4;
+                    this.setState({
+                        calculteCalries: calculteCalries,
+                        totalDEE: tdee,
+                        fatMass: fat,
+                        proteins: protein,
+                        carbohydrates: carbohydrate
+                    })
                 }
-                this.setState({
-                    calculteCalries: calculteCalries
-                })
             }
         }
         else if (gender == 'female') {
             if (age != '' && height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' &&
                 currentWeightUnit != '' && goalWeightUnit != '' && activityLevel != '') {
-                let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age - 161
-                this.setState({
-                    calculteCalries: calculteCalries
-                })
+                let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age - 161;
+                if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
+                    let tdee = calculteCalries * tdeeObj[activityLevel]
+                    let fatCalries = tdee * 0.25;
+                    let fat = fatCalries / 9
+                    let proteinCalries = calculteCalries * 0.25;
+                    let protein = proteinCalries / 4;
+                    let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
+                    let carbohydrate = carbohydratesCalries / 4;
+                    this.setState({
+                        calculteCalries: calculteCalries,
+                        totalDEE: tdee,
+                        fatMass: fat,
+                        proteins: protein,
+                        carbohydrates: carbohydrate
+                    })
+                }
             }
         }
     }
@@ -242,7 +266,8 @@ class Macrocalculator extends React.Component {
     render() {
         const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation,
             currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation, male, female,
-            moderate, sedentary, light, extreme } = this.state
+            moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates } = this.state;
+
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.mainContainer}>
@@ -456,10 +481,10 @@ class Macrocalculator extends React.Component {
                     </View>
                     <View style={styles.inputCaloriesContainer}>
                         {/* <Text style={{ borderWidth:2,borderColor:'black',color: '#4f4f4f', marginLeft: 20, marginVertical: 5,fontFamily: 'MontserratLight' }}>1640 Kcal{'\n'}Calories</Text> */}
-                        <TextInput placeholder={"1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} />
-                        <TextInput placeholder={"149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} />
-                        <TextInput placeholder={"107 g\Protein"} style={styles.inputCaloriesStyleThree} />
-                        <TextInput placeholder={"51 g\nFat"} style={styles.inputCaloriesStyleFour} />
+                        <TextInput placeholder={"1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={calculteCalries} />
+                        <TextInput placeholder={"149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={fatMass} />
+                        <TextInput placeholder={"107 g\Protein"} style={styles.inputCaloriesStyleThree} value={proteins} />
+                        <TextInput placeholder={"51 g\nFat"} style={styles.inputCaloriesStyleFour} value={carbohydrates} />
                         {/* <Text style={{ color: '#4f4f4f', marginLeft: '20%', marginVertical: 5,fontFamily: 'MontserratLight' }}>159 g{'\n'}Carbohydrates</Text> */}
                     </View>
                     <View style={styles.lastParaContainer}>

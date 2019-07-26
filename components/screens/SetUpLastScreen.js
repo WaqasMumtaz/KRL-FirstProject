@@ -18,6 +18,12 @@ class LastSetUpScreen extends React.Component {
         super(props)
         this.state = {
             activityLevel: '',
+            calculteCalries: '',
+            totalDEE: '',
+            fatMass: '',
+            proteins: '',
+            carbohydrates: '',
+            tdeeObj: { sedentary: 1.2, lightActivity: 1.375, active: 1.55, veryActive: 1.725 },
             activityLevelValidation: false,
             sedentary: false,
             lightActivity: false,
@@ -26,13 +32,13 @@ class LastSetUpScreen extends React.Component {
         }
     }
     activityLevel(activity) {
-        if (activity == 'light Activity') {
+        if (activity == 'lightActivity') {
             this.setState({
                 sedentary: false,
                 lightActivity: true,
                 active: false,
                 veryActive: false,
-                activityLevel: 'light Activity'
+                activityLevel: 'lightActivity'
             })
         }
         else if (activity == 'sedentary') {
@@ -53,33 +59,56 @@ class LastSetUpScreen extends React.Component {
                 activityLevel: 'active'
             })
         }
-        else if (activity == 'very Active') {
+        else if (activity == 'veryActive') {
             this.setState({
                 sedentary: false,
                 lightActivity: false,
                 active: false,
                 veryActive: true,
-                activityLevel: 'very Active'
+                activityLevel: 'veryActive'
             })
         }
     }
     calulateMacro = () => {
+        const { tdeeObj } = this.state;
         const { navigate } = this.props.navigation;
         const year = new Date().getFullYear(); //Current Year
-        const age = new Date(this.props.navigation.state.params.dob).getFullYear();
-        console.log(age , 'age')
+        let ageyear = new Date(this.props.navigation.state.params.dob).getFullYear();
+        let age = ageyear - year;
         if (gender == 'male') {
-            let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age + 5
+            let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age + 5;
+            let tdee = calculteCalries * tdeeObj[activityLevel]
+            let fatCalries = tdee * 0.25;
+            let fat = fatCalries / 9
+            let proteinCalries = calculteCalries * 0.25;
+            let protein = proteinCalries / 4;
+            let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
+            let carbohydrate = carbohydratesCalries / 4;
             this.setState({
-                calculteCalries: calculteCalries
+                calculteCalries: calculteCalries,
+                totalDEE: tdee,
+                fatMass: fat,
+                proteins: protein,
+                carbohydrates: carbohydrate
             })
             navigate('BottomTabe')
 
         }
         else if (gender == 'female') {
-            let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age - 161
+            let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age - 161;
+            let tdee = calculteCalries * tdeeObj[activityLevel]
+            let fatCalries = tdee * 0.25;
+            let fat = fatCalries / 9;
+            let proteinCalries = calculteCalries * 0.25;
+            let protein = proteinCalries / 4;
+            let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
+            let carbohydrate = carbohydratesCalries / 4;
             this.setState({
-                calculteCalries: calculteCalries
+                calculteCalries: calculteCalries,
+                totalDEE: tdee,
+                fatMass: fat,
+                proteins: protein,
+                carbohydrates: carbohydrate
             })
             navigate('BottomTabe')
         }
@@ -102,7 +131,7 @@ class LastSetUpScreen extends React.Component {
                             <Text style={styles.headerTextStyle}>Sedentary</Text>
                             <Text style={styles.textStyle}>Desk job very little activity.</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={lightActivity ? styles.touchOpacityStyle : styles.moderateContainer} onPress={this.activityLevel.bind(this, 'light Activity')}>
+                        <TouchableOpacity style={lightActivity ? styles.touchOpacityStyle : styles.moderateContainer} onPress={this.activityLevel.bind(this, 'lightActivity')}>
                             <Text style={styles.headerTextStyle}>Light Activity</Text>
                             <Text style={styles.textStyle}>Some Standing and moving.</Text>
                         </TouchableOpacity>
@@ -112,7 +141,7 @@ class LastSetUpScreen extends React.Component {
                             <Text style={styles.headerTextStyle}>Active</Text>
                             <Text style={styles.textStyle}>Mostly standing and moving.</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={veryActive ? styles.touchOpacityStyle : styles.extremTouchableStyle} onPress={this.activityLevel.bind(this, 'very Active')}>
+                        <TouchableOpacity style={veryActive ? styles.touchOpacityStyle : styles.extremTouchableStyle} onPress={this.activityLevel.bind(this, 'veryActive')}>
                             <Text style={styles.headerTextStyle}>Very Active</Text>
                             <Text style={styles.textStyle}>Heavy moving and lifting heavy stuff.</Text>
                         </TouchableOpacity>
