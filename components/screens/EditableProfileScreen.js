@@ -19,6 +19,7 @@ import CaloriesSetupBtn from '../buttons/setUpBtn';
 import AsyncStorage from '@react-native-community/async-storage';
 import { thisExpression } from '@babel/types';
 import ImagePicker from 'react-native-image-picker';
+import RNFS from 'react-native-fs';
 
 const userDefaultPic = require('../icons/profile.png')
 
@@ -146,12 +147,12 @@ class EditProfileScreen extends React.Component {
         })
     }
 
- chooseProfilePhoto= async ()=>{
+ chooseProfilePhoto= ()=>{
      const options={
         noData: true,
         mediaType: 'photo'
      }
-     ImagePicker.showImagePicker(options, (response) => {
+     ImagePicker.showImagePicker(options, async (response) => {
         console.log('Response = ', response);
       
         if (response.didCancel) {
@@ -162,13 +163,32 @@ class EditProfileScreen extends React.Component {
           console.log('User tapped custom button: ', response.customButton);
         } else {
           //const source = { uri: response.uri };
+          let contentType = response.type
+          let res = await RNFS.readFile(response.uri, 'base64')
+          let imgBase644 = `data:${contentType};base64,${res}`;
+          let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
+          let data = {
+          "file": imgBase644,
+          "upload_preset": "toh6r3p2",
+        }
+
+        fetch(apiUrl, {
+            body: JSON.stringify(data),
+            headers: {
+              'content-type': 'application/json'
+            },
+            method: 'POST',
+          }).then(async r => {
+            let data = await r.json()
+            //send image on firebase
+            console.log(data)
+            const source = {uri: data.secure_url}
+            this.setState({
+              avatarSource: source,
+            })
+            return data.secure_url
+          }).catch(err => console.log(err))
       
-          // You can also display the image using data:
-          // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-      
-          this.setState({
-            avatarSource: response.uri,
-          });
         }
       })
  }   
@@ -184,7 +204,8 @@ class EditProfileScreen extends React.Component {
             passwordValidate,
             addressValidate,
             contactNoValidate,
-            genderValidate
+            genderValidate,
+            avatarSource
 
         } = this.state;
 
@@ -197,13 +218,14 @@ class EditProfileScreen extends React.Component {
         }
 
         else {
-            this.setState({ isLoading: true })
+            //this.setState({ isLoading: true })
 
             const userObj = {
                 email: email,
                 address: address,
                 contactNo: contactNo,
-                gender: gender
+                gender: gender,
+                image: avatarSource
             }
             console.log(userObj)
 
@@ -229,24 +251,28 @@ class EditProfileScreen extends React.Component {
             avatarSource
 
         } = this.state;
-        console.log(email);
-        console.log(avatarSource)
+        // console.log(email);
+        // console.log(avatarSource)
 
         return (
             <View style={styles.mainContainer}>
-
+                
+                {/* <Image source={this.state.avatarSource} style={{height:25,width:25}}/> */}
                 <ScrollView
                     style={{ flex: 1, backgroundColor: 'white', height: height }}
                     contentContainerStyle={{ flexGrow: 1 }}
                 >
+                            
                     <View style={styles.profilPicContainer}>
                         <TouchableOpacity
                         activeOpacity={0.5}
                         onPress={this.chooseProfilePhoto}
-                        >
-                         {avatarSource == null ? <Image source={userDefaultPic}
+                        > 
+                         {avatarSource ? <Image source={avatarSource} style={styles.profilPicStyle}/>
+                         :
+                         <Image source={userDefaultPic}
                             style={styles.profilPicStyle}
-                         />: avatarSource && <Image style={styles.profilPicStyle}/>}
+                         /> }
                         </TouchableOpacity>
                         <View style={styles.nameContainer}>
                             <Text style={styles.nameStyle}>{this.state.name}</Text>
@@ -347,7 +373,7 @@ class EditProfileScreen extends React.Component {
                     </View>
 
                     <View style={styles.blankContainer}>
-                   {avatarSource && <Image style={{height:20,width:20}}/>}
+                   
                     </View>
                     
                 </ScrollView>

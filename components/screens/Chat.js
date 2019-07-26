@@ -184,6 +184,24 @@ class Chatscreen extends React.Component {
         let contentType = response.type
 
 
+        fetch(apiUrl, {
+          body: JSON.stringify(data),
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST',
+        }).then(async r => {
+          let data = await r.json()
+          //send image on firebase
+          //console.lob(data)
+          this.uplaodDataOnFirebase(data.secure_url)
+          // this.setState({
+          //   avatarSource: data.secure_url,
+          // })
+          return data.secure_url
+        }).catch(err => console.log(err))
+
+
 
         // let res = await RNFS.readFile(response.uri, 'base64')
         // let imgBase644 = `data:application/${contentType};base64,${res}`;
@@ -204,6 +222,7 @@ class Chatscreen extends React.Component {
         //   this.uplaodDataOnFirebase(data.secure_url)
         //   return data.secure_url
         // }).catch(err => console.log(err))
+
         // You can also display the image using data:
         this.setState({
           attachOrange: true,
