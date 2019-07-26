@@ -23,13 +23,13 @@ import 'firebase/firestore';
 const db = firebase.database();
 import RNFS from 'react-native-fs';
 import FilePickerManager from 'react-native-file-picker';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 class Chatscreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       header: () => null
     }
-
   };
   constructor(props) {
     super(props);
@@ -142,10 +142,8 @@ class Chatscreen extends React.Component {
   }
   sendMessage = async () => {
     const { textMessage } = this.state;
-
     //message send on firebase
     this.uplaodDataOnFirebase(textMessage)
-
     this.setState({
       textMessage: '',
       messagContainer: true,
@@ -165,6 +163,170 @@ class Chatscreen extends React.Component {
       }
     })
   }
+
+  choosePhotoFunc = () => {
+    const options = {
+      noData: true,
+      mediaType: 'photo'
+    }
+    ImagePicker.showImagePicker(options, async (response) => {
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        let contentType = response.type
+
+
+        fetch(apiUrl, {
+          body: JSON.stringify(data),
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST',
+        }).then(async r => {
+          let data = await r.json()
+          //send image on firebase
+          //console.lob(data)
+          this.uplaodDataOnFirebase(data.secure_url)
+          // this.setState({
+          //   avatarSource: data.secure_url,
+          // })
+          return data.secure_url
+        }).catch(err => console.log(err))
+
+
+
+        // let res = await RNFS.readFile(response.uri, 'base64')
+        // let imgBase644 = `data:application/${contentType};base64,${res}`;
+        // let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
+        // let data = {
+        //   "file": imgBase644,
+        //   "upload_preset": "toh6r3p2",
+        // }
+        // fetch(apiUrl, {
+        //   body: JSON.stringify(data),
+        //   headers: {
+        //     'content-type': 'application/json'
+        //   },
+        //   method: 'POST',
+        // }).then(async r => {
+        //   let data = await r.json()
+        //   //send image on firebase
+        //   this.uplaodDataOnFirebase(data.secure_url)
+        //   return data.secure_url
+        // }).catch(err => console.log(err))
+
+        // You can also display the image using data:
+        this.setState({
+          attachOrange: true,
+          shareFiles: true
+        });
+      }
+    })
+  }
+
+  fileUpload = (e) => {
+    console.log(e, 'file upload')
+    FilePickerManager.showFilePicker(null, async (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled file picker');
+      }
+      else if (response.error) {
+        console.log('FilePickerManager Error: ', response.error);
+      }
+      else {
+        console.log(response, 'responnse')
+        let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
+
+
+        // let a  = RNFetchBlob.wrap(response.uri)
+        // console.log(a , 'RNFetchBlob')
+        RNFetchBlob.fetch('POST', apiUrl, {
+          Authorization: "Bearer access-token",
+          otherHeader: "foo",
+          'Content-Type': 'multipart/form-data',
+          "upload_preset": "toh6r3p2",
+
+        }, [
+          {
+            filename: response.fileName,
+            type: response.type,
+            data: RNFetchBlob.wrap(response.uri),
+            "upload_preset": "toh6r3p2",
+            }
+          ]).then((resp) => {
+            console.log(resp, 'respone from fetch')
+          }).catch((err) => {
+            console.log(err, 'error')
+            // ...
+          })
+
+
+
+        // //with fs method and fetch
+        // var fileName = response.fileName.substring(response.fileName.lastIndexOf(".") + 1);
+        // console.log(fileName, 'file extention')
+        // let res = await RNFS.readFile(response.uri, 'base64')
+        // let imgBase644 = `data:application/${fileName};base64,${res}`;
+        // console.log(imgBase644, 'contents');
+        // console.log(response.path)
+        // var url = response.uri.substring(response.uri.lastIndexOf("/") + 1);
+        // console.log(url , 'uri')
+        // let data = {
+        //   'file': url,
+        //   "upload_preset": "toh6r3p2",
+        // }
+        // RNFetchBlob.fetch('POST', apiUrl, {
+        //   // headers: {
+        //     // 'content-type': 'application/json',
+        //     Authorization: "Bearer access-token",
+        //       otherHeader: "foo",
+        //       'Content-Type': 'multipart/form-data',
+        //   // },
+        //   body: {
+        //     filename: response.fileName,
+        //     type: response.type,
+        //     data: RNFetchBlob.wrap(response.uri),
+        //     "upload_preset": "toh6r3p2",
+        //   }
+        // }).then(async r => {
+        //   let data = await r.json()
+        //   console.log(data, 'data')
+        //   return data.secure_url
+        // }).catch(err => console.log(err))
+
+
+        // fetch(apiUrl, {
+        //   body: JSON.stringify(data),
+        //   headers: {
+        //     'content-type': 'application/json'
+        //   },
+        //   method: 'POST',
+        // }).then(async r => {
+        //   let data = await r.json()
+        //   console.log(data, 'data')
+        //   return data.secure_url
+        // }).catch(err => console.log(err))
+      }
+    });
+  }
+
+  expandImg = () => {
+    const { expand } = this.state;
+    this.setState({
+      expand: true,
+    })
+  }
+  shortPic = (e) => {
+    console.log(e)
+  }
   changeIcon = () => {
     this.setState({
       sendIcon: true,
@@ -174,29 +336,6 @@ class Chatscreen extends React.Component {
 
 
   toggelMic = async () => {
-    if (Platform.OS !== 'android') {
-      return Promise.resolve(true);
-    }
-
-    let result;
-    try {
-      result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        { title: 'Microphone Permission', message: 'Enter the Gunbook needs access to your microphone so you can search with voice.' });
-    } catch (error) {
-      console.error('failed getting permission, result:', result);
-    }
-    console.log('permission result:', result);
-    (result === true || result === PermissionsAndroid.RESULTS.GRANTED);
-    SoundRecorder.start(SoundRecorder.PATH_DOCUMENT + '/test.mp4')
-      .then(function () {
-        console.log('started recording');
-      });
-    setTimeout(() => {
-      SoundRecorder.stop()
-        .then(function (result) {
-          console.log('stopped recording, audio file saved at: ' + result.path);
-        });
-    }, 6000);
     this.setState({
       micIcon: false,
       micOrange: true,
@@ -229,199 +368,6 @@ class Chatscreen extends React.Component {
       attachOrange: false,
       shareFiles: false
     })
-  }
-
-  choosePhotoFunc = () => {
-    const options = {
-      noData: true,
-      mediaType: 'photo'
-    }
-    ImagePicker.showImagePicker(options, async (response) => {
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      }
-      else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      }
-      else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      }
-      else {
-        let contentType = response.type
-        let res = await RNFS.readFile(response.uri, 'base64')
-        let imgBase644 = `data:${contentType};base64,${res}`;
-        let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
-        let data = {
-          "file": imgBase644,
-          "upload_preset": "toh6r3p2",
-        }
-
-        fetch(apiUrl, {
-          body: JSON.stringify(data),
-          headers: {
-            'content-type': 'application/json'
-          },
-          method: 'POST',
-        }).then(async r => {
-          let data = await r.json()
-          //send image on firebase
-          //console.lob(data)
-          this.uplaodDataOnFirebase(data.secure_url)
-          // this.setState({
-          //   avatarSource: data.secure_url,
-          // })
-          return data.secure_url
-        }).catch(err => console.log(err))
-        // You can also display the image using data:
-        this.setState({
-          attachOrange: true,
-          shareFiles: true
-        });
-      }
-
-    })
-  }
-  expandImg = () => {
-    const { expand } = this.state;
-    console.log('function called')
-    // if (expand) {
-    this.setState({
-      expand: true,
-    })
-    // }
-    // else {
-    //   this.setState({
-    //     expand: false,
-    //   })
-    // }
-  }
-  shortPic = (e) => {
-    console.log(e)
-  }
-
-  fileUpload = (e) => {
-    console.log(e, 'file upload')
-    FilePickerManager.showFilePicker(null, async (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled file picker');
-      }
-      else if (response.error) {
-        console.log('FilePickerManager Error: ', response.error);
-      }
-      else {
-        console.log(response, 'responnse')
-        // const files = Array.from(response)
-        // const formData = new FormData()
-        // for(var name in response) {
-        //   formData.append(name, response[name]);
-        // }
-
-        // files.forEach((response, i) => {
-        //   formData.append(i, response)
-        // })
-        // const uri = response.uri;
-        // const uriParts = uri.split('.');
-        // const fileType = response.type;
-        // const formData = new FormData();
-        // formData.append('file', {
-        //   uri,
-        //   name: `file.${fileType}`,
-        //   type: `image/${fileType}`,
-        // });
-
-        //   var formdata = new FormData();
-
-        //   formdata.append('file', response);
-        //   formdata.append('cloud_name', 'dxk0bmtei');
-        //   formdata.append('upload_preset', 'toh6r3p2');
-
-        //   var xhr = new XMLHttpRequest();
-        //   xhr.open('POST', "https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload", true);
-
-        //   xhr.onload = function () {
-        //     // do something to response
-        //     console.log(this.responseText);
-        //   };
-        //   xhr.send(formdata);
-        // }
-
-        // const dataForm = new FormData();
-        // const unsignedUploadPreset = "toh6r3p2"
-        // dataForm.append('file', { uri: 'file://' + response.uri, name: response.fileName, type: response.type , });
-        // dataForm.append('upload_preset' ,unsignedUploadPreset )
-        // data.append({name: 'file', filename: response.name, type: response.type, data: response.uri}),
-        // data.append({name: 'upload_preset', data: 'toh6r3p2'})
-        // let a = { uri: 'file://' + response.uri, name: response.fileName, type: response.type, }
-        // console.log(a, 'form dat')
-
-        // let url = response.uri
-        // const cleanURL = url.replace("content://", "");
-
-        // const formData = new FormData()
-        // for(var name in response) {
-        //   formData.append(name, response[name]);
-        // }
-
-        let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
-
-        // var fileName = response.uri.substring(response.uri.lastIndexOf("/") + 1);
-        // var fsPath = response.uri;
-
-        // const path = response.uri + response.filename;
-        const path = response.uri;
-
-        const contents = await RNFS.readFileSync(path,{ encoding: 'utf8' });
-        console.log(contents, 'contents')
-        let data = {
-          'file': fsPath,
-          "upload_preset": "toh6r3p2",
-          'name': fileName,
-          // 'type': response.type,
-        }
-
-        fetch(apiUrl, {
-          body: JSON.stringify(data),
-          headers: {
-            'content-type': 'application/json'
-            // 'content-type': response.type
-            // 'Content-Type': 'multipart/form-data'
-            // 'content-type': 'application/x-www-form-urlencoded'
-          },
-          method: 'POST',
-        }).then(async r => {
-          let data = await r.json()
-          console.log(data, 'data')
-          return data.secure_url
-        }).catch(err => console.log(err))
-
-        // let timestamp = (Date.now() / 1000 | 0).toString();
-        // let api_key = '878178936665133'
-        // // let api_secret = 'your api secret'
-        // let cloud = 'dxk0bmtei'
-        // const uploadPreset = 'toh6r3p2'
-        // // let hash_string = 'timestamp=' + timestamp + api_secret
-        // // let signature = CryptoJS.SHA1(hash_string).toString();
-        // let upload_url = 'https://api.cloudinary.com/v1_1/' + cloud + '/image/upload'
-
-        // let xhr = new XMLHttpRequest();
-        // xhr.open('POST', upload_url);
-        // xhr.onload = () => {
-        //   console.log(xhr);
-        // };
-        // let formdata = new FormData();
-        // formdata.append('file', {uri: response.uri, type: response.type, name: response.fileName});
-        // // formdata.append('timestamp', timestamp);
-        // formdata.append('api_key', api_key);
-        // formdata.append('uploadPreset' , uploadPreset)
-        // // formdata.append('signature', signature);
-        // console.log(formdata , 'formdata')
-        // xhr.send(formdata);
-      }
-
-      // this.setState({
-      //   file: response
-    });
   }
 
 

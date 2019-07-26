@@ -43,9 +43,15 @@ const MainNavigator= createStackNavigator({
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
   //Signup:{screen:Signup},
   // ActivateSpinner:{screen:ActivateSpinner},
+
   Setupscreen:{screen:Setupscreen},
   Setupscreen1:{screen:Setupscreen1}, 
   LastSetUpScreen: { screen: LastSetUpScreen },
+
+  // Setupscreen1:{screen:Setupscreen1}, 
+  //Setupscreen:{screen:Setupscreen},
+  //LastSetUpScreen: { screen: LastSetUpScreen },
+
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen: { screen: LastSetUpScreen },
   // Wheelspiner:{screen:Wheelspiner},
