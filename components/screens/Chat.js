@@ -266,6 +266,7 @@ class Chatscreen extends React.Component {
         }).then(async r => {
           let data = await r.json()
           //send image on firebase
+          //console.lob(data)
           this.uplaodDataOnFirebase(data.secure_url)
           // this.setState({
           //   avatarSource: data.secure_url,
