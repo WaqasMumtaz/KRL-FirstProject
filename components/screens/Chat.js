@@ -246,36 +246,34 @@ class Chatscreen extends React.Component {
         let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
 
 
-        // let a  = RNFetchBlob.wrap(response.uri)
-        // console.log(a , 'RNFetchBlob')
-        RNFetchBlob.fetch('POST', apiUrl, {
-          Authorization: "Bearer access-token",
-          otherHeader: "foo",
-          'Content-Type': 'multipart/form-data',
-          "upload_preset": "toh6r3p2",
+        // RNFetchBlob.fetch('POST', apiUrl, {
+        //   Authorization: "Bearer access-token",
+        //   otherHeader: "foo",
+        //   'Content-Type': 'multipart/form-data',
+        //   "upload_preset": "toh6r3p2",
 
-        }, [
-          {
-            filename: response.fileName,
-            type: response.type,
-            data: RNFetchBlob.wrap(response.uri),
-            "upload_preset": "toh6r3p2",
-            }
-          ]).then((resp) => {
-            console.log(resp, 'respone from fetch')
-          }).catch((err) => {
-            console.log(err, 'error')
-            // ...
-          })
+        // }, [
+        //   {
+        //     filename: response.fileName,
+        //     type: response.type,
+        //     data: RNFetchBlob.wrap(response.uri),
+        //     "upload_preset": "toh6r3p2",
+        //     }
+        //   ]).then((resp) => {
+        //     console.log(resp, 'respone from fetch')
+        //   }).catch((err) => {
+        //     console.log(err, 'error')
+        //     // ...
+        //   })
 
 
 
         // //with fs method and fetch
-        // var fileName = response.fileName.substring(response.fileName.lastIndexOf(".") + 1);
+        var fileName = response.fileName.substring(response.fileName.lastIndexOf(".") + 1);
         // console.log(fileName, 'file extention')
-        // let res = await RNFS.readFile(response.uri, 'base64')
-        // let imgBase644 = `data:application/${fileName};base64,${res}`;
-        // console.log(imgBase644, 'contents');
+        let res = await RNFS.readFile(response.uri, 'base64')
+        let imgBase644 = `data:application/${fileName};base64,${res}`;
+        console.log(imgBase644, 'contents');
         // console.log(response.path)
         // var url = response.uri.substring(response.uri.lastIndexOf("/") + 1);
         // console.log(url , 'uri')

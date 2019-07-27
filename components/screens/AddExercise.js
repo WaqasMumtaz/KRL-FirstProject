@@ -10,68 +10,79 @@ const { height } = Dimensions.get('window');
 
 
 class AddExercise extends React.Component {
-    static navigationOptions =(navigation)=> {   
-        //const { params = {} } = navigation.state;
-        const {navigate} = navigation.navigation.navigate
-return{
-        headerRight:
-             <TouchableOpacity style={styles.headerIconContainer}>
-                 <Image source={require('../icons/tick.png')} style={styles.headerIcon}/>
-             </TouchableOpacity>,
-     
-        headerStyle: {
-           // backgroundColor: 'black'
-           
-          },
-         headerTintColor:'gray',
-}    
+    static navigationOptions = (navigation) => {
+        const { params = {} } = navigation.navigation.state;
+        console.log(params);
+        let headerRight = <TouchableOpacity style={styles.headerIconContainer}
+            onPress={
+                params.addExercise
+            }>
+            <Image source={require('../icons/tick.png')} style={styles.headerIcon} />
+        </TouchableOpacity>
+        return {
+            headerRight,
+
+            headerStyle: {
+                // backgroundColor: 'black'
+
+            },
+            headerTintColor: 'gray',
+        }
 
     };
     constructor(props) {
         super(props);
 
         this.state = {
-                show:true,
-                showCard:false,
-                jogging:false,
-                pushups:false,
-                bicep:false,
-                iconShow:false,
-                logExercise:false,
+            show: true,
+            showCard: false,
+            jogging: false,
+            pushups: false,
+            bicep: false,
+            iconShow: false,
+            logExercise: false,
         }
     }
+    componentDidMount() {
+        this.props.navigation.setParams({ addExercise: this.addExercise, })
+    }
+    addExercise = () => {
+        console.log('helloo')
+        this.props.navigation.navigate('Exerciselog');
+    }
 
-    exerciseLog=()=>{
-          this.setState({show:false, logExercise:true})
-    }    
 
-    showFields=()=>{
-        this.setState({show:false,showCard:true})
+    exerciseLog = () => {
+        this.setState({ show: false, logExercise: true })
     }
-    showHighPaceJogging=()=>{
-        this.setState({show:false,jogging:true})
+
+    showFields = () => {
+        this.setState({ show: false, showCard: true })
     }
-    pushUps=()=>{
-        this.setState({show:false,pushups:true})
+    showHighPaceJogging = () => {
+        this.setState({ show: false, jogging: true })
     }
-    bicepCurlsFun=()=>{
-        this.setState({show:false,bicep:true})
+    pushUps = () => {
+        this.setState({ show: false, pushups: true })
     }
-    backToHome=()=>{
-        this.setState({show:true,showCard:false})
+    bicepCurlsFun = () => {
+        this.setState({ show: false, bicep: true })
     }
-    joggingToHome=()=>{
-        this.setState({show:true,jogging:false})
+    backToHome = () => {
+        this.setState({ show: true, showCard: false })
     }
-    pushUpsToHome=()=>{
-        this.setState({show:true,pushups:false})
+    joggingToHome = () => {
+        this.setState({ show: true, jogging: false })
     }
-    bicepToHome=()=>{
-        this.setState({show:true,bicep:false})
+    pushUpsToHome = () => {
+        this.setState({ show: true, pushups: false })
+    }
+    bicepToHome = () => {
+        this.setState({ show: true, bicep: false })
     }
 
     render() {
-           const {show,showCard,jogging,pushups,bicep,logExercise}=this.state;
+        const { show, showCard, jogging, pushups, bicep, logExercise } = this.state;
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.childContainer}>
@@ -88,25 +99,25 @@ return{
 
                     <View style={styles.bodyContainer}>
                         <TextInput placeholder="Search exercise" placeholderTextColor="black" style={styles.inputFieldStyle} />
-                        
+
                     </View>
                     {show && <View style={styles.listsContainer}>
-                      <TouchableOpacity onPress={this.showFields}><Text style={styles.listsTextStyle}>Brisk Walk</Text></TouchableOpacity>
-                      <TouchableOpacity onPress={this.showHighPaceJogging}><Text style={styles.listsTextStyle}>High paced jogging</Text></TouchableOpacity>
-                      <TouchableOpacity onPress={this.pushUps}><Text style={styles.listsTextStyle}>Push ups</Text></TouchableOpacity>    
-                      <TouchableOpacity onPress={this.bicepCurlsFun}><Text style={styles.listsTextStyle}>Bicep curls</Text></TouchableOpacity>   
+                        <TouchableOpacity onPress={this.showFields}><Text style={styles.listsTextStyle}>Brisk Walk</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={this.showHighPaceJogging}><Text style={styles.listsTextStyle}>High paced jogging</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={this.pushUps}><Text style={styles.listsTextStyle}>Push ups</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={this.bicepCurlsFun}><Text style={styles.listsTextStyle}>Bicep curls</Text></TouchableOpacity>
                     </View>}
-                   {showCard && <View style={styles.cardContainer}>
-                     <BriskScreen title="Brisk Walk" label="Minutes" value="minutes" backFunc={this.backToHome}/>
+                    {showCard && <View style={styles.cardContainer}>
+                        <BriskScreen title="Brisk Walk" label="Minutes" value="minutes" backFunc={this.backToHome} />
                     </View>}
                     {jogging && <View style={styles.cardContainer} >
-                        <HighpacejoggingScreen backFunc={this.joggingToHome}/>
+                        <HighpacejoggingScreen backFunc={this.joggingToHome} />
                     </View>}
                     {pushups && <View style={styles.cardContainer} >
-                        <Pushups backFunc={this.pushUpsToHome}/>
+                        <Pushups backFunc={this.pushUpsToHome} />
                     </View>}
                     {bicep && <View style={styles.cardContainer} >
-                        <Bicepcurls backFunc={this.bicepToHome}/>
+                        <Bicepcurls backFunc={this.bicepToHome} />
                     </View>}
 
                     {logExercise && <View style={styles.cardContainer} >
@@ -115,7 +126,7 @@ return{
 
 
                 </View>
-                <View style={{flex:1.2}}>
+                <View style={{ flex: 1.2 }}>
 
                 </View>
             </ScrollView>
