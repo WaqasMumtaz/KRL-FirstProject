@@ -44,8 +44,8 @@ const MainNavigator= createStackNavigator({
   //Signup:{screen:Signup},
   // ActivateSpinner:{screen:ActivateSpinner},
 
-  Setupscreen:{screen:Setupscreen},
   Setupscreen1:{screen:Setupscreen1}, 
+  Setupscreen:{screen:Setupscreen},
   LastSetUpScreen: { screen: LastSetUpScreen },
 
   // Setupscreen1:{screen:Setupscreen1}, 

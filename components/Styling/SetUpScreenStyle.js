@@ -8,19 +8,19 @@ const screenHight =Dimensions.get('window').height;
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        //width: screenWidth,
-        backgroundColor: 'white',
-        marginHorizontal:20
-        // height: height,
-        //  justifyContent:'space-between',
-        //  justifyContent:'flex-start'
+        width: screenWidth,
+        height:screenHight,
+        backgroundColor:'black'
+        
+        
     },
-    // childContainer: {
-    //     flex: 4,
-    //     backgroundColor: 'black',
-    // },
+    childContainer: {
+        flex: 1,
+        backgroundColor: 'black',
+        marginHorizontal:20
+    },
     heading: {
-        flex: 3,
+        flex: 0.3,
         //backgroundColor: 'black'
     },
     headingStyle: {
@@ -31,103 +31,104 @@ const styles = StyleSheet.create({
 
     },
     paraGraph: {
-        flex: 2,
+        flex: 0.2,
         marginTop: 5
         //backgroundColor: '#8397b3'
     },
     paraGraphStyle: {
-        color: 'white',
-        
+        color: '#A6A6A6',
         fontFamily: 'MontserratLight',
     },
-    // inputFieldOne: {
-    //     flex: 2,
-    //     backgroundColor: 'white',
-    //     flexDirection: 'row',
-    //     marginLeft:20,
-    //     justifyContent:'space-between',
-        
+    labelsContainer:{
+        flexDirection:'row'
+    },
+    leftInputLabelStyle:{
+        color: '#A6A6A6',
+        fontFamily: 'MontserratLight',
+        marginTop:10
+    },
+    rightInputLabelStyle:{
+        color: '#A6A6A6',
+        fontFamily: 'MontserratLight',
+        marginTop:10,
+        marginLeft:145
+    },
+    weightLabelContainer:{
+        flexDirection:'row',
+        marginTop:12
+    },
+    rightWeightUnitLabelInput:{
+        color: '#A6A6A6',
+        fontFamily: 'MontserratLight',
+        marginTop:10,
+        marginLeft:88
+    },
+    rightGoalWeightUnitLabel:{
+        color: '#A6A6A6',
+        fontFamily: 'MontserratLight',
+        marginTop:10,
+        marginLeft:108
+    },
 
+    inputFieldOne: {
+        flexDirection:'row',
+        justifyContent:'space-between'
         
-    //     //marginTop:10
-    // },
-    // inputFieldOneStyle: {
-    //     color: 'yellow',
-    //     marginLeft: 20
-    // },
-    // inputFieldTwo: {
-    //     flex: 2,
-    //     // backgroundColor: '#7fff8e',
-    //     flexDirection: 'row',
-    //     justifyContent: 'center'
-    // },
-    // inputFieldTwoStyle: {
-    //     color: 'white',
-    //     marginLeft: 20
-    // },
-    // inputFieldThree: {
-    //     flex: 2,
-    //     //backgroundColor: '#008080',
-    //     flexDirection: 'row',
-    //     justifyContent: 'center'
-    // },
-    // inputFieldThreeStyle: {
-    //     color: 'white',
-    //     marginLeft: 20
-    // },
-    // textInputOne: {
-    //     flex: 3,
-    //     //backgroundColor: '#f8988b',
-    //     justifyContent: 'center',
-    //     flexDirection: 'row',
-    //     marginTop:20
-    // },
-    // textInputOneStyle: {
-    //     color: 'white',
-    //     fontFamily: 'MontserratLight',
-    //     marginLeft: 20
-    // },
-    // textInputStyle: {
-    //     flex: 1,
-    //     fontFamily: 'MontserratLight',
-    //     marginLeft: 20,
-    //     height: 40,
-    //     borderColor: 'gray',
-    //     backgroundColor: '#808080',
-    //     borderWidth: 2,
-    //     marginRight: 20,
-    //     paddingLeft: 16,
-    //     marginTop: 7,
-    // },
-    // textInputTwo: {
-    //     flex: 3,
-    //     //backgroundColor: '#038ff9',
-    //     justifyContent: 'center',
-    //     flexDirection: 'row'
-    // },
-    // textInputTwoStyle: {
-    //     color: 'white',
-    //     fontFamily: 'MontserratLight',
-    //     marginLeft: 20
-    // },
-    // lastParaGraph: {
-    //     flex: 2,
-    //     //backgroundColor: '#ffd39b',
-    //     flexDirection: 'row',
-    //     justifyContent: 'center',
-    //     flexWrap: 'wrap'
-    // },
-    // lastParaGraphStyle: {
-    //     color: 'white',
-    //     fontFamily: 'MontserratLight',
-    //     marginLeft: 20,
-    //     marginRight: 20
-    // },
+    },
+    inputFieldOneChild:{
+        flex: 1,
+        backgroundColor:'black',
+        flexDirection:'row',
+        marginTop:10,
+        height:40,
+        width:"50%"
+    },
+    touchableOpacityOne:{
+        height:40,
+        backgroundColor:'gray',
+        opacity:0.6,
+        paddingLeft:12, 
+        paddingTop:5,width:55
+    },
+
+    inputTextStyle:{
+        backgroundColor:'gray',
+        opacity:0.6,
+        textAlign:'center',
+        width:40
+    },
+    touchableOpacityTwo:{
+        height:40,
+        backgroundColor:'gray',
+        opacity:0.6, 
+        paddingTop:5,
+        width:55,
+        paddingLeft:22
+    },
+
+    inputFieldTwo:{
+        marginTop:5,
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },
+    inputFieldThree:{
+        marginTop:5,
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },
+
+    pickerContainer:{
+        flex: 1 ,
+        marginLeft:15
+    },
+        
+    
     buttonContainer: {
         flex: 2,
         //backgroundColor: '#794044',
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop:20
     },
     buttonContainerStyle: {
         flex: 1,
@@ -137,9 +138,7 @@ const styles = StyleSheet.create({
     //     flex: 2,
     //     backgroundColor: 'white'
     // },
-    // scrollViewStyle: {
-
-    // },
+    
     pickerStyle: {
         width: 155,
         height: 40,
@@ -149,38 +148,7 @@ const styles = StyleSheet.create({
         opacity: 0.3
 
     },
-    textInputStyleParent: {
-        //flex:1,
-        height: 40,
-        textAlign: 'center', 
-        // backgroundColor: '#e5e5e5',ss
-        backgroundColor: 'white',
-        // marginVertical: 5,
-        marginTop:10,
-    },
-    touchableOpacityOne: {
-        flex: 1,
-        padding: 5,
-        marginRight:5,
-         marginVertical: 5,
-        backgroundColor: 'black',
-        paddingLeft: 10,
-        height: 37,
-        opacity: 0.6
-
-
-    },
-    // touchableOpacityTwo: {
-    //     flex: 1,
-    //     padding: 5,
-    //     marginVertical: 5,
-    //     alignItems: 'flex-end',
-    //     backgroundColor: 'gray',
-    //     paddingRight: 10,
-    //     marginRight: 12,
-    //     height: 37,
-    //     opacity: 0.6
-    // },
+    
     caloriesBtnStyle: {
         flex: 1,
         height: 40,
@@ -189,43 +157,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5
     },
-    inputContainer:{
-        flex:0.5,
-        //height:'10%',
-        flexDirection:'row',
-        flexWrap:'wrap',
-        marginTop:5,
-        //backgroundColor:'orange'
-    },
-    container: {
-        flex: 1,
-        flexDirection: 'row',
-        
-
-        // backgroundColor:'green',
-        marginLeft: 20, 
-        marginRight: 16 
-        // width: screenWidth,
-        // height: screenHeight
-    },
-    textInputContainer: {
-        flex: 1,
-        // justifyContent: 'center',
-        //flexDirection: 'row',
-        //marginVertical: 5,
-        //borderRadius:2
-        marginTop:5,
-        marginBottom:8,
-        borderWidth:5,
-        borderColor:'white',
-        // height:20
-    },
+    
     forImg: {
         width: 20,
         height: 20,
         marginVertical: 5
 
     },
+    validationInstruction:{
+        fontSize:12,
+        fontFamily:'MontserratLight',
+        color:'#FF6200'
+    },
+    rightValidationHieghtAndCurrentWeight:{
+        marginLeft:65
+    },
+    rightGoalWeight:{
+        marginLeft:30
+    }
 
 })
 

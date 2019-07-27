@@ -8,8 +8,7 @@ const styles = StyleSheet.create({
     childContainer: {
         flex: 1,
         //backgroundColor: 'blue',
-        marginLeft: 20,
-        marginRight: 20
+        marginHorizontal:20
     },
     headingContainer: {
         flex: 0.5,
@@ -42,7 +41,7 @@ const styles = StyleSheet.create({
 
     },
     genderContainer: {
-        flex: 2,
+        flex: 0.5,
         //backgroundColor: 'green',
         marginTop: 10,
         flexDirection: 'row',
@@ -83,6 +82,7 @@ const styles = StyleSheet.create({
     btnContainer: {
         flex: 0.5,
         //backgroundColor: 'gray'
+        marginTop:12
     },
     reserv: {
         flex: 2,
@@ -105,17 +105,23 @@ const styles = StyleSheet.create({
     maleTouchableOpacity: {
         height: 38,
         width: '90%',
+        color:'yellow',
         justifyContent: 'center',
         backgroundColor: 'white',
         marginTop: 5,
         borderRadius: 3,
-        // opacity: 0.3
+        opacity: 0.4
     },
     maleTextStyle: {
         textAlign: 'center',
-        color: 'black',
-        fontFamily: 'MontserratLight',
-        // opacity:0.3
+        //color: 'black',
+        color: '#A6A6A6',
+        //fontFamily: 'MontserratLight',
+        //fontFamily: 'MontserratMedium',
+        fontFamily: "MontserratExtraBold",
+         opacity:0.7
+
+
     },
     femaleContainer: {
         height: 38,
@@ -141,8 +147,14 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         marginTop: 5,
         width: '90%',
+        
         // opacity: 2.5
-    }
+    },
+    validationInstruction:{
+        fontSize:12,
+        fontFamily:'MontserratLight',
+        color:'#FF6200'
+    },
 })
 
 export default styles;
