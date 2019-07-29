@@ -61,7 +61,7 @@ class Setupscreen1 extends React.Component {
             this.props.navigation.navigate('Setupscreen', {
                 dob: dob,
                 gender: gender,
-              });
+            });
             // navigate('Setupscreen')
         }
     }
@@ -86,7 +86,7 @@ class Setupscreen1 extends React.Component {
                         <View style={styles.dateOfBirthContainer}>
                             <DatePicker
                                 style={{ width: 200 }}
-                                date={this.state.date} //initial date from state
+                                date={this.state.dob} //initial date from state
                                 mode="date" //The enum of date, datetime and time
                                 placeholder="select date"
                                 format="DD-MM-YYYY"
@@ -110,44 +110,44 @@ class Setupscreen1 extends React.Component {
                             {/* <TextInputs placeholder={'Tab to set...'} /> */}
                         </View>
                         {dobValidation ?
-                            <View>
-                                <Text style={styles.textsStyle}>
+                            <View style={{ marginVertical: 10 }}>
+                                <Text style={styles.validationInstruction}>
                                     Please fill date of birth
                                     </Text>
                             </View>
                             : null}
-                        <View>
-                            <Text style={styles.textsStyle}>Gender</Text>
-                            <View style={styles.genderContainer}>
-                                {/* <TextInput placeholder="Male" style={styles.genderInputStyleMale} />
+                        {/* <View> */}
+                        <Text style={styles.textsStyle}>Gender</Text>
+                        <View style={styles.genderContainer}>
+                            {/* <TextInput placeholder="Male" style={styles.genderInputStyleMale} />
                             <TextInput placeholder="Female" style={styles.genderInputStyleFemale} /> */}
-                                <View style={styles.maleContainer}>
-                                    <TouchableOpacity
-                                        style={male ? styles.clickBtnStyle : styles.maleTouchableOpacity}
-                                        onPress={this.getGender.bind(this, 'male')}>
-                                        <Text style={styles.maleTextStyle}>
-                                            Male
+                            <View style={styles.maleContainer}>
+                                <TouchableOpacity
+                                    style={male ? styles.clickBtnStyle : styles.maleTouchableOpacity}
+                                    onPress={this.getGender.bind(this, 'male')}>
+                                    <Text style={styles.maleTextStyle}>
+                                        Male
                                         </Text>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={styles.maleContainer}>
-                                    <TouchableOpacity
-                                        style={female ? styles.clickBtnStyle : styles.maleTouchableOpacity}
-                                        onPress={this.getGender.bind(this, 'female')}>
-                                        <Text style={styles.maleTextStyle}>
-                                            Female
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
+                                </TouchableOpacity>
                             </View>
-                            {genderValidation ?
-                                <View>
-                                    <Text style={styles.textsStyle}>
-                                        Please select the gender
-                                    </Text>
-                                </View>
-                                : null}
+                            <View style={styles.maleContainer}>
+                                <TouchableOpacity
+                                    style={female ? styles.clickBtnStyle : styles.maleTouchableOpacity}
+                                    onPress={this.getGender.bind(this, 'female')}>
+                                    <Text style={styles.maleTextStyle}>
+                                        Female
+                                        </Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
+                        {genderValidation ?
+                            <View style={{marginVertical:3}}>
+                                <Text style={styles.validationInstruction}>
+                                    Please select the gender
+                                    </Text>
+                            </View>
+                            : null}
+                        {/* </View> */}
                         <View style={styles.btnContainer}>
                             {/* <Text>For Button</Text> */}
                             <CaloriesSetupBtn title="Next Step"

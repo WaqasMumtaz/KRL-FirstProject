@@ -58,7 +58,8 @@ const styles=StyleSheet.create({
         flexWrap:'wrap',
         alignItems:'center',
         //opacity:0.3,
-        marginTop:10
+        marginTop:10,
+        marginLeft:20
     },
     btnContainer:{
         flex:1,
@@ -72,7 +73,7 @@ const styles=StyleSheet.create({
         borderColor:'white',
         backgroundColor:'white',
         borderRadius:5,
-         opacity:0.3
+        opacity:0.3
     },
     headerTextStyle:{
         paddingLeft:8,
@@ -167,37 +168,46 @@ const styles=StyleSheet.create({
         borderRadius:3
     },
     sedetaryContainer:{
-        height: 38, 
-        width: '90%', 
+        height: 100, 
+        width: 150, 
         justifyContent: 'center', 
-        backgroundColor: '#e5e5e5', 
-        marginTop: 5, 
-        borderRadius: 3 
+        backgroundColor: '#FF6200', 
+        // marginTop: 5, 
+        borderRadius: 3,
+        opacity:0.3
     },
     moderateContainer:{
-        height: 38, 
-        width: '90%', 
+        height: 100, 
+        width: 150, 
         justifyContent: 'center', 
-        backgroundColor: '#e5e5e5', 
-        marginTop: 10, 
-        borderRadius: 3 
+        backgroundColor: '#FF6200', 
+        // marginTop: 5, 
+        borderRadius: 3,
+        opacity:0.3
     },
     lightTouchableStyle:{
-        height: 38, 
-        width: '100%', 
+        height: 100, 
+        width: 150, 
         justifyContent: 'center', 
-        backgroundColor: '#e5e5e5', 
-        marginTop: 5, 
-        borderRadius: 3 
+        backgroundColor: '#FF6200', 
+        // marginTop: 5, 
+        borderRadius: 3,
+        opacity:0.3
     },
     extremTouchableStyle:{
-        height: 38, 
-        width: '100%', 
+        height: 100, 
+        width: 150, 
         justifyContent: 'center', 
-        backgroundColor: '#e5e5e5', 
-        marginTop: 10, 
-        borderRadius: 3 
-    }
+        backgroundColor: '#FF6200', 
+        // marginTop: 5, 
+        borderRadius: 3,
+        opacity:0.3
+    },
+    validationInstruction:{
+        fontSize:12,
+        fontFamily:'MontserratLight',
+        color:'#FF6200'
+    },
 })
 
 export default styles;

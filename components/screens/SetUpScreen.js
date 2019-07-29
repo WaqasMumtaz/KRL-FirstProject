@@ -122,19 +122,40 @@ class Setupscreen extends React.Component {
                 goalWeightValidation: true
             })
         }
-        if (heightUnit == '') {
+        if (heightUnit == 0) {
             this.setState({
                 heightUnitValidation: true
             })
         }
-        if (currentWeightUnit == '') {
+        if (heightUnit == 1) {
+            this.setState({
+                heightUnitValidation: false
+            })
+        }
+        if (currentWeightUnit == 0) {
             this.setState({
                 currentWeightUnitValidation: true
             })
         }
-        if (goalWeightUnit == '') {
+        if (currentWeightUnit == 1) {
+            this.setState({
+                currentWeightUnitValidation: false
+            })
+        }
+
+        if (goalWeightUnit == 0) {
             this.setState({
                 goalWeightUnitValidation: true
+            })
+        }
+        if (goalWeightUnit == 1) {
+            this.setState({
+                goalWeightUnitValidation: false
+            })
+        }
+        if (height != '') {
+            this.setState({
+                heightValidation: false
             })
         }
         if (height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' && currentWeightUnit != '' && goalWeightUnit != '') {
@@ -150,228 +171,225 @@ class Setupscreen extends React.Component {
             });
             // this.props.navigation.navigate('LastSetUpScreen')
         }
+
     }
 
     render() {
         console.log(this.props.navigation.state.params, 'props wit navigate')
         const { heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation, currentWeightUnitValidation,
-            goalWeightUnitValidation } = this.state
+            goalWeightUnitValidation, heightUnit } = this.state;
+        console.log(heightUnit)
         return (
             <View style={styles.mainContainer}>
-            <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
-                <View style={styles.heading}>
-                    <Text style={styles.headingStyle}>Set Up Your App</Text>
-                </View>
-                <View style={styles.paraGraph}>
-                    <Text style={styles.paraGraphStyle}>GetFitAthletic needs the following info to help you with your fitness journey</Text>
-                </View>
-                <View style={{flexDirection:'row'}}>
-                    <Text style={{color: 'white', fontFamily: 'MontserratLight',marginTop:10}}>Height</Text>
-                    <Text style={{color: 'white', fontFamily: 'MontserratLight',marginTop:10,marginLeft:'39%'}}>Unit</Text>
-                </View>
-                <View 
-                // style={styles.inputFieldOne}
-                style={{flexDirection:'row',justifyContent:'space-between'}}
-                >
-                    
-                    {/* <Text style={styles.inputFieldOneStyle}>Input Fields One</Text> */}
-
-                    <View style={{ flex: 1,backgroundColor:'black',flexDirection:'row',marginTop:10,height:40,width:"50%"}}>
-                        {/* <View style={styles.container}> */}
-                            <TouchableOpacity 
-                            // style={styles.touchableOpacityOne} 
-                            style={{height:40,backgroundColor:'gray',opacity:0.6,paddingLeft:12, paddingTop:5,width:55}}
-                            activeOpacity={0.8}
-                                onPress={this.decrementVal.bind(this, 'height')}
-                            >
-                                <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
-                            </TouchableOpacity>
-                            {/* <View style={styles.textInputContainer}> */}
+                <View style={styles.childContainer}>
+                    <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
+                        <View style={styles.heading}>
+                            <Text style={styles.headingStyle}>Set Up Your App</Text>
+                        </View>
+                        <View style={styles.paraGraph}>
+                            <Text style={styles.paraGraphStyle}>GetFitAthletic needs the following info to help you with your fitness journey</Text>
+                        </View>
+                        <View style={styles.labelsContainer}>
+                            <Text style={styles.leftInputLabelStyle}>Height</Text>
+                            <Text style={styles.rightInputLabelStyle}>Unit</Text>
+                        </View>
+                        <View style={styles.inputFieldOne}>
+                            <View style={styles.inputFieldOneChild}>
+                                <TouchableOpacity style={styles.touchableOpacityOne}
+                                    activeOpacity={0.8}
+                                    onPress={this.decrementVal.bind(this, 'height')}
+                                >
+                                    <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                </TouchableOpacity>
                                 <TextInput keyboardType='numeric' maxLength={3} placeholder='0'
-                                    // style={styles.textInputStyleParent}
-                                    style={{backgroundColor:'gray',opacity:0.6,textAlign:'center',width:40}}
+                                    style={styles.inputTextStyle}
                                     type="number"
                                     onChangeText={(height) => this.setState({ height: height })}
                                     value={this.state.height}
                                 />
-                            {/* </View> */}
-                            <TouchableOpacity
-                             //style={styles.touchableOpacityTwo} 
-                             style={{height:40,backgroundColor:'gray',opacity:0.6, paddingTop:5,width:55,paddingLeft:22}}
-                             activeOpacity={0.8}
-                                onPress={this.increamentVal.bind(this, 'height')}
-                            >
-                                <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
-                            </TouchableOpacity>
-                        {/* </View> */}
-                    </View>
-                    {heightValidation ?
-                        <View>
-                            <Text>
-                                Please fill your height
-                            </Text>
-                        </View>
-                        : null}
-                    {/* <View><Text>Height</Text></View>      */}
-                    <View style={{ flex: 1 , marginLeft:15}}>
-                        {/* <Text style={{ color: 'white', fontFamily: 'MontserratLight',}}>Unit</Text> */}
-                        <Picker
-                            selectedValue={this.state.heightUnit}
-                            onValueChange={this.updateUnits.bind(this, 'height Unit')}
-                            style={styles.pickerStyle} headerTintColor='white'>
-                            <Picker.Item label='Select an option...' value='0' />
-                            <Picker.Item label="Centimeter" value="centimeter" />
-                        </Picker>
-                        {/* <PickerInput /> */}
-                    </View>
-                    {heightUnitValidation ?
-                        <View>
-                            <Text>
-                                Please select height unit
-                            </Text>
-                        </View>
-                        : null}
-                </View>
+                                <TouchableOpacity
+                                    style={styles.touchableOpacityTwo}
+                                    activeOpacity={0.8}
+                                    onPress={this.increamentVal.bind(this, 'height')}
+                                >
+                                    <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                </TouchableOpacity>
 
-                <View style={styles.inputFieldTwo}>
-                    {/* <Text style={styles.inputFieldTwoStyle}>Input Fields Two</Text> */}
-                    <View style={{ flex: 1, marginLeft: 20, marginRight: 16 }}>
-                        <Text style={{ color: 'white', fontFamily: 'MontserratLight' }}>Current Weight</Text>
-                        {/* <InputImgsScreen iconMinus={require('../icons/minus.png')}
-                            iconPlus={require('../icons/plus.png')}
-                            style={styles.textInputStyleParent}
-                            touchableOpacityOne={styles.touchableOpacityOne}
-                            touchableOpacityTwo={styles.touchableOpacityTwo}
-                        /> */}
-                        <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
-                            onPress={this.decrementVal.bind(this, 'currentWeight')}
-                        >
-                            <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
-                        </TouchableOpacity>
-                        <View style={styles.textInputContainer}>
-                            <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
-                                type="number"
-                                onChangeText={(currentWeight) => this.setState({ currentWeight: currentWeight })}
-                                value={this.state.currentWeight}
-                            />
+                            </View>
+
+
+                            <View style={styles.pickerContainer}>
+
+                                <Picker
+                                    selectedValue={this.state.heightUnit}
+                                    onValueChange={this.updateUnits.bind(this, 'height Unit')}
+                                    style={styles.pickerStyle} headerTintColor='white'>
+                                    <Picker.Item label='Select an option...' value='0' />
+                                    <Picker.Item label="Centimeter" value="centimeter" />
+                                </Picker>
+
+                            </View>
+
                         </View>
-                        <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
-                            onPress={this.increamentVal.bind(this, 'currentWeight')}
-                        >
-                            <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
-                        </TouchableOpacity>
-                    </View>
-                    {currentWeightValidation ?
-                        <View>
-                            <Text>
-                                Please fill your weight
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                            {heightValidation ?
+                                <View style={{ flexDirection: 'row', marginVertical: 10, }}>
+                                    <Text style={styles.validationInstruction}>
+                                        Please fill your height
+                         </Text>
+
+
+                                </View>
+                                : null}
+
+                            {heightUnitValidation ?
+                                <View style={{ flexDirection: 'row', marginVertical: 10, }}>
+                                    <Text style={styles.validationInstruction}>
+                                        Please select height unit
+                            </Text>
+
+                                </View>
+                                : null}
+
+                        </View>
+
+
+                        <View style={styles.weightLabelContainer}>
+                            <Text style={styles.leftInputLabelStyle}>Current Weight</Text>
+                            <Text style={styles.rightWeightUnitLabelInput}>Unit</Text>
+                        </View>
+
+                        <View style={styles.inputFieldTwo}>
+                            {/* <Text style={styles.inputFieldTwoStyle}>Input Fields Two</Text> */}
+                            <View style={styles.inputFieldOneChild}>
+
+                                <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                    onPress={this.decrementVal.bind(this, 'currentWeight')}
+                                >
+                                    <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                </TouchableOpacity>
+
+                                <TextInput keyboardType='numeric' maxLength={3} placeholder='0'
+                                    style={styles.inputTextStyle}
+                                    type="number"
+                                    onChangeText={(currentWeight) => this.setState({ currentWeight: currentWeight })}
+                                    value={this.state.currentWeight}
+                                />
+
+                                <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                    onPress={this.increamentVal.bind(this, 'currentWeight')}
+                                >
+                                    <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                </TouchableOpacity>
+                            </View>
+
+                            {/* <View><Text>Height</Text></View>      */}
+                            <View style={styles.pickerContainer}>
+
+                                <Picker
+                                    selectedValue={this.state.currentWeightUnit}
+                                    onValueChange={this.updateUnits.bind(this, 'current weight Unit')}
+                                    style={styles.pickerStyle}>
+                                    <Picker.Item label='Select an option...' value='0' />
+                                    <Picker.Item label="KG" value="kg" />
+                                </Picker>
+
+                            </View>
+
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                            {currentWeightValidation ?
+                                <View style={{ flexDirection: 'row', marginVertical: 10, }}>
+                                    <Text style={styles.validationInstruction}>
+                                        Please fill your weight
+                 </Text>
+                                </View>
+                                : null}
+                            {currentWeightUnitValidation ?
+                                <View style={{ flexDirection: 'row', marginVertical: 10, }}>
+                                    <Text style={[styles.validationInstruction, styles.rightValidationHieghtAndCurrentWeight]}>
+                                        Please select weight unit
+                            </Text>
+                                </View>
+                                :
+                                null}
+                        </View>
+
+
+                        <View style={styles.weightLabelContainer}>
+                            <Text style={styles.leftInputLabelStyle}>Goal Weight</Text>
+                            <Text style={styles.rightGoalWeightUnitLabel}>Unit</Text>
+                        </View>
+
+                        <View style={styles.inputFieldThree}>
+
+                            <View style={styles.inputFieldOneChild}>
+
+                                <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                    onPress={this.decrementVal.bind(this, 'goalWeight')}
+                                >
+                                    <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                </TouchableOpacity>
+                                <TextInput keyboardType='numeric' maxLength={3} placeholder='0'
+                                    style={styles.inputTextStyle}
+                                    type="number"
+                                    onChangeText={(goalWeight) => this.setState({ goalWeight: goalWeight })}
+                                    value={this.state.goalWeight}
+                                />
+
+                                <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                    onPress={this.increamentVal.bind(this, 'goalWeight')}
+                                >
+                                    <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                </TouchableOpacity>
+                            </View>
+
+                            {/* <View><Text>Height</Text></View>      */}
+                            <View style={styles.pickerContainer}>
+
+                                <Picker selectedValue={this.state.goalWeightUnit}
+                                    onValueChange={this.updateUnits.bind(this, 'goal weight Unit')}
+                                    style={styles.pickerStyle}>
+                                    <Picker.Item label='Select an option...' value='0' />
+                                    <Picker.Item label="KG" value="kg" />
+                                </Picker>
+
+                            </View>
+
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                            {goalWeightValidation ?
+                                <View style={{ flexDirection: 'row', marginVertical: 10, }}>
+                                    <Text style={styles.validationInstruction}>
+                                        Please fill your goal weight
+                         </Text>
+
+                                </View>
+                                : null}
+                            {goalWeightUnitValidation ?
+                                <View style={{ flexDirection: 'row', marginVertical: 10, }}>
+                                    <Text style={[styles.validationInstruction, styles.rightGoalWeight]}>
+                                        Please select goal weight unit
                                     </Text>
+                                </View>
+                                : null}
                         </View>
-                        : null}
-                    {/* <View><Text>Height</Text></View>      */}
-                    <View style={{ flex: 1, marginRight: 20 }}>
-                        <Text style={{ color: 'white', fontFamily: 'MontserratLight' }}>Unit</Text>
-                        <Picker
-                            selectedValue={this.state.currentWeightUnit}
-                            onValueChange={this.updateUnits.bind(this, 'current weight Unit')}
-                            style={styles.pickerStyle}>
-                            <Picker.Item label='Select an option...' value='0' />
-                            <Picker.Item label="KG" value="kg" />
-                        </Picker>
-                        {/* <InputImgsScreen /> */}
-                    </View>
-                    {currentWeightUnitValidation ?
-                        <View>
-                            <Text>
-                                Please select weight unit
-                            </Text>
+
+
+
+                        <View style={styles.buttonContainer}>
+
+                            <CaloriesSetupBtn title='Last Step'
+                                onPress={this.lastStep}
+                                // onPress={() => navigate('LastSetUpScreen')} 
+                                caloriesBtnStyle={styles.caloriesBtnStyle} />
                         </View>
-                        :
-                        null}
-                </View>
-                <View style={styles.inputFieldThree}>
-                    {/* <Text style={styles.inputFieldThreeStyle}>Input Fields Three</Text> */}
-                    {/* <Text style={styles.inputFieldTwoStyle}>Input Fields Two</Text> */}
-                    <View style={{ flex: 1, marginLeft: 20, marginRight: 16 }}>
-                        <Text style={{ color: 'white', fontFamily: 'MontserratLight' }}>Goal Weight</Text>
-                        {/* <InputImgsScreen iconMinus={require('../icons/minus.png')} iconPlus={require('../icons/plus.png')}
-                            style={styles.textInputStyleParent}
-                            touchableOpacityOne={styles.touchableOpacityOne}
-                            touchableOpacityTwo={styles.touchableOpacityTwo}
-                        /> */}
-                        <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
-                            onPress={this.decrementVal.bind(this, 'goalWeight')}
-                        >
-                            <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
-                        </TouchableOpacity>
-                        <View style={styles.textInputContainer}>
-                            <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
-                                type="number"
-                                onChangeText={(goalWeight) => this.setState({ goalWeight: goalWeight })}
-                                value={this.state.goalWeight}
-                            />
-                        </View>
-                        <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
-                            onPress={this.increamentVal.bind(this, 'goalWeight')}
-                        >
-                            <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
-                        </TouchableOpacity>
-                    </View>
-                    {goalWeightValidation ?
-                        <View>
-                            <Text>
-                                Please fill your goal weight
-                            </Text>
-                        </View>
-                        : null}
-                    {/* <View><Text>Height</Text></View>      */}
-                    <View style={{ flex: 1, marginRight: 20 }}>
-                        <Text style={{ color: 'white', fontFamily: 'MontserratLight' }}>Unit</Text>
-                        <Picker selectedValue={this.state.goalWeightUnit}
-                            onValueChange={this.updateUnits.bind(this, 'goal weight Unit')}
-                            style={styles.pickerStyle}>
-                            <Picker.Item label='Select an option...' value='0' />
-                            <Picker.Item label="KG" value="kg" />
-                        </Picker>
-                        {/* <InputImgsScreen /> */}
-                    </View>
-                    {goalWeightUnitValidation ?
-                        <View>
-                            <Text>
-                                Please select goal weight unit
-                                    </Text>
-                        </View>
-                        : null}
-                </View>
-                {/* <Text style={styles.textInputOneStyle}>BMI</Text> */}
-                {/* <View style={styles.textInputOne}> */}
-                {/* <TextInputs /> */}
-                {/* <TextInput placeholder="type BMI" style={styles.textInputStyle}/> */}
-                {/* </View> */}
-                {/* <Text style={styles.textInputTwoStyle}>Daily calories limit</Text>
-                <View style={styles.textInputTwo}>
-                    
-                    <TextInput placeholder="type calories" style={styles.textInputStyle}/>
-                </View>
-                <View style={styles.lastParaGraph}>
-                    <Text style={styles.lastParaGraphStyle}>*This is the daily calories limit as
-                    calculated by the app using your BMI. If your coach has set for you another limit ,
-                    please enter it please enter it above.
-                </Text>
-                </View> */}
-                <View style={styles.buttonContainer}>
-                    {/* <Text style={styles.buttonContainerStyle}>This is Button</Text> */}
-                    <CaloriesSetupBtn title='Last Step'
-                        onPress={this.lastStep}
-                        // onPress={() => navigate('LastSetUpScreen')} 
-                        caloriesBtnStyle={styles.caloriesBtnStyle} />
-                </View>
-                <View style={{ flex: 14 }}>
+
+
+
+                    </ScrollView>
 
                 </View>
-
-            </ScrollView>
-
             </View>
 
 
@@ -386,178 +404,3 @@ class Setupscreen extends React.Component {
 
 export default Setupscreen;
 
-// const styles = StyleSheet.create({
-//     mainContainer: {
-//         flex: 1,
-//         width: screenWidth,
-//         backgroundColor: 'black'
-//         // height: height,
-//         //  justifyContent:'space-between',
-//         //  justifyContent:'flex-start'
-//     },
-//     // childContainer: {
-//     //     flex: 4,
-//     //     backgroundColor: 'black',
-//     // },
-//     heading: {
-//         flex: 3,
-//         //backgroundColor: 'black'
-//     },
-//     headingStyle: {
-//         fontFamily: "MontserratExtraBold",
-//         fontSize: 20,
-//         color: '#A6A6A6',
-//         marginLeft: 20,
-
-//     },
-//     paraGraph: {
-//         flex: 2,
-//         marginTop: 5
-//         //backgroundColor: '#8397b3'
-//     },
-//     paraGraphStyle: {
-//         color: 'white',
-//         marginLeft: 20,
-//         fontFamily: 'MontserratLight',
-//     },
-//     inputFieldOne: {
-//         flex: 2,
-//         //backgroundColor: 'green',
-//         flexDirection: 'row',
-//         justifyContent: 'center'
-//     },
-//     inputFieldOneStyle: {
-//         color: 'white',
-//         marginLeft: 20
-//     },
-//     inputFieldTwo: {
-//         flex: 2,
-//         // backgroundColor: '#7fff8e',
-//         flexDirection: 'row',
-//         justifyContent: 'center'
-//     },
-//     inputFieldTwoStyle: {
-//         color: 'white',
-//         marginLeft: 20
-//     },
-//     inputFieldThree: {
-//         flex: 2,
-//         //backgroundColor: '#008080',
-//         flexDirection: 'row',
-//         justifyContent: 'center'
-//     },
-//     inputFieldThreeStyle: {
-//         color: 'white',
-//         marginLeft: 20
-//     },
-//     textInputOne: {
-//         flex: 3,
-//         //backgroundColor: '#f8988b',
-//         justifyContent: 'center',
-//         flexDirection: 'row'
-//     },
-//     textInputOneStyle: {
-//         color: 'white',
-//         fontFamily: 'MontserratLight',
-//         marginLeft: 20
-//     },
-//     textInputStyle: {
-//         flex: 1,
-//         fontFamily: 'MontserratLight',
-//         marginLeft: 20,
-//         height: 40,
-//         borderColor: 'gray',
-//         backgroundColor: '#808080',
-//         borderWidth: 2,
-//         marginRight: 20,
-//         paddingLeft: 16,
-//         marginTop: 7,
-//     },
-//     textInputTwo: {
-//         flex: 3,
-//         //backgroundColor: '#038ff9',
-//         justifyContent: 'center',
-//         flexDirection: 'row'
-//     },
-//     textInputTwoStyle: {
-//         color: 'white',
-//         fontFamily: 'MontserratLight',
-//         marginLeft: 20
-//     },
-//     lastParaGraph: {
-//         flex: 2,
-//         //backgroundColor: '#ffd39b',
-//         flexDirection: 'row',
-//         justifyContent: 'center',
-//         flexWrap: 'wrap'
-//     },
-//     lastParaGraphStyle: {
-//         color: 'white',
-//         fontFamily: 'MontserratLight',
-//         marginLeft: 20,
-//         marginRight: 20
-//     },
-//     buttonContainer: {
-//         flex: 2,
-//         //backgroundColor: '#794044',
-//         flexDirection: 'row',
-//         justifyContent: 'center'
-//     },
-//     buttonContainerStyle: {
-//         flex: 1,
-//     },
-
-//     // reserveScreen: {
-//     //     flex: 2,
-//     //     backgroundColor: 'white'
-//     // },
-//     // scrollViewStyle: {
-
-//     // },
-//     pickerStyle: {
-//         width: 150,
-//         height: 40,
-//         marginTop: 5,
-//         color: '#A6A6A6',
-//         backgroundColor: 'white',
-//         opacity: 0.3
-
-//     },
-//     textInputStyleParent: {
-//         flex: 1,
-//         height: 40,
-//         textAlign: 'center',
-//         backgroundColor: 'white',
-//         opacity: 0.3
-//     },
-//     touchableOpacityOne: {
-//         flex: 1,
-//         padding: 5,
-//         marginVertical: 5,
-//         backgroundColor: 'gray',
-//         paddingLeft: 10,
-//         height: 40,
-//         opacity: 0.6
-
-
-//     },
-//     touchableOpacityTwo: {
-//         flex: 1,
-//         padding: 5,
-//         marginVertical: 5,
-//         alignItems: 'flex-end',
-//         backgroundColor: 'gray',
-//         paddingRight: 10,
-//         marginRight: 12,
-//         height: 40,
-//         opacity: 0.6
-//     },
-//     caloriesBtnStyle: {
-//         flex: 1,
-//         height: 40,
-//         justifyContent: 'center',
-//         backgroundColor: '#FF6200',
-//         alignItems: 'center',
-//         borderRadius: 5
-//     }
-// })

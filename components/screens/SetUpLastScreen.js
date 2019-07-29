@@ -127,28 +127,49 @@ class LastSetUpScreen extends React.Component {
                     </View>
                     <Text style={styles.paraStyle}>Activity Level</Text>
                     <View style={styles.activityContainer}>
-                        <TouchableOpacity style={sedentary ? styles.touchOpacityStyle : styles.sedetaryContainer} onPress={this.activityLevel.bind(this, 'sedentary')}>
+                    {/* <TouchableOpacity style={styles.touchOpacityStyle } */}
+                         <TouchableOpacity style={sedentary ? styles.sedetaryContainer : styles.touchOpacityStyle}
+                         onPress={this.activityLevel.bind(this, 'sedentary')}>
                             <Text style={styles.headerTextStyle}>Sedentary</Text>
                             <Text style={styles.textStyle}>Desk job very little activity.</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={lightActivity ? styles.touchOpacityStyle : styles.moderateContainer} onPress={this.activityLevel.bind(this, 'lightActivity')}>
+
+                        
+                        <TouchableOpacity style={lightActivity ? styles.moderateContainer : styles.touchOpacityStyle}
+                        onPress={this.activityLevel.bind(this, 'lightActivity')}
+                        >
+                        {/* <TouchableOpacity style={lightActivity ? styles.touchOpacityStyle : styles.moderateContainer} > */}
+
+                        {/* <TouchableOpacity style={lightActivity ? styles.touchOpacityStyle : styles.moderateContainer} onPress={this.activityLevel.bind(this, 'lightActivity')}> */}
+
                             <Text style={styles.headerTextStyle}>Light Activity</Text>
                             <Text style={styles.textStyle}>Some Standing and moving.</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.scndActivity}>
-                        <TouchableOpacity style={active ? styles.touchOpacityStyle : styles.lightTouchableStyle} onPress={this.activityLevel.bind(this, 'active')}>
+                    <TouchableOpacity style={active ? styles.lightTouchableStyle : styles.touchOpacityStyle}
+                    onPress={this.activityLevel.bind(this, 'active')}
+                    >
+                        {/* <TouchableOpacity style={active ? styles.touchOpacityStyle : styles.lightTouchableStyle} > */}
                             <Text style={styles.headerTextStyle}>Active</Text>
                             <Text style={styles.textStyle}>Mostly standing and moving.</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={veryActive ? styles.touchOpacityStyle : styles.extremTouchableStyle} onPress={this.activityLevel.bind(this, 'veryActive')}>
+
+                        <TouchableOpacity style={veryActive ? styles.extremTouchableStyle : styles.touchOpacityStyle}
+                        onPress={this.activityLevel.bind(this, 'veryActive')}
+                        >
+                        {/* <TouchableOpacity style={veryActive ? styles.touchOpacityStyle : styles.extremTouchableStyle} > */}
+
+                        {/* <TouchableOpacity style={veryActive ? styles.touchOpacityStyle : styles.extremTouchableStyle} 
+                        onPress={this.activityLevel.bind(this, 'veryActive')}> */}
+
                             <Text style={styles.headerTextStyle}>Very Active</Text>
                             <Text style={styles.textStyle}>Heavy moving and lifting heavy stuff.</Text>
                         </TouchableOpacity>
                     </View>
                     {activityLevelValidation ?
-                        <View>
-                            <Text>
+                        <View style={{marginBottom:10,alignItems:'center'}}>
+                            <Text style={styles.validationInstruction}>
                                 Please select activity level
                             </Text>
                         </View>
