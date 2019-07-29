@@ -34,7 +34,7 @@ import Wheelspiner from '../Progress Wheel/Progress';
 
 const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
-  //  Login: {screen: Login},
+   Login: {screen: Login},
   //  EditProfileScreen:{
   //   screen:EditProfileScreen,
   //   navigationOptions: {
@@ -48,7 +48,7 @@ const MainNavigator= createStackNavigator({
   //  ResetpasswordScreen:{screen:ResetpasswordScreen},
   //  ConfirmResetPassword:{screen:ConfirmResetPassword},
  //const MainNavigator = createStackNavigator({
-  // Login: {/screen: Login},
+  // Login: {screen: Login},
   // ResetpasswordScreen:{screen:ResetpasswordScreen},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
   // Signup:{screen:Signup},

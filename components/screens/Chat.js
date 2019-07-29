@@ -107,6 +107,7 @@ class Chatscreen extends React.Component {
       chatArrayTemp = [];
     });
   }
+  
   uplaodDataOnFirebase = (userMessage) => {
     const { date, time } = this.state;
     let mgs = {}

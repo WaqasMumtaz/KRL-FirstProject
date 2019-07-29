@@ -292,7 +292,7 @@ class Macrocalculator extends React.Component {
                             <View>
                                 <Text>
                                     Please fill age
-                                    </Text>
+                                </Text>
                             </View>
                             : null}
                         <Text style={styles.genderTextStyle}>Gender</Text>
