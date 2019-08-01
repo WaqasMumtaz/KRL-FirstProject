@@ -176,39 +176,6 @@ class AddExercise extends React.Component {
         })
     }
 
-    // showHighPaceJogging = () => {
-    //     console.log('function called showHighPaceJogging')
-
-    //     this.setState({ show: false, jogging: true })
-    // }
-    // pushUps = () => {
-    //     console.log('function called pushUps')
-
-    //     this.setState({ show: false, pushups: true })
-    // }
-    // bicepCurlsFun = () => {
-    //     console.log('function called bicepCurlsFun')
-
-    //     this.setState({ show: false, bicep: true })
-    // }
-
-
-    // joggingToHome = () => {
-    //     console.log('function called joggingToHome')
-
-    //     this.setState({ show: true, jogging: false })
-    // }
-    // pushUpsToHome = () => {
-    //     console.log('function called pushUpsToHome')
-
-    //     this.setState({ show: true, pushups: false })
-    // }
-    // bicepToHome = () => {
-    //     console.log('function called bicepToHome')
-
-    //     this.setState({ show: true, bicep: false })
-    // }
-
     render() {
         const { show, showCard, jogging, pushups, bicep, logExercise, exerciseAmount, exerciseUnit } = this.state;
         return (

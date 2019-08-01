@@ -367,6 +367,7 @@ class EditProfileScreen extends React.Component {
                             placeholder="+92-333-1122223"
                             placeholderColor="#4f4f4f"
                             value={contactNo}
+                            keyboardType={"numeric"}
                             style={[styles.inputTextStyle, !contactNoValidate ? styles.errorInput : null]}
                         />
                     </View>

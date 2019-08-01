@@ -11,7 +11,7 @@ class Exerciselog extends React.Component {
         this.state = {
             date: "",
             data: '',
-            filterData: ''
+            filterData: []
         }
     }
 
@@ -39,19 +39,22 @@ class Exerciselog extends React.Component {
     //filtration with date
     dateFilter = (e) => {
         const { data, date } = this.state;
+        let dataArr = [];
         for (var i in data) {
             let dataFilter = data[i];
             if (e == undefined) {
                 if (dataFilter.date == date) {
+                    dataArr = [...dataArr, dataFilter]
                     this.setState({
-                        data: dataFilter
+                        filterData: dataArr
                     })
                 }
             }
             else if (e != undefined) {
                 if (dataFilter.date == e) {
+                    dataArr = [...dataArr, dataFilter]
                     this.setState({
-                        data: dataFilter,
+                        filterData: dataArr,
                         date: e
                     })
                 }
@@ -59,7 +62,7 @@ class Exerciselog extends React.Component {
         }
     }
     render() {
-        const { date, data } = this.state;
+        const { date, filterData } = this.state;
         return (
             <View style={styles.mainContainer}>
                 <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -91,7 +94,7 @@ class Exerciselog extends React.Component {
                             <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
                         </View>
 
-                        {data != '' && data.map((elem, key) => {
+                        {filterData.length >= 0 && filterData.map((elem, key) => {
                             return (
                                 <View style={styles.bodyContainer}>
                                     {

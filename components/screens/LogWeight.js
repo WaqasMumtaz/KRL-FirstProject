@@ -118,7 +118,7 @@ class Logweight extends React.Component {
         await this.dateFilter()
     }
     render() {
-        const { weightValidation, date, filterData, data } = this.state;
+        const { weightValidation, date, filterData } = this.state;
         return (
             <View style={styles.mainContainer}>
                 <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -151,7 +151,8 @@ class Logweight extends React.Component {
                         </View>
                         {/* <View> <PickDate /></View> */}
                         <View style={styles.bodyContainer}>
-                            <TextInput placeholder="Enter today's weight here" placeholderTextColor="black" style={styles.inputTextStyle}
+                            <TextInput placeholder="Enter today's weight in KG,s" placeholderTextColor="black" style={styles.inputTextStyle}
+                                keyboardType={"numeric"}
                                 onChangeText={(weight) => this.setState({ weight: weight })}
                             />
                         </View>
@@ -160,7 +161,7 @@ class Logweight extends React.Component {
                             : null}
                         <CaloriesSetupBtn title="Save Today's Weight" caloriesBtnStyle={styles.caloriesBtnStyle} onPress={this.addWeight} />
                         <View style={styles.weightListsContainer}>
-                            {filterData.length > 0 && filterData.map((elem, key) => (
+                            {filterData.length >= 0 && filterData.map((elem, key) => (
                                 <View style={styles.weightListOne}>
                                     <Text style={styles.weightNumberStyle}>{elem.weight} KG</Text>
                                     <Text style={styles.weightTextStyle}>{`Weight on ${elem.day}, ${elem.month} ${elem.dayOfMonth}th`}</Text>
