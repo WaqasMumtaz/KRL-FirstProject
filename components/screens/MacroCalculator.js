@@ -17,7 +17,6 @@ class Macrocalculator extends React.Component {
         super(props);
 
         this.state = {
-            user: '',
             age: '',
             gender: '',
             height: '',

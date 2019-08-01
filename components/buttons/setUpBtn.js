@@ -20,8 +20,6 @@ const CaloriesSetupBtn = (props)=>{
               <View style={{flex:1}}></View>
       </View>
   )
-
-
 }
 
 export default CaloriesSetupBtn;

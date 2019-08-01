@@ -3,6 +3,8 @@ import { Text, View, ScrollView, Button, Image, Dimensions, TextInput, Touchable
 import styles from '../Styling/BMICalculatorStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import InputImgsScreen from '../screens/InputImgs';
+import AsyncStorage from '@react-native-community/async-storage';
+import HttpUtils from '../Services/HttpUtils';
 const { height } = Dimensions.get('window');
 
 class BMICalculator extends React.Component {
@@ -15,16 +17,41 @@ class BMICalculator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: '',
             height: 0,
             weight: 0,
             bmi: '',
             heightUnit: '',
             weightUnit: '',
             showMgs: '',
+            userId: '',
+            date: '',
+            time: '',
             mgs: false,
+            hitApi: false
         }
     }
+    componentDidMount() {
+        const date = new Date().getDate();
+        let month = new Date().getMonth() + 1;
+        const year = new Date().getFullYear();
+        const hours = new Date().getHours();
+        const min = new Date().getMinutes();
+        const sec = new Date().getSeconds();
+        if (month == 1 || month == 2 || month == 3 || month == 4 || month == 5 || month == 6 || month == 7 || month == 8 || month == 9) {
+            month = `0${month}`
+        }
+        AsyncStorage.getItem("currentUser").then(value => {
+            if (value) {
+                let dataFromLocalStorage = JSON.parse(value);
+                this.setState({
+                    date: date + '-' + month + '-' + year,
+                    time: hours + ':' + min + ':' + sec,
+                    userId: dataFromLocalStorage._id
+                })
+            }
+        });
+    }
+
     //increament the  height
     increamentHeight = () => {
         const height = Number(this.state.height) + 1
@@ -71,39 +98,62 @@ class BMICalculator extends React.Component {
     }
 
     //calculate the BMI
-    calculateBmi = () => {
-        const { height, weight, heightUnit, weightUnit } = this.state;
-        let bmiValue
+    calculateBmi = async () => {
+        const { height, weight, heightUnit, weightUnit, userId, date, time, hitApi } = this.state;
+        let bmiData = {};
+        let bmiValue;
+        bmiData.height = height
+        bmiData.weight = weight
+        bmiData.heightUnit = heightUnit
+        bmiData.weightUnit = weightUnit
+        bmiData.userId = userId;
+        bmiData.date = date;
+        bmiData.time = time;
         if (heightUnit == 'inches' && weightUnit == 'pound') {
             bmiValue = (weight / height / height) * 703
             let bmiVal = bmiValue.toString();
+            bmiData.bmi = bmiVal;
             this.setState({
                 bmi: bmiVal,
-                mgs: false
+                mgs: false,
+                hitApi: true
             })
+            let dataUser = await HttpUtils.post('bmilogs', bmiData)
+            console.log(dataUser, 'dataUser')
         }
         else if (heightUnit == 'centimeter' && weightUnit == 'kg') {
             bmiValue = (weight / height / height) * 10000
             let bmiVal = bmiValue.toString();
+            bmiData.bmi = bmiVal;
             this.setState({
                 bmi: bmiVal,
-                mgs: false
+                mgs: false,
+                hitApi: true
             })
+            let dataUser = await HttpUtils.post('bmilogs', bmiData)
+            console.log(dataUser, 'dataUser')
         }
         else if (heightUnit == 'inches' && weightUnit == 'kg') {
             this.setState({
                 showMgs: "Select Weight Unit In Pounds",
                 mgs: true,
-                bmi: ''
+                bmi: '',
+                hitApi: false
             })
         }
         else if (heightUnit == 'centimeter' && weightUnit == 'pound') {
             this.setState({
                 showMgs: "Select Weight Unit In KG,s",
                 mgs: true,
-                bmi: ''
+                bmi: '',
+                hitApi: false
             })
         }
+        // console.log(hitApi , 'hitApi')
+        // if (hitApi) {
+        //     let dataUser = await HttpUtils.post('bmilogs', bmiData)
+        //     console.log(dataUser, 'dataUser')
+        // }
     }
     render() {
         const { showMgs, mgs } = this.state;

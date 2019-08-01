@@ -58,13 +58,16 @@ class Chatscreen extends React.Component {
 
   componentDidMount() {
     const date = new Date().getDate();
-    const month = new Date().getMonth() + 1;
+    let month = new Date().getMonth() + 1;
     const year = new Date().getFullYear();
     const hours = new Date().getHours();
     const min = new Date().getMinutes();
     const sec = new Date().getSeconds();
+    if (month == 1 || month == 2 || month == 3 || month == 4 || month == 5 || month == 6 || month == 7 || month == 8 || month == 9) {
+      month = `0${month}`
+    }
     this.setState({
-      date: date + '/' + month + '/' + year,
+      date: date + '-' + month + '-' + year,
       time: hours + ':' + min + ':' + sec
     })
   }
@@ -107,7 +110,7 @@ class Chatscreen extends React.Component {
       chatArrayTemp = [];
     });
   }
-  
+
   uplaodDataOnFirebase = (userMessage) => {
     const { date, time } = this.state;
     let mgs = {}

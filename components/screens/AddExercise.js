@@ -1,17 +1,12 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, TextInput, TouchableOpacity, Picker , Option} from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, TextInput, TouchableOpacity, Picker, Option } from 'react-native';
 import styles from '../Styling/AddExerciseStyle';
 import BriskScreen from '../screens/BriskScreen';
 import HighpacejoggingScreen from './HighPaceJogging';
 import Pushups from './PushUps';
 import Bicepcurls from './BicepCurls';
 import AsyncStorage from '@react-native-community/async-storage';
-
-// import DropDown, {
-//     Select,
-//     Option,
-//     OptionList,
-// } from 'react-native-option-select';
+import HttpUtils from '../Services/HttpUtils';
 
 const { height } = Dimensions.get('window');
 let exercise;
@@ -50,38 +45,37 @@ class AddExercise extends React.Component {
             time: '',
             exerciseArr: ['Brisk Walk', 'High paced jogging', 'Push ups', 'Bicep curls', 'Side Crunch', 'Reverse Crunches',
                 'Vertical Leg Crunch', 'Bicycle Exercise', 'Rolling Plank Exercise', 'Walking', 'Running', 'Jogging'],
-            // exercise: ''
         }
     }
     componentDidMount() {
         const date = new Date().getDate();
-        const month = new Date().getMonth() + 1;
+        let month = new Date().getMonth() + 1;
         const year = new Date().getFullYear();
         const hours = new Date().getHours();
         const min = new Date().getMinutes();
         const sec = new Date().getSeconds();
-        let dataFromLocalStorage;
+        if (month == 1 || month == 2 || month == 3 || month == 4 || month == 5 || month == 6 || month == 7 || month == 8 || month == 9) {
+            month = `0${month}`
+        }
         AsyncStorage.getItem("currentUser").then(value => {
             if (value) {
-                dataFromLocalStorage = JSON.parse(value);
+                let dataFromLocalStorage = JSON.parse(value);
+                this.setState({
+                    date: date + '-' + month + '-' + year,
+                    time: hours + ':' + min + ':' + sec,
+                    userId: dataFromLocalStorage._id
+                })
             }
         });
-
-        this.setState({
-            date: date + '/' + month + '/' + year,
-            time: hours + ':' + min + ':' + sec,
-            // userId: dataFromLocalStorage._id
-        })
-
         this.props.navigation.setParams({
             addExercise: this.addExercise,
         })
-        this.gettingDropDownValues();
+        // this.gettingDropDownValues();
     }
     gettingDropDownValues = () => {
         const { exerciseArr } = this.state;
         exercise = exerciseArr.map((elem, i) => {
-            console.log(elem , 'elemt')
+            console.log(elem, 'elemt')
             // return { label: elem, value: elem, id: i }
             // return <Option>{elem}</Option>
             // <View style={styles.listsContainer}>
@@ -104,14 +98,19 @@ class AddExercise extends React.Component {
         console.log(exercise, 'exercise')
     }
 
-    addExercise = () => {
-        const { exerciseName, exerciseAmount, exerciseUnit } = this.state;
+    addExercise = async () => {
+        const { exerciseName, exerciseAmount, exerciseUnit, date, time, userId } = this.state;
+        let excersiceObj = {};
         if (exerciseName != '' && exerciseAmount != '' && exerciseUnit != '') {
-            this.props.navigation.navigate('Exerciselog', {
-                exerciseName: exerciseName,
-                exerciseAmount: exerciseAmount,
-                exerciseUnit: exerciseUnit,
-            });
+            excersiceObj.exerciseName = exerciseName;
+            excersiceObj.exerciseAmount = exerciseAmount;
+            excersiceObj.exerciseUnit = exerciseUnit;
+            excersiceObj.date = date;
+            excersiceObj.time = time;
+            excersiceObj.userId = userId;
+            let dataUser = await HttpUtils.post('postexerciselog', excersiceObj)
+            console.log(dataUser, 'dataUser')
+            this.props.navigation.navigate('Exerciselog')
         }
     }
 
