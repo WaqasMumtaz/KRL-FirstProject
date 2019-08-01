@@ -17,7 +17,6 @@ class Macrocalculator extends React.Component {
         super(props);
 
         this.state = {
-            user: '',
             age: '',
             gender: '',
             height: '',
@@ -292,7 +291,7 @@ class Macrocalculator extends React.Component {
                             <View style={styles.validationContainer}>
                                 <Text style={styles.validationInstruction}>
                                     Please fill age
-                                    </Text>
+                                </Text>
                             </View>
                             : null}
                         <Text style={styles.genderTextStyle}>Gender</Text>

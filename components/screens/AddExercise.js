@@ -1,13 +1,15 @@
 import React from 'react';
-import { Text, View, ScrollView, Button, Image, Dimensions, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, TextInput, TouchableOpacity, Picker, Option } from 'react-native';
 import styles from '../Styling/AddExerciseStyle';
 import BriskScreen from '../screens/BriskScreen';
 import HighpacejoggingScreen from './HighPaceJogging';
 import Pushups from './PushUps';
 import Bicepcurls from './BicepCurls';
-//import console = require('console');
-const { height } = Dimensions.get('window');
+import AsyncStorage from '@react-native-community/async-storage';
+import HttpUtils from '../Services/HttpUtils';
 
+const { height } = Dimensions.get('window');
+let exercise;
 
 class AddExercise extends React.Component {
     static navigationOptions = (navigation) => {
@@ -21,18 +23,13 @@ class AddExercise extends React.Component {
         </TouchableOpacity>
         return {
             headerRight,
-
             headerStyle: {
-                // backgroundColor: 'black'
-
             },
             headerTintColor: 'gray',
         }
-
     };
     constructor(props) {
         super(props);
-
         this.state = {
             show: true,
             showCard: false,
@@ -41,48 +38,179 @@ class AddExercise extends React.Component {
             bicep: false,
             iconShow: false,
             logExercise: false,
+            exerciseName: '',
+            exerciseAmount: '',
+            exerciseUnit: '',
+            date: '',
+            time: '',
+            exerciseArr: ['Brisk Walk', 'High paced jogging', 'Push ups', 'Bicep curls', 'Side Crunch', 'Reverse Crunches',
+                'Vertical Leg Crunch', 'Bicycle Exercise', 'Rolling Plank Exercise', 'Walking', 'Running', 'Jogging'],
         }
     }
     componentDidMount() {
-        this.props.navigation.setParams({ addExercise: this.addExercise, })
+        const date = new Date().getDate();
+        let month = new Date().getMonth() + 1;
+        const year = new Date().getFullYear();
+        const hours = new Date().getHours();
+        const min = new Date().getMinutes();
+        const sec = new Date().getSeconds();
+        if (month == 1 || month == 2 || month == 3 || month == 4 || month == 5 || month == 6 || month == 7 || month == 8 || month == 9) {
+            month = `0${month}`
+        }
+        AsyncStorage.getItem("currentUser").then(value => {
+            if (value) {
+                let dataFromLocalStorage = JSON.parse(value);
+                this.setState({
+                    date: date + '-' + month + '-' + year,
+                    time: hours + ':' + min + ':' + sec,
+                    userId: dataFromLocalStorage._id
+                })
+            }
+        });
+        this.props.navigation.setParams({
+            addExercise: this.addExercise,
+        })
+        // this.gettingDropDownValues();
     }
-    addExercise = () => {
-        console.log('helloo')
-        this.props.navigation.navigate('Exerciselog');
+    gettingDropDownValues = () => {
+        const { exerciseArr } = this.state;
+        exercise = exerciseArr.map((elem, i) => {
+            console.log(elem, 'elemt')
+            // return { label: elem, value: elem, id: i }
+            // return <Option>{elem}</Option>
+            // <View style={styles.listsContainer}>
+            //     {/* <TouchableOpacity
+            //         onPress={this.showFields.bind(this, elem)}
+            //     > */}
+            //         {/* <Text style={styles.listsTextStyle}>{elem}</Text> */}
+            //         <Picker style={styles.pickerStyle}
+            //             onValueChange={this.showFields.bind(this, elem)}
+            //         // onValueChange={(itemValue, itemPosition) =>  
+            //         //     this.setState({language: itemValue, choosenIndex: itemPosition})}  
+            //         >
+            //             <Picker.Item label={elem} value={elem} />
+            //             {/* <Picker.Item label="JavaScript" value="js" />  
+            //         <Picker.Item label="React Native" value="rn" />   */}
+            //         </Picker>
+            //     {/* </TouchableOpacity> */}
+            //  </View>
+        })
+        console.log(exercise, 'exercise')
     }
 
+    addExercise = async () => {
+        const { exerciseName, exerciseAmount, exerciseUnit, date, time, userId } = this.state;
+        let excersiceObj = {};
+        if (exerciseName != '' && exerciseAmount != '' && exerciseUnit != '') {
+            excersiceObj.exerciseName = exerciseName;
+            excersiceObj.exerciseAmount = exerciseAmount;
+            excersiceObj.exerciseUnit = exerciseUnit;
+            excersiceObj.date = date;
+            excersiceObj.time = time;
+            excersiceObj.userId = userId;
+            let dataUser = await HttpUtils.post('postexerciselog', excersiceObj)
+            console.log(dataUser, 'dataUser')
+            this.props.navigation.navigate('Exerciselog')
+        }
+    }
 
     exerciseLog = () => {
         this.setState({ show: false, logExercise: true })
     }
 
-    showFields = () => {
-        this.setState({ show: false, showCard: true })
-    }
-    showHighPaceJogging = () => {
-        this.setState({ show: false, jogging: true })
-    }
-    pushUps = () => {
-        this.setState({ show: false, pushups: true })
-    }
-    bicepCurlsFun = () => {
-        this.setState({ show: false, bicep: true })
-    }
-    backToHome = () => {
-        this.setState({ show: true, showCard: false })
-    }
-    joggingToHome = () => {
-        this.setState({ show: true, jogging: false })
-    }
-    pushUpsToHome = () => {
-        this.setState({ show: true, pushups: false })
-    }
-    bicepToHome = () => {
-        this.setState({ show: true, bicep: false })
+    showFields(e, val) {
+        if (e == 'Brisk Walk') {
+            this.setState({ show: false, showCard: true, exerciseName: e })
+        }
+        else if (e == 'High paced jogging') {
+            this.setState({ show: false, jogging: true, exerciseName: e })
+        }
+        else if (e == 'Push ups') {
+            this.setState({ show: false, pushups: true, exerciseName: e })
+
+        }
+        else if (e == 'Bicep curls') {
+            this.setState({ show: false, bicep: true, exerciseName: e })
+        }
     }
 
+    backToHome(e, val) {
+        if (e == 'Brisk Walk') {
+            this.setState({ show: true, showCard: false })
+        }
+        else if (e == 'High paced jogging') {
+            this.setState({ show: true, jogging: false })
+        }
+        else if (e == 'Push ups') {
+            this.setState({ show: true, pushups: false })
+        }
+        else if (e == 'Bicep curls') {
+            this.setState({ show: true, bicep: false })
+        }
+    }
+
+    setAmount = (e) => {
+        this.setState({
+            exerciseAmount: e
+        })
+    }
+    increamentVal = () => {
+        const { exerciseAmount } = this.state;
+        const amount = Number(exerciseAmount) + 1
+        let amountVal = amount.toString()
+        this.setState({
+            exerciseAmount: amountVal
+        })
+    }
+    decrementVal = () => {
+        const { exerciseAmount } = this.state;
+        const amount = Number(exerciseAmount) - 1
+        let amountVal = amount.toString()
+        this.setState({
+            exerciseAmount: amountVal
+        })
+    }
+    updateUnit = (e) => {
+        this.setState({
+            exerciseUnit: e
+        })
+    }
+
+    // showHighPaceJogging = () => {
+    //     console.log('function called showHighPaceJogging')
+
+    //     this.setState({ show: false, jogging: true })
+    // }
+    // pushUps = () => {
+    //     console.log('function called pushUps')
+
+    //     this.setState({ show: false, pushups: true })
+    // }
+    // bicepCurlsFun = () => {
+    //     console.log('function called bicepCurlsFun')
+
+    //     this.setState({ show: false, bicep: true })
+    // }
+
+
+    // joggingToHome = () => {
+    //     console.log('function called joggingToHome')
+
+    //     this.setState({ show: true, jogging: false })
+    // }
+    // pushUpsToHome = () => {
+    //     console.log('function called pushUpsToHome')
+
+    //     this.setState({ show: true, pushups: false })
+    // }
+    // bicepToHome = () => {
+    //     console.log('function called bicepToHome')
+
+    //     this.setState({ show: true, bicep: false })
+    // }
+
     render() {
-        const { show, showCard, jogging, pushups, bicep, logExercise } = this.state;
+        const { show, showCard, jogging, pushups, bicep, logExercise, exerciseAmount, exerciseUnit } = this.state;
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.childContainer}>
@@ -91,49 +219,99 @@ class AddExercise extends React.Component {
                             Add Exercise
                         </Text>
                     </View>
-                    <View style={styles.arrowContainer}>
-                        <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity>
+                    {/* <View style={styles.arrowContainer}>
+                        <TouchableOpacity style={{ marginRight: 20 }}>
+                            <Image source={require('../icons/left.png')} style={styles.forImgs} />
+                        </TouchableOpacity>
                         <Text>Today</Text>
-                        <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
-                    </View>
-
+                        <TouchableOpacity style={{ marginLeft: 20 }}>
+                            <Image source={require('../icons/right.png')} style={styles.forImgs} />
+                        </TouchableOpacity>
+                    </View> */}
                     <View style={styles.bodyContainer}>
                         <TextInput placeholder="Search exercise" placeholderTextColor="black" style={styles.inputFieldStyle} />
-
                     </View>
                     {show && <View style={styles.listsContainer}>
-                        <TouchableOpacity onPress={this.showFields}><Text style={styles.listsTextStyle}>Brisk Walk</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={this.showHighPaceJogging}><Text style={styles.listsTextStyle}>High paced jogging</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={this.pushUps}><Text style={styles.listsTextStyle}>Push ups</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={this.bicepCurlsFun}><Text style={styles.listsTextStyle}>Bicep curls</Text></TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'Brisk Walk')}
+                        >
+                            <Text style={styles.listsTextStyle}>Brisk Walk</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'High paced jogging')}
+                        // onPress={this.showHighPaceJogging}
+                        >
+                            <Text style={styles.listsTextStyle}>High paced jogging</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'Push ups')}
+                        // onPress={this.pushUps}
+                        >
+                            <Text style={styles.listsTextStyle}>Push ups</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'Bicep curls')}
+                        // onPress={this.bicepCurlsFun}
+                        >
+                            <Text style={styles.listsTextStyle}>Bicep curls</Text>
+                        </TouchableOpacity>
                     </View>}
                     {showCard && <View style={styles.cardContainer}>
-                        <BriskScreen title="Brisk Walk" label="Minutes" value="minutes" backFunc={this.backToHome} />
+                        <BriskScreen title="Brisk Walk"
+                            // label="Minutes" value="minutes" 
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Brisk Walk')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit} />
                     </View>}
                     {jogging && <View style={styles.cardContainer} >
-                        <HighpacejoggingScreen backFunc={this.joggingToHome} />
+                        <HighpacejoggingScreen
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'High paced jogging')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit}
+                        // backFunc={this.joggingToHome} 
+                        />
                     </View>}
                     {pushups && <View style={styles.cardContainer} >
-                        <Pushups backFunc={this.pushUpsToHome} />
+                        <Pushups
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Push ups')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit}
+                        // backFunc={this.pushUpsToHome} 
+                        />
                     </View>}
                     {bicep && <View style={styles.cardContainer} >
-                        <Bicepcurls backFunc={this.bicepToHome} />
+                        <Bicepcurls
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Bicep curls')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit}
+                        // backFunc={this.bicepToHome}
+                        />
                     </View>}
-
                     {logExercise && <View style={styles.cardContainer} >
                         <Bicepcurls />
                     </View>}
-
-
                 </View>
                 <View style={{ flex: 1.2 }}>
-
                 </View>
             </ScrollView>
-
         )
     }
-
 }
 
 export default AddExercise;

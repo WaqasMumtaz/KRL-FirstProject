@@ -17,10 +17,10 @@ import TextInputs from '../textInputs/TextInputs';
 import styles from '../Styling/EditableProfileStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import AsyncStorage from '@react-native-community/async-storage';
+import HttpUtils from '../Services/HttpUtils';
 import { thisExpression } from '@babel/types';
 import ImagePicker from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
-
 const userDefaultPic = require('../icons/profile.png')
 
 
@@ -54,8 +54,32 @@ class EditProfileScreen extends React.Component {
             psswrdInstruction: false,
             genderValidate: true,
             isLoading: false,
-            avatarSource:null
+            avatarSource: null,
+            date: '',
+            time: '',
+            userId: ''
         }
+    }
+    componentDidMount() {
+        const date = new Date().getDate();
+        let month = new Date().getMonth() + 1;
+        const year = new Date().getFullYear();
+        const hours = new Date().getHours();
+        const min = new Date().getMinutes();
+        const sec = new Date().getSeconds();
+        if (month == 1 || month == 2 || month == 3 || month == 4 || month == 5 || month == 6 || month == 7 || month == 8 || month == 9) {
+            month = `0${month}`
+        }
+        AsyncStorage.getItem("currentUser").then(value => {
+            if (value) {
+                let dataFromLocalStorage = JSON.parse(value);
+                this.setState({
+                    date: date + '-' + month + '-' + year,
+                    time: hours + ':' + min + ':' + sec,
+                    userId: dataFromLocalStorage._id
+                })
+            }
+        });
     }
 
     checkValidation = (text, type) => {
@@ -147,53 +171,53 @@ class EditProfileScreen extends React.Component {
         })
     }
 
- chooseProfilePhoto= ()=>{
-     const options={
-        noData: true,
-        mediaType: 'photo'
-     }
-     ImagePicker.showImagePicker(options, async (response) => {
-        console.log('Response = ', response);
-      
-        if (response.didCancel) {
-          console.log('User cancelled image picker');
-        } else if (response.error) {
-          console.log('ImagePicker Error: ', response.error);
-        } else if (response.customButton) {
-          console.log('User tapped custom button: ', response.customButton);
-        } else {
-          //const source = { uri: response.uri };
-          let contentType = response.type
-          let res = await RNFS.readFile(response.uri, 'base64')
-          let imgBase644 = `data:${contentType};base64,${res}`;
-          let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
-          let data = {
-          "file": imgBase644,
-          "upload_preset": "toh6r3p2",
+    chooseProfilePhoto = () => {
+        const options = {
+            noData: true,
+            mediaType: 'photo'
         }
+        ImagePicker.showImagePicker(options, async (response) => {
+            console.log('Response = ', response);
 
-        fetch(apiUrl, {
-            body: JSON.stringify(data),
-            headers: {
-              'content-type': 'application/json'
-            },
-            method: 'POST',
-          }).then(async r => {
-            let data = await r.json()
-            //send image on firebase
-            console.log(data)
-            const source = {uri: data.secure_url}
-            this.setState({
-              avatarSource: source,
-            })
-            return data.secure_url
-          }).catch(err => console.log(err))
-      
-        }
-      })
- }   
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                //const source = { uri: response.uri };
+                let contentType = response.type
+                let res = await RNFS.readFile(response.uri, 'base64')
+                let imgBase644 = `data:${contentType};base64,${res}`;
+                let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
+                let data = {
+                    "file": imgBase644,
+                    "upload_preset": "toh6r3p2",
+                }
 
-    updateUserProfileFunc = () => {
+                fetch(apiUrl, {
+                    body: JSON.stringify(data),
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    method: 'POST',
+                }).then(async r => {
+                    let data = await r.json()
+                    //send image on firebase
+                    console.log(data)
+                    const source = { uri: data.secure_url }
+                    this.setState({
+                        avatarSource: source,
+                    })
+                    return data.secure_url
+                }).catch(err => console.log(err))
+
+            }
+        })
+    }
+
+    updateUserProfileFunc = async () => {
         const {
             email,
             password,
@@ -205,31 +229,31 @@ class EditProfileScreen extends React.Component {
             addressValidate,
             contactNoValidate,
             genderValidate,
-            avatarSource
-
+            avatarSource,
+            date,
+            time,
+            userId,
         } = this.state;
-
         if (email == '' || password == '' || address == '' || contactNo == '' || gender == '') {
             Alert.alert('Please Fill All Fields');
             if (passwordValidate != true || emailValidate != true || addressValidate != true || contactNoValidate != true || genderValidate != true) {
                 Alert.alert('Please Enter Correct Field');
             }
-
         }
-
         else {
-            //this.setState({ isLoading: true })
-
             const userObj = {
                 email: email,
                 address: address,
                 contactNo: contactNo,
                 gender: gender,
-                image: avatarSource
+                image: avatarSource.uri,
+                date: date,
+                time: time,
+                userId: userId
             }
             console.log(userObj)
-
-
+            let dataUser = await HttpUtils.post('profile', userObj)
+            console.log(dataUser, 'dataUser')
         }
     }
 
@@ -256,23 +280,23 @@ class EditProfileScreen extends React.Component {
 
         return (
             <View style={styles.mainContainer}>
-                
+
                 {/* <Image source={this.state.avatarSource} style={{height:25,width:25}}/> */}
                 <ScrollView
                     style={{ flex: 1, backgroundColor: 'white', height: height }}
                     contentContainerStyle={{ flexGrow: 1 }}
                 >
-                            
+
                     <View style={styles.profilPicContainer}>
                         <TouchableOpacity
-                        activeOpacity={0.5}
-                        onPress={this.chooseProfilePhoto}
-                        > 
-                         {avatarSource ? <Image source={avatarSource} style={styles.profilPicStyle}/>
-                         :
-                         <Image source={userDefaultPic}
-                            style={styles.profilPicStyle}
-                         /> }
+                            activeOpacity={0.5}
+                            onPress={this.chooseProfilePhoto}
+                        >
+                            {avatarSource ? <Image source={avatarSource} style={styles.profilPicStyle} />
+                                :
+                                <Image source={userDefaultPic}
+                                    style={styles.profilPicStyle}
+                                />}
                         </TouchableOpacity>
                         <View style={styles.nameContainer}>
                             <Text style={styles.nameStyle}>{this.state.name}</Text>
@@ -287,9 +311,9 @@ class EditProfileScreen extends React.Component {
                         <TextInput
                             onChangeText={text => {
                                 this.checkValidation(text, 'email'),
-                                this.setState({
-                                    email: text
-                                })
+                                    this.setState({
+                                        email: text
+                                    })
                             }}
                             placeholder="waqas@gmail.com"
                             keyboardType="email-address"
@@ -336,9 +360,9 @@ class EditProfileScreen extends React.Component {
                         <TextInput
                             onChangeText={text => {
                                 this.checkValidation(text, 'mobile'),
-                                this.setState({
-                                    contactNo: text
-                                })
+                                    this.setState({
+                                        contactNo: text
+                                    })
                             }}
                             placeholder="+92-333-1122223"
                             placeholderColor="#4f4f4f"
@@ -351,9 +375,9 @@ class EditProfileScreen extends React.Component {
                         <TextInput
                             onChangeText={text => {
                                 this.checkValidation(text, 'gender'),
-                                this.setState({
-                                    gender: text
-                                })
+                                    this.setState({
+                                        gender: text
+                                    })
                             }}
                             placeholder="Male"
                             placeholderColor="#4f4f4f"
@@ -373,9 +397,9 @@ class EditProfileScreen extends React.Component {
                     </View>
 
                     <View style={styles.blankContainer}>
-                   
+
                     </View>
-                    
+
                 </ScrollView>
             </View>
 
