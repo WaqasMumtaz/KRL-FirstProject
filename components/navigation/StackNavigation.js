@@ -28,13 +28,12 @@ import Wheelspiner from '../Progress Wheel/Progress';
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
 // import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
-
-//console.log('hello World')
+import ToastComponent from '../Toasts/nativeToast';
 
 
 const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
-   Login: {screen: Login},
+  // Login: {screen: Login},
   //  EditProfileScreen:{
   //   screen:EditProfileScreen,
   //   navigationOptions: {
@@ -58,10 +57,10 @@ const MainNavigator= createStackNavigator({
   // Setupscreen1:{screen:Setupscreen1}, 
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen: { screen: LastSetUpScreen },
+  ToastComponent:{screen:ToastComponent},
 
-
-  Macrocalculator: {
-    screen: Macrocalculator,
+  BMICalculator: {
+    screen: BMICalculator,
     navigationOptions: {
       headerStyle: {
         elevation: 0,
