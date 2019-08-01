@@ -59,6 +59,18 @@ const MainNavigator= createStackNavigator({
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen: { screen: LastSetUpScreen },
 
+
+  Macrocalculator: {
+    screen: Macrocalculator,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+
+    }
+  },
+
+
   // Setupscreen:{screen:Setupscreen},
   // Setupscreen1:{screen:Setupscreen1}, 
   // LastSetUpScreen: { screen: LastSetUpScreen },

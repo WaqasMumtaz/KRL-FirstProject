@@ -34,13 +34,13 @@ const styles =StyleSheet.create({
         color:'#4f4f4f',
         fontFamily: "MontserratExtraBold",
     },
-    textContainer:{
-        flex:1,
-        //height:'8%',
-        //backgroundColor:'green',
-        marginTop:25
-    },
-    textStyle:{
+    // textContainer:{
+    //     flex:1,
+    //     //height:'8%',
+    //     //backgroundColor:'green',
+    //     marginTop:25
+    // },
+    styleForLabel:{
         color:'#4f4f4f',
         fontFamily:'MontserratLight'
     },
@@ -50,14 +50,14 @@ const styles =StyleSheet.create({
         //backgroundColor:'pink',
         marginTop:10
     },
-    inputContainer:{
-        flex:0.5,
-        //height:'10%',
-        flexDirection:'row',
-        flexWrap:'wrap',
-        marginTop:5,
-        //backgroundColor:'orange'
-    },
+    // inputContainer:{
+    //     flex:0.5,
+    //     //height:'10%',
+    //     flexDirection:'row',
+    //     // flexWrap:'wrap',
+    //     marginTop:5,
+    //     //backgroundColor:'orange'
+    // },
     inputStyle:{
         flex:1,
         height:38,
@@ -70,7 +70,11 @@ const styles =StyleSheet.create({
         flex:2,
         marginTop:5,
         //backgroundColor:'yellow',
-        flexDirection:'row'
+        //flexDirection:'row'
+    },
+    ageInputContainer:{
+        flex:1,
+        marginTop:10
     },
     touchableOpacityOne:{
         flex: 1,
@@ -105,15 +109,17 @@ const styles =StyleSheet.create({
        // opacity:0.6
     },
     pickerStyle: {
-        width: 144,
+        width: 140,
         height: 40,
-        // marginTop: 45,
+        //marginTop:5,
         color: '#4f4f4f',
         backgroundColor: '#e5e5e5',
         borderRadius:5,
-        marginLeft:16,
+        // marginLeft:16,
         fontFamily: 'MontserratLight',
         // opacity:0.3
+        
+        
 
     },
     inputCaloriesStyleOne:{
@@ -175,7 +181,7 @@ const styles =StyleSheet.create({
     },
     maleTouchableOpacity:{
         height: 38,
-        width: '90%', 
+        width: '43%', 
         justifyContent: 'center', 
         backgroundColor: '#e5e5e5', 
         marginTop: 5, 
@@ -192,9 +198,12 @@ const styles =StyleSheet.create({
         fontFamily: 'MontserratLight', 
     },
     inputContainer:{
-        width: '98%', 
+        width: '46.5%', 
         height: 50, 
-        justifyContent: 'center' 
+        justifyContent: 'center',
+        flexDirection:'row',
+        //justifyContent:'space-between',
+        //backgroundColor:'green' 
     },
     textStyle:{
         marginTop: 20, 
@@ -203,10 +212,10 @@ const styles =StyleSheet.create({
     },
     sedetaryContainer:{
         height: 38, 
-        width: '90%', 
+        width: '43%', 
         justifyContent: 'center', 
         backgroundColor: '#e5e5e5', 
-        marginTop: 5, 
+        //marginTop: 5, 
         borderRadius: 3 
     },
     activityChildsTextStyle:{
@@ -216,35 +225,69 @@ const styles =StyleSheet.create({
     },
     moderateContainer:{
         height: 38, 
-        width: '90%', 
+        width: '43%', 
         justifyContent: 'center', 
         backgroundColor: '#e5e5e5', 
+        //marginTop: 10, 
+        borderRadius: 3 
+    },
+    clickSedetary:{
+        height: 38, 
+        width: '43%', 
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        //marginTop: 5, 
+        borderRadius: 3 
+    },
+    clickModerate:{
+        height: 38, 
+        width: '43%', 
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
         marginTop: 10, 
+        borderRadius: 3 
+    },
+    clickedMale:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
         borderRadius: 3 
     },
     femaleContainer:{
         height: 38, 
-        width: '90%', 
-        marginLeft: 16, 
+        width: '43%', 
+        //marginLeft: 16, 
         justifyContent: 'center', 
         backgroundColor: '#e5e5e5', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    clickedFemale:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
         marginTop: 5, 
         borderRadius: 3 
     },
     lightTouchableStyle:{
         height: 38, 
-        width: '100%', 
+        width: '43%', 
         justifyContent: 'center', 
         backgroundColor: '#e5e5e5', 
-        marginTop: 5, 
+        //marginTop: 8, 
         borderRadius: 3 
     },
     extremTouchableStyle:{
         height: 38, 
-        width: '100%', 
+        width: '43%', 
         justifyContent: 'center', 
         backgroundColor: '#e5e5e5', 
-        marginTop: 10, 
+        //marginTop: 10, 
         borderRadius: 3 
     },
     lightTextStyle:{
@@ -298,9 +341,82 @@ const styles =StyleSheet.create({
         justifyContent:'center',
         backgroundColor: '#FF6200',
         alignItems:'center',
+        marginTop:8,
         borderRadius:3
+    },
+    validationInstruction:{
+        fontSize:12,
+        fontFamily:'MontserratLight',
+        color:'#FF6200'
+    },
+    validationContainer:{
+        marginTop:3
+    },
+    sedetaryAndLightClickedStyle:{
+        height: 38,
+        width: '90%', 
+        justifyContent:'center',
+        backgroundColor: '#FF6200',
+        alignItems:'center',
+        borderRadius:3
+    },
+    clickedExtremTouchableStyle:{
+        height: 38, 
+        width: '43%', 
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        //marginTop: 10, 
+        borderRadius: 3 
+    },
+    clickedLightStyle:{
+        height: 38,
+        width: '43%', 
+        justifyContent:'center',
+        backgroundColor: '#FF6200',
+        alignItems:'center',
+        borderRadius:3
+    },
+    instructionContainer:{
+        flex:0.2
+    },
+    heightContainer:{
+        // height:70,
+        // backgroundColor:'pink',
+        // borderColor:'black',
+        // borderWidth:3,
+        flexDirection:'row',
+        justifyContent:'space-between',
+        //marginBottom:12
+    },
+    currentWeightContainer:{
+      // height:70,
+        // backgroundColor:'pink',
+        // borderColor:'black',
+        // borderWidth:3,
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },
+    goalWeightContainer:{
+        // height:70,
+        // backgroundColor:'pink',
+        // borderColor:'black',
+        // borderWidth:3,
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },
+    showValidationContainer:{
+        flexDirection: 'row',
+        height: 30, 
+        justifyContent: 'space-between' ,
+        //backgroundColor:'blue'
+    },
+    activityLevelInstruction:{
+        flexDirection: 'row',
+        height: 30, 
+        //backgroundColor:'blue'
+         justifyContent:'center',
+         marginTop:10
     }
-
 })
 
 export default styles;

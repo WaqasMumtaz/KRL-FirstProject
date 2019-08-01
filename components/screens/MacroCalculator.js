@@ -199,7 +199,7 @@ class Macrocalculator extends React.Component {
                     macroObj.calculteCalries = calries;
                     macroObj.proteins = proteinVal;
                     macroObj.carbohydrates = carbohydratesVal;
-                    console.log(macroObj , 'macroObj')
+                    console.log(macroObj, 'macroObj')
                 }
             }
         }
@@ -239,7 +239,7 @@ class Macrocalculator extends React.Component {
                     macroObj.calculteCalries = calries;
                     macroObj.proteins = proteinVal;
                     macroObj.carbohydrates = carbohydratesVal;
-                    console.log(macroObj , 'macroObj')
+                    console.log(macroObj, 'macroObj')
                 }
             }
         }
@@ -265,9 +265,9 @@ class Macrocalculator extends React.Component {
     activityLevel(activity) {
         if (activity == 'active') {
             this.setState({
-                moderate: true,
+                moderate: false,
                 sedentary: false,
-                light: false,
+                light: true,
                 extreme: false,
                 activityLevel: 'active'
             })
@@ -283,9 +283,9 @@ class Macrocalculator extends React.Component {
         }
         else if (activity == 'lightActivity') {
             this.setState({
-                moderate: false,
+                moderate: true,
                 sedentary: false,
-                light: true,
+                light: false,
                 extreme: false,
                 activityLevel: 'lightActivity'
             })
@@ -365,11 +365,305 @@ class Macrocalculator extends React.Component {
             })
         }
     }
+    //     render() {
+    //         const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation,
+    //             currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation, male, female,
+    //             moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates, dob, date, } = this.state;
+    //         // console.log(date, 'date');
+    //         return (
+    //             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
+    //                 <View style={styles.mainContainer}>
+    //                     <View style={styles.childContainer}>
+    //                         <View style={styles.headingContainer}>
+    //                             <Text style={styles.headingStyle}>
+    //                                 Macro Calculator
+    //                             </Text>
+    //                         </View>
+    //                         <View style={styles.textContainer}>
+    //                             <Text style={styles.textStyle}>Enter your height and weight below to re-calculate
+    //                             your daily macro limit </Text>
+    //                         </View>
+    //                         <View style={styles.dateBirth}>
+    //                             <Text style={styles.textStyle}>Date Of Birth</Text>
+    //                         </View>
+    //                         <View style={styles.inputContainer}>
+    //                             {/* <TextInput placeholder="Tap to set..." placeholderTextColor="gray" style={styles.inputStyle}
+    //                                 onChangeText={(age) => this.setState({ age: age })} /> */}
+    //                             <DatePicker
+    //                                 style={{ width: 200 }}
+    //                                 date={dob} //initial date from state
+    //                                 mode="date" //The enum of date, datetime and time
+    //                                 placeholder="select date"
+    //                                 format="DD-MM-YYYY"
+    //                                 minDate="01-01-1950"
+    //                                 maxDate={date}
+    //                                 confirmBtnText="Confirm"
+    //                                 cancelBtnText="Cancel"
+    //                                 // customStyles={{
+    //                                 //     dateIcon: {
+    //                                 //         position: 'absolute',
+    //                                 //         left: 0,
+    //                                 //         top: 4,
+    //                                 //         marginLeft: 0
+    //                                 //     },
+    //                                 //     dateInput: {
+    //                                 //         marginLeft: 36
+    //                                 //     }
+    //                                 // }}
+    //                                 onDateChange={(date) => { this.setState({ dob: date }) }}
+    //                             />
+    //                         </View>
+    //                         {dobValidation ?
+    //                             <View>
+    //                                 <Text>
+    //                                     Please fill date of birth
+    //                         <View style={styles.ageInputContainer}>
+    //                             <TextInput placeholder="Tap to set..." placeholderTextColor="gray" style={styles.inputStyle}
+    //                                 onChangeText={(age) => this.setState({ age: age })} />
+    //                         </View>
+    //                         {dobValidation ?
+    //                             <View style={styles.validationContainer}>
+    //                                 <Text style={styles.validationInstruction}>
+    //                                     Please fill age
+    //                                 </Text>
+    //                             </View>
+    //                             : null}
+    //                         <Text style={styles.genderTextStyle}>Gender</Text>
+    //                     </View>
+
+    //                     <View style={styles.genderContainer}>
+    //                         {/* <View style={styles.maleContainer}> */}
+    //                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+    //                             <TouchableOpacity style={male ? styles.clickedMale : styles.maleTouchableOpacity} onPress={this.getGender.bind(this, 'male')}>
+    //                                 <Text style={styles.maleTextStyle}>
+    //                                     Male
+    //                                 </Text>
+    //                             </TouchableOpacity>
+    //                             <TouchableOpacity style={female ? styles.clickedFemale : styles.femaleContainer} onPress={this.getGender.bind(this, 'female')}>
+    //                                 <Text style={styles.maleTextStyle}>Female</Text>
+    //                             </TouchableOpacity>
+    //                         </View>
+    //                         <View style={{height: 30,marginTop:3}}>
+    //                             {genderValidation ?
+    //                                 <Text style={styles.validationInstruction}>
+    //                                     Please select the gender
+    //                                     </Text>
+    //                                 : null}
+    //                         </View>
+
+    //                         <Text style={styles.styleForLabel}>Height</Text>
+    //                         <View style={styles.heightContainer}>
+    //                             <View style={styles.inputContainer}>
+    //                                 <View style={styles.container}>
+    //                                     <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+    //                                         onPress={this.decrementVal.bind(this, 'height')}>
+    //                                         <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+    //                                     </TouchableOpacity>
+    //                                     <View style={styles.textInputContainer}>
+    //                                         <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+    //                                             type="number"
+    //                                             onChangeText={(height) => this.setState({ height: height })}
+    //                                             value={this.state.height}
+    //                                         />
+    //                                     </View>
+    //                                     <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+    //                                         onPress={this.increamentVal.bind(this, 'height')}>
+    //                                         <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+    //                                     </TouchableOpacity>
+    //                                 </View>
+
+    //                             </View>
+    //                             <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
+    //                                 <Picker selectedValue={this.state.heightUnit}
+    //                                     onValueChange={this.updateUnits.bind(this, 'height Unit')}
+    //                                     style={styles.pickerStyle}>
+    //                                     <Picker.Item label='Select an option...' value='0' />
+    //                                     <Picker.Item label="Inches" value="inches" />
+    //                                 </Picker>
+    //                             </View>
+    //                         </View>
+    //                         <View style={styles.showValidationContainer}>
+    //                             {heightValidation ?
+    //                                 <Text style={styles.validationInstruction}>
+    //                                     Please fill your height
+    //                                     </Text>
+
+    //                                 : null}
+    //                             {heightUnitValidation ?
+    //                                 <Text style={styles.validationInstruction}>
+    //                                     Please select height unit
+    //                                     </Text>
+    //                                 : null}
+    //                         </View>
+
+    //                         <Text style={styles.styleForLabel}>Current Weight</Text>
+    //                         <View style={styles.currentWeightContainer}>
+    //                             <View style={styles.inputContainer}>
+    //                                 <View style={styles.container}>
+    //                                     <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+    //                                         onPress={this.decrementVal.bind(this, 'currentWeight')}>
+    //                                         <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+    //                                     </TouchableOpacity>
+    //                                     <View style={styles.textInputContainer}>
+    //                                         <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+    //                                             type="number"
+    //                                             onChangeText={(currentWeight) => this.setState({ currentWeight: currentWeight })}
+    //                                             value={this.state.currentWeight}
+    //                                         />
+    //                                     </View>
+    //                                     <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+    //                                         onPress={this.increamentVal.bind(this, 'currentWeight')}>
+    //                                         <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+    //                                     </TouchableOpacity>
+    //                                 </View>
+    //                             </View>
+    //                             <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
+    //                             <Picker selectedValue={this.state.currentWeightUnit}
+    //                                     onValueChange={this.updateUnits.bind(this, 'current weight Unit')}
+    //                                     style={styles.pickerStyle}>
+    //                                     <Picker.Item label='Select an option...' value='0' />
+    //                                     <Picker.Item label="KG" value="kg" />
+    //                                 </Picker>
+    //                             </View>
+    //                         </View>
+    //                         <View style={styles.showValidationContainer}>
+    //                         {currentWeightValidation ?
+    //                                     <Text style={styles.validationInstruction}>
+    //                                         Please fill your weight
+    //                                     </Text>
+    //                                 : null}
+    //                                 {currentWeightUnitValidation ?
+    //                                 <Text style={styles.validationInstruction}>
+    //                                         Please select weight unit
+    //                                     </Text>
+    //                                 : null}
+    //                         </View>
+    //                         <Text style={styles.styleForLabel}>Goal Weight</Text>
+
+    //                         <View style={styles.goalWeightContainer}>
+    //                         <View style={styles.inputContainer}>
+    //                                 <View style={styles.container}>
+    //                                     <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+    //                                         onPress={this.decrementVal.bind(this, 'goalWeight')}>
+    //                                         <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+    //                                     </TouchableOpacity>
+    //                                     <View style={styles.textInputContainer}>
+    //                                         <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+    //                                             type="number"
+    //                                             onChangeText={(goalWeight) => this.setState({ goalWeight: goalWeight })}
+    //                                             value={this.state.goalWeight}
+    //                                         />
+    //                                     </View>
+    //                                     <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+    //                                         onPress={this.increamentVal.bind(this, 'goalWeight')}>
+    //                                         <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+    //                                     </TouchableOpacity>
+    //                                 </View>
+
+    //                             </View>
+    //                             <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
+    //                             <Picker selectedValue={this.state.goalWeightUnit}
+    //                                     onValueChange={this.updateUnits.bind(this, 'goal weight Unit')}
+    //                                     style={styles.pickerStyle}>
+    //                                     <Picker.Item label='Select an option...' value='0' />
+    //                                     <Picker.Item label="KG" value="kg" />
+    //                                 </Picker>
+    //                             </View>
+    //                         </View>
+    //                         <View style={styles.showValidationContainer}>
+    //                         {goalWeightValidation ?
+    //                                     <Text style={styles.validationInstruction}>
+    //                                         Please fill your goal weight
+    //                                     </Text>
+    //                                 : null}
+    //                                 {goalWeightUnitValidation ?
+    //                                 <Text style={styles.validationInstruction}>
+    //                                         Please select weight unit
+    //                                     </Text>
+    //                                 : null}
+    //                         </View>
+
+
+    //                         <Text style={styles.styleForLabel}>Activity Level</Text>
+    //                         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+    //                         <TouchableOpacity style={sedentary ? styles.clickSedetary : styles.sedetaryContainer}
+    //                             onPress={this.activityLevel.bind(this, 'sedentary')}>
+    //                             <Text style={styles.activityChildsTextStyle}>
+    //                                 Sedentary
+    //                                 </Text>
+    //                         </TouchableOpacity>
+    //                         <TouchableOpacity style={moderate ? styles.clickModerate : styles.moderateContainer}
+    //                             onPress={this.activityLevel.bind(this, 'lightActivity')}>
+    //                             <Text style={styles.activityChildsTextStyle}>
+    //                                 Moderate
+    //                                 </Text>
+    //                         </TouchableOpacity>
+
+    //                         </View>
+    //                         <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:8}}>
+    //                         <TouchableOpacity style={light ? styles.clickedLightStyle : styles.lightTouchableStyle}
+    //                                  onPress={this.activityLevel.bind(this, 'active')}>
+    //                                     <Text style={styles.lightTextStyle}>
+    //                                         Light
+    //                                           </Text>
+    //                                 </TouchableOpacity>
+    //                                 <TouchableOpacity style={extreme ? styles.clickedExtremTouchableStyle : styles.extremTouchableStyle} 
+    //                                 onPress={this.activityLevel.bind(this, 'veryActive')}>
+    //                                     <Text style={styles.lightTextStyle}>
+    //                                         Extreme
+    //                                     </Text>
+    //                                 </TouchableOpacity>
+    //                         </View>
+    //                         <View style={styles.activityLevelInstruction}>
+
+    //                         {activityLevelValidation ?
+    //                             <Text style={styles.validationInstruction}>
+    //                                 Please select activity level
+    //                                     </Text>
+    //                             : null}
+    //                     </View>
+
+    //                     </View>
+
+
+    //                     <View style={{ marginTop: 15 }}>
+    //                         <Text style={styles.macroTextStyle}>Your Daily Macros*</Text>
+    //                     </View>
+    //                     <View style={styles.inputCaloriesContainer}>
+    //                         {/* <Text style={{ borderWidth:2,borderColor:'black',color: '#4f4f4f', marginLeft: 20, marginVertical: 5,fontFamily: 'MontserratLight' }}>1640 Kcal{'\n'}Calories</Text> */}
+    //                         <TextInput placeholder={"1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={calculteCalries} />
+    //                         <TextInput placeholder={"149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={fatMass} />
+    //                         <TextInput placeholder={"107 g\Protein"} style={styles.inputCaloriesStyleThree} value={proteins} />
+    //                         <TextInput placeholder={"51 g\nFat"} style={styles.inputCaloriesStyleFour} value={carbohydrates} />
+    //                         {/* <Text style={{ color: '#4f4f4f', marginLeft: '20%', marginVertical: 5,fontFamily: 'MontserratLight' }}>159 g{'\n'}Carbohydrates</Text> */}
+    //                     </View>
+    //                     <View style={styles.lastParaContainer}>
+    //                         <Text style={styles.lastParaStyle}>
+    //                             *This is the daily calories limit as calculated by the app using the above infromation.
+    //                             If your coach has set another limit for you, please enter it above.
+    //                       </Text>
+    //                     </View>
+    //                     <View style={styles.btnContainer}>
+    //                         <CaloriesSetupBtn title='Set Up & Use App' caloriesBtnStyle={styles.caloriesBtnStyle} onPress={this.calulateMacro} />
+    //                     </View>
+
+    //                     <View style={{ flex: 2, marginBottom: 30 }}>
+
+    //                     </View>
+    //                 </View>
+    //             </ScrollView>
+
+    //         )
+    //     }
+
+    // }
+
+    // export default Macrocalculator;
     render() {
         const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation,
             currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation, male, female,
             moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates, dob, date, } = this.state;
-        // console.log(date, 'date');
+
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.mainContainer}>
@@ -377,16 +671,16 @@ class Macrocalculator extends React.Component {
                         <View style={styles.headingContainer}>
                             <Text style={styles.headingStyle}>
                                 Macro Calculator
-                            </Text>
+                        </Text>
                         </View>
                         <View style={styles.textContainer}>
                             <Text style={styles.textStyle}>Enter your height and weight below to re-calculate
-                            your daily macro limit </Text>
+                        your daily macro limit </Text>
                         </View>
                         <View style={styles.dateBirth}>
                             <Text style={styles.textStyle}>Date Of Birth</Text>
                         </View>
-                        <View style={styles.inputContainer}>
+                        <View style={styles.ageInputContainer}>
                             {/* <TextInput placeholder="Tap to set..." placeholderTextColor="gray" style={styles.inputStyle}
                                 onChangeText={(age) => this.setState({ age: age })} /> */}
                             <DatePicker
@@ -414,29 +708,37 @@ class Macrocalculator extends React.Component {
                             />
                         </View>
                         {dobValidation ?
-                            <View>
-                                <Text>
-                                    Please fill date of birth
-                                </Text>
+                            <View style={styles.validationContainer}>
+                                <Text style={styles.validationInstruction}>
+                                    Please Pick date of birth
+                            </Text>
                             </View>
                             : null}
                         <Text style={styles.genderTextStyle}>Gender</Text>
                     </View>
+
                     <View style={styles.genderContainer}>
-                        <View style={styles.maleContainer}>
-                            <TouchableOpacity style={male ? styles.clickBtnStyle : styles.maleTouchableOpacity} onPress={this.getGender.bind(this, 'male')}>
+                        {/* <View style={styles.maleContainer}> */}
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <TouchableOpacity style={male ? styles.clickedMale : styles.maleTouchableOpacity} onPress={this.getGender.bind(this, 'male')}>
                                 <Text style={styles.maleTextStyle}>
                                     Male
-                                </Text>
+                            </Text>
                             </TouchableOpacity>
+                            <TouchableOpacity style={female ? styles.clickedFemale : styles.femaleContainer} onPress={this.getGender.bind(this, 'female')}>
+                                <Text style={styles.maleTextStyle}>Female</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ height: 30, marginTop: 3 }}>
                             {genderValidation ?
-                                <View>
-                                    <Text>
-                                        Please select the gender
-                                    </Text>
-                                </View>
+                                <Text style={styles.validationInstruction}>
+                                    Please select the gender
+                                </Text>
                                 : null}
-                            <Text style={styles.heightStyle}>Height</Text>
+                        </View>
+
+                        <Text style={styles.styleForLabel}>Height</Text>
+                        <View style={styles.heightContainer}>
                             <View style={styles.inputContainer}>
                                 <View style={styles.container}>
                                     <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
@@ -455,15 +757,33 @@ class Macrocalculator extends React.Component {
                                         <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
                                 </View>
+
                             </View>
+                            <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
+                                <Picker selectedValue={this.state.heightUnit}
+                                    onValueChange={this.updateUnits.bind(this, 'height Unit')}
+                                    style={styles.pickerStyle}>
+                                    <Picker.Item label='Select an option...' value='0' />
+                                    <Picker.Item label="Inches" value="inches" />
+                                </Picker>
+                            </View>
+                        </View>
+                        <View style={styles.showValidationContainer}>
                             {heightValidation ?
-                                <View>
-                                    <Text>
-                                        Please fill your height
-                                    </Text>
-                                </View>
+                                <Text style={styles.validationInstruction}>
+                                    Please fill your height
+                                </Text>
+
                                 : null}
-                            <Text style={styles.textStyle}>Current Weight</Text>
+                            {heightUnitValidation ?
+                                <Text style={styles.validationInstruction}>
+                                    Please select height unit
+                                </Text>
+                                : null}
+                        </View>
+
+                        <Text style={styles.styleForLabel}>Current Weight</Text>
+                        <View style={styles.currentWeightContainer}>
                             <View style={styles.inputContainer}>
                                 <View style={styles.container}>
                                     <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
@@ -483,16 +803,31 @@ class Macrocalculator extends React.Component {
                                     </TouchableOpacity>
                                 </View>
                             </View>
+                            <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
+                                <Picker selectedValue={this.state.currentWeightUnit}
+                                    onValueChange={this.updateUnits.bind(this, 'current weight Unit')}
+                                    style={styles.pickerStyle}>
+                                    <Picker.Item label='Select an option...' value='0' />
+                                    <Picker.Item label="KG" value="kg" />
+                                </Picker>
+                            </View>
+                        </View>
+                        <View style={styles.showValidationContainer}>
                             {currentWeightValidation ?
-                                <View>
-                                    <Text>
-                                        Please fill your weight
-                                    </Text>
-                                </View>
+                                <Text style={styles.validationInstruction}>
+                                    Please fill your weight
+                                </Text>
                                 : null}
-                            <Text style={styles.textStyle}>Goal Weight</Text>
-                            <View style={styles.inputContainer}>
+                            {currentWeightUnitValidation ?
+                                <Text style={styles.validationInstruction}>
+                                    Please select weight unit
+                                </Text>
+                                : null}
+                        </View>
+                        <Text style={styles.styleForLabel}>Goal Weight</Text>
 
+                        <View style={styles.goalWeightContainer}>
+                            <View style={styles.inputContainer}>
                                 <View style={styles.container}>
                                     <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
                                         onPress={this.decrementVal.bind(this, 'goalWeight')}>
@@ -510,69 +845,9 @@ class Macrocalculator extends React.Component {
                                         <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
                                 </View>
+
                             </View>
-                            {goalWeightValidation ?
-                                <View>
-                                    <Text>
-                                        Please fill your goal weight
-                                    </Text>
-                                </View>
-                                : null}
-                            <Text style={styles.textStyle}>Activity Level</Text>
-                            <TouchableOpacity style={sedentary ? styles.clickBtnStyle : styles.sedetaryContainer} onPress={this.activityLevel.bind(this, 'sedentary')}>
-                                <Text style={styles.activityChildsTextStyle}>
-                                    Sedentary
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={moderate ? styles.clickBtnStyle : styles.moderateContainer} onPress={this.activityLevel.bind(this, 'lightActivity')}>
-                                <Text style={styles.activityChildsTextStyle}>
-                                    Moderate
-                                </Text>
-                            </TouchableOpacity>
-                            {activityLevelValidation ?
-                                <View>
-                                    <Text>
-                                        Please select activity level
-                                    </Text>
-                                </View>
-                                : null}
-                        </View>
-                        <View style={{ flex: 1, }}>
-                            <TouchableOpacity style={female ? styles.clickBtnStyle : styles.femaleContainer} onPress={this.getGender.bind(this, 'female')}>
-                                <Text style={styles.maleTextStyle}>Female</Text>
-                            </TouchableOpacity>
-                            <View><Text></Text></View>
-                            <View style={{ marginTop: 44 }}>
-                                <Picker selectedValue={this.state.heightUnit}
-                                    onValueChange={this.updateUnits.bind(this, 'height Unit')}
-                                    style={styles.pickerStyle}>
-                                    <Picker.Item label='Select an option...' value='0' />
-                                    <Picker.Item label="Inches" value="inches" />
-                                </Picker>
-                            </View>
-                            {heightUnitValidation ?
-                                <View>
-                                    <Text>
-                                        Please select height unit
-                                    </Text>
-                                </View>
-                                : null}
-                            <View style={{ marginTop: 50 }}>
-                                <Picker selectedValue={this.state.currentWeightUnit}
-                                    onValueChange={this.updateUnits.bind(this, 'current weight Unit')}
-                                    style={styles.pickerStyle}>
-                                    <Picker.Item label='Select an option...' value='0' />
-                                    <Picker.Item label="KG" value="kg" />
-                                </Picker>
-                            </View>
-                            {currentWeightUnitValidation ?
-                                <View>
-                                    <Text>
-                                        Please select weight unit
-                                    </Text>
-                                </View>
-                                : null}
-                            <View style={{ marginTop: 50 }}>
+                            <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
                                 <Picker selectedValue={this.state.goalWeightUnit}
                                     onValueChange={this.updateUnits.bind(this, 'goal weight Unit')}
                                     style={styles.pickerStyle}>
@@ -580,27 +855,63 @@ class Macrocalculator extends React.Component {
                                     <Picker.Item label="KG" value="kg" />
                                 </Picker>
                             </View>
-                            {goalWeightUnitValidation ?
-                                <View>
-                                    <Text>
-                                        Please select goal weight unit
-                                    </Text>
-                                </View>
-                                : null}
-                            <View style={{ marginTop: 42, marginLeft: 16 }}>
-                                <TouchableOpacity style={light ? styles.clickBtnStyle : styles.lightTouchableStyle} onPress={this.activityLevel.bind(this, 'active')}>
-                                    <Text style={styles.lightTextStyle}>
-                                        Light
-                                          </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={extreme ? styles.clickBtnStyle : styles.extremTouchableStyle} onPress={this.activityLevel.bind(this, 'veryActive')}>
-                                    <Text style={styles.lightTextStyle}>
-                                        Extreme
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
                         </View>
+                        <View style={styles.showValidationContainer}>
+                            {goalWeightValidation ?
+                                <Text style={styles.validationInstruction}>
+                                    Please fill your goal weight
+                                </Text>
+                                : null}
+                            {goalWeightUnitValidation ?
+                                <Text style={styles.validationInstruction}>
+                                    Please select weight unit
+                                </Text>
+                                : null}
+                        </View>
+
+
+                        <Text style={styles.styleForLabel}>Activity Level</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <TouchableOpacity style={sedentary ? styles.clickSedetary : styles.sedetaryContainer}
+                                onPress={this.activityLevel.bind(this, 'sedentary')}>
+                                <Text style={styles.activityChildsTextStyle}>
+                                    Sedentary
+                            </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={moderate ? styles.clickModerate : styles.moderateContainer}
+                                onPress={this.activityLevel.bind(this, 'lightActivity')}>
+                                <Text style={styles.activityChildsTextStyle}>
+                                    Moderate
+                            </Text>
+                            </TouchableOpacity>
+
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
+                            <TouchableOpacity style={light ? styles.clickedLightStyle : styles.lightTouchableStyle}
+                                onPress={this.activityLevel.bind(this, 'active')}>
+                                <Text style={styles.lightTextStyle}>
+                                    Light
+                                      </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={extreme ? styles.clickedExtremTouchableStyle : styles.extremTouchableStyle}
+                                onPress={this.activityLevel.bind(this, 'veryActive')}>
+                                <Text style={styles.lightTextStyle}>
+                                    Extreme
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.activityLevelInstruction}>
+
+                            {activityLevelValidation ?
+                                <Text style={styles.validationInstruction}>
+                                    Please select activity level
+                                </Text>
+                                : null}
+                        </View>
+
                     </View>
+
+
                     <View style={{ marginTop: 15 }}>
                         <Text style={styles.macroTextStyle}>Your Daily Macros*</Text>
                     </View>
@@ -616,7 +927,7 @@ class Macrocalculator extends React.Component {
                         <Text style={styles.lastParaStyle}>
                             *This is the daily calories limit as calculated by the app using the above infromation.
                             If your coach has set another limit for you, please enter it above.
-                      </Text>
+                  </Text>
                     </View>
                     <View style={styles.btnContainer}>
                         <CaloriesSetupBtn title='Set Up & Use App' caloriesBtnStyle={styles.caloriesBtnStyle} onPress={this.calulateMacro} />
