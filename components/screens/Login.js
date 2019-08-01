@@ -63,7 +63,7 @@ class Login extends React.Component {
       }
       try {
         let dataUser = await HttpUtilsFile.post('signin', userObj)
-        console.log(dataUser);
+        console.log(dataUser, 'dataUser');
         let getUserCode = dataUser.code;
         let userWrong = dataUser.Match;
         let userMsg = dataUser.msg;
@@ -81,7 +81,7 @@ class Login extends React.Component {
           navigate('BottomTabe')
 
           // navigate('Setupscreen1')
-          
+
           // db.collection('users').add({
           //   dataUser
           // }).then(() => {

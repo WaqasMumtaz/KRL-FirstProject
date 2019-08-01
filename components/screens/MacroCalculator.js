@@ -3,11 +3,12 @@ import { Text, View, ScrollView, Button, Image, Dimensions, TextInput, Touchable
 import styles from '../Styling/MacroStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import InputImgsScreen from '../screens/InputImgs';
+import DatePicker from 'react-native-datepicker';
+import AsyncStorage from '@react-native-community/async-storage';
+import HttpUtils from '../Services/HttpUtils';
 const { height } = Dimensions.get('window');
-
 class Macrocalculator extends React.Component {
     static navigationOptions = () => ({
-
         headerStyle: {
             backgroundColor: 'white'
         },
@@ -15,8 +16,8 @@ class Macrocalculator extends React.Component {
     })
     constructor(props) {
         super(props);
-
         this.state = {
+            dob: '',
             age: '',
             gender: '',
             height: '',
@@ -31,6 +32,12 @@ class Macrocalculator extends React.Component {
             fatMass: '',
             proteins: '',
             carbohydrates: '',
+            userId: '',
+            date: '',
+            time: '',
+            currentDate: '',
+            currentMonth: '',
+            currentYear: '',
             tdeeObj: { sedentary: 1.2, lightActivity: 1.375, active: 1.55, veryActive: 1.725 },
             dobValidation: false,
             genderValidation: false,
@@ -49,10 +56,54 @@ class Macrocalculator extends React.Component {
             extreme: false
         }
     }
-    calulateMacro = () => {
-        const { age, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit,
-            activityLevel, tdeeObj } = this.state
-        if (age == '') {
+
+    componentWillMount() {
+        let monthNo = new Date().getMonth();
+        const date = new Date().getDate();
+        const year = new Date().getFullYear();
+        const hours = new Date().getHours();
+        const min = new Date().getMinutes();
+        const sec = new Date().getSeconds();
+        if (monthNo == 1 || monthNo == 2 || monthNo == 3 || monthNo == 4 || monthNo == 5 || monthNo == 6 || monthNo == 7 || monthNo == 8 || monthNo == 9) {
+            month = `0${monthNo + 1}`;
+        }
+        else {
+            month = monthNo + 1;
+        }
+        AsyncStorage.getItem("currentUser").then(value => {
+            if (value) {
+                let dataFromLocalStorage = JSON.parse(value);
+                this.setState({
+                    date: date + '-' + month + '-' + year,
+                    time: hours + ':' + min + ':' + sec,
+                    userId: dataFromLocalStorage._id,
+                    currentYear: year,
+                    currentDate: date,
+                    currentMonth: month,
+                })
+            }
+        });
+    }
+
+    calulateMacro = async () => {
+        const { dob, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit,
+            activityLevel, tdeeObj, date, time, currentYear, currentDate, currentMonth, userId } = this.state;
+        let age;
+        let macroObj = {
+            dob: dob,
+            gender: gender,
+            height: height,
+            heightUnit: heightUnit,
+            currentWeight: currentWeight,
+            currentWeightUnit: currentWeightUnit,
+            goalWeight: goalWeight,
+            goalWeightUnit: goalWeightUnit,
+            activityLevel: activityLevel,
+            date: date,
+            time: time,
+            userId: userId
+        };
+        if (dob == '') {
             this.setState({
                 dobValidation: true
             })
@@ -97,51 +148,103 @@ class Macrocalculator extends React.Component {
                 activityLevelValidation: true
             })
         }
+        if (dob != '') {
+            const dobYear = new Date(dob).getFullYear();
+            // const dobMonth = new Date(dob).getMonth() + 1;
+            // const dobDate = new Date(dob).getDate();
+            age = currentYear - dobYear;
+            // let month = currentMonth - dobMonth;
+            // console.log(month, 'month minus')
+            // console.log(currentMonth, 'currentMonth minus')
+            // console.log(dobMonth, 'dobMonth minus')
+            // if (month < 0 || (month === 0 && currentDate < dobDate)) {
+            //     age = age - 1;
+            //     console.log(age, 'age in condition')
+            // }
 
+        }
         if (gender == 'male') {
-            if (age != '' && height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' &&
+            if (dob != '' && height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' &&
                 currentWeightUnit != '' && goalWeightUnit != '' && activityLevel != '') {
                 let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age + 5;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
+                    // get tdee value
                     let tdee = calculteCalries * tdeeObj[activityLevel]
+                    //calculate fat
                     let fatCalries = tdee * 0.25;
                     let fat = fatCalries / 9
+                    //calculate protein
                     let proteinCalries = calculteCalries * 0.25;
                     let protein = proteinCalries / 4;
+                    //calculate carbohydrate
                     let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
                     let carbohydrate = carbohydratesCalries / 4;
+                    //convert to string 
+                    let calries = calculteCalries.toString();
+                    let tde = tdee.toString();
+                    let fatVal = fat.toString();
+                    let proteinVal = protein.toString();
+                    let carbohydratesVal = carbohydrate.toString();
+                    //set the state
                     this.setState({
-                        calculteCalries: calculteCalries,
-                        totalDEE: tdee,
-                        fatMass: fat,
-                        proteins: protein,
-                        carbohydrates: carbohydrate
+                        calculteCalries: calries,
+                        totalDEE: tde,
+                        fatMass: fatVal,
+                        proteins: proteinVal,
+                        carbohydrates: carbohydratesVal
                     })
+                    //add properties to object
+                    macroObj.totalDEE = tde;
+                    macroObj.fatMass = fatVal;
+                    macroObj.calculteCalries = calries;
+                    macroObj.proteins = proteinVal;
+                    macroObj.carbohydrates = carbohydratesVal;
+                    console.log(macroObj , 'macroObj')
                 }
             }
         }
         else if (gender == 'female') {
-            if (age != '' && height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' &&
+            if (dob != '' && height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' &&
                 currentWeightUnit != '' && goalWeightUnit != '' && activityLevel != '') {
                 let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age - 161;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
-                    let tdee = calculteCalries * tdeeObj[activityLevel]
+                    // get tdee value
+                    let tdee = calculteCalries * tdeeObj[activityLevel];
+                    //calculate fat
                     let fatCalries = tdee * 0.25;
                     let fat = fatCalries / 9
+                    //calculate protein
                     let proteinCalries = calculteCalries * 0.25;
                     let protein = proteinCalries / 4;
+                    //calculate carbohydrate
                     let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
                     let carbohydrate = carbohydratesCalries / 4;
+                    //convert to string 
+                    let calries = calculteCalries.toString();
+                    let tde = tdee.toString();
+                    let fatVal = fat.toString();
+                    let proteinVal = protein.toString();
+                    let carbohydratesVal = carbohydrate.toString();
+                    //set the state
                     this.setState({
-                        calculteCalries: calculteCalries,
-                        totalDEE: tdee,
-                        fatMass: fat,
-                        proteins: protein,
-                        carbohydrates: carbohydrate
+                        calculteCalries: calries,
+                        totalDEE: tde,
+                        fatMass: fatVal,
+                        proteins: proteinVal,
+                        carbohydrates: carbohydratesVal
                     })
+                    //add properties to object
+                    macroObj.totalDEE = tde;
+                    macroObj.fatMass = fatVal;
+                    macroObj.calculteCalries = calries;
+                    macroObj.proteins = proteinVal;
+                    macroObj.carbohydrates = carbohydratesVal;
+                    console.log(macroObj , 'macroObj')
                 }
             }
         }
+        // let dataUser = await HttpUtils.post('macrodata', addWeight)
+        // console.log(dataUser, 'dataUser')
     }
     getGender(gender) {
         if (gender == 'male') {
@@ -265,8 +368,8 @@ class Macrocalculator extends React.Component {
     render() {
         const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation,
             currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation, male, female,
-            moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates } = this.state;
-
+            moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates, dob, date, } = this.state;
+        // console.log(date, 'date');
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.mainContainer}>
@@ -281,16 +384,39 @@ class Macrocalculator extends React.Component {
                             your daily macro limit </Text>
                         </View>
                         <View style={styles.dateBirth}>
-                            <Text style={styles.textStyle}>Age</Text>
+                            <Text style={styles.textStyle}>Date Of Birth</Text>
                         </View>
                         <View style={styles.inputContainer}>
-                            <TextInput placeholder="Tap to set..." placeholderTextColor="gray" style={styles.inputStyle}
-                                onChangeText={(age) => this.setState({ age: age })} />
+                            {/* <TextInput placeholder="Tap to set..." placeholderTextColor="gray" style={styles.inputStyle}
+                                onChangeText={(age) => this.setState({ age: age })} /> */}
+                            <DatePicker
+                                style={{ width: 200 }}
+                                date={dob} //initial date from state
+                                mode="date" //The enum of date, datetime and time
+                                placeholder="select date"
+                                format="DD-MM-YYYY"
+                                minDate="01-01-1950"
+                                maxDate={date}
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                // customStyles={{
+                                //     dateIcon: {
+                                //         position: 'absolute',
+                                //         left: 0,
+                                //         top: 4,
+                                //         marginLeft: 0
+                                //     },
+                                //     dateInput: {
+                                //         marginLeft: 36
+                                //     }
+                                // }}
+                                onDateChange={(date) => { this.setState({ dob: date }) }}
+                            />
                         </View>
                         {dobValidation ?
                             <View>
                                 <Text>
-                                    Please fill age
+                                    Please fill date of birth
                                 </Text>
                             </View>
                             : null}
