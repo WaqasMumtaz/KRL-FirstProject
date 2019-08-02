@@ -32,6 +32,11 @@ import Wheelspiner from '../Progress Wheel/Progress';
 const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
   //  Login: {screen: Login},
+
+
+
+  // Profile:{screen:Profile},
+  // Login: {screen: Login},
   //  EditProfileScreen:{
   //   screen:EditProfileScreen,
   //   navigationOptions: {
@@ -55,10 +60,10 @@ const MainNavigator= createStackNavigator({
   // Setupscreen1:{screen:Setupscreen1}, 
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen: { screen: LastSetUpScreen },
+  ToastComponent:{screen:ToastComponent},
 
-
-  Macrocalculator: {
-    screen: Macrocalculator,
+  BMICalculator: {
+    screen: BMICalculator,
     navigationOptions: {
       headerStyle: {
         elevation: 0,

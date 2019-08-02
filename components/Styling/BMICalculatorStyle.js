@@ -39,15 +39,14 @@ const styles = StyleSheet.create({
         fontFamily: 'MontserratLight'
     },
     inputMainContainer: {
-        flex: 0.4,
-        flexDirection: 'row',
+        flex: 0.5,
         //backgroundColor:'yellow'
     },
-    leftContainer: {
-        flex: 1,
-        //backgroundColor:'green',
-        marginRight: 10,
-    },
+    // leftContainer: {
+    //     flex: 1,
+    //     //backgroundColor:'green',
+    //     marginRight: 10,
+    // },
     rightContainer: {
         flex: 1,
         //backgroundColor:'blue',
@@ -73,17 +72,17 @@ const styles = StyleSheet.create({
     },
     touchableOpacityTwo: {
         flex: 1,
-        padding: 5,
+        padding: 5, 
         marginVertical: 5,
-        alignItems: 'flex-end',
-        backgroundColor: '#e5e5e5',
-        paddingRight: 10,
-        marginRight: 12,
-        height: 40,
-        borderTopRightRadius: 3,
-        borderBottomRightRadius: 3,
+        alignItems:'flex-end',
+        backgroundColor:'#e5e5e5',
+        paddingRight:10,
+        marginRight:12,
+        height:40 ,
+        borderTopRightRadius:3,
+        borderBottomRightRadius:3,
         //marginLeft:15
-         opacity:0.6
+       // opacity:0.6
     },
     pickerStyle: {
         width: 160,
@@ -134,9 +133,9 @@ const styles = StyleSheet.create({
     },
     bmiInputContainer: {
         flexDirection: 'row',
-        flex: 5,
+        flex: 6,
         //backgroundColor:'white',
-        marginTop: 5
+        //marginTop: 5
     },
     bmiTextStyle: {
         color: '#4f4f4f',
@@ -154,14 +153,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         //marginRight: 20,
         paddingLeft: 16,
-        width: '95%'
+        width: '100%'
 
     },
     container: {
         flex: 1,
         flexDirection: 'row'
-        // width: screenWidth,
-        // height: screenHeight
     },
     forImg: {
         width: 16,
@@ -173,11 +170,12 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 5,
         marginVertical: 5,
-        backgroundColor: 'gray',
-        height: 40,
-        opacity: 0.6
-
-
+        backgroundColor:'#e5e5e5',
+        paddingLeft:10,
+        height:40 ,
+        borderTopLeftRadius:3,
+        borderBottomLeftRadius:3,
+        // opacity:0.6
     },
     textInputContainer: {
         flex: 2,
@@ -193,16 +191,73 @@ const styles = StyleSheet.create({
     //     backgroundColor: 'gray',
 
     // },
-    touchableOpacityTwo: {
-        flex: 1,
-        padding: 5,
-        marginVertical: 5,
-        alignItems: 'flex-end',
-        backgroundColor: 'gray',
-        paddingRight: 5,
-        marginRight: 12,
-        height: 40
+    
+    heightContainer:{
+        // height:70,
+        // backgroundColor:'pink',
+        // borderColor:'black',
+        // borderWidth:3,
+        flexDirection:'row',
+        justifyContent:'space-between',
+        //marginBottom:12
     },
+    inputContainer:{
+        width: '46.5%', 
+        height: 50, 
+        justifyContent: 'center',
+        flexDirection:'row',
+        //justifyContent:'space-between',
+        //backgroundColor:'green' 
+    },
+    textInputContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        flexDirection: 'row',
+        marginVertical: 5,
+        //borderRadius:2
+    },
+
+    showValidationContainer:{
+        flexDirection: 'row',
+        height: 30, 
+        justifyContent: 'space-between' ,
+        //backgroundColor:'blue'
+    },
+    validationInstruction:{
+        fontSize:12,
+        fontFamily:'MontserratLight',
+        color:'#FF6200'
+    },
+    currentWeightContainer:{
+        // height:70,
+          // backgroundColor:'pink',
+          // borderColor:'black',
+          // borderWidth:3,
+          flexDirection:'row',
+          justifyContent:'space-between'
+      },
+      buttonContainer:{
+          flex:5,
+          marginBottom:12,
+          marginTop:12
+      },
+      caloriesBtnStyle:{
+        flex:2,
+        height:40,
+        justifyContent:'center',
+        backgroundColor: '#FF6200',
+        alignItems:'center',
+        borderRadius:5
+      },
+      spinerContainer:{
+        flex: 1,
+        justifyContent: 'center'
+      },
+      horizontal: {
+        flexDirection: 'row',
+        // justifyContent: 'space-around',
+        padding: 10
+      },
 
 })
 

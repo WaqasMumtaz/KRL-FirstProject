@@ -418,7 +418,6 @@ class Macrocalculator extends React.Component {
         const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation,
             currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation, male, female,
             moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates, dob, date, } = this.state;
-
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.mainContainer}>
@@ -629,7 +628,6 @@ class Macrocalculator extends React.Component {
                                     Light Activity
                             </Text>
                             </TouchableOpacity>
-
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
                             <TouchableOpacity style={light ? styles.clickedLightStyle : styles.lightTouchableStyle}
@@ -676,7 +674,6 @@ class Macrocalculator extends React.Component {
                     </View>
                 </View>
             </ScrollView>
-
         )
     }
 

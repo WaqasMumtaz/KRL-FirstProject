@@ -1,5 +1,19 @@
 import React from 'react';
-import { Text, View, ScrollView, Button, Image, Dimensions, TextInput, TouchableOpacity, Picker, StyleSheet } from 'react-native';
+import { 
+    Text, 
+    Alert,
+    View, 
+    ScrollView, 
+    Button, 
+    Image, 
+    Dimensions, 
+    TextInput, 
+    TouchableOpacity, 
+    Picker, 
+    StyleSheet,
+    ActivityIndicator,
+    } from 'react-native';
+import Toast, {DURATION} from 'react-native-easy-toast'
 import styles from '../Styling/BMICalculatorStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import InputImgsScreen from '../screens/InputImgs';
@@ -27,7 +41,14 @@ class BMICalculator extends React.Component {
             date: '',
             time: '',
             mgs: false,
-            hitApi: false
+            hitApi: false,
+            heightValidation:false,
+            heightUnitValidation:false,
+            weightValidation:false,
+            weightUnitValidation:false,
+            isLoading:false,
+            position: 'top',
+            style:{},
         }
     }
     componentDidMount() {
@@ -98,8 +119,20 @@ class BMICalculator extends React.Component {
     }
 
     //calculate the BMI
+    toastFunction=(text , position , duration ,withStyle )=>{
+        this.setState({
+            position: position,
+        })
+        if(withStyle){
+            this.refs.toastWithStyle.show(text, duration);
+        }else {
+            this.refs.toast.show(text, duration);
+        }
+    }
+
     calculateBmi = async () => {
         const { height, weight, heightUnit, weightUnit, userId, date, time, hitApi } = this.state;
+        this.setState({isLoading:true})
         let bmiData = {};
         let bmiValue;
         bmiData.height = height
@@ -109,7 +142,28 @@ class BMICalculator extends React.Component {
         bmiData.userId = userId;
         bmiData.date = date;
         bmiData.time = time;
-        if (heightUnit == 'inches' && weightUnit == 'pound') {
+        if(height == 0){
+            this.setState({
+                heightValidation:true
+            })
+        }
+        if(heightUnit == 0){
+            this.setState({
+             heightUnitValidation:true   
+            })
+        }
+        if(weight == 0){
+          this.setState({
+              weightValidation:true
+          })
+        }
+        if(weightUnit == 0){
+        this.setState({
+            weightUnitValidation:true
+        })
+        }
+        
+       else if (heightUnit == 'inches' && weightUnit == 'pound') {
             bmiValue = (weight / height / height) * 703
             let bmiVal = bmiValue.toString();
             bmiData.bmi = bmiVal;
@@ -119,8 +173,19 @@ class BMICalculator extends React.Component {
                 hitApi: true
             })
             let dataUser = await HttpUtils.post('bmilogs', bmiData)
-            console.log(dataUser, 'dataUser')
+            console.log(dataUser, 'dataUser');
+            let userCode = dataUser.code;
+            let userMsg = dataUser.msg;
+            if(userCode){
+               this.setState({
+                   isLoading:false
+               }, ()=>{
+                  this.toastFunction(userMsg,this.state.position , DURATION.LENGTH_LONG,true)
+               })
+               
+            }
         }
+        
         else if (heightUnit == 'centimeter' && weightUnit == 'kg') {
             bmiValue = (weight / height / height) * 10000
             let bmiVal = bmiValue.toString();
@@ -131,7 +196,17 @@ class BMICalculator extends React.Component {
                 hitApi: true
             })
             let dataUser = await HttpUtils.post('bmilogs', bmiData)
-            console.log(dataUser, 'dataUser')
+            console.log(dataUser, 'dataUser');
+            let userCode = dataUser.code;
+            let userMsg = dataUser.msg;
+            if(userCode){
+               this.setState({
+                   isLoading:false
+               }, ()=>{
+                this.toastFunction(userMsg,this.state.position , DURATION.LENGTH_LONG,true)
+               })
+               
+            }
         }
         else if (heightUnit == 'inches' && weightUnit == 'kg') {
             this.setState({
@@ -149,6 +224,7 @@ class BMICalculator extends React.Component {
                 hitApi: false
             })
         }
+
         // console.log(hitApi , 'hitApi')
         // if (hitApi) {
         //     let dataUser = await HttpUtils.post('bmilogs', bmiData)
@@ -156,7 +232,15 @@ class BMICalculator extends React.Component {
         // }
     }
     render() {
-        const { showMgs, mgs } = this.state;
+        const { 
+            showMgs, 
+            mgs,
+            heightValidation,
+            heightUnitValidation,
+            weightValidation,
+            weightUnitValidation,
+            isLoading 
+           } = this.state;
         return (
             // <View style={styles.mainContainer}>
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -170,71 +254,30 @@ class BMICalculator extends React.Component {
                         <Text style={styles.textStyle}>Enter your height and weight below to calculate your BMI </Text>
                     </View>
                     <View style={styles.inputMainContainer}>
-                        <View style={styles.leftContainer}>
-                            <View style={styles.container}>
-                                <Text style={styles.textStyle}>Height</Text>
-                                {/* <InputImgsScreen
-                                    iconMinus={require('../icons/minus-gray.png')}
-                                    iconPlus={require('../icons/plus-gray.png')}
-                                    touchableOpacityOne={styles.touchableOpacityOne}
-                                    style={styles.textInputStyleParent}
-                                    touchableOpacityTwo={styles.touchableOpacityTwo}
-                                    getHeightWeight={this.getHeightWeight.bind(this, 'height')}
-                                    increamentValue={this.increamentValue.bind(this, 'height')}
-                                    decreamentValue={this.decreamentValue.bind(this, 'height')}
-                                    // height={height}
-                                // increamentValue = {this.increamentValue}
-                                // decreamentValue = {this.decreamentValue}
-                                /> */}
-                                <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
-                                    onPress={this.decrementHeight}
-                                >
-                                    <Image source={require('../icons/minus.png')} style={styles.forImg} />
-                                </TouchableOpacity>
-                                <View style={styles.textInputContainer}>
-                                    <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
-                                        type="number"
-                                        onChangeText={(height) => this.setState({ height: height })}
-                                        value={this.state.height}
-                                    />
-                                </View>
-                                <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
-                                    onPress={this.increamentHeight}>
-                                    <Image source={require('../icons/plus.png')} style={styles.forImg} />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.container}>
-                                <Text style={styles.textStyle}>Weight</Text>
-                                {/* <InputImgsScreen
-                                    iconMinus={require('../icons/minus-gray.png')}
-                                    iconPlus={require('../icons/plus-gray.png')}
-                                    touchableOpacityOne={styles.touchableOpacityOne}
-                                    style={styles.textInputStyleParent}
-                                    touchableOpacityTwo={styles.touchableOpacityTwo}
-                                    getHeightWeight={this.getHeightWeight.bind(this, 'weight')}
-                                    increamentValue={this.increamentValue.bind(this, 'weight')}
-                                    decreamentValue={this.decreamentValue.bind(this, 'weight')}
-                                /> */}
-                                <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
-                                    onPress={this.decrementWeight}>
-                                    <Image source={require('../icons/minus.png')} style={styles.forImg} />
-                                </TouchableOpacity>
-                                <View style={styles.textInputContainer}>
-                                    <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
-                                        type="number"
-                                        onChangeText={(weight) => this.setState({ weight: weight })}
-                                        value={this.state.weight}
-                                    />
-                                </View>
-                                <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
-                                    onPress={this.increamentWeight}>
-                                    <Image source={require('../icons/plus.png')} style={styles.forImg} />
-                                </TouchableOpacity>
+                    <Text style={styles.textStyle}>Height</Text>
+                    <View style={styles.heightContainer}>
+                        <View style={styles.inputContainer}>
+                           <View style={styles.container}>
+                           <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                       onPress={this.decrementHeight}
+                                        >
+                                        <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                    <View style={styles.textInputContainer}>
+                                        <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                            type="number"
+                                            onChangeText={(height) => this.setState({ height: height })}
+                                            value={this.state.height}
+                                        />
+                                    </View>
+                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                        onPress={this.increamentHeight}>
+                                        
+                                        <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={styles.rightContainer}>
-                            <Text style={styles.nuitTextStyleOne}>Unit</Text>
-                            <View style={styles.pickerContainerOne}>
+                        <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
                                 <Picker selectedValue={this.state.heightUnit}
                                     onValueChange={this.updateHeight}
                                     style={styles.pickerStyle}>
@@ -243,9 +286,43 @@ class BMICalculator extends React.Component {
                                     <Picker.Item label="Centimeter" value="centimeter" />
                                 </Picker>
                             </View>
-                            <Text style={styles.nuitTextStyleTwo}>Unit</Text>
-                            <View style={styles.pickerContainerTwo}>
-                                <Picker selectedValue={this.state.weightUnit}
+                    </View>
+                    <View style={styles.showValidationContainer}>
+                            {heightValidation ?
+                                <Text style={styles.validationInstruction}>
+                                    Please fill your height
+                                    </Text>
+
+                                : null}
+                            {heightUnitValidation ?
+                                <Text style={styles.validationInstruction}>
+                                    Please select height unit
+                                    </Text>
+                                : null}
+                        </View>
+                        <Text style={styles.textStyle}>Weight</Text>
+                        <View style={styles.currentWeightContainer}>
+                            <View style={styles.inputContainer}>
+                                <View style={styles.container}>
+                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                        onPress={this.decrementWeight}>
+                                        <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                    <View style={styles.textInputContainer}>
+                                        <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                            type="number"
+                                            onChangeText={(weight) => this.setState({ weight: weight })}
+                                            value={this.state.weight}
+                                        />
+                                    </View>
+                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                        onPress={this.increamentWeight}>
+                                        <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
+                            <Picker selectedValue={this.state.weightUnit}
                                     onValueChange={this.updateWeight}
                                     style={styles.pickerStyle}>
                                     <Picker.Item label='Select an option...' value='0' />
@@ -254,13 +331,33 @@ class BMICalculator extends React.Component {
                                 </Picker>
                             </View>
                         </View>
-                    </View>
-                    <View>
-                        {mgs ?
-                            <Text>
+                        <View style={styles.showValidationContainer}>
+                        {weightValidation ?
+                                    <Text style={styles.validationInstruction}>
+                                        Please fill your weight
+                                    </Text>
+                                : null}
+                                {weightUnitValidation ?
+                                <Text style={styles.validationInstruction}>
+                                        Please select weight unit
+                                    </Text>
+                                : null}
+                                {mgs ?
+                            <Text style={styles.validationInstruction}>
                                 {showMgs}
                             </Text>
                             : null}
+                        </View>
+
+
+                        
+                    </View>
+                    <View>
+                        {/* {mgs ?
+                            <Text>
+                                {showMgs}
+                            </Text>
+                            : null} */}
                     </View>
                     <Text style={styles.bmiTextStyle}>BMI</Text>
                     <View style={styles.bmiInputContainer}>
@@ -270,8 +367,23 @@ class BMICalculator extends React.Component {
                             value={this.state.bmi}
                         />
                     </View>
-                    <Button title='Calculate' onPress={this.calculateBmi}>
-                    </Button>
+                    {isLoading ? <View style={[styles.spinerContainer, styles.horizontal]}>
+                                 <ActivityIndicator size='large' color="#FF6200" />
+                            </View>: null}
+                    <View style={styles.buttonContainer}>
+                    <CaloriesSetupBtn title="Set Up & Use App"
+                            onPress={this.calculateBmi}
+                            caloriesBtnStyle={styles.caloriesBtnStyle} />
+                    </View>
+                    <Toast ref="toastWithStyle" 
+                    style={{backgroundColor:'#FF6200'}} 
+                    position={this.state.position}
+                    positionValue={50}
+                    fadeInDuration={750}
+                    fadeOutDuration={1000}
+                    opacity={0.8}
+                    textStyle={{color:'white',fontFamily: 'MontserratLight',}}
+                    />
                 </View>
             </ScrollView>
         )
@@ -282,51 +394,3 @@ class BMICalculator extends React.Component {
 export default BMICalculator;
 
 
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         flexDirection: 'row'
-//         // width: screenWidth,
-//         // height: screenHeight
-//     },
-//     forImg: {
-//         width: 16,
-//         height: 16,
-//         marginVertical: 5
-
-//     },
-//     touchableOpacityOne: {
-//         flex: 1,
-//         padding: 5,
-//         marginVertical: 5,
-//         backgroundColor: 'gray',
-//         height: 40,
-//         opacity: 0.6
-
-
-//     },
-//     textInputContainer: {
-//         flex: 2,
-//         justifyContent: 'center',
-//         flexDirection: 'row',
-//         marginVertical: 5,
-//         //borderRadius:2
-//     },
-//     // textInputStyle:{
-//     //     flex:1,
-//     //     height: 40,
-//     //     textAlign: 'center', 
-//     //     backgroundColor: 'gray',
-
-//     // },
-//     touchableOpacityTwo: {
-//         flex: 1,
-//         padding: 5,
-//         marginVertical: 5,
-//         alignItems: 'flex-end',
-//         backgroundColor: 'gray',
-//         paddingRight: 5,
-//         marginRight: 12,
-//         height: 40
-//     },
-// })
