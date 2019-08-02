@@ -60,17 +60,17 @@ const MainNavigator= createStackNavigator({
   // Setupscreen1:{screen:Setupscreen1}, 
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen: { screen: LastSetUpScreen },
-  ToastComponent:{screen:ToastComponent},
+  // ToastComponent:{screen:ToastComponent},
 
-  BMICalculator: {
-    screen: BMICalculator,
-    navigationOptions: {
-      headerStyle: {
-        elevation: 0,
-      }
+  // BMICalculator: {
+  //   screen: BMICalculator,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
 
-    }
-  },
+  //   }
+  // },
 
 
   // Setupscreen:{screen:Setupscreen},

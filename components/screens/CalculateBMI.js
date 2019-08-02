@@ -13,7 +13,7 @@ import {
     StyleSheet,
     ActivityIndicator,
     } from 'react-native';
-import Toast, {DURATION} from 'react-native-easy-toast'
+// import Toast, {DURATION} from 'react-native-easy-toast'
 import styles from '../Styling/BMICalculatorStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import InputImgsScreen from '../screens/InputImgs';
