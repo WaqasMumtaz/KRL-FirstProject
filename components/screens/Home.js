@@ -8,32 +8,61 @@ const { height } = Dimensions.get('window');
 class Homescreen extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   dateOfExcercise: '',
-    //   data: ''
-    // }
+    this.state = {
+      todayData: '',
+      yestertdayData: ''
+    }
 
   }
   async componentWillMount() {
+    // let obj = {
+    //   date: "2-08-2019",
+    //   dayOfMonth: "2",
+    //   exerciseAmount: "3",
+    //   exerciseName: "Push ups",
+    //   exerciseUnit: "hours",
+    //   month: "08",
+    //   time: "17:0:59",
+    //   year: "2019"
+    // }
+    // this.setState({
+    //   todayData: obj
+    // })
     let dataUser = await HttpUtils.get('getallexerciselog');
-    let data = dataUser.content
-    let dateOfExcercise = [];
-    for (var i in data) {
-      let dates = data[i].date;
-      // let month = new Date(dates).getDate();
-
-      console.log(dates.getDate(), 'data')
-      // console.log(month, 'month')
-      break;
+    let data = dataUser.content;
+    const currentDate = new Date().getDate();
+    let currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+    if (currentMonth == 1 || currentMonth == 2 || currentMonth == 3 || currentMonth == 4 || currentMonth == 5 || currentMonth == 6 || currentMonth == 7 || currentMonth == 8 || currentMonth == 9) {
+      currentMonth = `0${currentMonth}`
     }
-    // console.log(dataUser, 'dataUser from log get ')
+    for (var i in data) {
+      let dataApi = data[i];
+      let currMonth = Number(currentMonth)
+      let checkDate = Number(dataApi.dayOfMonth) - currentDate;
+      let checkMonth = Number(dataApi.month) - currMonth;
+      let checkYear = Number(dataApi.year) - currentYear;
+      if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
+        this.setState({
+          todayData: dataApi
+        })
+      }
+      else if (checkDate == -1 && checkMonth == 0 && checkYear == 0) {
+        this.setState({
+          yestertdayData: dataApi
+        })
+      }
+    }
+  }
+  changeRout = () => {
+    const { navigate } = this.props.navigation;
+    navigate('Exerciselog')
   }
 
   render() {
+    const { todayData, yestertdayData } = this.state;
     const { navigate } = this.props.navigation;
-
     return (
-
       <View style={styles.container}>
         <View style={styles.headingContainer}>
           <Text style={styles.textStyleOne}>GetFit</Text>
@@ -73,13 +102,18 @@ class Homescreen extends React.Component {
                   <Image source={require('../icons/forward-arrow.png')} style={styles.arrowIcon} />
                 </View>
               </View>
-
-              <TouchableOpacity style={styles.cardFour} activeOpacity={0.7}>
-                <Text style={styles.cardFourTextStyle}>Today's{'\n'}exercise</Text>
-                <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', marginTop: 20, marginLeft: 14 }}>High paced jogging{'\n'}exercise</Text>
+              <TouchableOpacity style={styles.cardFour} activeOpacity={0.7}
+                onPress={this.changeRout}
+              >
+                <Text style={styles.cardFourTextStyle}>{todayData != '' ? `Today's ${'\n'} exercise` : `Yesterday's${'\n'} exercise`}</Text>
+                <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', marginTop: 20, marginLeft: 14 }}>{todayData != '' ? `${todayData.exerciseName} ${'\n'}exercise` : yestertdayData != '' ? `${yestertdayData.exerciseName} ${'\n'}exercise` : 'No Record Found'}</Text>
                 <View style={{ borderBottomColor: '#a6a6a6', borderBottomWidth: 1, marginHorizontal: 14, marginTop: 20 }}></View>
-                <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight', marginLeft: 14, marginTop: 10 }}>35</Text>
-                <Text style={{ color: '#a6a6a6', marginLeft: 14, fontFamily: 'MontserratLight' }}>minuts</Text>
+                <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight', marginLeft: 14, marginTop: 10 }}>
+                  {todayData != '' ? todayData.exerciseAmount : yestertdayData != '' ? yestertdayData.exerciseAmount : 'No Record Found'}
+                </Text>
+                <Text style={{ color: '#a6a6a6', marginLeft: 14, fontFamily: 'MontserratLight' }}>
+                  {todayData != '' ? todayData.exerciseUnit : yestertdayData != '' ? yestertdayData.exerciseUnit : 'No Record Found'}
+                </Text>
                 <Text style={{ color: '#FFFFFF', fontFamily: 'MontserratLight', fontSize: 12, marginTop: 20, marginLeft: 14 }}>View detailed report</Text>
                 <Image source={require('../icons/forward-arrow.png')} style={styles.lastArrow} />
               </TouchableOpacity>
