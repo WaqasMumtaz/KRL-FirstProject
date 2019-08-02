@@ -1,11 +1,9 @@
 import React from 'react';
 import {
   Alert,
-  StyleSheet,
   Text,
   View,
   ScrollView,
-  Button,
   TextInput,
   Dimensions,
   TouchableOpacity,
@@ -13,15 +11,10 @@ import {
 } from 'react-native';
 import { Image } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-//import Resetpassword from './ResetPasswrd';
-//import SkipButton from '../buttons/buttons';
-//import TextInputs from '../textInputs/TextInputs'
 import styles from '../Styling/LoginScreenStyle';
 import HttpUtilsFile from '../Services/HttpUtils';
 import firebase from '../../Config/Firebase';
 import 'firebase/firestore';
-//console.log(HttpUtilsFile);
-// const db = firebase.firestore();
 const db = firebase.database();
 
 const { height } = Dimensions.get('window');
@@ -79,22 +72,6 @@ class Login extends React.Component {
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
           db.ref(`users/`).push(dataUser)
           navigate('BottomTabe')
-
-          // navigate('Setupscreen1')
-
-          // db.collection('users').add({
-          //   dataUser
-          // }).then(() => {
-          //   this.setState({ isLoading: false })
-          //   alert("Successfully Login!");
-          //   navigate('BottomTabe')
-          // })
-          //   .catch(() => {
-          //     this.setState({ isLoading: false })
-          //     alert('Something went wrong!')
-          //     console.error("Error writing document: ", error);
-          //   });
-
         }
         else if (userWrong == false) {
           this.setState({
@@ -124,7 +101,6 @@ class Login extends React.Component {
 
   checkValidateFunc = (text, type) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
     if (type === 'email') {
       if (reg.test(text)) {
         this.setState({
@@ -161,29 +137,10 @@ class Login extends React.Component {
 
     })
   }
-
-  // componentWillMount(){
-  //   const  config ={  
-  //     apiKey: "AIzaSyCrtuXYX_EYef2zSbdKnbKMROkH65pFrX4",
-  //     authDomain: "getfit-application.firebaseapp.com",
-  //     databaseURL: "https://getfit-application.firebaseio.com",
-  //     projectId: "getfit-application",
-  //     storageBucket: "getfit-application-react-native-appspot.com",
-  //     messagingSenderId: "253025208867",
-  //     appId: "1:253025208867:web:bd3b867d48f7fe6e"
-
-  // }
-  // firebase.initializeApp(config)
-  // }
-
-
-
   render() {
     const { navigate } = this.props.navigation;
     const { email, password, psswrdInstruction, isLoading, passwordNotMatch, psswrdNotMatchShow } = this.state;
-
     return (
-
       <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
         <View style={styles.loginTextContainer}>
           <Text style={styles.textLogin}>
@@ -242,7 +199,7 @@ class Login extends React.Component {
         {psswrdInstruction && <View style={styles.passwrdInstructionContainer}>
           <Text style={styles.instructionStyle}>
             Password strength is required maximum 9 and greater then 4
-                         </Text>
+            </Text>
         </View>}
         <View style={{ flex: 1 }}></View>
         <View style={{ flexDirection: 'row' }}>
@@ -262,12 +219,9 @@ class Login extends React.Component {
         <View style={styles.btnContainer}>
           <Text style={styles.accountText}>Don't have account?</Text>
           <TouchableOpacity onPress={() => { navigate('Signup') }}><Text style={styles.registerText}>Register here.</Text></TouchableOpacity>
-          {/* <SkipButton gotToSetUpScreen={navigate} /> */}
         </View>
         <View style={{ flex: 3 }}></View>
       </ScrollView>
-
-
     );
   }
 }

@@ -2,9 +2,8 @@ import React from 'react';
 import { Alert, StyleSheet, Text, View, ScrollView, Button, TextInput, Dimensions, TouchableOpacity } from 'react-native';
 import styles from '../Styling/LastScreenStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn'
-
+import HttpUtils from '../Services/HttpUtils';
 const { height } = Dimensions.get('window');
-
 
 class LastSetUpScreen extends React.Component {
     static navigationOptions = {
@@ -69,53 +68,110 @@ class LastSetUpScreen extends React.Component {
             })
         }
     }
-    calulateMacro = () => {
-        const { tdeeObj } = this.state;
-        const { navigate } = this.props.navigation;
-        const year = new Date().getFullYear(); //Current Year
+    calulateMacro = async () => {
+        const { tdeeObj, activityLevel } = this.state;
+        const { dob, gender, date, time, userId, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit } = this.props.navigation.state.params;
+        let age;
+        let macroObj = {
+            dob: dob,
+            gender: gender,
+            height: height,
+            heightUnit: heightUnit,
+            currentWeight: currentWeight,
+            currentWeightUnit: currentWeightUnit,
+            goalWeight: goalWeight,
+            goalWeightUnit: goalWeightUnit,
+            activityLevel: activityLevel,
+            date: date,
+            time: time,
+            userId: userId
+        };
+        let year = new Date().getFullYear(); //Current Year
         let ageyear = new Date(this.props.navigation.state.params.dob).getFullYear();
-        let age = ageyear - year;
+        age = year - ageyear;
         if (gender == 'male') {
             let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age + 5;
+            // get tdee value
             let tdee = calculteCalries * tdeeObj[activityLevel]
+            //calculate fat
             let fatCalries = tdee * 0.25;
             let fat = fatCalries / 9
+            //calculate protein
             let proteinCalries = calculteCalries * 0.25;
             let protein = proteinCalries / 4;
+            //calculate carbohydrate
             let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
             let carbohydrate = carbohydratesCalries / 4;
+            //convert to string 
+            let calries = calculteCalries.toString();
+            let tde = tdee.toString();
+            let fatVal = fat.toString();
+            let proteinVal = protein.toString();
+            let carbohydratesVal = carbohydrate.toString();
+            //set the state
             this.setState({
-                calculteCalries: calculteCalries,
-                totalDEE: tdee,
-                fatMass: fat,
-                proteins: protein,
-                carbohydrates: carbohydrate
+                calculteCalries: calries,
+                totalDEE: tde,
+                fatMass: fatVal,
+                proteins: proteinVal,
+                carbohydrates: carbohydratesVal
             })
-            navigate('BottomTabe')
+            //add properties to object
+            macroObj.age = age;
+            macroObj.totalDEE = tde;
+            macroObj.fatMass = fatVal;
+            macroObj.calculteCalries = calries;
+            macroObj.proteins = proteinVal;
+            macroObj.carbohydrates = carbohydratesVal;
+            let dataUser = await HttpUtils.post('macrodata', macroObj)
+            console.log(dataUser, 'dataUser')
+            this.props.navigation.navigate('BottomTabe')
+
 
         }
         else if (gender == 'female') {
             let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age - 161;
-            let tdee = calculteCalries * tdeeObj[activityLevel]
+            // get tdee value
+            let tdee = calculteCalries * tdeeObj[activityLevel];
+            //calculate fat
             let fatCalries = tdee * 0.25;
-            let fat = fatCalries / 9;
+            let fat = fatCalries / 9
+            //calculate protein
             let proteinCalries = calculteCalries * 0.25;
             let protein = proteinCalries / 4;
+            //calculate carbohydrate
             let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
             let carbohydrate = carbohydratesCalries / 4;
+            //convert to string 
+            let calries = calculteCalries.toString();
+            let tde = tdee.toString();
+            let fatVal = fat.toString();
+            let proteinVal = protein.toString();
+            let carbohydratesVal = carbohydrate.toString();
+            //set the state
             this.setState({
-                calculteCalries: calculteCalries,
-                totalDEE: tdee,
-                fatMass: fat,
-                proteins: protein,
-                carbohydrates: carbohydrate
+                calculteCalries: calries,
+                totalDEE: tde,
+                fatMass: fatVal,
+                proteins: proteinVal,
+                carbohydrates: carbohydratesVal
             })
-            navigate('BottomTabe')
+            //add properties to object
+            macroObj.age = age;
+            macroObj.totalDEE = tde;
+            macroObj.fatMass = fatVal;
+            macroObj.calculteCalries = calries;
+            macroObj.proteins = proteinVal;
+            macroObj.carbohydrates = carbohydratesVal;
+            let dataUser = await HttpUtils.post('macrodata', macroObj)
+            console.log(dataUser, 'dataUser')
+            this.props.navigation.navigate('BottomTabe')
         }
     }
+
     render() {
-        console.log(this.props.navigation.state.params, 'props wit navigate')
-        const { activityLevelValidation, sedentary, lightActivity, active, veryActive } = this.state;
+        const { activityLevelValidation, sedentary, lightActivity, active, veryActive,
+            calculteCalries, fatMass, proteins, carbohydrates } = this.state;
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
                 <View style={styles.container}>
@@ -127,48 +183,35 @@ class LastSetUpScreen extends React.Component {
                     </View>
                     <Text style={styles.paraStyle}>Activity Level</Text>
                     <View style={styles.activityContainer}>
-                    {/* <TouchableOpacity style={styles.touchOpacityStyle } */}
-                         <TouchableOpacity style={sedentary ? styles.sedetaryContainer : styles.touchOpacityStyle}
-                         onPress={this.activityLevel.bind(this, 'sedentary')}>
+                        <TouchableOpacity style={sedentary ? styles.sedetaryContainer : styles.touchOpacityStyle}
+                            onPress={this.activityLevel.bind(this, 'sedentary')}>
                             <Text style={styles.headerTextStyle}>Sedentary</Text>
                             <Text style={styles.textStyle}>Desk job very little activity.</Text>
                         </TouchableOpacity>
-
-                        
                         <TouchableOpacity style={lightActivity ? styles.moderateContainer : styles.touchOpacityStyle}
-                        onPress={this.activityLevel.bind(this, 'lightActivity')}
+                            onPress={this.activityLevel.bind(this, 'lightActivity')}
                         >
-                        {/* <TouchableOpacity style={lightActivity ? styles.touchOpacityStyle : styles.moderateContainer} > */}
-
-                        {/* <TouchableOpacity style={lightActivity ? styles.touchOpacityStyle : styles.moderateContainer} onPress={this.activityLevel.bind(this, 'lightActivity')}> */}
-
                             <Text style={styles.headerTextStyle}>Light Activity</Text>
                             <Text style={styles.textStyle}>Some Standing and moving.</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.scndActivity}>
-                    <TouchableOpacity style={active ? styles.lightTouchableStyle : styles.touchOpacityStyle}
-                    onPress={this.activityLevel.bind(this, 'active')}
-                    >
-                        {/* <TouchableOpacity style={active ? styles.touchOpacityStyle : styles.lightTouchableStyle} > */}
+                        <TouchableOpacity style={active ? styles.lightTouchableStyle : styles.touchOpacityStyle}
+                            onPress={this.activityLevel.bind(this, 'active')}
+                        >
                             <Text style={styles.headerTextStyle}>Active</Text>
                             <Text style={styles.textStyle}>Mostly standing and moving.</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={veryActive ? styles.extremTouchableStyle : styles.touchOpacityStyle}
-                        onPress={this.activityLevel.bind(this, 'veryActive')}
+                            onPress={this.activityLevel.bind(this, 'veryActive')}
                         >
-                        {/* <TouchableOpacity style={veryActive ? styles.touchOpacityStyle : styles.extremTouchableStyle} > */}
-
-                        {/* <TouchableOpacity style={veryActive ? styles.touchOpacityStyle : styles.extremTouchableStyle} 
-                        onPress={this.activityLevel.bind(this, 'veryActive')}> */}
-
                             <Text style={styles.headerTextStyle}>Very Active</Text>
                             <Text style={styles.textStyle}>Heavy moving and lifting heavy stuff.</Text>
                         </TouchableOpacity>
                     </View>
                     {activityLevelValidation ?
-                        <View style={{marginBottom:10,alignItems:'center'}}>
+                        <View style={{ marginBottom: 10, alignItems: 'center' }}>
                             <Text style={styles.validationInstruction}>
                                 Please select activity level
                             </Text>
@@ -176,10 +219,10 @@ class LastSetUpScreen extends React.Component {
                         : null}
                     <Text style={styles.paraStyle}>Your Daily Macros*</Text>
                     <View style={styles.macrosContainer}>
-                        <TextInput placeholder="1640 Kcal calories" placeholderTextColor='black' style={styles.textInputOne} underlineColorAndroid='black' />
-                        <TextInput placeholder="159 g Carbohyderates " placeholderTextColor='black' style={styles.textInputTwo} underlineColorAndroid='black' />
-                        <TextInput placeholder="107 g Proteins" placeholderTextColor='black' style={styles.textInputThree} />
-                        <TextInput placeholder="51 g Fat " placeholderTextColor='black' style={styles.textInputFour} />
+                        <TextInput placeholder="1640 Kcal calories" placeholderTextColor='black' style={styles.textInputOne}  value={calculteCalries + 'Kcal calories'} />
+                        <TextInput placeholder="159 g Carbohyderates " placeholderTextColor='black' style={styles.textInputTwo}  value={fatMass + 'g Carbohyderates'} />
+                        <TextInput placeholder="107 g Proteins" placeholderTextColor='black' style={styles.textInputThree} value={proteins + 'g Proteins'} />
+                        <TextInput placeholder="51 g Fat " placeholderTextColor='black' style={styles.textInputFour} value={carbohydrates + 'g Fat'} />
                     </View>
                     <Text style={styles.paraStyle}>*This is the daily calories limit as calculated by the app using the above information . If
                         your coach has set another limit for you , please enter it above.
@@ -187,10 +230,8 @@ class LastSetUpScreen extends React.Component {
                     <View style={styles.btnContainer}>
                         <CaloriesSetupBtn title="Set Up & Use App"
                             onPress={this.calulateMacro}
-                            // onPress={() => navigate('BottomTabe')}
                             caloriesBtnStyle={styles.caloriesBtnStyle} />
                     </View>
-
                 </View>
             </ScrollView>
         )

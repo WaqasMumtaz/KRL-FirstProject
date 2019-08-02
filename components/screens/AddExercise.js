@@ -41,6 +41,9 @@ class AddExercise extends React.Component {
             exerciseName: '',
             exerciseAmount: '',
             exerciseUnit: '',
+            dayOfMonth:'',
+            month:'',
+            year:'',
             date: '',
             time: '',
             exerciseArr: ['Brisk Walk', 'High paced jogging', 'Push ups', 'Bicep curls', 'Side Crunch', 'Reverse Crunches',
@@ -63,6 +66,9 @@ class AddExercise extends React.Component {
                 this.setState({
                     date: date + '-' + month + '-' + year,
                     time: hours + ':' + min + ':' + sec,
+                    dayOfMonth:date,
+                    month:month,
+                    year:year,
                     userId: dataFromLocalStorage._id
                 })
             }
@@ -99,7 +105,7 @@ class AddExercise extends React.Component {
     }
 
     addExercise = async () => {
-        const { exerciseName, exerciseAmount, exerciseUnit, date, time, userId } = this.state;
+        const { exerciseName, exerciseAmount, exerciseUnit, date, time, userId , dayOfMonth , month , year } = this.state;
         let excersiceObj = {};
         if (exerciseName != '' && exerciseAmount != '' && exerciseUnit != '') {
             excersiceObj.exerciseName = exerciseName;
@@ -107,7 +113,10 @@ class AddExercise extends React.Component {
             excersiceObj.exerciseUnit = exerciseUnit;
             excersiceObj.date = date;
             excersiceObj.time = time;
-            excersiceObj.userId = userId;
+            excersiceObj.dayOfMonth = dayOfMonth;
+            excersiceObj.month = month;
+            excersiceObj.year = year;
+
             let dataUser = await HttpUtils.post('postexerciselog', excersiceObj)
             console.log(dataUser, 'dataUser')
             this.props.navigation.navigate('Exerciselog')

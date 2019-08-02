@@ -6,10 +6,10 @@ import Resetpassword from '../screens/ResetPasswrd';
 import Login from '../screens/Login';
 import Signup from '../screens/SignUp';
 //import TextInputs from '../textInputs/TextInputs';
-import Setupscreen from '../screens/SetUpScreen';
 //import PickerInput from '../../Picker/PickerInput';
 import BottomTabe from '../navigation/tabNav';
 import Setupscreen1 from '../screens/SetUpScreen1';
+import Setupscreen from '../screens/SetUpScreen';
 import LastSetUpScreen from '../screens/SetUpLastScreen';
 import AddExercise from '../screens/AddExercise';
 import BriskScreen from '../screens/BriskScreen';
@@ -28,11 +28,19 @@ import Wheelspiner from '../Progress Wheel/Progress';
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
 // import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
+
 import ToastComponent from '../Toasts/nativeToast';
 import OverlayLoader from '../Loader/OverlaySpinner'
 
 
+
+
 const MainNavigator= createStackNavigator({
+  // Profile:{screen:Profile},
+  //  Login: {screen: Login},
+
+
+
   // Profile:{screen:Profile},
   // Login: {screen: Login},
 
@@ -90,7 +98,20 @@ const MainNavigator= createStackNavigator({
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen: { screen: LastSetUpScreen },
   // ToastComponent:{screen:ToastComponent},
+
   //OverlayLoader:{screen:OverlayLoader},
+
+
+  // BMICalculator: {
+  //   screen: BMICalculator,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
+
+  //   }
+  // },
+
 
   
 

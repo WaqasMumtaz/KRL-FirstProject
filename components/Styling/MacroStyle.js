@@ -244,7 +244,6 @@ const styles =StyleSheet.create({
         width: '43%', 
         justifyContent: 'center', 
         backgroundColor: '#FF6200', 
-        marginTop: 10, 
         borderRadius: 3 
     },
     clickedMale:{

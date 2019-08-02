@@ -1,17 +1,12 @@
 import React from 'react';
-import { Alert, Text, View, Button, TextInput, Picker, Dimensions, TouchableOpacity, ScrollView, Image } from 'react-native';
-import InputImgsScreen from './InputImgs';
-import TextInputs from '../textInputs/TextInputs';
+import {Text, View, TextInput, Picker, Dimensions, TouchableOpacity, ScrollView, Image } from 'react-native';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
-//import PickerInput from '../../Picker/PickerInput';
 import styles from '../Styling/SetUpScreenStyle';
-
 const screenWidth = Dimensions.get('window').width;
 const { height } = Dimensions.get('window');
 
 class Setupscreen extends React.Component {
     static navigationOptions = () => ({
-
         headerStyle: {
             backgroundColor: 'black'
         },
@@ -19,7 +14,6 @@ class Setupscreen extends React.Component {
     })
     constructor(props) {
         super(props);
-
         this.state = {
             screenHeight: 0,
             user: '',
@@ -106,10 +100,15 @@ class Setupscreen extends React.Component {
     }
     lastStep = () => {
         const { height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit } = this.state
-
+        const { dob, gender, date, time, userId } = this.props.navigation.state.params;
         if (height == '') {
             this.setState({
                 heightValidation: true
+            })
+        }
+        else {
+            this.setState({
+                heightValidation: false
             })
         }
         if (currentWeight == '') {
@@ -117,68 +116,71 @@ class Setupscreen extends React.Component {
                 currentWeightValidation: true
             })
         }
+        else {
+            this.setState({
+                currentWeightValidation: false
+            })
+        }
         if (goalWeight == '') {
             this.setState({
                 goalWeightValidation: true
             })
         }
-        if (heightUnit == 0) {
+        else {
+            this.setState({
+                goalWeightValidation: false
+            })
+        }
+        if (heightUnit == '' || heightUnit == '0') {
             this.setState({
                 heightUnitValidation: true
             })
         }
-        if (heightUnit == 1) {
+        else {
             this.setState({
                 heightUnitValidation: false
             })
         }
-        if (currentWeightUnit == 0) {
+        if (currentWeightUnit == '' || currentWeightUnit == '0') {
             this.setState({
                 currentWeightUnitValidation: true
             })
         }
-        if (currentWeightUnit == 1) {
+        else {
             this.setState({
                 currentWeightUnitValidation: false
             })
         }
-
-        if (goalWeightUnit == 0) {
+        if (goalWeightUnit == '' || goalWeightUnit == '0') {
             this.setState({
                 goalWeightUnitValidation: true
             })
         }
-        if (goalWeightUnit == 1) {
+        else {
             this.setState({
                 goalWeightUnitValidation: false
             })
         }
-        if (height != '') {
-            this.setState({
-                heightValidation: false
-            })
-        }
         if (height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' && currentWeightUnit != '' && goalWeightUnit != '') {
             this.props.navigation.navigate('LastSetUpScreen', {
-                dob: this.props.navigation.state.params.dob,
-                gender: this.props.navigation.state.params.gender,
+                dob: dob,
+                gender: gender,
                 height: height,
                 currentWeight: currentWeight,
                 goalWeight: goalWeight,
                 heightUnit: heightUnit,
                 currentWeightUnit: currentWeightUnit,
-                goalWeightUnit: goalWeightUnit
+                goalWeightUnit: goalWeightUnit,
+                date: date,
+                time: time,
+                userId: userId
             });
-            // this.props.navigation.navigate('LastSetUpScreen')
         }
-
     }
 
     render() {
-        console.log(this.props.navigation.state.params, 'props wit navigate')
         const { heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation, currentWeightUnitValidation,
             goalWeightUnitValidation, heightUnit } = this.state;
-        console.log(heightUnit)
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.childContainer}>
@@ -199,7 +201,7 @@ class Setupscreen extends React.Component {
                                     activeOpacity={0.8}
                                     onPress={this.decrementVal.bind(this, 'height')}
                                 >
-                                    <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                 </TouchableOpacity>
                                 <TextInput keyboardType='numeric' maxLength={3} placeholder='0'
                                     style={styles.inputTextStyle}
@@ -214,12 +216,8 @@ class Setupscreen extends React.Component {
                                 >
                                     <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
                                 </TouchableOpacity>
-
                             </View>
-
-
                             <View style={styles.pickerContainer}>
-
                                 <Picker
                                     selectedValue={this.state.heightUnit}
                                     onValueChange={this.updateUnits.bind(this, 'height Unit')}
@@ -227,65 +225,48 @@ class Setupscreen extends React.Component {
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="Centimeter" value="centimeter" />
                                 </Picker>
-
                             </View>
-
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
                             {heightValidation ?
                                 <View style={{ flexDirection: 'row', marginVertical: 10, }}>
                                     <Text style={styles.validationInstruction}>
                                         Please fill your height
-                         </Text>
-
-
+                                    </Text>
                                 </View>
                                 : null}
-
                             {heightUnitValidation ?
                                 <View style={{ flexDirection: 'row', marginVertical: 10, }}>
                                     <Text style={styles.validationInstruction}>
                                         Please select height unit
-                            </Text>
-
+                                     </Text>
                                 </View>
                                 : null}
-
                         </View>
-
-
                         <View style={styles.weightLabelContainer}>
                             <Text style={styles.leftInputLabelStyle}>Current Weight</Text>
                             <Text style={styles.rightWeightUnitLabelInput}>Unit</Text>
                         </View>
-
                         <View style={styles.inputFieldTwo}>
-                            {/* <Text style={styles.inputFieldTwoStyle}>Input Fields Two</Text> */}
                             <View style={styles.inputFieldOneChild}>
-
                                 <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
                                     onPress={this.decrementVal.bind(this, 'currentWeight')}
                                 >
-                                    <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                 </TouchableOpacity>
-
                                 <TextInput keyboardType='numeric' maxLength={3} placeholder='0'
                                     style={styles.inputTextStyle}
                                     type="number"
                                     onChangeText={(currentWeight) => this.setState({ currentWeight: currentWeight })}
                                     value={this.state.currentWeight}
                                 />
-
                                 <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
                                     onPress={this.increamentVal.bind(this, 'currentWeight')}
                                 >
                                     <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
                                 </TouchableOpacity>
                             </View>
-
-                            {/* <View><Text>Height</Text></View>      */}
                             <View style={styles.pickerContainer}>
-
                                 <Picker
                                     selectedValue={this.state.currentWeightUnit}
                                     onValueChange={this.updateUnits.bind(this, 'current weight Unit')}
@@ -293,38 +274,31 @@ class Setupscreen extends React.Component {
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="KG" value="kg" />
                                 </Picker>
-
                             </View>
-
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
                             {currentWeightValidation ?
                                 <View style={{ flexDirection: 'row', marginVertical: 10, }}>
                                     <Text style={styles.validationInstruction}>
                                         Please fill your weight
-                 </Text>
+                                    </Text>
                                 </View>
                                 : null}
                             {currentWeightUnitValidation ?
                                 <View style={{ flexDirection: 'row', marginVertical: 10, }}>
                                     <Text style={[styles.validationInstruction, styles.rightValidationHieghtAndCurrentWeight]}>
                                         Please select weight unit
-                            </Text>
+                                    </Text>
                                 </View>
                                 :
                                 null}
                         </View>
-
-
                         <View style={styles.weightLabelContainer}>
                             <Text style={styles.leftInputLabelStyle}>Goal Weight</Text>
                             <Text style={styles.rightGoalWeightUnitLabel}>Unit</Text>
                         </View>
-
                         <View style={styles.inputFieldThree}>
-
                             <View style={styles.inputFieldOneChild}>
-
                                 <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
                                     onPress={this.decrementVal.bind(this, 'goalWeight')}
                                 >
@@ -343,27 +317,21 @@ class Setupscreen extends React.Component {
                                     <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
                                 </TouchableOpacity>
                             </View>
-
-                            {/* <View><Text>Height</Text></View>      */}
                             <View style={styles.pickerContainer}>
-
                                 <Picker selectedValue={this.state.goalWeightUnit}
                                     onValueChange={this.updateUnits.bind(this, 'goal weight Unit')}
                                     style={styles.pickerStyle}>
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="KG" value="kg" />
                                 </Picker>
-
                             </View>
-
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
                             {goalWeightValidation ?
                                 <View style={{ flexDirection: 'row', marginVertical: 10, }}>
                                     <Text style={styles.validationInstruction}>
                                         Please fill your goal weight
-                         </Text>
-
+                                    </Text>
                                 </View>
                                 : null}
                             {goalWeightUnitValidation ?
@@ -374,30 +342,15 @@ class Setupscreen extends React.Component {
                                 </View>
                                 : null}
                         </View>
-
-
-
                         <View style={styles.buttonContainer}>
-
                             <CaloriesSetupBtn title='Last Step'
                                 onPress={this.lastStep}
                                 // onPress={() => navigate('LastSetUpScreen')} 
                                 caloriesBtnStyle={styles.caloriesBtnStyle} />
                         </View>
-
-
-
                     </ScrollView>
-
                 </View>
             </View>
-
-
-
-
-
-
-
         )
     }
 }
