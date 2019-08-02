@@ -6,10 +6,10 @@ import Resetpassword from '../screens/ResetPasswrd';
 import Login from '../screens/Login';
 import Signup from '../screens/SignUp';
 //import TextInputs from '../textInputs/TextInputs';
-import Setupscreen from '../screens/SetUpScreen';
 //import PickerInput from '../../Picker/PickerInput';
 import BottomTabe from '../navigation/tabNav';
 import Setupscreen1 from '../screens/SetUpScreen1';
+import Setupscreen from '../screens/SetUpScreen';
 import LastSetUpScreen from '../screens/SetUpLastScreen';
 import AddExercise from '../screens/AddExercise';
 import BriskScreen from '../screens/BriskScreen';
@@ -29,12 +29,9 @@ import Wheelspiner from '../Progress Wheel/Progress';
 // import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
 
-//console.log('hello World')
-
-
 const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
-   Login: {screen: Login},
+  //  Login: {screen: Login},
   //  EditProfileScreen:{
   //   screen:EditProfileScreen,
   //   navigationOptions: {

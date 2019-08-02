@@ -4,16 +4,18 @@ import styles from '../Styling/SetUpScreen1Style';
 import TextInputs from '../textInputs/TextInputs';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import DatePicker from 'react-native-datepicker';
+import AsyncStorage from '@react-native-community/async-storage';
 const screenWidth = Dimensions.get('window').width;
 const { height } = Dimensions.get('window');
 
 class Setupscreen1 extends React.Component {
-    static navigationOptions = {
-
-        headerStyle: {
-            backgroundColor: 'black'
-        },
-        headerTintColor: 'white'
+    static navigationOptions = (navigation) => {
+        return {
+            headerStyle: {
+                backgroundColor: 'black'
+            },
+            headerTintColor: 'white'
+        }
     };
     constructor(props) {
         super(props);
@@ -24,9 +26,37 @@ class Setupscreen1 extends React.Component {
             genderValidation: false,
             male: false,
             female: false,
-            date: "15-07-2019"
+            date: "",
+            time: '',
+            userId: '',
+            dob: ''
         }
     }
+    componentWillMount() {
+        let monthNo = new Date().getMonth();
+        const date = new Date().getDate();
+        const year = new Date().getFullYear();
+        const hours = new Date().getHours();
+        const min = new Date().getMinutes();
+        const sec = new Date().getSeconds();
+        if (monthNo == 1 || monthNo == 2 || monthNo == 3 || monthNo == 4 || monthNo == 5 || monthNo == 6 || monthNo == 7 || monthNo == 8 || monthNo == 9) {
+            month = `0${monthNo + 1}`;
+        }
+        else {
+            month = monthNo + 1;
+        }
+        AsyncStorage.getItem("currentUser").then(value => {
+            if (value) {
+                let dataFromLocalStorage = JSON.parse(value);
+                this.setState({
+                    date: date + '-' + month + '-' + year,
+                    time: hours + ':' + min + ':' + sec,
+                    userId: dataFromLocalStorage._id,
+                })
+            }
+        });
+    }
+
     getGender(gender) {
         if (gender == 'male') {
             this.setState({
@@ -45,11 +75,17 @@ class Setupscreen1 extends React.Component {
     }
 
     nextStep = () => {
-        const { dob, gender } = this.state;
-        // const { navigate } = this.props.navigation;
+        const { dob, gender, date, time, userId } = this.state;
+        const { navigate } = this.props.navigation;
+
         if (dob == '') {
             this.setState({
                 dobValidation: true
+            })
+        }
+        else {
+            this.setState({
+                dobValidation: false
             })
         }
         if (gender == '') {
@@ -57,17 +93,25 @@ class Setupscreen1 extends React.Component {
                 genderValidation: true
             })
         }
-        if (dob != '' && gender != '') {
-            this.props.navigation.navigate('Setupscreen', {
+        else {
+            this.setState({
+                genderValidation: false
+            })
+        }
+        if (dob != '' && gender != '' && date != '' && time != '' && userId != '') {
+            navigate('Setupscreen', {
                 dob: dob,
                 gender: gender,
+                date: date,
+                time: time,
+                userId: userId
             });
             // navigate('Setupscreen')
         }
     }
 
     render() {
-        const { dobValidation, genderValidation, male, female } = this.state;
+        const { dobValidation, genderValidation, male, female, date, dob } = this.state;
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
                 <View style={styles.mainContainer}>
@@ -86,12 +130,12 @@ class Setupscreen1 extends React.Component {
                         <View style={styles.dateOfBirthContainer}>
                             <DatePicker
                                 style={{ width: 200 }}
-                                date={this.state.dob} //initial date from state
+                                date={dob} //initial date from state
                                 mode="date" //The enum of date, datetime and time
                                 placeholder="select date"
                                 format="DD-MM-YYYY"
                                 minDate="01-01-1950"
-                                maxDate="01-01-2019"
+                                maxDate={date}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 customStyles={{
@@ -141,7 +185,7 @@ class Setupscreen1 extends React.Component {
                             </View>
                         </View>
                         {genderValidation ?
-                            <View style={{marginVertical:3}}>
+                            <View style={{ marginVertical: 3 }}>
                                 <Text style={styles.validationInstruction}>
                                     Please select the gender
                                     </Text>
