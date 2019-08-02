@@ -250,7 +250,14 @@ const styles = StyleSheet.create({
         borderRadius:5
       },
       spinerContainer:{
-        flex: 1,
+        // flex: 1,
+        // justifyContent: 'center',
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
         justifyContent: 'center'
       },
       horizontal: {

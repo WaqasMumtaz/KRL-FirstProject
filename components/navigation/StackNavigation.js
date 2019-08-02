@@ -29,11 +29,33 @@ import Wheelspiner from '../Progress Wheel/Progress';
 // import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
 import ToastComponent from '../Toasts/nativeToast';
+import OverlayLoader from '../Loader/OverlaySpinner'
 
 
 const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
   // Login: {screen: Login},
+
+  // Exerciselog: {
+  //   screen: Exerciselog,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
+
+  //   }
+  // },
+
+  Logweight: {
+    screen: Logweight,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+
+    }
+  },
+
   //  EditProfileScreen:{
   //   screen:EditProfileScreen,
   //   navigationOptions: {
@@ -42,7 +64,17 @@ const MainNavigator= createStackNavigator({
   //     }
   //   }
   // },
+  // BMICalculator: {
+  //   screen: BMICalculator,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
 
+  //   }
+  // },
+
+  
 
   //  ResetpasswordScreen:{screen:ResetpasswordScreen},
   //  ConfirmResetPassword:{screen:ConfirmResetPassword},
@@ -57,18 +89,10 @@ const MainNavigator= createStackNavigator({
   // Setupscreen1:{screen:Setupscreen1}, 
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen: { screen: LastSetUpScreen },
-  ToastComponent:{screen:ToastComponent},
+  // ToastComponent:{screen:ToastComponent},
+  //OverlayLoader:{screen:OverlayLoader},
 
-  BMICalculator: {
-    screen: BMICalculator,
-    navigationOptions: {
-      headerStyle: {
-        elevation: 0,
-      }
-
-    }
-  },
-
+  
 
   // Setupscreen:{screen:Setupscreen},
   // Setupscreen1:{screen:Setupscreen1}, 

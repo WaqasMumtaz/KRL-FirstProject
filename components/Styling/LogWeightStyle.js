@@ -5,14 +5,19 @@ const screenHight =Dimensions.get('window').height;
 
 const styles =StyleSheet.create({
     mainContainer:{
-        width:screenWidth,
-        height:screenHight,
+        flex:1,
+        marginHorizontal:20,
+        // width:screenWidth,
+        // height:screenHight,
         //backgroundColor:'red'
     },
     childContainer:{
-        flex:1,
-        marginHorizontal:20,
+        //flex:1,
+        //marginHorizontal:20,
         //backgroundColor:'green'
+    },
+    nextContainer:{
+        marginHorizontal:20,
     },
     headingContainer:{
         flex:0.5,
@@ -36,10 +41,11 @@ const styles =StyleSheet.create({
         height:15,
         width:15,
     },
-    bodyContainer:{
-        flex:0.9,
+    inputContainer:{
+        //flex:0.9,
        // backgroundColor:'pink',
         flexDirection:'row',
+        marginTop:8
         
     },
     // inputContainer:{
@@ -47,13 +53,16 @@ const styles =StyleSheet.create({
     //     backgroundColor:'skyblue'
     // }
     inputTextStyle:{
-        flex:1,
+        width:'50%',
         fontFamily: 'MontserratLight',
         color: '#666666',
         height:40,
-        borderRadius:3,
-        backgroundColor:'gray',
-        opacity:0.2
+        //borderRadius:3,
+        backgroundColor:'#e5e5e5',
+        borderBottomLeftRadius:3,
+        borderTopLeftRadius:3,
+        paddingLeft:10
+        
     },
     weightListsContainer:{
         flex:14,
@@ -83,14 +92,58 @@ const styles =StyleSheet.create({
         fontFamily:'MontserratLight'
     },
     caloriesBtnStyle:{
-        flex:3,
+        flex:2,
         height:40,
         justifyContent:'center',
         backgroundColor: '#FF6200',
         alignItems:'center',
         borderRadius:5
-      }
+      },
+      unitTextStyle:{
+    //    borderWidth:1,
+    //    borderColor:'#e5e5e5',
+       height:40,
+       //borderRadius:3,
+       justifyContent:'flex-end',
+       padding:5,
+       borderBottomRightRadius:3,
+       borderTopRightRadius:3,
+       width:'50%',
+       flexDirection:'row',
+       backgroundColor:'#e5e5e5'
+            
+      },
+      textStyle:{
+        fontFamily:'MontserratLight',
+        color:'#4f4f4f',
+        paddingRight:5,
+        paddingVertical:5
 
+      },
+      labelTextWeight:{
+        fontFamily:'MontserratLight',
+        color:'#4f4f4f',
+        marginTop:20
+      },
+      validationContainer:{
+          height:30,
+         // backgroundColor:'blue'
+      },
+      validationInstruction:{
+        fontSize:12,
+        fontFamily:'MontserratLight',
+        color:'#FF6200',
+        paddingVertical:5
+    },
+    btnContainer:{
+        //marginTop:20,
+        marginVertical:25
+
+    },
+    labelText:{
+        fontFamily:'MontserratLight',
+        color:'#4f4f4f',
+    }
 
 })   
 
