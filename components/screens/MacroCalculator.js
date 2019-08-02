@@ -665,7 +665,7 @@ class Macrocalculator extends React.Component {
                         <Text style={styles.lastParaStyle}>
                             *This is the daily calories limit as calculated by the app using the above infromation.
                             If your coach has set another limit for you, please enter it above.
-                  </Text>
+                        </Text>
                     </View>
                     <View style={styles.btnContainer}>
                         <CaloriesSetupBtn title='Set Up & Use App' caloriesBtnStyle={styles.caloriesBtnStyle} onPress={this.calulateMacro} />
