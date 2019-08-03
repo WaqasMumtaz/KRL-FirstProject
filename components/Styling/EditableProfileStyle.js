@@ -81,7 +81,13 @@ const styles =StyleSheet.create({
       },
       genderContainer:{
           flex:1,
-          marginTop:18
+          marginTop:18,
+          //backgroundColor:'green'
+      },
+      childGender:{
+          flex:1,
+          flexDirection:'row',
+          justifyContent:'space-between'
       },
       blankContainer:{
           flex:2,
@@ -122,6 +128,46 @@ const styles =StyleSheet.create({
         // justifyContent: 'space-around',
         padding: 10
       },
+      maleTouchableOpacity:{
+        height: 38,
+        width: '43%', 
+        justifyContent: 'center', 
+        backgroundColor: '#e5e5e5', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    clickedMale:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    femaleContainer:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        justifyContent: 'center', 
+        backgroundColor: '#e5e5e5', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    clickedFemale:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    maleTextStyle:{
+        textAlign: 'center', 
+        color: '#4f4f4f',
+        fontFamily: 'MontserratLight'
+    },
 
 })
 

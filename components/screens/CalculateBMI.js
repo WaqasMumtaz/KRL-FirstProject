@@ -19,6 +19,8 @@ import CaloriesSetupBtn from '../buttons/setUpBtn';
 import InputImgsScreen from '../screens/InputImgs';
 import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
+import ToastComponent from '../Toasts/nativeToast';
+import OverlayLoader from '../Loader/OverlaySpinner'
 const { height } = Dimensions.get('window');
 
 class BMICalculator extends React.Component {
@@ -49,6 +51,7 @@ class BMICalculator extends React.Component {
             isLoading:false,
             position: 'top',
             style:{},
+            toast:false
         }
     }
     componentDidMount() {
@@ -181,6 +184,7 @@ class BMICalculator extends React.Component {
                    isLoading:false
                }, ()=>{
                   this.toastFunction(userMsg,this.state.position , DURATION.LENGTH_LONG,true)
+                  //this.setState({toast:true})
                })
                
             }
@@ -204,6 +208,7 @@ class BMICalculator extends React.Component {
                    isLoading:false
                }, ()=>{
                 this.toastFunction(userMsg,this.state.position , DURATION.LENGTH_LONG,true)
+                //this.setState({toast:true})
                })
                
             }
@@ -213,7 +218,8 @@ class BMICalculator extends React.Component {
                 showMgs: "Select Weight Unit In Pounds",
                 mgs: true,
                 bmi: '',
-                hitApi: false
+                hitApi: false,
+                isLoading:false
             })
         }
         else if (heightUnit == 'centimeter' && weightUnit == 'pound') {
@@ -221,7 +227,8 @@ class BMICalculator extends React.Component {
                 showMgs: "Select Weight Unit In KG,s",
                 mgs: true,
                 bmi: '',
-                hitApi: false
+                hitApi: false,
+                isLoading:false
             })
         }
 
@@ -239,7 +246,8 @@ class BMICalculator extends React.Component {
             heightUnitValidation,
             weightValidation,
             weightUnitValidation,
-            isLoading 
+            isLoading,
+            toast 
            } = this.state;
         return (
             // <View style={styles.mainContainer}>
@@ -367,10 +375,9 @@ class BMICalculator extends React.Component {
                             value={this.state.bmi}
                         />
                     </View>
-                    {isLoading ? <View style={[styles.spinerContainer, styles.horizontal]}>
-                                 <ActivityIndicator size='large' color="#FF6200" />
-                            </View>: null}
+                    {isLoading ? <OverlayLoader/>: null}
                     <View style={styles.buttonContainer}>
+                        {/* {toast ? <ToastComponent pressFunc={this.toastFunction.bind(this, 'Success',this.state.position , DURATION.LENGTH_LONG,true)}/> : null} */}
                     <CaloriesSetupBtn title="Set Up & Use App"
                             onPress={this.calculateBmi}
                             caloriesBtnStyle={styles.caloriesBtnStyle} />

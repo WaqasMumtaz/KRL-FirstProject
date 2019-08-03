@@ -57,7 +57,9 @@ class EditProfileScreen extends React.Component {
             avatarSource: null,
             date: '',
             time: '',
-            userId: ''
+            userId: '',
+            male:false,
+            female:false
         }
     }
     componentDidMount() {
@@ -256,6 +258,22 @@ class EditProfileScreen extends React.Component {
             console.log(dataUser, 'dataUser')
         }
     }
+    getGender(gender) {
+        if (gender == 'male') {
+            this.setState({
+                male: true,
+                female: false,
+                gender: 'male'
+            })
+        }
+        else if (gender == 'female') {
+            this.setState({
+                male: false,
+                female: true,
+                gender: 'female'
+            })
+        }
+    }
 
 
     render() {
@@ -272,7 +290,9 @@ class EditProfileScreen extends React.Component {
             gender,
             genderValidate,
             isLoading,
-            avatarSource
+            avatarSource,
+            male,
+            female
 
         } = this.state;
         // console.log(email);
@@ -373,18 +393,18 @@ class EditProfileScreen extends React.Component {
                     </View>
                     <View style={styles.genderContainer}>
                         <Text style={styles.inputLabelsStyle}>Gender</Text>
-                        <TextInput
-                            onChangeText={text => {
-                                this.checkValidation(text, 'gender'),
-                                    this.setState({
-                                        gender: text
-                                    })
-                            }}
-                            placeholder="Male"
-                            placeholderColor="#4f4f4f"
-                            value={gender}
-                            style={[styles.inputTextStyle, !genderValidate ? styles.errorInput : null]}
-                        />
+                        <View style={styles.childGender}>
+                        <TouchableOpacity style={male ? styles.clickedMale : styles.maleTouchableOpacity} 
+                          onPress={this.getGender.bind(this, 'male')}>
+                                <Text style={styles.maleTextStyle}>
+                                    Male
+                            </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={female ? styles.clickedFemale : styles.femaleContainer} 
+                            onPress={this.getGender.bind(this, 'female')}>
+                                <Text style={styles.maleTextStyle}>Female</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
                         <ActivityIndicator size='large' color="#FF6200" />

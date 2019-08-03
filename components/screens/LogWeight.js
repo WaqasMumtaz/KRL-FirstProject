@@ -4,8 +4,10 @@ import styles from '../Styling/LogWeightStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
+import Toast, {DURATION} from 'react-native-easy-toast'
 // import PickDate from '../Common/datePicker';
-import DatePicker from 'react-native-datepicker';
+// import DatePicker from 'react-native-datepicker';
+import OverlayLoader from '../Loader/OverlaySpinner'
 
 const { height } = Dimensions.get('window');
 
@@ -18,11 +20,25 @@ class Logweight extends React.Component {
             dayOfMonth: '',
             time: '',
             weight: '',
+            neck:'',
+            shoulder:'',
+            biceps:'',
+            chest:'',
+            waist:'',
+            thigh:'',
             day: '',
             userId: '',
             data: '',
             filterData: [],
             weightValidation: false,
+            neckValidation:false,
+            shoulderValidation:false,
+            bicepsValidation:false,
+            chestValidation:false,
+            waistValidation:false,
+            thighValidation:false,
+            isLoading:false,
+            position:'top',
             monthArr: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             weekDay: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
         }
@@ -55,18 +71,134 @@ class Logweight extends React.Component {
             }
         });
         console.log('componentWillMount')
-        this.getData()
+        // this.getData()
     }
+    toastFunction=(text , position , duration ,withStyle )=>{
+        this.setState({
+            position: position,
+        })
+        if(withStyle){
+            this.refs.toastWithStyle.show(text, duration);
+        }else {
+            this.refs.toast.show(text, duration);
+        }
+    }
+
+
     addWeight = async () => {
-        const { weight, monthNo, monthArr, weekDay, day, userId, date, time, dayOfMonth } = this.state;
+        const { 
+            weight, 
+            monthNo, 
+            monthArr, 
+            weekDay, 
+            day, 
+            userId, 
+            date, 
+            time, 
+            dayOfMonth,
+            neck,
+            shoulder,
+            biceps,
+            chest,
+            waist,
+            thigh
+           } = this.state;
         let addWeight = {}
         if (weight == '') {
             this.setState({
-                weightValidation: true
+                weightValidation: true,
+                isLoading:false,
             })
         }
-        if (weight != '') {
+        else {
+            this.setState({
+                weightValidation: false,
+                isLoading:false,
+            })
+        }
+        if (neck == ''){
+            this.setState({
+                neckValidation: true,
+                isLoading:false,
+            })
+        }
+        else {
+            this.setState({
+                neckValidation: false,
+                isLoading:false,
+            })
+        }
+        if(shoulder == ''){
+            this.setState({
+                shoulderValidation: true,
+                isLoading:false,
+            })
+        }
+        else {
+            this.setState({
+                shoulderValidation: false,
+                isLoading:false,
+            })
+        }
+        if(biceps == ''){
+            this.setState({
+                bicepsValidation: true,
+                isLoading:false,
+            })
+        }
+        else {
+            this.setState({
+                bicepsValidation: false,
+                isLoading:false,
+            })
+        }
+        if(chest == ''){
+            this.setState({
+                chestValidation: true,
+                isLoading:false,
+            })
+        }
+        else {
+            this.setState({
+                chestValidation: false,
+                isLoading:false,
+            })
+        }
+
+        if(waist == ''){
+            this.setState({
+                waistValidation: true,
+                isLoading:false,
+            })
+        }
+        else {
+            this.setState({
+                waistValidation: false,
+                isLoading:false,
+            })
+        }
+        if(thigh == ''){
+            this.setState({
+                thighValidation: true,
+                isLoading:false,
+            })
+            
+        }
+        else {
+            this.setState({
+                thighValidation: false,
+                isLoading:false,
+            })
+        }
+
+         if (weight != '' && neck != '' && shoulder != '' && biceps != '' && chest != '' && waist != '' && thigh != '') {
             addWeight.weight = weight;
+            addWeight.neck = neck;
+            addWeight.shoulder = shoulder;
+            addWeight.biceps = biceps;
+            addWeight.chest = chest;
+            addWeight.waist = waist;
+            addWeight.thigh = thigh;
             addWeight.month = monthArr[monthNo];
             addWeight.day = weekDay[day];
             addWeight.dayOfMonth = dayOfMonth;
@@ -74,12 +206,28 @@ class Logweight extends React.Component {
             addWeight.time = time;
             addWeight.userId = userId;
             this.setState({
-                weightValidation: false
+                isLoading:true
             })
             let dataUser = await HttpUtils.post('weightLog', addWeight)
-            // console.log(dataUser, 'dataUser')
-            this.getData()
+             console.log(dataUser, 'dataUser')
+            let userMsg = dataUser.msg;
+            if(dataUser.code){
+                  this.setState({
+                      isLoading:false
+                  }, ()=>{
+                    this.toastFunction(userMsg,this.state.position , DURATION.LENGTH_LONG,true)
+                  })
+            }
+            // this.getData()
+            else if(!dataUser.code){
+                this.setState({
+                    isLoading:false
+                }, ()=>{
+                  this.toastFunction('Some thing went wrong',this.state.position , DURATION.LENGTH_LONG,true)
+                })
+            }
         }
+        
     }
 
     //filtration with date
@@ -118,49 +266,160 @@ class Logweight extends React.Component {
         await this.dateFilter()
     }
     render() {
-        const { weightValidation, date, filterData } = this.state;
+        const { 
+            weightValidation, 
+            neckValidation,
+            shoulderValidation,
+            bicepsValidation,
+            chestValidation,
+            waistValidation,
+            thighValidation, 
+            isLoading
+            } = this.state;
         return (
             <View style={styles.mainContainer}>
+                       
+                
                 <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
-                    <View style={styles.childContainer}>
-                        <View style={styles.headingContainer}>
+                    {/* <View style={styles.childContainer}> */}
+                    <View style={styles.headingContainer}>
                             <Text style={styles.headingStyle}>
-                                Log Weight
+                                Log Measurements
                             </Text>
                         </View>
-                        <View style={styles.arrowContainer}>
-                            <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity>
-                            {/* <Text>Today</Text> */}
-                            <DatePicker
-                                style={{ width: 200 }}
-                                date={date}
-                                mode="date"
-                                placeholder="select date"
-                                format="DD-MM-YYYY"
-                                minDate="01-01-1950"
-                                maxDate={date}
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-
-                                onDateChange={
-                                    this.dateFilter
-                                    // (date) => { this.setState({ date: date }) }
-                                }
+                        
+                        <Text style={styles.labelTextWeight}>Weight</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput placeholder="61" 
+                                   placeholderTextColor="#4f4f4f" 
+                                   style={styles.inputTextStyle}
+                                   keyboardType={"numeric"}
+                                   maxLength={3}
+                                   onChangeText={(weight) => this.setState({ weight: weight })}
                             />
-                            <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
+                            <View style={styles.unitTextStyle}><Text style={styles.textStyle}>KG</Text></View>
                         </View>
-                        {/* <View> <PickDate /></View> */}
-                        <View style={styles.bodyContainer}>
-                            <TextInput placeholder="Enter today's weight in KG,s" placeholderTextColor="black" style={styles.inputTextStyle}
-                                keyboardType={"numeric"}
-                                onChangeText={(weight) => this.setState({ weight: weight })}
-                            />
-                        </View>
+                        <View style={styles.validationContainer}>
                         {weightValidation ?
-                            <Text>Please Enter Your Today Weight </Text>
+                            <Text style={styles.validationInstruction}>Please Enter Your Weight </Text>
                             : null}
-                        <CaloriesSetupBtn title="Save Today's Weight" caloriesBtnStyle={styles.caloriesBtnStyle} onPress={this.addWeight} />
-                        <View style={styles.weightListsContainer}>
+                        </View>
+                        <Text style={styles.labelText}>Neck</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput placeholder="22" 
+                                   placeholderTextColor="#4f4f4f" 
+                                   style={styles.inputTextStyle}
+                                   keyboardType={"numeric"}
+                                   maxLength={3}
+                                   onChangeText={(neck) => this.setState({ neck: neck })}
+                            />
+                            <View style={styles.unitTextStyle}><Text style={styles.textStyle}>Inches</Text></View>
+                        </View>
+                        <View style={styles.validationContainer}>
+                        {neckValidation ?
+                            <Text style={styles.validationInstruction}>Please Enter Your Neck Value </Text>
+                            : null}
+                        </View>
+                        <Text style={styles.labelText}>Shoulder</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput placeholder="14" 
+                                   placeholderTextColor="#4f4f4f" 
+                                   style={styles.inputTextStyle}
+                                   keyboardType={"numeric"}
+                                   maxLength={3}
+                                   onChangeText={(shoulder) => this.setState({ shoulder:shoulder })}
+                            />
+                            <View style={styles.unitTextStyle}><Text style={styles.textStyle}>Inches</Text></View>
+                        </View>
+                        <View style={styles.validationContainer}>
+                        {shoulderValidation ?
+                            <Text style={styles.validationInstruction}>Please Enter Your Shoulder Value </Text>
+                            : null}
+                        </View>
+                        <Text style={styles.labelText}>Biceps</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput placeholder="33" 
+                                   placeholderTextColor="#4f4f4f" 
+                                   style={styles.inputTextStyle}
+                                   keyboardType={"numeric"}
+                                   maxLength={3}
+                                   onChangeText={(biceps) => this.setState({ biceps:biceps })}
+                            />
+                            <View style={styles.unitTextStyle}><Text style={styles.textStyle}>Inches</Text></View>
+                        </View>
+                        <View style={styles.validationContainer}>
+                        {bicepsValidation ?
+                            <Text style={styles.validationInstruction}>Please Enter Your Biceps </Text>
+                            : null}
+                        </View>
+                        <Text style={styles.labelText}>Chest</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput placeholder="20" 
+                                   placeholderTextColor="#4f4f4f" 
+                                   style={styles.inputTextStyle}
+                                   keyboardType={"numeric"}
+                                   maxLength={3}
+                                   onChangeText={(chest) => this.setState({ chest:chest })}
+                            />
+                            <View style={styles.unitTextStyle}><Text style={styles.textStyle}>Inches</Text></View>
+                        </View>
+                        <View style={styles.validationContainer}>
+                        {chestValidation ?
+                            <Text style={styles.validationInstruction}>Please Enter Your Chest </Text>
+                            : null}
+                        </View>
+                        <Text style={styles.labelText}>Waist</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput placeholder="33" 
+                                   placeholderTextColor="#4f4f4f" 
+                                   style={styles.inputTextStyle}
+                                   keyboardType={"numeric"}
+                                   maxLength={3}
+                                   onChangeText={(waist) => this.setState({ waist:waist })}
+                            />
+                            <View style={styles.unitTextStyle}><Text style={styles.textStyle}>Inches</Text></View>
+                        </View>
+                        <View style={styles.validationContainer}>
+                        {waistValidation ?
+                            <Text style={styles.validationInstruction}>Please Enter Your Waist </Text>
+                            : null}
+                        </View>
+                        <Text style={styles.labelText}>Thigh</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput placeholder="33" 
+                                   placeholderTextColor="#4f4f4f" 
+                                   style={styles.inputTextStyle}
+                                   keyboardType={"numeric"}
+                                   maxLength={3}
+                                   onChangeText={(thigh) => this.setState({ thigh:thigh })}
+                            />
+                            <View style={styles.unitTextStyle}><Text style={styles.textStyle}>Inches</Text></View>
+                        </View>
+                        <View style={styles.validationContainer}>
+                        {thighValidation ?
+                            <Text style={styles.validationInstruction}>Please Enter Your Thigh </Text>
+                            : null}
+                        </View>
+                        {isLoading ? <OverlayLoader/>: null}
+                        <View style={styles.btnContainer}>
+                        <CaloriesSetupBtn title="Save Measurements" 
+                        caloriesBtnStyle={styles.caloriesBtnStyle} 
+                        onPress={this.addWeight}
+                         />
+                         </View>
+
+                         <Toast ref="toastWithStyle" 
+                    style={{backgroundColor:'#FF6200'}} 
+                    position={this.state.position}
+                    positionValue={50}
+                    fadeInDuration={750}
+                    fadeOutDuration={1000}
+                    opacity={0.8}
+                    textStyle={{color:'white',fontFamily: 'MontserratLight',}}
+                    />
+                        
+
+                        {/* <View style={styles.weightListsContainer}>
                             {filterData.length >= 0 && filterData.map((elem, key) => (
                                 <View style={styles.weightListOne}>
                                     <Text style={styles.weightNumberStyle}>{elem.weight} KG</Text>
@@ -168,9 +427,10 @@ class Logweight extends React.Component {
                                 </View>
                             ))
                             }
-                        </View>
-                    </View>
+                        </View> */}
+                    {/* </View> */}
                 </ScrollView>
+                
             </View>
         )
 

@@ -12,7 +12,6 @@ export default class ActivateSpinner extends Component {
     return (
       <View style={[styles.container, styles.horizontal]}>
         <ActivityIndicator size='large' color="#FF6200" />
-        
       </View>
     )
   }

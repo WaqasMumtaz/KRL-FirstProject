@@ -29,6 +29,12 @@ import Wheelspiner from '../Progress Wheel/Progress';
 // import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
 
+import ToastComponent from '../Toasts/nativeToast';
+import OverlayLoader from '../Loader/OverlaySpinner'
+
+
+
+
 const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
   //  Login: {screen: Login},
@@ -37,6 +43,27 @@ const MainNavigator= createStackNavigator({
 
   // Profile:{screen:Profile},
   // Login: {screen: Login},
+
+  // Exerciselog: {
+  //   screen: Exerciselog,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
+
+  //   }
+  // },
+
+  Logweight: {
+    screen: Logweight,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+
+    }
+  },
+
   //  EditProfileScreen:{
   //   screen:EditProfileScreen,
   //   navigationOptions: {
@@ -45,7 +72,17 @@ const MainNavigator= createStackNavigator({
   //     }
   //   }
   // },
+  // BMICalculator: {
+  //   screen: BMICalculator,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
 
+  //   }
+  // },
+
+  
 
   //  ResetpasswordScreen:{screen:ResetpasswordScreen},
   //  ConfirmResetPassword:{screen:ConfirmResetPassword},
@@ -62,6 +99,9 @@ const MainNavigator= createStackNavigator({
   // LastSetUpScreen: { screen: LastSetUpScreen },
   // ToastComponent:{screen:ToastComponent},
 
+  //OverlayLoader:{screen:OverlayLoader},
+
+
   // BMICalculator: {
   //   screen: BMICalculator,
   //   navigationOptions: {
@@ -72,6 +112,8 @@ const MainNavigator= createStackNavigator({
   //   }
   // },
 
+
+  
 
   // Setupscreen:{screen:Setupscreen},
   // Setupscreen1:{screen:Setupscreen1}, 

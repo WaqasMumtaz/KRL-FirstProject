@@ -76,7 +76,7 @@ class Exerciselog extends React.Component {
                             <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity>
                             {/* <Text>Today</Text> */}
                             <DatePicker
-                                style={{ width: 200 }}
+                                style={{ width: 120 }}
                                 date={date}
                                 mode="date"
                                 placeholder="select date"
@@ -85,7 +85,15 @@ class Exerciselog extends React.Component {
                                 maxDate={date}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
-
+                                customStyles={{
+                                    dateIcon: {
+                                    width:0,
+                                    height:0,
+                                    },
+                                    dateInput: {
+                                    height: 40,
+                                    }
+                                    }}
                                 onDateChange={
                                     this.dateFilter
                                     // (date) => { this.setState({ date: date }) }
