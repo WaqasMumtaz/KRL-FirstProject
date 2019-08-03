@@ -117,28 +117,10 @@ class Homescreen extends React.Component {
                 <Text style={{ color: '#FFFFFF', fontFamily: 'MontserratLight', fontSize: 12, marginTop: 20, marginLeft: 14 }}>View detailed report</Text>
                 <Image source={require('../icons/forward-arrow.png')} style={styles.lastArrow} />
               </TouchableOpacity>
-
             </View>
-
           </View>
         </ScrollView>
-
-
-
-
-
-        {/* <View style={styles.secondContainer}> */}
-
-
-
-
-
-
-        {/* </View> */}
-
-
       </View>
-
     );
   }
 }
