@@ -21,6 +21,9 @@ class BriskScreen extends React.Component {
         const { brisk } = this.state;
         return (
             <View style={styles.mainContainer}>
+                {/* <ScrollView style={{ flex: 1, backgroundColor: 'white',
+                
+                 height: height }} contentContainerStyle={{ flexGrow: 1 }}> */}
                 <View style={styles.cardStyle}>
                     <View style={styles.cardChildOne}>
                         <Text style={styles.heading}>{this.props.title}</Text>
@@ -33,6 +36,7 @@ class BriskScreen extends React.Component {
                     <Text style={styles.labelTextAmountStyle}>Amount</Text>
                     <Text style={styles.labelUnitStyle}>Unit</Text>
                 </View>
+               
                 <View style={styles.cardChildTwo}>
                     <View style={styles.cardChildTwoSiblingContainer}>
                         <TouchableOpacity style={styles.minusImgContainer} onPress={this.props.decrementVal}>
@@ -56,6 +60,7 @@ class BriskScreen extends React.Component {
                         </Picker>
                     </View>
                 </View>
+                {/* </ScrollView> */}
             </View>
 
         )
