@@ -24,7 +24,6 @@ class Login extends React.Component {
   }
   constructor(props) {
     super(props);
-
     this.state = {
       email: '',
       emailValidate: true,
@@ -52,7 +51,8 @@ class Login extends React.Component {
       })
       const userObj = {
         email: email,
-        password: password
+        password: password,
+        // type:'trainny'
       }
       try {
         let dataUser = await HttpUtilsFile.post('signin', userObj)
@@ -60,16 +60,21 @@ class Login extends React.Component {
         let getUserCode = dataUser.code;
         let userWrong = dataUser.Match;
         let userMsg = dataUser.msg;
-
         if (getUserCode) {
-
-          let userDataSave = {
-            token: dataUser.token,
-            email: dataUser.email,
-            name: dataUser.name,
-            id: dataUser._id,
-          }
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
+          let myProfile = dataUser.profile[0];
+          myProfile.type = dataUser.type;
+          AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
+          if (dataUser.trainnerProfileData[0]) {
+            let opponentData = dataUser.trainnerProfileData[0];
+            opponentData.type = "Coach";
+            AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+          }
+          else if (dataUser.trainnyProfiledata[0]) {
+            let opponentData = dataUser.trainnyProfiledata[0];
+            opponentData.type = "Trainee";
+            AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+          }
           db.ref(`users/`).push(dataUser)
           navigate('BottomTabe')
         }

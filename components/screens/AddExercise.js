@@ -116,7 +116,6 @@ class AddExercise extends React.Component {
             excersiceObj.dayOfMonth = dayOfMonth;
             excersiceObj.month = month;
             excersiceObj.year = year;
-
             let dataUser = await HttpUtils.post('postexerciselog', excersiceObj)
             console.log(dataUser, 'dataUser')
             this.props.navigation.navigate('Exerciselog')

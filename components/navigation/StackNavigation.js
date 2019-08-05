@@ -54,15 +54,15 @@ const MainNavigator= createStackNavigator({
   //   }
   // },
 
-  Logweight: {
-    screen: Logweight,
-    navigationOptions: {
-      headerStyle: {
-        elevation: 0,
-      }
+  // Logweight: {
+  //   screen: Logweight,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
 
-    }
-  },
+  //   }
+  // },
 
   //  EditProfileScreen:{
   //   screen:EditProfileScreen,

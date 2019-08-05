@@ -15,19 +15,6 @@ class Homescreen extends React.Component {
 
   }
   async componentWillMount() {
-    // let obj = {
-    //   date: "2-08-2019",
-    //   dayOfMonth: "2",
-    //   exerciseAmount: "3",
-    //   exerciseName: "Push ups",
-    //   exerciseUnit: "hours",
-    //   month: "08",
-    //   time: "17:0:59",
-    //   year: "2019"
-    // }
-    // this.setState({
-    //   todayData: obj
-    // })
     let dataUser = await HttpUtils.get('getallexerciselog');
     let data = dataUser.content;
     const currentDate = new Date().getDate();
