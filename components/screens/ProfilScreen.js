@@ -38,26 +38,36 @@ class Profile extends React.Component {
 
     this.state = {
       name: '',
+      address:'',
+      contactNo:'',
+      email:'',
+      gender:'',
+      type:'',
+      avtarImage : '',
       show: false
     }
 
   }
 
   componentWillMount() {
-    AsyncStorage.getItem('currentUser').then((value) => {
+    AsyncStorage.getItem('myProfile').then((value) => {
       let userData = JSON.parse(value);
-      let userName = userData.name;
-      this.setState({
-        name: userName
-      })
+      console.log(userData ,'userData')
+      // this.setState({
+      //   name: userData.name,
+      //   address:userData.address,
+      //   contactNo:user.DatacontactNo,
+      //   email:userData.email,
+      //   gender:userData.gender,
+      //   type:userData.type,
+      //   avtarImage:userData.image
+      // })
     })
 
   }
   editForm = () => {
     console.log('helloo')
     this.props.navigation.navigate('EditProfileScreen');
-
-
   }
 
   componentDidMount() {
@@ -75,7 +85,7 @@ class Profile extends React.Component {
         <View style={styles.headingContainer}>
           <Text style={styles.headingStyle}>
             My Profile
-                            </Text>
+            </Text>
         </View>
         <ScrollView
           style={{

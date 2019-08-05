@@ -60,6 +60,7 @@ const MainNavigator= createStackNavigator({
   //       elevation: 0,
   //     }
 
+<<<<<<< HEAD
   //   }
   // },
   AddExercise: {
@@ -68,9 +69,17 @@ const MainNavigator= createStackNavigator({
       headerStyle: {
         elevation: 0,
       }
+=======
+  // Logweight: {
+  //   screen: Logweight,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
+>>>>>>> f90f4ece3bf60965039db69f50338e77caf34c59
 
-    }
-  },
+  //   }
+  // },
 
   // LogMeasurementsScreen: {
   //   screen: LogMeasurementsScreen,
