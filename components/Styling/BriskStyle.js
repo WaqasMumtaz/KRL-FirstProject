@@ -7,16 +7,18 @@ const styles =StyleSheet.create({
          //flexDirection:'row',
         //backgroundColor:'red',
         //marginHorizontal:20,
-        //justifyContent:'center'
+        justifyContent:'center'
+        //height:100
     },
     cardStyle:{
         //flex:,
         // borderWidth:5,
         backgroundColor:'black',
-        borderBottomWidth:0,
+        //borderBottomWidth:0,
         //borderColor:'yellow',
         //borderRadius:3,
-        height:'20%',
+        height:40,
+        //marginHorizontal:18
         //width:'100%'
     },
     cardChildOne:{
@@ -47,12 +49,13 @@ const styles =StyleSheet.create({
          //borderWidth:5,
          //borderColor:'red',
         //borderRadius:3,
-         height:'25%',
+         height:45,
         // width:'100%',
         backgroundColor:'black',
         justifyContent:'space-between',
         //opacity:0.6,
-        marginBottom:3
+        //marginBottom:40
+       // marginHorizontal:18
     },
     pickerStyle:{
         width:140,
@@ -64,16 +67,17 @@ const styles =StyleSheet.create({
     },
     labelTextContainer:{
         flexDirection:'row',
-        backgroundColor:'black'
+        backgroundColor:'black',
+        //marginHorizontal:18
     },
     labelTextAmountStyle:{
-        marginLeft:'5%',
+        marginLeft:13,
         fontFamily: 'MontserratLight',
         color: '#A6A6A6',
         marginTop:5
     },
     labelUnitStyle:{
-        marginLeft:'30%',
+        marginLeft:123,
         fontFamily: 'MontserratLight',
         color: '#A6A6A6',
         marginTop:5
@@ -105,6 +109,7 @@ const styles =StyleSheet.create({
         height: 40, 
         width: 32, 
         justifyContent: 'center',
+        paddingLeft:10
     },
     pickerContainer:{
         backgroundColor:'white',

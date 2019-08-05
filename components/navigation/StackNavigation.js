@@ -14,7 +14,7 @@ import LastSetUpScreen from '../screens/SetUpLastScreen';
 import AddExercise from '../screens/AddExercise';
 import BriskScreen from '../screens/BriskScreen';
 import Exerciselog from '../screens/ExerciseLog';
-import Logweight from '../screens/LogWeight';
+import LogMeasurementsScreen from '../screens/LogMeasurements';
 import Macrocalculator from '../screens/MacroCalculator';
 import BMICalculator from '../screens/CalculateBMI';
 import Profile from '../screens/ProfilScreen';
@@ -39,7 +39,7 @@ const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
   //  Login: {screen: Login},
 
-
+//BriskScreen: { screen: BriskScreen },
 
   // Profile:{screen:Profile},
   // Login: {screen: Login},
@@ -53,9 +53,36 @@ const MainNavigator= createStackNavigator({
 
   //   }
   // },
+  // Exerciselog: {
+  //   screen: Exerciselog,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
 
+<<<<<<< HEAD
+  //   }
+  // },
+  AddExercise: {
+    screen: AddExercise,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+=======
   // Logweight: {
   //   screen: Logweight,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
+>>>>>>> f90f4ece3bf60965039db69f50338e77caf34c59
+
+  //   }
+  // },
+
+  // LogMeasurementsScreen: {
+  //   screen: LogMeasurementsScreen,
   //   navigationOptions: {
   //     headerStyle: {
   //       elevation: 0,
@@ -127,7 +154,7 @@ const MainNavigator= createStackNavigator({
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen: { screen: LastSetUpScreen },
   // Wheelspiner:{screen:Wheelspiner},
-  //BriskScreen: { screen: BriskScreen },
+  
   // ChartScreen: { screen: ChartScreen },
 
   BottomTabe: {
@@ -154,8 +181,8 @@ const MainNavigator= createStackNavigator({
 
     }
   },
-  Logweight: {
-    screen: Logweight,
+  LogMeasurementsScreen: {
+    screen: LogMeasurementsScreen,
     navigationOptions: {
       headerStyle: {
         elevation: 0,

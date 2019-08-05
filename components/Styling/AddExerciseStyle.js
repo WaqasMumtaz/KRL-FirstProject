@@ -52,16 +52,16 @@ const styles =StyleSheet.create({
         opacity:0.2
     },
     listsContainer:{
-        flex:1.5,
-        backgroundColor:'gray',
+        flex:3,
+        backgroundColor:'#e5e5e5',
         justifyContent:'space-evenly',
-        opacity:0.2,
-        // marginTop:10
+        //opacity:0.2,
+         marginTop:20
     },
     listsTextStyle:{
-        fontFamily:'MontserratMedium',
-        color:'black',
-        opacity:1
+        fontFamily:'MontserratLight',
+        color:'#4f4f4f',
+        marginVertical:10
     },
     cardContainer:{
         flex:1.5,

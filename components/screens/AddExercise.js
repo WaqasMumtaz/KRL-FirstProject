@@ -5,6 +5,8 @@ import BriskScreen from '../screens/BriskScreen';
 import HighpacejoggingScreen from './HighPaceJogging';
 import Pushups from './PushUps';
 import Bicepcurls from './BicepCurls';
+import Sidecrunch from '../screens/cardScreens/SideCrunch';
+import ReverseCrunches from '../screens/cardScreens/ReverseCrunches';
 import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
 
@@ -19,10 +21,10 @@ class AddExercise extends React.Component {
             onPress={
                 params.addExercise
             }>
-            <Image source={require('../icons/tick.png')} style={styles.headerIcon} />
+           <Image source={require('../icons/tick.png')} style={styles.headerIcon} />
         </TouchableOpacity>
         return {
-            headerRight,
+            headerRight ,
             headerStyle: {
             },
             headerTintColor: 'gray',
@@ -36,8 +38,16 @@ class AddExercise extends React.Component {
             jogging: false,
             pushups: false,
             bicep: false,
+            crunch:false,
             iconShow: false,
             logExercise: false,
+            reverseCrunch:false,
+            verticalLegCrunch:false,
+            bicycleEx:false,
+            rollingEx:false,
+            walking:false,
+            running:false,
+            joggingEx:false,
             exerciseName: '',
             exerciseAmount: '',
             exerciseUnit: '',
@@ -72,11 +82,14 @@ class AddExercise extends React.Component {
                     userId: dataFromLocalStorage._id
                 })
             }
+
         });
         this.props.navigation.setParams({
             addExercise: this.addExercise,
+            //showIcon:this.state.iconShow
         })
         // this.gettingDropDownValues();
+        console.log('date --> ' ,date)
     }
     gettingDropDownValues = () => {
         const { exerciseArr } = this.state;
@@ -128,34 +141,83 @@ class AddExercise extends React.Component {
 
     showFields(e, val) {
         if (e == 'Brisk Walk') {
-            this.setState({ show: false, showCard: true, exerciseName: e })
+            this.setState({ show: false, showCard: true,iconShow:true, exerciseName: e })
         }
         else if (e == 'High paced jogging') {
-            this.setState({ show: false, jogging: true, exerciseName: e })
+            this.setState({ show: false, jogging: true,iconShow:true, exerciseName: e })
         }
         else if (e == 'Push ups') {
-            this.setState({ show: false, pushups: true, exerciseName: e })
+            this.setState({ show: false, pushups: true,iconShow:true, exerciseName: e })
 
         }
         else if (e == 'Bicep curls') {
-            this.setState({ show: false, bicep: true, exerciseName: e })
+            this.setState({ show: false, bicep: true,iconShow:true, exerciseName: e })
+        }
+        else if (e == 'Side Crunch'){
+            this.setState({ show: false, crunch: true,iconShow:true, exerciseName: e })
+        }
+        else if (e == 'Reverse Crunches'){
+            this.setState({ show: false, reverseCrunch: true,iconShow:true, exerciseName: e })
+        }
+        else if(e == 'Vertical Leg Crunch'){
+            this.setState({ show: false, verticalLegCrunch: true,iconShow:true, exerciseName: e })
+        }
+        else if (e == 'Bicycle Exercise'){
+            this.setState({ show: false, bicycleEx: true,iconShow:true, exerciseName: e })
+        }
+        else if (e == 'Rolling Plank Exercise'){
+            this.setState({ show: false, rollingEx: true,iconShow:true, exerciseName: e })
+        }
+        else if (e == 'Walking'){
+            this.setState({ show: false, walking: true,iconShow:true, exerciseName: e })
+        }
+        else if (e == 'Running'){
+            this.setState({ show: false, running: true,iconShow:true, exerciseName: e })
+        }
+        else if (e == 'Jogging'){
+            this.setState({ show: false, joggingEx: true,iconShow:true, exerciseName: e })
         }
     }
 
     backToHome(e, val) {
         if (e == 'Brisk Walk') {
-            this.setState({ show: true, showCard: false })
+            this.setState({ show: true, showCard: false,iconShow:false })
         }
         else if (e == 'High paced jogging') {
-            this.setState({ show: true, jogging: false })
+            this.setState({ show: true, jogging: false,iconShow:false })
         }
         else if (e == 'Push ups') {
-            this.setState({ show: true, pushups: false })
+            this.setState({ show: true, pushups: false,iconShow:false })
         }
         else if (e == 'Bicep curls') {
-            this.setState({ show: true, bicep: false })
+            this.setState({ show: true, bicep: false,iconShow:false })
+        }
+        else if (e == 'Side Crunch'){
+            this.setState({ show: true, crunch: false,iconShow:false })
+        }
+        else if (e == 'Reverse Crunches'){
+            this.setState({ show: true, reverseCrunch: false,iconShow:false })
+        }
+        else if (e == 'Vertical Leg Crunch'){
+            this.setState({ show: true, verticalLegCrunch: false,iconShow:false })
+        }
+        else if (e == 'Bicycle Exercise'){
+            this.setState({ show: true, bicycleEx: false,iconShow:false })
+        }
+        else if (e == 'Rolling Plank Exercise'){
+            this.setState({ show: true, rollingEx: false,iconShow:false })
+        }
+        else if (e == 'Walking'){
+            this.setState({ show: true, walking: false ,iconShow:false})
+        }
+        else if (e == 'Running'){
+            this.setState({ show: true, running: false,iconShow:false })
+        }
+        else if (e == 'Jogging'){
+            this.setState({ show: true, joggingEx: false ,iconShow:false})
         }
     }
+
 
     setAmount = (e) => {
         this.setState({
@@ -185,7 +247,24 @@ class AddExercise extends React.Component {
     }
 
     render() {
-        const { show, showCard, jogging, pushups, bicep, logExercise, exerciseAmount, exerciseUnit } = this.state;
+        const { 
+            show, 
+            showCard, 
+            jogging, 
+            pushups, 
+            bicep,
+            crunch, 
+            logExercise, 
+            exerciseAmount, 
+            exerciseUnit,
+            reverseCrunch,
+            verticalLegCrunch,
+            bicycleEx,
+            rollingEx,
+            walking,
+            running,
+            joggingEx,
+         } = this.state;
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.childContainer}>
@@ -230,6 +309,55 @@ class AddExercise extends React.Component {
                         >
                             <Text style={styles.listsTextStyle}>Bicep curls</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'Side Crunch')}
+                        // onPress={this.bicepCurlsFun}
+                        >
+                            <Text style={styles.listsTextStyle}>Side Crunch</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'Reverse Crunches')}
+                        // onPress={this.bicepCurlsFun}
+                        >
+                            <Text style={styles.listsTextStyle}>Reverse Crunches</Text>
+                        </TouchableOpacity>
+                        
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'Vertical Leg Crunch')}
+                        // onPress={this.bicepCurlsFun}
+                        >
+                            <Text style={styles.listsTextStyle}>Vertical Leg Crunch</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'Bicycle Exercise')}
+                        // onPress={this.bicepCurlsFun}
+                        >
+                            <Text style={styles.listsTextStyle}>Bicycle Exercise</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'Rolling Plank Exercise')}
+                        // onPress={this.bicepCurlsFun}
+                        >
+                            <Text style={styles.listsTextStyle}>Rolling Plank Exercise</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'Walking')}
+                        // onPress={this.bicepCurlsFun}
+                        >
+                            <Text style={styles.listsTextStyle}>Walking</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'Running')}
+                        // onPress={this.bicepCurlsFun}
+                        >
+                            <Text style={styles.listsTextStyle}>Running</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.showFields.bind(this, 'Jogging')}
+                        // onPress={this.bicepCurlsFun}
+                        >
+                            <Text style={styles.listsTextStyle}>Jogging</Text>
+                        </TouchableOpacity>
                     </View>}
                     {showCard && <View style={styles.cardContainer}>
                         <BriskScreen title="Brisk Walk"
@@ -243,7 +371,8 @@ class AddExercise extends React.Component {
                             unit={exerciseUnit} />
                     </View>}
                     {jogging && <View style={styles.cardContainer} >
-                        <HighpacejoggingScreen
+                        <BriskScreen
+                            title='High Paced Jogging'
                             increamentVal={this.increamentVal}
                             decrementVal={this.decrementVal}
                             backFunc={this.backToHome.bind(this, 'High paced jogging')}
@@ -255,7 +384,8 @@ class AddExercise extends React.Component {
                         />
                     </View>}
                     {pushups && <View style={styles.cardContainer} >
-                        <Pushups
+                        <BriskScreen
+                            title='Push Ups'
                             increamentVal={this.increamentVal}
                             decrementVal={this.decrementVal}
                             backFunc={this.backToHome.bind(this, 'Push ups')}
@@ -267,7 +397,8 @@ class AddExercise extends React.Component {
                         />
                     </View>}
                     {bicep && <View style={styles.cardContainer} >
-                        <Bicepcurls
+                        <BriskScreen
+                            title='Bicep Curls'
                             increamentVal={this.increamentVal}
                             decrementVal={this.decrementVal}
                             backFunc={this.backToHome.bind(this, 'Bicep curls')}
@@ -278,9 +409,113 @@ class AddExercise extends React.Component {
                         // backFunc={this.bicepToHome}
                         />
                     </View>}
-                    {logExercise && <View style={styles.cardContainer} >
-                        <Bicepcurls />
+                    {crunch && <View style={styles.cardContainer} >
+                        <BriskScreen
+                            title='Side Crunch'
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Side Crunch')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit}
+                        // backFunc={this.bicepToHome}
+                        />
                     </View>}
+                    {reverseCrunch && <View style={styles.cardContainer} >
+                        <BriskScreen
+                            title='Reverse Crunches'
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Reverse Crunches')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit}
+                        // backFunc={this.bicepToHome}
+                        />
+                    </View>}
+                    {verticalLegCrunch && <View style={styles.cardContainer} >
+                        <BriskScreen
+                            title='Vertical Leg Crunch'
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Vertical Leg Crunch')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit}
+                        // backFunc={this.bicepToHome}
+                        />
+                    </View>}
+                    {bicycleEx && <View style={styles.cardContainer} >
+                        <BriskScreen
+                            title='Bicycle Exercise'
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Bicycle Exercise')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit}
+                        // backFunc={this.bicepToHome}
+                        />
+                    </View>}
+                    {rollingEx && <View style={styles.cardContainer} >
+                        <BriskScreen
+                            title='Rolling Plank Exercise'
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Rolling Plank Exercise')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit}
+                        // backFunc={this.bicepToHome}
+                        />
+                    </View>}
+                    {walking && <View style={styles.cardContainer} >
+                        <BriskScreen
+                            title='Walking'
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Walking')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit}
+                        // backFunc={this.bicepToHome}
+                        />
+                    </View>}
+                    {running && <View style={styles.cardContainer} >
+                        <BriskScreen
+                            title='Running'
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Running')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit}
+                        // backFunc={this.bicepToHome}
+                        />
+                    </View>}
+                    {joggingEx && <View style={styles.cardContainer} >
+                        <BriskScreen
+                            title='Jogging'
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Jogging')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit}
+                        // backFunc={this.bicepToHome}
+                        />
+                    </View>}
+                    {/* {logExercise && <View style={styles.cardContainer} >
+                        <Bicepcurls />
+                    </View>} */}
                 </View>
                 <View style={{ flex: 1.2 }}>
                 </View>
