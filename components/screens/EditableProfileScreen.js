@@ -22,24 +22,19 @@ import { thisExpression } from '@babel/types';
 import ImagePicker from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 const userDefaultPic = require('../icons/profile.png')
-
-
 const { height } = Dimensions.get('window');
 
 class EditProfileScreen extends React.Component {
     static navigationOptions = (navigation) => {
         return {
-
             headerStyle: {
                 backgroundColor: 'white'
-
             },
             headerTintColor: 'gray',
         }
     }
     constructor(props) {
         super(props);
-
         this.state = {
             email: '',
             emailValidate: true,
@@ -58,6 +53,7 @@ class EditProfileScreen extends React.Component {
             date: '',
             time: '',
             userId: '',
+            objectId:'',
             male:false,
             female:false
         }
@@ -82,6 +78,16 @@ class EditProfileScreen extends React.Component {
                 })
             }
         });
+    }
+    componentWillMount(){
+        AsyncStorage.getItem('myProfile').then((value) => {
+        if(value){
+            let userData = JSON.parse(value);
+            this.setState({
+                objectId:userData._id
+            })
+        }
+        })
     }
 
     checkValidation = (text, type) => {
@@ -235,8 +241,10 @@ class EditProfileScreen extends React.Component {
             date,
             time,
             userId,
+            objectId,
+            name
         } = this.state;
-        if (email == '' || password == '' || address == '' || contactNo == '' || gender == '') {
+        if (email == '' || password == '' || address == '' || contactNo == '' || gender == '' || name =='') {
             Alert.alert('Please Fill All Fields');
             if (passwordValidate != true || emailValidate != true || addressValidate != true || contactNoValidate != true || genderValidate != true) {
                 Alert.alert('Please Enter Correct Field');
@@ -244,6 +252,7 @@ class EditProfileScreen extends React.Component {
         }
         else {
             const userObj = {
+                name:name,
                 email: email,
                 address: address,
                 contactNo: contactNo,
@@ -251,11 +260,17 @@ class EditProfileScreen extends React.Component {
                 image: avatarSource.uri,
                 date: date,
                 time: time,
-                userId: userId
+                userId: userId,
+                objectId:objectId
             }
-            console.log(userObj)
-            let dataUser = await HttpUtils.post('profile', userObj)
-            console.log(dataUser, 'dataUser')
+            console.log(userObj);
+            let dataUser = await HttpUtils.post('profile', userObj);
+            if(dataUser.code == 200){
+            AsyncStorage.setItem('myProfile', JSON.stringify(userObj));
+
+            }
+
+            console.log(dataUser, 'dataUser');
         }
     }
     getGender(gender) {
@@ -292,40 +307,43 @@ class EditProfileScreen extends React.Component {
             isLoading,
             avatarSource,
             male,
-            female
-
+            female,
+            name
         } = this.state;
-        // console.log(email);
-        // console.log(avatarSource)
-
-        return (
+    return (
             <View style={styles.mainContainer}>
-
-                {/* <Image source={this.state.avatarSource} style={{height:25,width:25}}/> */}
-                <ScrollView
-                    style={{ flex: 1, backgroundColor: 'white', height: height }}
-                    contentContainerStyle={{ flexGrow: 1 }}
-                >
-
+                <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={styles.profilPicContainer}>
-                        <TouchableOpacity
-                            activeOpacity={0.5}
-                            onPress={this.chooseProfilePhoto}
-                        >
+                        <TouchableOpacity activeOpacity={0.5} onPress={this.chooseProfilePhoto}>
                             {avatarSource ? <Image source={avatarSource} style={styles.profilPicStyle} />
                                 :
                                 <Image source={userDefaultPic}
                                     style={styles.profilPicStyle}
                                 />}
                         </TouchableOpacity>
-                        <View style={styles.nameContainer}>
+                        {/* <View style={styles.nameContainer}>
                             <Text style={styles.nameStyle}>{this.state.name}</Text>
                         </View>
                         <View style={styles.userTitle}>
                             <Text style={styles.userTitleStyle}>Trainee</Text>
-                        </View>
+                        </View> */}
                     </View>
-
+                     <View style={styles.emailContainer}>
+                        <Text style={styles.inputLabelsStyle}>Name</Text>
+                        <TextInput
+                            onChangeText={text => {
+                                    this.setState({
+                                        name: text
+                                    })
+                            }}
+                            placeholder="Enter your name"
+                            placeholderColor="#4f4f4f"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            value={name}
+                            style={[styles.inputTextStyle]}
+                        />
+                    </View>
                     <View style={styles.emailContainer}>
                         <Text style={styles.inputLabelsStyle}>Email</Text>
                         <TextInput
@@ -335,7 +353,7 @@ class EditProfileScreen extends React.Component {
                                         email: text
                                     })
                             }}
-                            placeholder="waqas@gmail.com"
+                            placeholder="Enter your email"
                             keyboardType="email-address"
                             placeholderColor="#4f4f4f"
                             autoCapitalize="none"
@@ -411,7 +429,7 @@ class EditProfileScreen extends React.Component {
                     </View>}
                     <View style={styles.btnContainer}>
                         <CaloriesSetupBtn
-                            title='Set Up & Use App'
+                            title='Edit Profile'
                             caloriesBtnStyle={styles.caloriesBtnStyle}
                             onPress={this.updateUserProfileFunc}
                         />
