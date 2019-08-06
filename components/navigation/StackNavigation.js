@@ -44,39 +44,30 @@ const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
   // Login: {screen: Login},
 
-  // Exerciselog: {
-  //   screen: Exerciselog,
-  //   navigationOptions: {
-  //     headerStyle: {
-  //       elevation: 0,
-  //     }
-
-  //   }
-  // },
-  // Exerciselog: {
-  //   screen: Exerciselog,
-  //   navigationOptions: {
-  //     headerStyle: {
-  //       elevation: 0,
-  //     }
-
-<<<<<<< HEAD
-  //   }
-  // },
-  AddExercise: {
-    screen: AddExercise,
+  Exerciselog: {
+    screen: Exerciselog,
     navigationOptions: {
       headerStyle: {
         elevation: 0,
       }
-=======
-  // Logweight: {
-  //   screen: Logweight,
+
+    }
+   },
+  // Exerciselog: {
+  //   screen: Exerciselog,
   //   navigationOptions: {
   //     headerStyle: {
   //       elevation: 0,
   //     }
->>>>>>> f90f4ece3bf60965039db69f50338e77caf34c59
+
+  //   }
+  // },
+  // AddExercise: {
+  //   screen: AddExercise,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
 
   //   }
   // },

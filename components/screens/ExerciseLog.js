@@ -63,9 +63,10 @@ class Exerciselog extends React.Component {
     }
     render() {
         const { date, filterData } = this.state;
+    
         return (
             <View style={styles.mainContainer}>
-                <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
+                
                     <View style={styles.childContainer}>
                         <View style={styles.headingContainer}>
                             <Text style={styles.headingStyle}>
@@ -101,70 +102,51 @@ class Exerciselog extends React.Component {
                             />
                             <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
                         </View>
-
+                        <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                         {filterData.length >= 0 && filterData.map((elem, key) => {
                             return (
-                                <View style={styles.bodyContainer}>
-                                    {
-                                        key % 2 == 0 ?
-                                            // <View style={styles.bodyChildOne}>
-                                            //     <TouchableOpacity style={styles.resultCardLeft}>
-                                            //         <Text style={styles.resultText}>
-                                            //             {elem.exerciseName}
-                                            //         </Text>
-                                            //         <Text style={styles.resultTextAmount}>
-                                            //             {elem.exerciseAmount}
-                                            //         </Text>
-                                            //         <Text style={styles.resultTextUnit}>
-                                            //             {elem.exerciseUnit}
-                                            //         </Text>
-                                            //     </TouchableOpacity>
-                                            // </View>
-                                            <View>
-                                                <TouchableOpacity>
-                                                    <Text>
+                                <View style={styles.bodyChildOne}>
+                                 {/* <View style={styles.bodyContainer}> */}
+                                                <TouchableOpacity style={styles.resultCardLeft}>
+                                                    <Text style={styles.resultText}>
                                                         {elem.exerciseName}
                                                     </Text>
-                                                    <Text>
+                                                    <Text style={styles.resultTextAmount}>
                                                         {elem.exerciseAmount}
                                                     </Text>
-                                                    <Text>
+                                                    <Text style={styles.resultTextUnit}>
                                                         {elem.exerciseUnit}
                                                     </Text>
                                                 </TouchableOpacity>
-                                            </View>
-                                            :
-                                            // <View style={styles.bodyChildTwo}>
-                                            //     <TouchableOpacity style={styles.resultCardRight}>
-                                            //         <Text style={styles.resultText}>
-                                            //             {elem.exerciseName}
-                                            //         </Text>
-                                            //         <Text style={styles.resultTextAmount}>
-                                            //             {elem.exerciseAmount}
-                                            //         </Text>
-                                            //         <Text style={styles.resultTextUnit}>
-                                            //             {elem.exerciseUnit}
-                                            //         </Text>
-                                            //     </TouchableOpacity>
-                                            // </View>
-                                            <View >
-                                                <TouchableOpacity>
-                                                    <Text>
+                                                {/* <TouchableOpacity style={styles.resultCardRight}>
+                                                    <Text style={styles.resultText}>
                                                         {elem.exerciseName}
                                                     </Text>
-                                                    <Text>
+                                                    <Text style={styles.resultTextAmount}>
                                                         {elem.exerciseAmount}
                                                     </Text>
-                                                    <Text>
+                                                    <Text style={styles.resultTextUnit}>
                                                         {elem.exerciseUnit}
                                                     </Text>
-                                                </TouchableOpacity>
-                                            </View>
-                                    }
-                                </View>)
-                        })
-                        }
+                                                </TouchableOpacity> */}
+                                                
+                                            
+                                                
+                                        </View> 
+                                                
+                                                )
+                                            })
+                                            
+                                        }
+                                
+                               
+                           
+                            </ScrollView>
+                            <View style={{marginVertical:70,
+                            height:30
+                            }}>
 
+                            </View>
                         {/* <View style={styles.bodyContainer}>
                             <View style={styles.bodyChildOne}>
                                 <TouchableOpacity style={styles.resultCardLeft}>
@@ -193,8 +175,14 @@ class Exerciselog extends React.Component {
                                 </TouchableOpacity>
                             </View>
                         </View> */}
+
                     </View>
-                </ScrollView>
+                    
+
+                    
+                    
+                   
+                    
 
             </View>
         )
