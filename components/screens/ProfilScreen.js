@@ -7,7 +7,7 @@ import CaloriesSetupBtn from '../buttons/setUpBtn';
 import AsyncStorage from '@react-native-community/async-storage';
 import { thisExpression } from '@babel/types';
 
-
+let imageTag;
 const { height } = Dimensions.get('window');
 
 class Profile extends React.Component {
@@ -30,22 +30,19 @@ class Profile extends React.Component {
       },
       headerTintColor: 'gray',
     }
-
-
   }
   constructor(props) {
     super(props);
-
-    this.state = {
-      name: '',
-      address:'',
-      contactNo:'',
-      email:'',
-      gender:'',
-      type:'',
-      avtarImage : '',
-      show: false
-    }
+      this.state = {
+        name: '',
+        address:'',
+        contactNo:'',
+        email:'',
+        gender:'',
+        type:'',
+        avatarSource : '',
+        show: false
+      }
 
   }
 
@@ -53,15 +50,15 @@ class Profile extends React.Component {
     AsyncStorage.getItem('myProfile').then((value) => {
       let userData = JSON.parse(value);
       console.log(userData ,'userData')
-      // this.setState({
-      //   name: userData.name,
-      //   address:userData.address,
-      //   contactNo:user.DatacontactNo,
-      //   email:userData.email,
-      //   gender:userData.gender,
-      //   type:userData.type,
-      //   avtarImage:userData.image
-      // })
+      this.setState({
+        // name: userData.name,
+        address:userData.address,
+        contactNo:userData.contactNo,
+        email:userData.email,
+        gender:userData.gender,
+        type:userData.type.toUpperCase(),
+        avatarSource:userData.image            
+      })
     })
 
   }
@@ -77,10 +74,9 @@ class Profile extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
-    const { show } = this.state;
-    // console.log(routes);
+    const { show , name , type , address , contactNo , email , gender , avatarSource} = this.state;
+    console.log(imageTag)
     return (
-
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <Text style={styles.headingStyle}>
@@ -96,31 +92,40 @@ class Profile extends React.Component {
         >
           <View style={styles.profileContainer}>
             <View style={styles.profilPicContainer}>
-              <Image source={require('../icons/profile.png')} style={styles.profilPicStyle} />
+              {/* <Image
+              source = {avtarImage}
+              //  source={avtarImage != '' ? avtarImage : require('../icons/profile.png')} 
+               style={styles.profilPicStyle} /> */}
+                {
+                  avatarSource != '' ? 
+                    <Image source={avatarSource} style={styles.profilPicStyle} />
+                  :
+                    <Image source={require('../icons/profile.png')} style={styles.profilPicStyle}/>
+                  }
               <View style={styles.nameContainer}>
-                <Text style={styles.nameStyle}>{this.state.name}</Text>
+                <Text style={styles.nameStyle}>{name}</Text>
               </View>
               <View style={styles.userTitle}>
-                <Text style={styles.userTitleStyle}>Trainee</Text>
+                <Text style={styles.userTitleStyle}>{type}</Text>
               </View>
             </View>
           </View>
           <View style={styles.userInfoContainer}>
                  <View>
                    <Text style={styles.labelStyle}>Email</Text>
-                   <Text style={styles.userInsertedValueStyle}>waqas@gmail.com</Text>
+                   <Text style={styles.userInsertedValueStyle}>{email}</Text>
                  </View>
                  <View style={styles.viewBlock}>
                    <Text style={styles.labelStyle}>Address</Text>
-                   <Text style={styles.userInsertedValueStyle}>57-C, Lane 15 , khayban-e-badar , DHA , Karachi</Text>
+                   <Text style={styles.userInsertedValueStyle}>{address}</Text>
                  </View>
                  <View style={styles.viewBlock}>
                    <Text style={styles.labelStyle}>Contact Number</Text>
-                   <Text style={styles.userInsertedValueStyle}>0333-444444443</Text>
+                   <Text style={styles.userInsertedValueStyle}>{contactNo}</Text>
                  </View>
                  <View style={styles.viewBlock}>
                    <Text style={styles.labelStyle}>Gender</Text>
-                   <Text style={styles.userInsertedValueStyle}>Male</Text>
+                   <Text style={styles.userInsertedValueStyle}>{gender}</Text>
                  </View>
           </View>
         </ScrollView>
