@@ -61,7 +61,8 @@ const styles =StyleSheet.create({
     listsTextStyle:{
         fontFamily:'MontserratLight',
         color:'#4f4f4f',
-        marginVertical:10
+        marginVertical:10,
+        marginLeft:16
     },
     cardContainer:{
         flex:1.5,

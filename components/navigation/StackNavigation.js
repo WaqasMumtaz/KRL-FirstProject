@@ -39,15 +39,15 @@ const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
   // Login: {screen: Login},
 
-  // Exerciselog: {
-  //   screen: Exerciselog,
-  //   navigationOptions: {
-  //     headerStyle: {
-  //       elevation: 0,
-  //     }
+  Exerciselog: {
+    screen: Exerciselog,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
 
-  //   }
-  // },
+    }
+   },
   // Exerciselog: {
   //   screen: Exerciselog,
   //   navigationOptions: {
@@ -66,6 +66,7 @@ const MainNavigator= createStackNavigator({
 
   // Logweight: {
   //   screen: Logweight,
+
   //   navigationOptions: {
   //     headerStyle: {
   //       elevation: 0,

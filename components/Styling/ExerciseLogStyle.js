@@ -38,38 +38,42 @@ const styles =StyleSheet.create({
     },
     bodyContainer:{
         flex:1,
-        //backgroundColor:'pink',
+        backgroundColor:'pink',
         marginVertical:25,
-        flexDirection:'row'
+        flexDirection:'row',
+       
     },
     bodyChildOne:{
        flex:1,
        //backgroundColor:'yellow',
        flexDirection:'row',
-       flexWrap:'wrap'
+       flexWrap:'wrap',
+       justifyContent:'space-evenly',
+       padding:10
+       
     },
     bodyChildTwo:{
         flex:1,
-        //backgroundColor:'black',
+        backgroundColor:'yellow',
         flexDirection:'row',
-       flexWrap:'wrap'
+        flexWrap:'wrap'
     },
     resultCardLeft:{
-    //   borderWidth:5,
-    //   borderColor:'white',
+    //    borderWidth:5,
+    //    borderColor:'white',
       borderRadius:3,
       backgroundColor:'black',
-      height:'23%',
-      width:'95%'
+      height:125,
+      width:140
     },
     resultCardRight:{
-        // borderWidth:5,
-        // borderColor:'white',
+        //  borderWidth:5,
+        //  borderColor:'white',
         borderRadius:3,
         backgroundColor:'black',
-        height:'23%',
-        width:'95%',
-        marginLeft:8
+        height:125,
+        width:140,
+        //marginLeft:5
       },
     resultText:{
      marginTop:10,
@@ -85,6 +89,7 @@ const styles =StyleSheet.create({
     },
     resultTextUnit:{
         marginLeft:10,
+        marginTop:10,
         color:'#a6a6a6',
         fontFamily:'MontserratLight'
     },

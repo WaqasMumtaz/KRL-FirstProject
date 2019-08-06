@@ -21,10 +21,10 @@ class AddExercise extends React.Component {
             onPress={
                 params.addExercise
             }>
-           <Image source={require('../icons/tick.png')} style={styles.headerIcon} />
+            <Image source={require('../icons/tick.png')} style={styles.headerIcon} />
         </TouchableOpacity>
         return {
-            headerRight ,
+            headerRight,
             headerStyle: {
             },
             headerTintColor: 'gray',
@@ -38,22 +38,22 @@ class AddExercise extends React.Component {
             jogging: false,
             pushups: false,
             bicep: false,
-            crunch:false,
+            crunch: false,
             iconShow: false,
             logExercise: false,
-            reverseCrunch:false,
-            verticalLegCrunch:false,
-            bicycleEx:false,
-            rollingEx:false,
-            walking:false,
-            running:false,
-            joggingEx:false,
+            reverseCrunch: false,
+            verticalLegCrunch: false,
+            bicycleEx: false,
+            rollingEx: false,
+            walking: false,
+            running: false,
+            joggingEx: false,
             exerciseName: '',
             exerciseAmount: '',
             exerciseUnit: '',
-            dayOfMonth:'',
-            month:'',
-            year:'',
+            dayOfMonth: '',
+            month: '',
+            year: '',
             date: '',
             time: '',
             exerciseArr: ['Brisk Walk', 'High paced jogging', 'Push ups', 'Bicep curls', 'Side Crunch', 'Reverse Crunches',
@@ -76,9 +76,9 @@ class AddExercise extends React.Component {
                 this.setState({
                     date: date + '-' + month + '-' + year,
                     time: hours + ':' + min + ':' + sec,
-                    dayOfMonth:date,
-                    month:month,
-                    year:year,
+                    dayOfMonth: date,
+                    month: month,
+                    year: year,
                     userId: dataFromLocalStorage._id
                 })
             }
@@ -89,7 +89,7 @@ class AddExercise extends React.Component {
             //showIcon:this.state.iconShow
         })
         // this.gettingDropDownValues();
-        console.log('date --> ' ,date)
+        console.log('date --> ', date)
     }
     gettingDropDownValues = () => {
         const { exerciseArr } = this.state;
@@ -118,7 +118,7 @@ class AddExercise extends React.Component {
     }
 
     addExercise = async () => {
-        const { exerciseName, exerciseAmount, exerciseUnit, date, time, userId , dayOfMonth , month , year } = this.state;
+        const { exerciseName, exerciseAmount, exerciseUnit, date, time, userId, dayOfMonth, month, year } = this.state;
         let excersiceObj = {};
         if (exerciseName != '' && exerciseAmount != '' && exerciseUnit != '') {
             excersiceObj.exerciseName = exerciseName;
@@ -141,80 +141,80 @@ class AddExercise extends React.Component {
 
     showFields(e, val) {
         if (e == 'Brisk Walk') {
-            this.setState({ show: false, showCard: true,iconShow:true, exerciseName: e })
+            this.setState({ show: false, showCard: true, iconShow: true, exerciseName: e })
         }
         else if (e == 'High paced jogging') {
-            this.setState({ show: false, jogging: true,iconShow:true, exerciseName: e })
+            this.setState({ show: false, jogging: true, iconShow: true, exerciseName: e })
         }
         else if (e == 'Push ups') {
-            this.setState({ show: false, pushups: true,iconShow:true, exerciseName: e })
+            this.setState({ show: false, pushups: true, iconShow: true, exerciseName: e })
 
         }
         else if (e == 'Bicep curls') {
-            this.setState({ show: false, bicep: true,iconShow:true, exerciseName: e })
+            this.setState({ show: false, bicep: true, iconShow: true, exerciseName: e })
         }
-        else if (e == 'Side Crunch'){
-            this.setState({ show: false, crunch: true,iconShow:true, exerciseName: e })
+        else if (e == 'Side Crunch') {
+            this.setState({ show: false, crunch: true, iconShow: true, exerciseName: e })
         }
-        else if (e == 'Reverse Crunches'){
-            this.setState({ show: false, reverseCrunch: true,iconShow:true, exerciseName: e })
+        else if (e == 'Reverse Crunches') {
+            this.setState({ show: false, reverseCrunch: true, iconShow: true, exerciseName: e })
         }
-        else if(e == 'Vertical Leg Crunch'){
-            this.setState({ show: false, verticalLegCrunch: true,iconShow:true, exerciseName: e })
+        else if (e == 'Vertical Leg Crunch') {
+            this.setState({ show: false, verticalLegCrunch: true, iconShow: true, exerciseName: e })
         }
-        else if (e == 'Bicycle Exercise'){
-            this.setState({ show: false, bicycleEx: true,iconShow:true, exerciseName: e })
+        else if (e == 'Bicycle Exercise') {
+            this.setState({ show: false, bicycleEx: true, iconShow: true, exerciseName: e })
         }
-        else if (e == 'Rolling Plank Exercise'){
-            this.setState({ show: false, rollingEx: true,iconShow:true, exerciseName: e })
+        else if (e == 'Rolling Plank Exercise') {
+            this.setState({ show: false, rollingEx: true, iconShow: true, exerciseName: e })
         }
-        else if (e == 'Walking'){
-            this.setState({ show: false, walking: true,iconShow:true, exerciseName: e })
+        else if (e == 'Walking') {
+            this.setState({ show: false, walking: true, iconShow: true, exerciseName: e })
         }
-        else if (e == 'Running'){
-            this.setState({ show: false, running: true,iconShow:true, exerciseName: e })
+        else if (e == 'Running') {
+            this.setState({ show: false, running: true, iconShow: true, exerciseName: e })
         }
-        else if (e == 'Jogging'){
-            this.setState({ show: false, joggingEx: true,iconShow:true, exerciseName: e })
+        else if (e == 'Jogging') {
+            this.setState({ show: false, joggingEx: true, iconShow: true, exerciseName: e })
         }
     }
 
     backToHome(e, val) {
         if (e == 'Brisk Walk') {
-            this.setState({ show: true, showCard: false,iconShow:false })
+            this.setState({ show: true, showCard: false, iconShow: false })
         }
         else if (e == 'High paced jogging') {
-            this.setState({ show: true, jogging: false,iconShow:false })
+            this.setState({ show: true, jogging: false, iconShow: false })
         }
         else if (e == 'Push ups') {
-            this.setState({ show: true, pushups: false,iconShow:false })
+            this.setState({ show: true, pushups: false, iconShow: false })
         }
         else if (e == 'Bicep curls') {
-            this.setState({ show: true, bicep: false,iconShow:false })
+            this.setState({ show: true, bicep: false, iconShow: false })
         }
-        else if (e == 'Side Crunch'){
-            this.setState({ show: true, crunch: false,iconShow:false })
+        else if (e == 'Side Crunch') {
+            this.setState({ show: true, crunch: false, iconShow: false })
         }
-        else if (e == 'Reverse Crunches'){
-            this.setState({ show: true, reverseCrunch: false,iconShow:false })
+        else if (e == 'Reverse Crunches') {
+            this.setState({ show: true, reverseCrunch: false, iconShow: false })
         }
-        else if (e == 'Vertical Leg Crunch'){
-            this.setState({ show: true, verticalLegCrunch: false,iconShow:false })
+        else if (e == 'Vertical Leg Crunch') {
+            this.setState({ show: true, verticalLegCrunch: false, iconShow: false })
         }
-        else if (e == 'Bicycle Exercise'){
-            this.setState({ show: true, bicycleEx: false,iconShow:false })
+        else if (e == 'Bicycle Exercise') {
+            this.setState({ show: true, bicycleEx: false, iconShow: false })
         }
-        else if (e == 'Rolling Plank Exercise'){
-            this.setState({ show: true, rollingEx: false,iconShow:false })
+        else if (e == 'Rolling Plank Exercise') {
+            this.setState({ show: true, rollingEx: false, iconShow: false })
         }
-        else if (e == 'Walking'){
-            this.setState({ show: true, walking: false ,iconShow:false})
+        else if (e == 'Walking') {
+            this.setState({ show: true, walking: false, iconShow: false })
         }
-        else if (e == 'Running'){
-            this.setState({ show: true, running: false,iconShow:false })
+        else if (e == 'Running') {
+            this.setState({ show: true, running: false, iconShow: false })
         }
-        else if (e == 'Jogging'){
-            this.setState({ show: true, joggingEx: false ,iconShow:false})
+        else if (e == 'Jogging') {
+            this.setState({ show: true, joggingEx: false, iconShow: false })
         }
     }
 
@@ -247,15 +247,15 @@ class AddExercise extends React.Component {
     }
 
     render() {
-        const { 
-            show, 
-            showCard, 
-            jogging, 
-            pushups, 
+        const {
+            show,
+            showCard,
+            jogging,
+            pushups,
             bicep,
-            crunch, 
-            logExercise, 
-            exerciseAmount, 
+            crunch,
+            logExercise,
+            exerciseAmount,
             exerciseUnit,
             reverseCrunch,
             verticalLegCrunch,
@@ -264,7 +264,7 @@ class AddExercise extends React.Component {
             walking,
             running,
             joggingEx,
-         } = this.state;
+        } = this.state;
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.childContainer}>
@@ -321,7 +321,7 @@ class AddExercise extends React.Component {
                         >
                             <Text style={styles.listsTextStyle}>Reverse Crunches</Text>
                         </TouchableOpacity>
-                        
+
                         <TouchableOpacity
                             onPress={this.showFields.bind(this, 'Vertical Leg Crunch')}
                         // onPress={this.bicepCurlsFun}
