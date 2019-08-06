@@ -6,14 +6,18 @@ import styles from '../Styling/ProfilScreenStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import AsyncStorage from '@react-native-community/async-storage';
 import { thisExpression } from '@babel/types';
-
-let imageTag;
 const { height } = Dimensions.get('window');
+let checkProfile = false;
 
 class Profile extends React.Component {
   static navigationOptions = (navigation) => {
     const { params = {} } = navigation.navigation.state;
-    console.log(params);
+    if(params.opponentProfile){
+      checkProfile = params.opponentProfile;
+    }
+    else{
+      checkProfile = false;
+    }
     let headerRight = <TouchableOpacity
       style={styles.headerIconContainer}
       onPress={
@@ -26,7 +30,6 @@ class Profile extends React.Component {
       headerRight,
       headerStyle: {
         backgroundColor: 'white'
-
       },
       headerTintColor: 'gray',
     }
@@ -41,30 +44,62 @@ class Profile extends React.Component {
         gender:'',
         type:'',
         avatarSource : '',
-        show: false
+        show: false,
+        title:'',
+        checkProfile:false,
+        profileData:'',
+        profile:''
       }
-
   }
 
   componentWillMount() {
-    AsyncStorage.getItem('myProfile').then((value) => {
-      let userData = JSON.parse(value);
-      console.log(userData ,'userData')
-      this.setState({
-        // name: userData.name,
-        address:userData.address,
-        contactNo:userData.contactNo,
-        email:userData.email,
-        gender:userData.gender,
-        type:userData.type.toUpperCase(),
-        avatarSource:userData.image            
+    if(checkProfile){
+         AsyncStorage.getItem('opponentProfile').then((value) => {
+        let userData = JSON.parse(value);
+        if(value){
+        this.setState({
+          name: userData.name,
+          address:userData.address,
+          contactNo:userData.contactNo,
+          email:userData.email,
+          gender:userData.gender,
+          avatarSource:userData.image,    
+          type:userData.type,
+          title:userData.type,
+          profileData:userData,
+          profile:'opponentProfile'
+        })
+        }
       })
-    })
+    }
+    else{
+      AsyncStorage.getItem('myProfile').then((value) => {
+        let userData = JSON.parse(value);
+        if(value){
+          this.setState({
+            name: userData.name,
+            address:userData.address,
+            contactNo:userData.contactNo,
+            email:userData.email,
+            gender:userData.gender,
+            type:userData.type,
+            avatarSource:userData.image,
+            title:'My',
+            profileData:userData,
+            profile:'myProfile'
+          })
+        }
+      })
+    }
 
   }
   editForm = () => {
-    console.log('helloo')
-    this.props.navigation.navigate('EditProfileScreen');
+    const { profileData , profile} = this.state;
+    this.props.navigation.navigate('EditProfileScreen', {
+          profileData: profileData,
+          profile:profile
+        });
+    // this.props.navigation.navigate('EditProfileScreen');
   }
 
   componentDidMount() {
@@ -74,31 +109,21 @@ class Profile extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
-    const { show , name , type , address , contactNo , email , gender , avatarSource} = this.state;
-    console.log(imageTag)
+    const { show , name , type , address , contactNo , email , gender , avatarSource , title} = this.state;
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <Text style={styles.headingStyle}>
-            My Profile
+            {`${title} Profile`}
             </Text>
         </View>
         <ScrollView
-          style={{
-            flex: 1,
-            backgroundColor: 'white', height: height
-          }}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
+          style={{flex: 1, backgroundColor: 'white', height: height}} contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.profileContainer}>
             <View style={styles.profilPicContainer}>
-              {/* <Image
-              source = {avtarImage}
-              //  source={avtarImage != '' ? avtarImage : require('../icons/profile.png')} 
-               style={styles.profilPicStyle} /> */}
                 {
                   avatarSource != '' ? 
-                    <Image source={avatarSource} style={styles.profilPicStyle} />
+                    <Image style={styles.profilPicStyle} source={{uri: `${avatarSource}`}}/>
                   :
                     <Image source={require('../icons/profile.png')} style={styles.profilPicStyle}/>
                   }

@@ -15,12 +15,17 @@ import {
 import TextInputs from '../textInputs/TextInputs';
 // import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/EditableProfileStyle';
+import styless from '../Styling/ProfilScreenStyle';
+
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
 import { thisExpression } from '@babel/types';
 import ImagePicker from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
+import Toast, {DURATION} from 'react-native-easy-toast'
+import OverlayLoader from '../Loader/OverlaySpinner'
+
 const userDefaultPic = require('../icons/profile.png')
 const { height } = Dimensions.get('window');
 
@@ -38,15 +43,12 @@ class EditProfileScreen extends React.Component {
         this.state = {
             email: '',
             emailValidate: true,
-            password: '',
-            passwordValidate: true,
             address: '',
             addressValidate: true,
             addressInstruction: false,
             contactNo: '',
             contactNoValidate: true,
             gender: '',
-            psswrdInstruction: false,
             genderValidate: true,
             isLoading: false,
             avatarSource: null,
@@ -55,7 +57,9 @@ class EditProfileScreen extends React.Component {
             userId: '',
             objectId:'',
             male:false,
-            female:false
+            female:false,
+            position:'top',
+            profile:''
         }
     }
     componentDidMount() {
@@ -79,15 +83,22 @@ class EditProfileScreen extends React.Component {
             }
         });
     }
-    componentWillMount(){
-        AsyncStorage.getItem('myProfile').then((value) => {
-        if(value){
-            let userData = JSON.parse(value);
-            this.setState({
-                objectId:userData._id
-            })
-        }
+    async componentWillMount(){
+        const { profileData , profile } = this.props.navigation.state.params;
+        await this.setState({
+            objectId:profileData._id,
+            email:profileData.email,
+            name:profileData.name,
+            address:profileData.address,
+            contactNo:profileData.contactNo,
+            gender:profileData.gender,
+            avatarSource:profileData.image,
+            type:profileData.type,
+            profile:profile
         })
+        if(this.state.gender != ''){
+            this.getGender(this.state.gender);
+        }
     }
 
     checkValidation = (text, type) => {
@@ -131,34 +142,6 @@ class EditProfileScreen extends React.Component {
             }
         }
     }
-
-    passwordHandleValue = (text) => {
-        const { password } = this.state;
-        this.setState({
-            password: text
-        }, () => {
-            if (password.length < 4) {
-                this.setState({
-                    passwordValidate: false,
-                    psswrdInstruction: true
-                })
-            }
-            if (password.length >= 4) {
-                this.setState({
-                    passwordValidate: true,
-                    psswrdInstruction: false
-                })
-            }
-            if (password.length > 9) {
-                this.setState({
-                    passwordValidate: false,
-                    psswrdInstruction: true
-                })
-            }
-
-        })
-    }
-
     addressValueHandle = (text) => {
         const { address } = this.state;
         this.setState({
@@ -178,15 +161,12 @@ class EditProfileScreen extends React.Component {
             }
         })
     }
-
     chooseProfilePhoto = () => {
         const options = {
             noData: true,
             mediaType: 'photo'
         }
         ImagePicker.showImagePicker(options, async (response) => {
-            console.log('Response = ', response);
-
             if (response.didCancel) {
                 console.log('User cancelled image picker');
             } else if (response.error) {
@@ -203,7 +183,6 @@ class EditProfileScreen extends React.Component {
                     "file": imgBase644,
                     "upload_preset": "toh6r3p2",
                 }
-
                 fetch(apiUrl, {
                     body: JSON.stringify(data),
                     headers: {
@@ -213,10 +192,9 @@ class EditProfileScreen extends React.Component {
                 }).then(async r => {
                     let data = await r.json()
                     //send image on firebase
-                    console.log(data)
                     const source = { uri: data.secure_url }
                     this.setState({
-                        avatarSource: source,
+                        avatarSource: source.uri,
                     })
                     return data.secure_url
                 }).catch(err => console.log(err))
@@ -224,29 +202,24 @@ class EditProfileScreen extends React.Component {
             }
         })
     }
-
+    toastFunction=(text , position , duration ,withStyle )=>{
+        this.setState({
+            position: position,
+        })
+        if(withStyle){
+            this.refs.toastWithStyle.show(text, duration);
+        }else {
+            this.refs.toast.show(text, duration);
+        }
+    }
     updateUserProfileFunc = async () => {
-        const {
-            email,
-            password,
-            address,
-            contactNo,
-            gender,
-            emailValidate,
-            passwordValidate,
-            addressValidate,
-            contactNoValidate,
-            genderValidate,
-            avatarSource,
-            date,
-            time,
-            userId,
-            objectId,
-            name
-        } = this.state;
-        if (email == '' || password == '' || address == '' || contactNo == '' || gender == '' || name =='') {
+        const { email, address, contactNo, gender, emailValidate, addressValidate, contactNoValidate, genderValidate,
+                avatarSource, date, time, userId, objectId, name, type , profile} = this.state;
+        // const { profile } = this.props.navigation.state.params;
+        
+        if (email == '' || address == '' || contactNo == '' || gender == '' || name =='') {
             Alert.alert('Please Fill All Fields');
-            if (passwordValidate != true || emailValidate != true || addressValidate != true || contactNoValidate != true || genderValidate != true) {
+            if (emailValidate != true || addressValidate != true || contactNoValidate != true || genderValidate != true) {
                 Alert.alert('Please Enter Correct Field');
             }
         }
@@ -261,31 +234,62 @@ class EditProfileScreen extends React.Component {
                 date: date,
                 time: time,
                 userId: userId,
-                objectId:objectId
+                objectId:objectId,
             }
-            console.log(userObj);
+             this.setState({
+                isLoading:true
+            })
             let dataUser = await HttpUtils.post('profile', userObj);
+            let userMsg = dataUser.msg;
             if(dataUser.code == 200){
-            AsyncStorage.setItem('myProfile', JSON.stringify(userObj));
-
+                this.setState({
+                    isLoading:false
+                }, ()=>{
+                    this.toastFunction(userMsg,this.state.position , DURATION.LENGTH_LONG,true)
+                })
+            let obj ={
+                address: dataUser.content.address,
+                contactNo: dataUser.content.contactNo,
+                date: dataUser.content.date,
+                email: dataUser.content.email,
+                gender: dataUser.content.gender,
+                image: dataUser.content.image,
+                name: dataUser.content.name,
+                _id:dataUser.content.objectId,
+                time: dataUser.content.time,
+                userId: dataUser.content.userId,
+                type:type
             }
-
-            console.log(dataUser, 'dataUser');
+            if(profile == "opponentProfile"){
+                AsyncStorage.setItem('opponentProfile', JSON.stringify(obj));
+            }
+            else if(profile == 'myProfile'){
+                AsyncStorage.setItem('myProfile', JSON.stringify(obj));
+            }
+            }
+            else if(!dataUser.code){
+                this.setState({
+                    isLoading:false
+                }, ()=>{
+                  this.toastFunction('Some thing went wrong',this.state.position , DURATION.LENGTH_LONG,true)
+                })
+            }
         }
     }
     getGender(gender) {
-        if (gender == 'male') {
+        console.log(gender, 'called gender')
+        if (gender == 'Male' || gender == 'male') {
             this.setState({
                 male: true,
                 female: false,
-                gender: 'male'
+                gender: 'Male'
             })
         }
-        else if (gender == 'female') {
+        else if (gender == 'Female'|| gender == 'female') {
             this.setState({
                 male: false,
                 female: true,
-                gender: 'female'
+                gender: 'Female'
             })
         }
     }
@@ -294,9 +298,6 @@ class EditProfileScreen extends React.Component {
     render() {
         const {
             email,
-            password,
-            psswrdInstruction,
-            passwordValidate,
             address,
             addressValidate,
             addressInstruction,
@@ -308,18 +309,18 @@ class EditProfileScreen extends React.Component {
             avatarSource,
             male,
             female,
-            name
+            name,
         } = this.state;
     return (
             <View style={styles.mainContainer}>
                 <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={styles.profilPicContainer}>
                         <TouchableOpacity activeOpacity={0.5} onPress={this.chooseProfilePhoto}>
-                            {avatarSource ? <Image source={avatarSource} style={styles.profilPicStyle} />
+                            {avatarSource ? 
+                                <Image source={{uri: `${avatarSource}`}} style={styles.profilPicStyle} />
                                 :
-                                <Image source={userDefaultPic}
-                                    style={styles.profilPicStyle}
-                                />}
+                                <Image source={userDefaultPic} style={styles.profilPicStyle}/>
+                            }
                         </TouchableOpacity>
                         {/* <View style={styles.nameContainer}>
                             <Text style={styles.nameStyle}>{this.state.name}</Text>
@@ -345,8 +346,9 @@ class EditProfileScreen extends React.Component {
                         />
                     </View>
                     <View style={styles.emailContainer}>
-                        <Text style={styles.inputLabelsStyle}>Email</Text>
-                        <TextInput
+                   <Text style={styless.labelStyle}>Email</Text>
+                        <Text style={styless.userInsertedValueStyle}>{email}</Text>
+                        {/* <TextInput
                             onChangeText={text => {
                                 this.checkValidation(text, 'email'),
                                     this.setState({
@@ -360,9 +362,9 @@ class EditProfileScreen extends React.Component {
                             autoCorrect={false}
                             value={email}
                             style={[styles.inputTextStyle, !this.state.emailValidate ? styles.errorInput : null]}
-                        />
+                        /> */}
                     </View>
-                    <View style={styles.passwrdContainer}>
+                    {/* <View style={styles.passwrdContainer}>
                         <Text style={styles.inputLabelsStyle}>Password</Text>
                         <TextInput
                             onChangeText={text => { this.passwordHandleValue(text) }}
@@ -372,12 +374,12 @@ class EditProfileScreen extends React.Component {
                             value={password}
                             style={[styles.inputTextStyle, !passwordValidate ? styles.errorInput : null]}
                         />
-                    </View>
-                    {psswrdInstruction && <View style={styles.passwrdInstructionContainer}>
+                    </View> */}
+                    {/* {psswrdInstruction && <View style={styles.passwrdInstructionContainer}>
                         <Text style={styles.instructionStyle}>
                             Password strength is required maximum 9 and greater then 4
                          </Text>
-                    </View>}
+                    </View>} */}
                     <View style={styles.addressContainer}>
                         <Text style={styles.inputLabelsStyle}>Address</Text>
                         <TextInput
@@ -413,20 +415,23 @@ class EditProfileScreen extends React.Component {
                         <Text style={styles.inputLabelsStyle}>Gender</Text>
                         <View style={styles.childGender}>
                         <TouchableOpacity style={male ? styles.clickedMale : styles.maleTouchableOpacity} 
-                          onPress={this.getGender.bind(this, 'male')}>
+                          onPress={this.getGender.bind(this, 'Male')}>
                                 <Text style={styles.maleTextStyle}>
                                     Male
                             </Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={female ? styles.clickedFemale : styles.femaleContainer} 
-                            onPress={this.getGender.bind(this, 'female')}>
+                            onPress={this.getGender.bind(this, 'Female')}>
                                 <Text style={styles.maleTextStyle}>Female</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
-                        <ActivityIndicator size='large' color="#FF6200" />
-                    </View>}
+                    {
+                    //     isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
+                    //     <ActivityIndicator size='large' color="#FF6200" />
+                    // </View>
+                    isLoading ? <OverlayLoader/>: null
+                    }
                     <View style={styles.btnContainer}>
                         <CaloriesSetupBtn
                             title='Edit Profile'
@@ -434,10 +439,17 @@ class EditProfileScreen extends React.Component {
                             onPress={this.updateUserProfileFunc}
                         />
                     </View>
-
                     <View style={styles.blankContainer}>
-
                     </View>
+                    <Toast ref="toastWithStyle" 
+                        style={{backgroundColor:'#FF6200'}} 
+                        position={this.state.position}
+                        positionValue={50}
+                        fadeInDuration={750}
+                        fadeOutDuration={1000}
+                        opacity={0.8}
+                        textStyle={{color:'white',fontFamily: 'MontserratLight',}}
+                    />
 
                 </ScrollView>
             </View>

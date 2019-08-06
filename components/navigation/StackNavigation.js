@@ -28,13 +28,8 @@ import Wheelspiner from '../Progress Wheel/Progress';
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
 // import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
-
 import ToastComponent from '../Toasts/nativeToast';
-import OverlayLoader from '../Loader/OverlaySpinner'
-
-
-
-
+import OverlayLoader from '../Loader/OverlaySpinner';
 const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
   //  Login: {screen: Login},
@@ -60,23 +55,21 @@ const MainNavigator= createStackNavigator({
   //       elevation: 0,
   //     }
 
-<<<<<<< HEAD
   //   }
   // },
-  AddExercise: {
-    screen: AddExercise,
-    navigationOptions: {
-      headerStyle: {
-        elevation: 0,
-      }
-=======
+  // AddExercise: {
+  //   screen: AddExercise,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
+
   // Logweight: {
   //   screen: Logweight,
   //   navigationOptions: {
   //     headerStyle: {
   //       elevation: 0,
   //     }
->>>>>>> f90f4ece3bf60965039db69f50338e77caf34c59
 
   //   }
   // },
