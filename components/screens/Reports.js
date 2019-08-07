@@ -12,9 +12,7 @@ class Reportscreen extends React.Component {
   }
   render() {
     const { navigate } = this.props.navigation;
-
     return (
-
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <Text style={styles.textStyleOne}>Weekly</Text>
@@ -78,7 +76,6 @@ class Reportscreen extends React.Component {
                       <Text style={styles.superScriptTextStyle}>th</Text>
                     </View>
                   </View>
-                  
                 </View>
                 <View style={styles.exerciseResultCard}>
                   <Text style={styles.resultHeading}>
@@ -94,9 +91,7 @@ class Reportscreen extends React.Component {
                       <Text style={styles.superScriptTextStyle}>th</Text>
                     </View>
                   </View>
-                  
                 </View>
-
                 <View style={styles.exerciseResultCard}>
                   <Text style={styles.resultHeading}>
                     High Intensity Run
@@ -111,14 +106,10 @@ class Reportscreen extends React.Component {
                       <Text style={styles.superScriptTextStyle}>th</Text>
                     </View>
                   </View>
-                  
                 </View>
-                
               </View>
-
             </View>
           </View>
-
         </ScrollView>
       </View>
 
