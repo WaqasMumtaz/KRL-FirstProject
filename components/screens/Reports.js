@@ -39,9 +39,11 @@ class Reportscreen extends React.Component {
                 <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', marginLeft: 14 }}>steps</Text>
               </View>
               <View style={styles.weightStatus}>
+              {/* <View> */}
                 <Text style={styles.headingText}>Weight{'\n'}status</Text>
                 <View style={styles.statusGraphContainer}>
                   <View style={styles.midBox}>
+                    {/* <Text style={styles.headingText}>Chart</Text> */}
                     <ChartScreen />
                   </View>
                   <View style={styles.borderLines1}>
