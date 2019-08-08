@@ -53,6 +53,8 @@ class Chatscreen extends React.Component {
       userId: '',
       opponentId: '',
       file: '',
+      opponnetAvatarSource:'',
+      name:''
     }
   }
 
@@ -73,6 +75,23 @@ class Chatscreen extends React.Component {
   }
 
   componentWillMount() {
+     AsyncStorage.getItem('opponentProfile').then((value) => {
+      let userData = JSON.parse(value);
+      if(value){
+      console.log(userData ,'userData')
+      this.setState({
+        opponnetAvatarSource:userData.image,
+        name:userData.name
+      })
+      }
+      else if(userData.name != undefined){
+        this.setState({
+          opponnetAvatarSource:userData.image,
+          name:userData.name
+        })
+      }
+    })
+
     let chatArrayTemp = [];
     let dataFromLocalStorage;
     AsyncStorage.getItem("currentUser").then(value => {
@@ -174,7 +193,6 @@ class Chatscreen extends React.Component {
       mediaType: 'photo'
     }
     ImagePicker.showImagePicker(options, async (response) => {
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       }
@@ -185,9 +203,7 @@ class Chatscreen extends React.Component {
         console.log('User tapped custom button: ', response.customButton);
       }
       else {
-        let contentType = response.type
-
-
+        let contentType = response.type;
         fetch(apiUrl, {
           body: JSON.stringify(data),
           headers: {
@@ -197,14 +213,12 @@ class Chatscreen extends React.Component {
         }).then(async r => {
           let data = await r.json()
           //send image on firebase
-          //console.lob(data)
           this.uplaodDataOnFirebase(data.secure_url)
           // this.setState({
           //   avatarSource: data.secure_url,
           // })
           return data.secure_url
         }).catch(err => console.log(err))
-
 
 
         // let res = await RNFS.readFile(response.uri, 'base64')
@@ -248,14 +262,11 @@ class Chatscreen extends React.Component {
       else {
         console.log(response, 'responnse')
         let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
-
-
         // RNFetchBlob.fetch('POST', apiUrl, {
         //   Authorization: "Bearer access-token",
         //   otherHeader: "foo",
         //   'Content-Type': 'multipart/form-data',
         //   "upload_preset": "toh6r3p2",
-
         // }, [
         //   {
         //     filename: response.fileName,
@@ -371,11 +382,18 @@ class Chatscreen extends React.Component {
       shareFiles: false
     })
   }
+checkProfile = () =>{
+    const { navigate } = this.props.navigation;
+  console.log('checkProfile')
+  navigate('Profile', {
+        opponentProfile: true
+      });
 
+}
 
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
-      attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId } = this.state;
+      attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId , opponnetAvatarSource , name} = this.state;
 
     const chatMessages = this.state.chatMessages.map((message, key) => (
       <View>
@@ -427,12 +445,11 @@ class Chatscreen extends React.Component {
       <View style={styles.mainContainer}>
         <View style={styles.childMainContainer}>
           <View style={styles.chatProfileContainer}>
-            <Text style={styles.profileNameStyle}>Waqas</Text>
-            {/* <View style={styles.profilPicContainer}> */}
-            <Image source={require('../icons/profil.jpg')} style={styles.profilPicStyle} />
-            {/* </View> */}
+            <Text style={styles.profileNameStyle}>{name}</Text>
+             <TouchableOpacity activeOpacity={0.5} onPress={this.checkProfile}>
+            <Image source={{uri: `${opponnetAvatarSource}`}}style={styles.profilPicStyle} />
+            </TouchableOpacity>
           </View>
-
           <ScrollView style={styles.scrollContainer} contentContainerStyle={{ flexGrow: 1 }}
             ref={ref => this.scrollView = ref}
             onContentSizeChange={(contentWidth, contentHeight) => {
@@ -480,10 +497,7 @@ class Chatscreen extends React.Component {
                   </TouchableOpacity>
                 </View>
               </View>}
-
-
             </View>
-
           </ScrollView>
           <View style={styles.textInputContainer}>
             <TextInput
@@ -509,7 +523,6 @@ class Chatscreen extends React.Component {
                 />
               </TouchableOpacity>}
             </View>
-
             {sendBtnContainer && <View style={styles.sentBtnContainer}>
               {sendIcon && <TouchableOpacity onPress={this.sendMessage}>
                 <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
@@ -525,10 +538,8 @@ class Chatscreen extends React.Component {
               </TouchableOpacity>}
             </View>}
           </View>
-
         </View>
       </View>
-
     );
   }
 }

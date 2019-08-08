@@ -15,6 +15,7 @@
     "prop-types": "^15.7.2",
     "react": "16.8.6",
     "react-native": "0.59.5",
+    "react-native-chart-kit": "^3.2.0",
     "react-native-charts": "^3.0.0",
     "react-native-charts-wrapper": "^0.5.5",
     "react-native-datepicker": "^1.7.2",
@@ -33,6 +34,7 @@
     "react-native-progress-wheel": "^1.0.4",
     "react-native-simple-dialogs": "^1.1.0",
     "react-native-sound-recorder": "^1.3.3",
+    "react-native-svg": "^9.6.2",
     "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.9.1",
     "socket.io-client": "^2.2.0"

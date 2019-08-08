@@ -37,6 +37,7 @@ import StepCountScreen from '../screens/StepCountScreen';
 
 
 
+
 const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
   //  Login: {screen: Login},
@@ -68,6 +69,14 @@ const MainNavigator= createStackNavigator({
   // },
   // AddExercise: {
   //   screen: AddExercise,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
+
+  // Logweight: {
+  //   screen: Logweight,
+
   //   navigationOptions: {
   //     headerStyle: {
   //       elevation: 0,

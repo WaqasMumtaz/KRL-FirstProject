@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
 import styles from '../Styling/ReportsScreenStyle';
 import Wheelspiner from '../Progress Wheel/Progress';
-//import ChartScreen from '../BarChart/BarChart';
+import ChartScreen from '../BarChart/BarChart';
 const { height } = Dimensions.get('window');
 // const screenWidth=Dimensions.get('window').width;
 // const screenHeight=Dimensions.get('window').height;
@@ -12,9 +12,7 @@ class Reportscreen extends React.Component {
   }
   render() {
     const { navigate } = this.props.navigation;
-
     return (
-
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <Text style={styles.textStyleOne}>Weekly</Text>
@@ -44,7 +42,7 @@ class Reportscreen extends React.Component {
                 <Text style={styles.headingText}>Weight{'\n'}status</Text>
                 <View style={styles.statusGraphContainer}>
                   <View style={styles.midBox}>
-                    {/* <ChartScreen /> */}
+                    <ChartScreen />
                   </View>
                   <View style={styles.borderLines1}>
                     <Text style={styles.kgTextOne}>64 KG</Text>
@@ -78,7 +76,6 @@ class Reportscreen extends React.Component {
                       <Text style={styles.superScriptTextStyle}>th</Text>
                     </View>
                   </View>
-                  
                 </View>
                 <View style={styles.exerciseResultCard}>
                   <Text style={styles.resultHeading}>
@@ -94,9 +91,7 @@ class Reportscreen extends React.Component {
                       <Text style={styles.superScriptTextStyle}>th</Text>
                     </View>
                   </View>
-                  
                 </View>
-
                 <View style={styles.exerciseResultCard}>
                   <Text style={styles.resultHeading}>
                     High Intensity Run
@@ -111,14 +106,10 @@ class Reportscreen extends React.Component {
                       <Text style={styles.superScriptTextStyle}>th</Text>
                     </View>
                   </View>
-                  
                 </View>
-                
               </View>
-
             </View>
           </View>
-
         </ScrollView>
       </View>
 

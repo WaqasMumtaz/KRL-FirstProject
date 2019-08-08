@@ -67,6 +67,8 @@
 		9ED8F8E9961B495ABBCD5C97 /* libRNFileViewer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18019CFE567F474295A61965 /* libRNFileViewer.a */; };
 		B56A75454A8F4EEE8EA182C3 /* libRNFileOpener.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC65B80F578345B4885FC41E /* libRNFileOpener.a */; };
 		C0F252C981BE4D37ABC25C42 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36B8C72428AF4505BC27CA6D /* libRNFetchBlob.a */; };
+		3788CE17E84E4075867EF2F6 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0364BCDAF6344099089D6FF /* libRNSVG.a */; };
+		1EF2B92578E8445CB8AC2ACE /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A4E70FEDF584B99896AB850 /* libRNSVG-tvOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -412,6 +414,9 @@
 		CC65B80F578345B4885FC41E /* libRNFileOpener.a */ = {isa = PBXFileReference; name = "libRNFileOpener.a"; path = "libRNFileOpener.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		9F50AE318BDD4C98BCF6A0AF /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; name = "RNFetchBlob.xcodeproj"; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		36B8C72428AF4505BC27CA6D /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		4FEA0257A1BE4FFFB24E885C /* RNSVG.xcodeproj */ = {isa = PBXFileReference; name = "RNSVG.xcodeproj"; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		A0364BCDAF6344099089D6FF /* libRNSVG.a */ = {isa = PBXFileReference; name = "libRNSVG.a"; path = "libRNSVG.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		9A4E70FEDF584B99896AB850 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; name = "libRNSVG-tvOS.a"; path = "libRNSVG-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -450,6 +455,7 @@
 				9ED8F8E9961B495ABBCD5C97 /* libRNFileViewer.a in Frameworks */,
 				B56A75454A8F4EEE8EA182C3 /* libRNFileOpener.a in Frameworks */,
 				C0F252C981BE4D37ABC25C42 /* libRNFetchBlob.a in Frameworks */,
+				3788CE17E84E4075867EF2F6 /* libRNSVG.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +477,7 @@
 				7299200CAF9245A79BCF60BA /* libRNGestureHandler-tvOS.a in Frameworks */,
 				4C2750EF4FFD4B2EAE2FF9BB /* libRNGestureHandler-tvOS.a in Frameworks */,
 				1282BBB5459E44E2876827F8 /* libRNVectorIcons-tvOS.a in Frameworks */,
+				1EF2B92578E8445CB8AC2ACE /* libRNSVG-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -654,6 +661,7 @@
 				0AB70A4F84644442A438C3D9 /* RNFileViewer.xcodeproj */,
 				1B5311AFBC194FEA97C37881 /* RNFileOpener.xcodeproj */,
 				9F50AE318BDD4C98BCF6A0AF /* RNFetchBlob.xcodeproj */,
+				4FEA0257A1BE4FFFB24E885C /* RNSVG.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1323,6 +1331,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1336,6 +1346,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
 					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 				);
 			};
 			name = Debug;
@@ -1358,6 +1369,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1371,6 +1384,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
 					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 				);
 			};
 			name = Release;
@@ -1403,6 +1417,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
 					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 				);
 			};
 			name = Debug;
@@ -1434,6 +1449,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
 					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 				);
 			};
 			name = Release;
@@ -1464,6 +1480,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1477,6 +1495,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
 					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 				);
 			};
 			name = Debug;
@@ -1507,6 +1526,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1520,6 +1541,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
 					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 				);
 			};
 			name = Release;
@@ -1549,6 +1571,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1562,6 +1586,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
 					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 				);
 			};
 			name = Debug;
@@ -1591,6 +1616,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1604,6 +1631,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-file-viewer\ios",
 					"$(SRCROOT)\..\node_modules\react-native-file-opener\ios\RNFileOpener",
 					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 				);
 			};
 			name = Release;
