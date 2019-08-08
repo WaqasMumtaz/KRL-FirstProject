@@ -41,9 +41,17 @@ class Homescreen extends React.Component {
       }
     }
   }
-  changeRout = () => {
+  changeRout(e) {
     const { navigate } = this.props.navigation;
-    navigate('Exerciselog')
+    if (e == 'logexercise') {
+      navigate('Exerciselog')
+    }
+    else if (e == 'stepcount') {
+      navigate('StepCountScreen')
+    }
+
+
+
   }
 
   render() {
@@ -66,7 +74,7 @@ class Homescreen extends React.Component {
               <TouchableOpacity style={styles.cardOne} onPress={() => { navigate('AddExercise') }}>
                 <Image source={require('../icons/log-exer.png')} style={styles.imgsStyle} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.cardThree} onPress={() => navigate('Logweight')}>
+              <TouchableOpacity style={styles.cardThree} onPress={() => navigate('LogMeasurementsScreen')}>
                 <Image source={require('../icons/log-weight.png')} style={styles.imgsStyle} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.cardFive} onPress={() => navigate('Macrocalculator')}>
@@ -74,10 +82,20 @@ class Homescreen extends React.Component {
               </TouchableOpacity>
             </View>
             <View style={styles.childContainerTwo}>
-              <View style={styles.cardTwo}>
+              <TouchableOpacity style={styles.cardTwo} activeOpacity={0.7}
+                onPress={this.changeRout.bind(this, 'stepcount')}
+              >
                 <Text style={styles.cardTwoTextStyle}>Today's {'\n'}step count</Text>
                 <View style={styles.whelSpinerContainer}>
-                  <Wheelspiner />
+                  <Wheelspiner
+                    size={65}
+                    width={10}
+                    color={'#FF6200'}
+                    progress={60}
+                    backgroundColor={'gray'}
+                    animateFromValue={0}
+                    fullColor={'#FF6200'}
+                  />
                 </View>
                 <View style={styles.resultContainer}>
                   <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight' }}>6842</Text>
@@ -88,9 +106,9 @@ class Homescreen extends React.Component {
                   <Text style={{ color: '#FFFFFF', fontFamily: 'MontserratLight', fontSize: 12, marginTop: 33 }}>View detailed report</Text>
                   <Image source={require('../icons/forward-arrow.png')} style={styles.arrowIcon} />
                 </View>
-              </View>
+              </TouchableOpacity>
               <TouchableOpacity style={styles.cardFour} activeOpacity={0.7}
-                onPress={this.changeRout}
+                onPress={this.changeRout.bind(this, 'logexercise')}
               >
                 <Text style={styles.cardFourTextStyle}>{todayData != '' ? `Today's ${'\n'} exercise` : `Yesterday's${'\n'} exercise`}</Text>
                 <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', marginTop: 20, marginLeft: 14 }}>{todayData != '' ? `${todayData.exerciseName} ${'\n'}exercise` : yestertdayData != '' ? `${yestertdayData.exerciseName} ${'\n'}exercise` : 'No Record Found'}</Text>

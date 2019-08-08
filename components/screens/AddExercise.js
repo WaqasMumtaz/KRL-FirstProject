@@ -2,11 +2,11 @@ import React from 'react';
 import { Text, View, ScrollView, Image, Dimensions, TextInput, TouchableOpacity, Picker, Option } from 'react-native';
 import styles from '../Styling/AddExerciseStyle';
 import BriskScreen from '../screens/BriskScreen';
-import HighpacejoggingScreen from './HighPaceJogging';
-import Pushups from './PushUps';
-import Bicepcurls from './BicepCurls';
-import Sidecrunch from '../screens/cardScreens/SideCrunch';
-import ReverseCrunches from '../screens/cardScreens/ReverseCrunches';
+// import HighpacejoggingScreen from './HighPaceJogging';
+// import Pushups from './PushUps';
+// import Bicepcurls from './BicepCurls';
+// import Sidecrunch from '../screens/cardScreens/SideCrunch';
+// import ReverseCrunches from '../screens/cardScreens/ReverseCrunches';
 import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
 

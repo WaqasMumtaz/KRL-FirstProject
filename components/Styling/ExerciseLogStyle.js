@@ -47,7 +47,7 @@ const styles =StyleSheet.create({
        flex:1,
        //backgroundColor:'yellow',
        flexDirection:'row',
-       flexWrap:'wrap',
+       //flexWrap:'wrap',
        justifyContent:'space-evenly',
        padding:10
        

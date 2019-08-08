@@ -1,9 +1,11 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, TouchableOpacity,FlatList } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import styles from '../Styling/ExerciseLogStyle';
 import HttpUtils from '../Services/HttpUtils';
 const { height } = Dimensions.get('window');
+
+const columsNum = 2;
 
 class Exerciselog extends React.Component {
     constructor(props) {
@@ -61,93 +63,99 @@ class Exerciselog extends React.Component {
             }
         }
     }
+
+    _keyExtractor = (item, index) => item.id;
+    
+    renderDataItems = ({ item }) => {
+        return (
+        <View style={styles.bodyChildOne}>
+            {/* <View style={styles.bodyContainer}> */}
+
+            <TouchableOpacity style={styles.resultCardLeft} id={item.id}>
+                <Text style={styles.resultText}>
+                    {item.exerciseName}
+                </Text>
+                <Text style={styles.resultTextAmount}>
+                    {item.exerciseAmount}
+                </Text>
+                <Text style={styles.resultTextUnit}>
+                    {item.exerciseUnit}
+                </Text>
+            </TouchableOpacity>
+        </View>
+        )
+
+    }
+
     render() {
         const { date, filterData } = this.state;
-    
+
         return (
             <View style={styles.mainContainer}>
-                
-                    <View style={styles.childContainer}>
-                        <View style={styles.headingContainer}>
-                            <Text style={styles.headingStyle}>
-                                Exercise Log
-                            </Text>
-                        </View>
-                        <View style={styles.arrowContainer}>
-                            <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity>
-                            {/* <Text>Today</Text> */}
-                            <DatePicker
-                                style={{ width: 120 }}
-                                date={date}
-                                mode="date"
-                                placeholder="select date"
-                                format="DD-MM-YYYY"
-                                minDate="01-01-1950"
-                                maxDate={date}
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                customStyles={{
-                                    dateIcon: {
-                                    width:0,
-                                    height:0,
-                                    },
-                                    dateInput: {
-                                    height: 40,
-                                    }
-                                    }}
-                                onDateChange={
-                                    this.dateFilter
-                                    // (date) => { this.setState({ date: date }) }
-                                }
-                            />
-                            <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
-                        </View>
-                        <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
-                        {filterData.length >= 0 && filterData.map((elem, key) => {
-                            return (
-                                <View style={styles.bodyChildOne}>
-                                 {/* <View style={styles.bodyContainer}> */}
-                                                <TouchableOpacity style={styles.resultCardLeft}>
-                                                    <Text style={styles.resultText}>
-                                                        {elem.exerciseName}
-                                                    </Text>
-                                                    <Text style={styles.resultTextAmount}>
-                                                        {elem.exerciseAmount}
-                                                    </Text>
-                                                    <Text style={styles.resultTextUnit}>
-                                                        {elem.exerciseUnit}
-                                                    </Text>
-                                                </TouchableOpacity>
-                                                {/* <TouchableOpacity style={styles.resultCardRight}>
-                                                    <Text style={styles.resultText}>
-                                                        {elem.exerciseName}
-                                                    </Text>
-                                                    <Text style={styles.resultTextAmount}>
-                                                        {elem.exerciseAmount}
-                                                    </Text>
-                                                    <Text style={styles.resultTextUnit}>
-                                                        {elem.exerciseUnit}
-                                                    </Text>
-                                                </TouchableOpacity> */}
-                                                
-                                            
-                                                
-                                        </View> 
-                                                
-                                                )
-                                            })
-                                            
-                                        }
-                                
-                               
-                           
-                            </ScrollView>
-                            <View style={{marginVertical:70,
-                            height:30
-                            }}>
 
-                            </View>
-                        {/* <View style={styles.bodyContainer}>
+                <View style={styles.childContainer}>
+                    <View style={styles.headingContainer}>
+                        <Text style={styles.headingStyle}>
+                            Exercise Log
+                            </Text>
+                    </View>
+                    <View style={styles.arrowContainer}>
+                        <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity>
+                        {/* <Text>Today</Text> */}
+                        <DatePicker
+                            style={{ width: 120 }}
+                            date={date}
+                            mode="date"
+                            placeholder="select date"
+                            format="DD-MM-YYYY"
+                            minDate="01-01-1950"
+                            maxDate={date}
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                                dateIcon: {
+                                    width: 0,
+                                    height: 0,
+                                },
+                                dateInput: {
+                                    height: 40,
+                                }
+                            }}
+                            onDateChange={
+                                this.dateFilter
+                                // (date) => { this.setState({ date: date }) }
+                            }
+                        />
+                        <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
+                    </View>
+                    <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
+                        {/* {filterData.length >= 0 && filterData.map((elem, key) => {
+                            return (
+                                <View>
+
+                                </View>
+                            )
+                        })
+
+                        } */}
+
+                        <FlatList
+                              data={filterData}
+                              renderItem={this.renderDataItems}
+                              keyExtractor={this._keyExtractor}
+                              numColumns={columsNum}
+                        />
+
+
+
+                    </ScrollView>
+                    <View style={{
+                        marginVertical: 70,
+                        height: 30
+                    }}>
+
+                    </View>
+                    {/* <View style={styles.bodyContainer}>
                             <View style={styles.bodyChildOne}>
                                 <TouchableOpacity style={styles.resultCardLeft}>
                                     <Text style={styles.resultText}>
@@ -176,13 +184,13 @@ class Exerciselog extends React.Component {
                             </View>
                         </View> */}
 
-                    </View>
-                    
+                </View>
 
-                    
-                    
-                   
-                    
+
+
+
+
+
 
             </View>
         )

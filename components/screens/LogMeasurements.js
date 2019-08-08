@@ -105,94 +105,94 @@ class LogMeasurementsScreen extends React.Component {
            } = this.state;
            console.log('Neck -->',neck, 'Shoulder -->',shoulder)
         let addWeight = {}
-        if (weight == '') {
-            this.setState({
-                weightValidation: true,
-                isLoading:false,
-            })
-        }
-        else {
-            this.setState({
-                weightValidation: false,
-                isLoading:false,
-            })
-        }
-        if (neck == ''){
-            this.setState({
-                neckValidation: true,
-                isLoading:false,
-            })
-        }
-        else {
-            this.setState({
-                neckValidation: false,
-                isLoading:false,
-            })
-        }
-        if(shoulder == ''){
-            this.setState({
-                shoulderValidation: true,
-                isLoading:false,
-            })
-        }
-        else {
-            this.setState({
-                shoulderValidation: false,
-                isLoading:false,
-            })
-        }
-        if(biceps == ''){
-            this.setState({
-                bicepsValidation: true,
-                isLoading:false,
-            })
-        }
-        else {
-            this.setState({
-                bicepsValidation: false,
-                isLoading:false,
-            })
-        }
-        if(chest == ''){
-            this.setState({
-                chestValidation: true,
-                isLoading:false,
-            })
-        }
-        else {
-            this.setState({
-                chestValidation: false,
-                isLoading:false,
-            })
-        }
+        // if (weight == '') {
+        //     this.setState({
+        //         weightValidation: true,
+        //         isLoading:false,
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         weightValidation: false,
+        //         isLoading:false,
+        //     })
+        // }
+        // if (neck == ''){
+        //     this.setState({
+        //         neckValidation: true,
+        //         isLoading:false,
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         neckValidation: false,
+        //         isLoading:false,
+        //     })
+        // }
+        // if(shoulder == ''){
+        //     this.setState({
+        //         shoulderValidation: true,
+        //         isLoading:false,
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         shoulderValidation: false,
+        //         isLoading:false,
+        //     })
+        // }
+        // if(biceps == ''){
+        //     this.setState({
+        //         bicepsValidation: true,
+        //         isLoading:false,
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         bicepsValidation: false,
+        //         isLoading:false,
+        //     })
+        // }
+        // if(chest == ''){
+        //     this.setState({
+        //         chestValidation: true,
+        //         isLoading:false,
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         chestValidation: false,
+        //         isLoading:false,
+        //     })
+        // }
 
-        if(waist == ''){
-            this.setState({
-                waistValidation: true,
-                isLoading:false,
-            })
-        }
-        else {
-            this.setState({
-                waistValidation: false,
-                isLoading:false,
-            })
-        }
-        if(thigh == ''){
-            this.setState({
-                thighValidation: true,
-                isLoading:false,
-            })
+        // if(waist == ''){
+        //     this.setState({
+        //         waistValidation: true,
+        //         isLoading:false,
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         waistValidation: false,
+        //         isLoading:false,
+        //     })
+        // }
+        // if(thigh == ''){
+        //     this.setState({
+        //         thighValidation: true,
+        //         isLoading:false,
+        //     })
             
-        }
-        else {
-            this.setState({
-                thighValidation: false,
-                isLoading:false,
-            })
-        }
+        // }
+        // else {
+        //     this.setState({
+        //         thighValidation: false,
+        //         isLoading:false,
+        //     })
+        // }
 
-         if (weight != '' && neck != '' && shoulder != '' && biceps != '' && chest != '' && waist != '' && thigh != '') {
+         if (weight != '' || neck != '' || shoulder != '' || biceps != '' || chest != '' || waist != '' || thigh != '') {
             addWeight.weight = weight + ' KG';
             addWeight.neck = neck + ' Inches';
             addWeight.shoulder = shoulder + ' Inches';

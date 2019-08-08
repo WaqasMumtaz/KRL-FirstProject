@@ -66,7 +66,7 @@ cardTwo:{
     borderWidth:2,
     //borderColor:'white',
     borderRadius:5,
-    backgroundColor:'black',
+    backgroundColor:'#000000',
     marginLeft:2
 },
 cardTwoTextStyle:{

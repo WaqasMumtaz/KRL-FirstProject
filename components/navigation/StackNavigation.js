@@ -28,9 +28,11 @@ import Wheelspiner from '../Progress Wheel/Progress';
 //import CaloriesSetupBtn from '../buttons/setUpBtn'
 // import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
-
 import ToastComponent from '../Toasts/nativeToast';
-import OverlayLoader from '../Loader/OverlaySpinner'
+import OverlayLoader from '../Loader/OverlaySpinner';
+import SettingScreen from '../screens/Setting';
+import ShowMeasurementsScreen from '../screens/ShowMeasurements';
+import StepCountScreen from '../screens/StepCountScreen';
 
 
 
@@ -39,20 +41,22 @@ const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
   //  Login: {screen: Login},
 
+  //ShowMeasurementsScreen:ShowMeasurementsScreen,
+
 //BriskScreen: { screen: BriskScreen },
 
   // Profile:{screen:Profile},
   // Login: {screen: Login},
 
-  Exerciselog: {
-    screen: Exerciselog,
-    navigationOptions: {
-      headerStyle: {
-        elevation: 0,
-      }
+  // Exerciselog: {
+  //   screen: Exerciselog,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
 
-    }
-   },
+  //   }
+  //  },
   // Exerciselog: {
   //   screen: Exerciselog,
   //   navigationOptions: {
@@ -106,7 +110,7 @@ const MainNavigator= createStackNavigator({
   //  ConfirmResetPassword:{screen:ConfirmResetPassword},
  //const MainNavigator = createStackNavigator({
   // Login: {screen: Login},
-  // ResetpasswordScreen:{screen:ResetpasswordScreen},
+  //  ResetpasswordScreen:{screen:ResetpasswordScreen},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
   // Signup:{screen:Signup},
   // ActivateSpinner:{screen:ActivateSpinner},
@@ -154,6 +158,8 @@ const MainNavigator= createStackNavigator({
       header: null
     }
   },
+  ResetpasswordScreen:{screen:ResetpasswordScreen},
+  StepCountScreen:{screen:StepCountScreen},
   AddExercise: {
     screen: AddExercise,
     navigationOptions: {
@@ -214,7 +220,16 @@ const MainNavigator= createStackNavigator({
         elevation: 0,
       }
     }
+  },
+  SettingScreen:{
+    screen:SettingScreen,
+    navigationOptions:{
+      headerStyle: {
+        elevation: 0,
+      }
+    }
   }
+  
 
 },
 

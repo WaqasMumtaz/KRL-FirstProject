@@ -1,20 +1,21 @@
 import React from 'react';
 import { StyleSheet, Text, View,ScrollView,Button,Dimensions,Image,TouchableOpacity} from 'react-native';
 import AnimatedProgressWheel from 'react-native-progress-wheel';
+import { tsPropertySignature } from '@babel/types';
 
 
 
-const Wheelspiner =()=>{
+const Wheelspiner =(props)=>{
     return(
         <View style={styles.container}>
         <AnimatedProgressWheel 
-    size={65} 
-    width={10} 
-    color={'#FF6200'}
-    progress={60}
-    backgroundColor={'gray'}
-    animateFromValue={0}
-    fullColor={'#FF6200'}
+    size={props.size} 
+    width={props.width} 
+    color={props.color}
+    progress={props.progress}
+    backgroundColor={props.backgroundColor}
+    animateFromValue={props.animateFromValue}
+    fullColor={props.fullColor}
 />
     </View>
     )
