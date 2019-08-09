@@ -207,13 +207,14 @@ class LogMeasurementsScreen extends React.Component {
             addWeight.dayOfMonth = dayOfMonth;
             addWeight.date = date;
             addWeight.time = time;
+            addWeight.dayOfWeek = day + 1;
             addWeight.month = monthNo;
             addWeight.year = year;
             addWeight.userId = userId;
             this.setState({
                 isLoading: true
             })
-            console.log(addWeight)
+            console.log(addWeight, 'addWeight')
             let dataUser = await HttpUtils.post('weightLog', addWeight)
             console.log(dataUser, 'dataUser')
             let userMsg = dataUser.msg;
