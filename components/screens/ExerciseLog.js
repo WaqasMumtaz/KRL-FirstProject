@@ -18,8 +18,8 @@ class Exerciselog extends React.Component {
     }
 
     async componentWillMount() {
-        await this.getData()
-        this.dateFilter()
+        await this.getData();
+        this.dateFilter();
     }
 
     //get data from database

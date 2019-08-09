@@ -1,17 +1,90 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { Text, View, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
 import styles from '../Styling/ReportsScreenStyle';
 import Wheelspiner from '../Progress Wheel/Progress';
 import ChartScreen from '../BarChart/BarChart';
+import HttpUtils from '../Services/HttpUtils';
 const { height } = Dimensions.get('window');
-// const screenWidth=Dimensions.get('window').width;
-// const screenHeight=Dimensions.get('window').height;
+
 class Reportscreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: "",
+      data: [],
+      monthName: ["January", "February", "March", "April", "May", "June", "July", "August",
+        "September", "October", "November", "December"]
+    }
+  }
+  async componentWillMount() {
+    await this.getData()
+  }
+
+  //get data from database
+  getData = async () => {
+    const { monthName } = this.state;
+    let dataArr = [];
+    let dataUser = await HttpUtils.get('getallexerciselog');
+    let data = dataUser.content;
+    const currentDate = new Date().getDate();
+    let currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+    if (currentMonth == 1 || currentMonth == 2 || currentMonth == 3 || currentMonth == 4 || currentMonth == 5 || currentMonth == 6 || currentMonth == 7 || currentMonth == 8 || currentMonth == 9) {
+      currentMonth = `0${currentMonth}`
+    }
+    for (var i in data) {
+      let dataApi = data[i];
+      //get month name
+      let getMonthNo = dataApi.month.slice(1) - 1;
+      let getMontName = monthName[getMonthNo];
+      dataApi.monthName = getMontName;
+      //check week of the month
+      let checkDate = Number(dataApi.dayOfMonth) - currentDate;
+      let checkMonth = Number(dataApi.month) - currentMonth;
+      let checkYear = Number(dataApi.year) - currentYear;
+      if (checkDate == 0 || checkDate == -1 || checkDate == -2 || checkDate == -3 || checkDate == -4 || checkDate == -5 ||
+        checkDate == -6 || checkDate == -7 && checkMonth == 0 && checkYear == 0) {
+        dataArr = [...dataArr, dataApi];
+        this.setState({
+          data: dataArr
+        })
+      }
+
+    }
+  }
   render() {
+    const { data } = this.state;
     const { navigate } = this.props.navigation;
+    let weeklyExcersice = data && data.map((elem, key) => {
+      return (
+        <View style={styles.exerciseResultCard}>
+          <Text style={styles.resultHeading}>
+            {elem.exerciseName}
+          </Text>
+          <View style={styles.dataResultParent}>
+            <View style={styles.timeShowContainer}>
+              <Text style={styles.timeShow}>
+                {`${elem.exerciseAmount} ${elem.exerciseUnit}`}
+              </Text>
+            </View>
+            <View style={styles.dateAndMonth}>
+              <Text maxLength={3} style={styles.dateAndMonthShow}>
+                {elem.monthName}
+              </Text>
+              <Text style={styles.dateNumber}>
+                {elem.dayOfMonth}
+              </Text>
+              <Text style={styles.superScriptTextStyle}>
+                {elem.dayOfMonth == 1 ? 'st' : elem.dayOfMonth == 2 ? '2nd' : elem.dayOfMonth == 3 ? 'rd' : 'th'}
+              </Text>
+            </View>
+          </View>
+        </View>
+      )
+    });
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
@@ -20,9 +93,11 @@ class Reportscreen extends React.Component {
           {/* <TouchableOpacity><Image /></TouchableOpacity> */}
         </View>
         <View style={styles.arrowContainer}>
-          <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity>
+          <TouchableOpacity style={{ marginRight: 20 }}>
+            <Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity>
           <Text>This week</Text>
-          <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
+          <TouchableOpacity style={{ marginLeft: 20 }}>
+            <Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
         </View>
         <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
           <View style={styles.bodyContainer}>
@@ -39,7 +114,7 @@ class Reportscreen extends React.Component {
                 <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', marginLeft: 14 }}>steps</Text>
               </View>
               <View style={styles.weightStatus}>
-              {/* <View> */}
+                {/* <View> */}
                 <Text style={styles.headingText}>Weight{'\n'}status</Text>
                 <View style={styles.statusGraphContainer}>
                   <View style={styles.midBox}>
@@ -53,18 +128,37 @@ class Reportscreen extends React.Component {
                   <View style={styles.weeksTextContainer}>
                     <Text style={styles.thisWeek}>This week</Text>
                     <Text style={styles.lastWeek}>Last week</Text>
-
                   </View>
                   <Text style={styles.lostKg}>0.5 Kg</Text>
                   <Text style={styles.lostText}>Lost</Text>
-
                 </View>
               </View>
             </View>
             <View style={styles.cardRight}>
               <View style={styles.totalExerciseContainer}>
                 <Text style={styles.totalExercisHeading}>Total exercise{'\n'}done</Text>
-                <View style={styles.exerciseResultCard}>
+                {weeklyExcersice}
+                {/* {data && data.map((elem, key) => {
+                  return (
+                    <View style={styles.exerciseResultCard}>
+                      <Text style={styles.resultHeading}>
+                        {elem.exerciseName}
+                      </Text>
+                      <View style={styles.dataResultParent}>
+                        <View style={styles.timeShowContainer}>
+                          <Text style={styles.timeShow}>{`${elem.exerciseAmount} ${elem.exerciseUnit}`}</Text>
+                        </View>
+                        <View style={styles.dateAndMonth}>
+                          <Text maxLength={3} style={styles.dateAndMonthShow}>May</Text>
+                          <Text style={styles.dateNumber}>{elem.dayOfMonth}</Text>
+                          <Text style={styles.superScriptTextStyle}>th</Text>
+                        </View>
+                      </View>
+                    </View>
+                  )
+                })
+                } */}
+                {/* <View style={styles.exerciseResultCard}>
                   <Text style={styles.resultHeading}>
                     Brisk Walk
                       </Text>
@@ -78,8 +172,8 @@ class Reportscreen extends React.Component {
                       <Text style={styles.superScriptTextStyle}>th</Text>
                     </View>
                   </View>
-                </View>
-                <View style={styles.exerciseResultCard}>
+                </View> */}
+                {/* <View style={styles.exerciseResultCard}>
                   <Text style={styles.resultHeading}>
                     Push Ups
                       </Text>
@@ -93,8 +187,8 @@ class Reportscreen extends React.Component {
                       <Text style={styles.superScriptTextStyle}>th</Text>
                     </View>
                   </View>
-                </View>
-                <View style={styles.exerciseResultCard}>
+                </View> */}
+                {/* <View style={styles.exerciseResultCard}>
                   <Text style={styles.resultHeading}>
                     High Intensity Run
                       </Text>
@@ -108,7 +202,7 @@ class Reportscreen extends React.Component {
                       <Text style={styles.superScriptTextStyle}>th</Text>
                     </View>
                   </View>
-                </View>
+                </View> */}
               </View>
             </View>
           </View>
