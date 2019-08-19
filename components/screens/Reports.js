@@ -84,10 +84,9 @@ class Reportscreen extends React.Component {
         let checkDate = Number(dataApi.dayOfMonth) - currentDate;
         let checkMonth = Number(dataApi.month) - currentMonth;
         let checkYear = Number(dataApi.year) - currentYear;
-        if (checkWeekDay == 1 || checkWeekDay == -1 || checkWeekDay == 2 || checkWeekDay == -2 ||
-          checkWeekDay == 3 || checkWeekDay == -3 || checkWeekDay == 4 || checkWeekDay == -4 || checkWeekDay == 5 ||
-          checkWeekDay == -5 || checkWeekDay == 6 || checkWeekDay == -6 || checkWeekDay == 7 || checkWeekDay == -7
-          && checkMonth == 0 && checkYear == 0) {
+        if (checkWeekDay == 1 || checkWeekDay == -1 || checkWeekDay == 2 || checkWeekDay == -2 || checkWeekDay == 3 ||
+          checkWeekDay == -3 || checkWeekDay == 4 || checkWeekDay == -4 || checkWeekDay == 5 || checkWeekDay == -5 ||
+          checkWeekDay == 6 || checkWeekDay == -6 || checkWeekDay == 7 || checkWeekDay == -7 && checkMonth == 0 && checkYear == 0) {
           weekBefore = dataApi
           this.setState({
             dataWeights: weekBefore
@@ -107,8 +106,8 @@ class Reportscreen extends React.Component {
   render() {
     const { dataExcersices, currentDateDataWeights, dataWeights } = this.state;
     const { navigate } = this.props.navigation;
-    console.log(dataWeights, 'dataWeights')
-    console.log(currentDateDataWeights, 'currentDateDataWeights')
+    // console.log(dataWeights, 'dataWeights')
+    // console.log(currentDateDataWeights, 'currentDateDataWeights')
 
 
     let weeklyExcersice = dataExcersices && dataExcersices.map((elem, key) => {
