@@ -386,7 +386,7 @@ checkProfile = () =>{
     const { navigate } = this.props.navigation;
   console.log('checkProfile')
   navigate('Profile', {
-        opponentProfile: true
+        opponentProfile: true,
       });
 
 }

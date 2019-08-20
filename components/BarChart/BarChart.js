@@ -8,6 +8,7 @@ class ChartScreen extends React.Component {
         this.state = {};
     }
     render() {
+        const { lastWeek, cureentWeek } = this.props;
         return (
             <View style={styles.mainContainer} >
                 <BarChart dataSets={
@@ -16,7 +17,7 @@ class ChartScreen extends React.Component {
                         {
                             fillColor: '#FF6200',
                             data: [
-                                { value: 6 },
+                                { value: cureentWeek },
                                 { value: 0 },
                             ]
                         },
@@ -32,8 +33,8 @@ class ChartScreen extends React.Component {
                             fillColor: '#a6a6a6',
 
                             data: [{
-                                value: 6,
-
+                                value: lastWeek,
+                                // value: 0
                             },]
                         },
                     ]

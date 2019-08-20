@@ -20,7 +20,11 @@ class Reportscreen extends React.Component {
       currentDateDataWeights: [],
       weekAgoDateDataWeights: [],
       monthName: ["January", "February", "March", "April", "May", "June", "July", "August",
-        "September", "October", "November", "December"]
+        "September", "October", "November", "December"],
+      loseWeight: '',
+      gainWeight: '',
+      lastWeek: '',
+      cureentWeek: ''
     }
   }
   async componentWillMount() {
@@ -41,9 +45,12 @@ class Reportscreen extends React.Component {
       }
     });
     let dataExcersice = await HttpUtils.get('getallexerciselog');
+    // console.log(dataExcersice , 'dataExcersice')
     let dataWeight = await HttpUtils.get('getweightlog');
+    // console.log(dataWeight , 'dataWeight')
     let data = dataExcersice.content;
     let weightData = dataWeight.content;
+
     const currentDayOfWeek = new Date().getDay() + 1;
     const currentDate = new Date().getDate();
     let currentMonth = new Date().getMonth() + 1;
@@ -78,38 +85,65 @@ class Reportscreen extends React.Component {
     //get week wise data and show bar chart line 
     for (var i in weightData) {
       let dataApi = weightData[i];
+      // console.log(dataApi , 'dataApi')
       if (dataApi.userId == userId) {
         //check week of the month
         let checkWeekDay = currentDayOfWeek - dataApi.dayOfWeek;
         let checkDate = Number(dataApi.dayOfMonth) - currentDate;
         let checkMonth = Number(dataApi.month) - currentMonth;
         let checkYear = Number(dataApi.year) - currentYear;
-        if (checkWeekDay == 1 || checkWeekDay == -1 || checkWeekDay == 2 || checkWeekDay == -2 || checkWeekDay == 3 ||
-          checkWeekDay == -3 || checkWeekDay == 4 || checkWeekDay == -4 || checkWeekDay == 5 || checkWeekDay == -5 ||
-          checkWeekDay == 6 || checkWeekDay == -6 || checkWeekDay == 7 || checkWeekDay == -7 && checkMonth == 0 && checkYear == 0) {
+        if (checkWeekDay == 0 && checkDate != 0 && checkMonth == 0 && checkYear == 0) {
+          // console.log(dataApi, 'week ago data')
           weekBefore = dataApi
           this.setState({
-            dataWeights: weekBefore
+            weekAgoDateDataWeights: weekBefore
           })
         }
         if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
+          console.log(dataApi, 'current date')
           cureentWeek = dataApi
           this.setState({
             currentDateDataWeights: cureentWeek
           })
         }
+
+        // if (checkWeekDay == 1 || checkWeekDay == -1 || checkWeekDay == 2 || checkWeekDay == -2 || checkWeekDay == 3 ||
+        //   checkWeekDay == -3 || checkWeekDay == 4 || checkWeekDay == -4 || checkWeekDay == 5 || checkWeekDay == -5 ||
+        //   checkWeekDay == 6 || checkWeekDay == -6 || checkWeekDay == 7 || checkWeekDay == -7 && checkMonth == 0 && checkYear == 0) {
+        //   weekBefore = dataApi
+        //   this.setState({
+        //     dataWeights: weekBefore
+        //   })
+        // }
+        // if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
+        //   cureentWeek = dataApi
+        //   this.setState({
+        //     currentDateDataWeights: cureentWeek
+        //   })
+        // }
       }
     }
-    let loseWeight = weekBefore.weight.slice(0, 1) - cureentWeek.weight.slice(0, 1);
-    console.log(loseWeight, 'loseWeight')
+    let weekAgoWieght = weekBefore.weight.substring(0, weekBefore.weight.length - 2);
+    let currentWeekWieght = cureentWeek.weight.substring(0, cureentWeek.weight.length - 2);
+    let loseWeight = weekAgoWieght - currentWeekWieght;
+    if (loseWeight > 0) {
+      this.setState({
+        loseWeight: loseWeight,
+        lastWeek: 6,
+        cureentWeek: 5
+      })
+    }
+    else if (loseWeight < 0) {
+      let gainWeight = Math.abs(loseWeight);
+      this.setState({
+        lastWeek: 5,
+        cureentWeek: 6,
+        gainWeight: gainWeight
+      })
+    }
   }
   render() {
-    const { dataExcersices, currentDateDataWeights, dataWeights } = this.state;
-    const { navigate } = this.props.navigation;
-    // console.log(dataWeights, 'dataWeights')
-    // console.log(currentDateDataWeights, 'currentDateDataWeights')
-
-
+    const { dataExcersices, currentDateDataWeights, weekAgoDateDataWeights, loseWeight, gainWeight, lastWeek, cureentWeek } = this.state;
     let weeklyExcersice = dataExcersices && dataExcersices.map((elem, key) => {
       return (
         <View style={styles.exerciseResultCard}>
@@ -142,7 +176,6 @@ class Reportscreen extends React.Component {
         <View style={styles.headingContainer}>
           <Text style={styles.textStyleOne}>Weekly</Text>
           <Text style={styles.textStyleTwo}>Report</Text>
-          {/* <TouchableOpacity><Image /></TouchableOpacity> */}
         </View>
         <View style={styles.arrowContainer}>
           <TouchableOpacity style={{ marginRight: 20 }}>
@@ -169,18 +202,31 @@ class Reportscreen extends React.Component {
                 <Text style={styles.headingText}>Weight{'\n'}status</Text>
                 <View style={styles.statusGraphContainer}>
                   <View style={styles.midBox}>
-                    <ChartScreen />
+                    <ChartScreen lastWeek={lastWeek} cureentWeek={cureentWeek} />
                   </View>
                   <View style={styles.borderLines1}>
-                    <Text style={styles.kgTextOne}>64 KG</Text>
-                    <Text style={styles.kgTextTwo}>64.5 KG</Text>
+                    <Text style={styles.kgTextOne}>
+                      {currentDateDataWeights.weight}
+                    </Text>
+                    <Text style={styles.kgTextTwo}>
+                      {weekAgoDateDataWeights.weight}
+                    </Text>
                   </View>
                   <View style={styles.weeksTextContainer}>
                     <Text style={styles.thisWeek}>This week</Text>
                     <Text style={styles.lastWeek}>Last week</Text>
                   </View>
-                  <Text style={styles.lostKg}>0.5 Kg</Text>
-                  <Text style={styles.lostText}>Lost</Text>
+                  {loseWeight ?
+                    <View>
+                      <Text style={styles.lostKg}>{`${loseWeight} KG`} </Text>
+                      <Text style={styles.lostText}>Lost</Text>
+                    </View>
+                    :
+                    <View>
+                      <Text style={styles.lostKg}>{`${gainWeight} KG`} </Text>
+                      <Text style={styles.lostText}>Gain</Text>
+                    </View>
+                  }
                 </View>
               </View>
             </View>

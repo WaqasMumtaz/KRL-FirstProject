@@ -12,20 +12,21 @@ let checkProfile = false;
 class Profile extends React.Component {
   static navigationOptions = (navigation) => {
     const { params = {} } = navigation.navigation.state;
-    if(params.opponentProfile){
+    let headerRight;
+    if (params.opponentProfile) {
       checkProfile = params.opponentProfile;
     }
-    else{
+    else {
       checkProfile = false;
+      headerRight = <TouchableOpacity
+        style={styles.headerIconContainer}
+        onPress={
+          params.showEditForm
+        }
+      >
+        <Image source={require('../icons/edit-pencil.png')} style={styles.headerIcon} />
+      </TouchableOpacity>
     }
-    let headerRight = <TouchableOpacity
-      style={styles.headerIconContainer}
-      onPress={
-        params.showEditForm
-      }
-    >
-      <Image source={require('../icons/edit-pencil.png')} style={styles.headerIcon} />
-    </TouchableOpacity>
     return {
       headerRight,
       headerStyle: {
@@ -36,57 +37,57 @@ class Profile extends React.Component {
   }
   constructor(props) {
     super(props);
-      this.state = {
-        name: '',
-        address:'',
-        contactNo:'',
-        email:'',
-        gender:'',
-        type:'',
-        avatarSource : '',
-        show: false,
-        title:'',
-        checkProfile:false,
-        profileData:'',
-        profile:''
-      }
+    this.state = {
+      name: '',
+      address: '',
+      contactNo: '',
+      email: '',
+      gender: '',
+      type: '',
+      avatarSource: '',
+      show: false,
+      title: '',
+      checkProfile: false,
+      profileData: '',
+      profile: ''
+    }
   }
 
   componentWillMount() {
-    if(checkProfile){
-         AsyncStorage.getItem('opponentProfile').then((value) => {
+    if (checkProfile) {
+      AsyncStorage.getItem('opponentProfile').then((value) => {
         let userData = JSON.parse(value);
-        if(value){
-        this.setState({
-          name: userData.name,
-          address:userData.address,
-          contactNo:userData.contactNo,
-          email:userData.email,
-          gender:userData.gender,
-          avatarSource:userData.image,    
-          type:userData.type,
-          title:userData.type,
-          profileData:userData,
-          profile:'opponentProfile'
-        })
+        if (value) {
+          this.setState({
+            name: userData.name,
+            address: userData.address,
+            contactNo: userData.contactNo,
+            email: userData.email,
+            gender: userData.gender,
+            avatarSource: userData.image,
+            type: userData.type,
+            title: userData.type,
+            profileData: userData,
+            profile: 'opponentProfile'
+          })
         }
       })
     }
-    else{
+    else {
       AsyncStorage.getItem('myProfile').then((value) => {
         let userData = JSON.parse(value);
-        if(value){
+        if (value) {
           this.setState({
             name: userData.name,
-            address:userData.address,
-            contactNo:userData.contactNo,
-            email:userData.email,
-            gender:userData.gender,
-            type:userData.type,
-            avatarSource:userData.image,
-            title:'My',
-            profileData:userData,
-            profile:'myProfile'
+            address: userData.address,
+            contactNo: userData.contactNo,
+            email: userData.email,
+            gender: userData.gender,
+            type: userData.type,
+            avatarSource: userData.image,
+            title: 'My',
+            profileData: userData,
+            profile: 'myProfile'
           })
         }
       })
@@ -94,11 +95,11 @@ class Profile extends React.Component {
 
   }
   editForm = () => {
-    const { profileData , profile} = this.state;
+    const { profileData, profile } = this.state;
     this.props.navigation.navigate('EditProfileScreen', {
-          profileData: profileData,
-          profile:profile
-        });
+      profileData: profileData,
+      profile: profile
+    });
     // this.props.navigation.navigate('EditProfileScreen');
   }
 
@@ -108,25 +109,24 @@ class Profile extends React.Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation;
-    const { show , name , type , address , contactNo , email , gender , avatarSource , title} = this.state;
+    const { show, name, type, address, contactNo, email, gender, avatarSource, title } = this.state;
     return (
       <View style={styles.mainContainer}>
         <View style={styles.headingContainer}>
           <Text style={styles.headingStyle}>
             {`${title} Profile`}
-            </Text>
+          </Text>
         </View>
         <ScrollView
-          style={{flex: 1, backgroundColor: 'white', height: height}} contentContainerStyle={{ flexGrow: 1 }}>
+          style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.profileContainer}>
             <View style={styles.profilPicContainer}>
-                {
-                  avatarSource != '' ? 
-                    <Image style={styles.profilPicStyle} source={{uri: `${avatarSource}`}}/>
+              {
+                avatarSource != '' ?
+                  <Image style={styles.profilPicStyle} source={{ uri: `${avatarSource}` }} />
                   :
-                    <Image source={require('../icons/profile.png')} style={styles.profilPicStyle}/>
-                  }
+                  <Image source={require('../icons/profile.png')} style={styles.profilPicStyle} />
+              }
               <View style={styles.nameContainer}>
                 <Text style={styles.nameStyle}>{name}</Text>
               </View>
@@ -136,22 +136,22 @@ class Profile extends React.Component {
             </View>
           </View>
           <View style={styles.userInfoContainer}>
-                 <View>
-                   <Text style={styles.labelStyle}>Email</Text>
-                   <Text style={styles.userInsertedValueStyle}>{email}</Text>
-                 </View>
-                 <View style={styles.viewBlock}>
-                   <Text style={styles.labelStyle}>Address</Text>
-                   <Text style={styles.userInsertedValueStyle}>{address}</Text>
-                 </View>
-                 <View style={styles.viewBlock}>
-                   <Text style={styles.labelStyle}>Contact Number</Text>
-                   <Text style={styles.userInsertedValueStyle}>{contactNo}</Text>
-                 </View>
-                 <View style={styles.viewBlock}>
-                   <Text style={styles.labelStyle}>Gender</Text>
-                   <Text style={styles.userInsertedValueStyle}>{gender}</Text>
-                 </View>
+            <View>
+              <Text style={styles.labelStyle}>Email</Text>
+              <Text style={styles.userInsertedValueStyle}>{email}</Text>
+            </View>
+            <View style={styles.viewBlock}>
+              <Text style={styles.labelStyle}>Address</Text>
+              <Text style={styles.userInsertedValueStyle}>{address}</Text>
+            </View>
+            <View style={styles.viewBlock}>
+              <Text style={styles.labelStyle}>Contact Number</Text>
+              <Text style={styles.userInsertedValueStyle}>{contactNo}</Text>
+            </View>
+            <View style={styles.viewBlock}>
+              <Text style={styles.labelStyle}>Gender</Text>
+              <Text style={styles.userInsertedValueStyle}>{gender}</Text>
+            </View>
           </View>
         </ScrollView>
 
