@@ -34,23 +34,25 @@ class Reportscreen extends React.Component {
   //get data from database
   getData = async () => {
     const { monthName } = this.state;
+    //create varibale for useage
     let dataExcersiceArr = [];
     let userId;
     let weekBefore;
-    let cureentWeek;
+    let cureentWeekData;
+    let loseWeight;
+    //get user id from local storage
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         let dataFromLocalStorage = JSON.parse(value);
         userId = dataFromLocalStorage._id;
       }
     });
+    //getting api complete data excersice or weight mearsment
     let dataExcersice = await HttpUtils.get('getallexerciselog');
-    // console.log(dataExcersice , 'dataExcersice')
     let dataWeight = await HttpUtils.get('getweightlog');
-    // console.log(dataWeight , 'dataWeight')
     let data = dataExcersice.content;
     let weightData = dataWeight.content;
-
+    //gettibg curent date
     const currentDayOfWeek = new Date().getDay() + 1;
     const currentDate = new Date().getDate();
     let currentMonth = new Date().getMonth() + 1;
@@ -85,47 +87,77 @@ class Reportscreen extends React.Component {
     //get week wise data and show bar chart line 
     for (var i in weightData) {
       let dataApi = weightData[i];
-      // console.log(dataApi , 'dataApi')
       if (dataApi.userId == userId) {
         //check week of the month
-        let checkWeekDay = currentDayOfWeek - dataApi.dayOfWeek;
+        let checkWeekDay = (Math.abs(currentDayOfWeek - dataApi.dayOfWeek));
         let checkDate = Number(dataApi.dayOfMonth) - currentDate;
         let checkMonth = Number(dataApi.month) - currentMonth;
         let checkYear = Number(dataApi.year) - currentYear;
+        //condition check week ago data
         if (checkWeekDay == 0 && checkDate != 0 && checkMonth == 0 && checkYear == 0) {
-          // console.log(dataApi, 'week ago data')
           weekBefore = dataApi
           this.setState({
             weekAgoDateDataWeights: weekBefore
           })
         }
+        //if data not has week ago then check a last week any day data
+        if (checkWeekDay != 0 && checkMonth == 0 && checkYear == 0) {
+          if (checkWeekDay == 1 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          }
+          else if (checkWeekDay == 2 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          }
+          else if (checkWeekDay == 3 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          }
+          else if (checkWeekDay == 4 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          } else if (checkWeekDay == 5 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          } else if (checkWeekDay == 6 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          } else if (checkWeekDay == 7 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          }
+        }
+        //current date data
         if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
-          console.log(dataApi, 'current date')
-          cureentWeek = dataApi
+          cureentWeekData = dataApi
           this.setState({
-            currentDateDataWeights: cureentWeek
+            currentDateDataWeights: cureentWeekData
           })
         }
-
-        // if (checkWeekDay == 1 || checkWeekDay == -1 || checkWeekDay == 2 || checkWeekDay == -2 || checkWeekDay == 3 ||
-        //   checkWeekDay == -3 || checkWeekDay == 4 || checkWeekDay == -4 || checkWeekDay == 5 || checkWeekDay == -5 ||
-        //   checkWeekDay == 6 || checkWeekDay == -6 || checkWeekDay == 7 || checkWeekDay == -7 && checkMonth == 0 && checkYear == 0) {
-        //   weekBefore = dataApi
-        //   this.setState({
-        //     dataWeights: weekBefore
-        //   })
-        // }
-        // if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
-        //   cureentWeek = dataApi
-        //   this.setState({
-        //     currentDateDataWeights: cureentWeek
-        //   })
-        // }
       }
     }
-    let weekAgoWieght = weekBefore.weight.substring(0, weekBefore.weight.length - 2);
-    let currentWeekWieght = cureentWeek.weight.substring(0, cureentWeek.weight.length - 2);
-    let loseWeight = weekAgoWieght - currentWeekWieght;
+    //availbe current date and week ago ago data then get lose or gain wieght
+    if (cureentWeekData != undefined && weekBefore != undefined) {
+      let weekAgoWieght = weekBefore.weight.substring(0, weekBefore.weight.length - 2);
+      let currentWeekWieght = cureentWeekData.weight.substring(0, cureentWeekData.weight.length - 2);
+      loseWeight = weekAgoWieght - currentWeekWieght;
+    }
+    //lose weight
     if (loseWeight > 0) {
       this.setState({
         loseWeight: loseWeight,
@@ -133,6 +165,7 @@ class Reportscreen extends React.Component {
         cureentWeek: 5
       })
     }
+    //gain weight
     else if (loseWeight < 0) {
       let gainWeight = Math.abs(loseWeight);
       this.setState({
@@ -141,9 +174,25 @@ class Reportscreen extends React.Component {
         gainWeight: gainWeight
       })
     }
+    //not gain or lose weight
+    else if (loseWeight == 0) {
+      this.setState({
+        loseWeight: loseWeight,
+        lastWeek: 6,
+        cureentWeek: 6
+      })
+    }
+    //not availeble today data
+    else if (cureentWeekData == undefined) {
+      this.setState({
+        loseWeight: 0,
+        lastWeek: 6,
+        cureentWeek: 0
+      })
+    }
   }
   render() {
-    const { dataExcersices, currentDateDataWeights, weekAgoDateDataWeights, loseWeight, gainWeight, lastWeek, cureentWeek } = this.state;
+    const { dataExcersices, currentDateDataWeights, weekAgoDateDataWeights, loseWeight, gainWeight, lastWeek, cureentWeek } = this.state
     let weeklyExcersice = dataExcersices && dataExcersices.map((elem, key) => {
       return (
         <View style={styles.exerciseResultCard}>
@@ -216,7 +265,7 @@ class Reportscreen extends React.Component {
                     <Text style={styles.thisWeek}>This week</Text>
                     <Text style={styles.lastWeek}>Last week</Text>
                   </View>
-                  {loseWeight ?
+                  {loseWeight || loseWeight == 0 ?
                     <View>
                       <Text style={styles.lostKg}>{`${loseWeight} KG`} </Text>
                       <Text style={styles.lostText}>Lost</Text>

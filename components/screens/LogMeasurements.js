@@ -46,7 +46,7 @@ class LogMeasurementsScreen extends React.Component {
     }
     componentWillMount() {
         const { dayOfMonth } = this.state;
-        let monthNo = new Date().getMonth();
+        let monthNo = new Date().getMonth() + 1;
         const day = new Date().getDay();
         const date = new Date().getDate();
         const year = new Date().getFullYear();
