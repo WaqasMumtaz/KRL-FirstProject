@@ -61,7 +61,6 @@ class Reportscreen extends React.Component {
       currentMonth == 6 || currentMonth == 7 || currentMonth == 8 || currentMonth == 9) {
       currentMonth = `0${currentMonth}`
     }
-
     //getting weekly excersices 
     for (var i in data) {
       let dataApi = data[i];
