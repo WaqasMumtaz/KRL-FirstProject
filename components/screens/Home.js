@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, ScrollView, Button, Dimensions, Image, Touchabl
 import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
+import AsyncStorage from '@react-native-community/async-storage';
+
 const { height } = Dimensions.get('window');
 
 class Homescreen extends React.Component {
@@ -15,29 +17,44 @@ class Homescreen extends React.Component {
 
   }
   async componentWillMount() {
+    //getting user id from local storage
+    let userId;
+    AsyncStorage.getItem("currentUser").then(value => {
+      if (value) {
+        let dataFromLocalStorage = JSON.parse(value);
+        userId = dataFromLocalStorage._id;
+      }
+    });
+    //get all excersice log data
     let dataUser = await HttpUtils.get('getallexerciselog');
     let data = dataUser.content;
+    //get current date 
     const currentDate = new Date().getDate();
     let currentMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
     if (currentMonth == 1 || currentMonth == 2 || currentMonth == 3 || currentMonth == 4 || currentMonth == 5 || currentMonth == 6 || currentMonth == 7 || currentMonth == 8 || currentMonth == 9) {
       currentMonth = `0${currentMonth}`
     }
+    //looping with data
     for (var i in data) {
       let dataApi = data[i];
-      let currMonth = Number(currentMonth)
-      let checkDate = Number(dataApi.dayOfMonth) - currentDate;
-      let checkMonth = Number(dataApi.month) - currMonth;
-      let checkYear = Number(dataApi.year) - currentYear;
-      if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
-        this.setState({
-          todayData: dataApi
-        })
-      }
-      else if (checkDate == -1 && checkMonth == 0 && checkYear == 0) {
-        this.setState({
-          yestertdayData: dataApi
-        })
+      //check user id with api data and get current user data
+      if (dataApi.userId == userId) {
+        //get today & yesterday of excersice from database 
+        let currMonth = Number(currentMonth)
+        let checkDate = Number(dataApi.dayOfMonth) - currentDate;
+        let checkMonth = Number(dataApi.month) - currMonth;
+        let checkYear = Number(dataApi.year) - currentYear;
+        if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
+          this.setState({
+            todayData: dataApi
+          })
+        }
+        else if (checkDate == -1 && checkMonth == 0 && checkYear == 0) {
+          this.setState({
+            yestertdayData: dataApi
+          })
+        }
       }
     }
   }
@@ -49,9 +66,6 @@ class Homescreen extends React.Component {
     else if (e == 'stepcount') {
       navigate('StepCountScreen')
     }
-
-
-
   }
 
   render() {
@@ -112,7 +126,7 @@ class Homescreen extends React.Component {
               >
                 <Text style={styles.cardFourTextStyle}>{todayData != '' ? `Today's ${'\n'} exercise` : yestertdayData != '' ? `Yesterday's${'\n'} exercise` : `No ${'\n'}exercise`}</Text>
                 <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', marginTop: 20, marginLeft: 14 }}>
-                {todayData != '' ? `${todayData.exerciseName} ${'\n'}exercise` : yestertdayData != '' ? `${yestertdayData.exerciseName} ${'\n'}exercise` : 'No Record Found'}
+                  {todayData != '' ? `${todayData.exerciseName} ${'\n'}exercise` : yestertdayData != '' ? `${yestertdayData.exerciseName} ${'\n'}exercise` : 'No Record Found'}
                 </Text>
                 <View style={{ borderBottomColor: '#a6a6a6', borderBottomWidth: 1, marginHorizontal: 14, marginTop: 20 }}></View>
                 <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight', marginLeft: 14, marginTop: 10 }}>

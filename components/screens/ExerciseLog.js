@@ -1,8 +1,10 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, Dimensions, TouchableOpacity,FlatList } from 'react-native';
+import { Text, View, ScrollView, Image, Dimensions, TouchableOpacity, FlatList } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import styles from '../Styling/ExerciseLogStyle';
 import HttpUtils from '../Services/HttpUtils';
+import AsyncStorage from '@react-native-community/async-storage';
+
 const { height } = Dimensions.get('window');
 
 const columsNum = 2;
@@ -12,96 +14,119 @@ class Exerciselog extends React.Component {
         super(props);
         this.state = {
             date: "",
+            maxDate: '',
             data: '',
-            filterData: []
+            filterData: [],
+            userId: ''
         }
     }
 
     async componentWillMount() {
+        //get current user id
+        AsyncStorage.getItem("currentUser").then(value => {
+            if (value) {
+                let dataFromLocalStorage = JSON.parse(value);
+                this.setState({
+                    userId: dataFromLocalStorage._id
+                })
+            }
+        });
+        //calling a function
         await this.getData();
         this.dateFilter();
     }
 
     //get data from database
     getData = async () => {
+        //get current date 
         const date = new Date().getDate();
         let month = new Date().getMonth() + 1;
         const year = new Date().getFullYear();
         if (month == 1 || month == 2 || month == 3 || month == 4 || month == 5 || month == 6 || month == 7 || month == 8 || month == 9) {
             month = `0${month}`
         }
+        //get data from database
         let dataUser = await HttpUtils.get('getallexerciselog')
-        console.log(dataUser, 'dataUser from log get ')
+        //set date , max date and data ikn the state
         await this.setState({
+            maxDate: date + '-' + month + '-' + year,
             date: date + '-' + month + '-' + year,
             data: dataUser.content
         })
     }
-
     //filtration with date
     dateFilter = (e) => {
-        const { data, date } = this.state;
+        const { data, date, userId } = this.state;
+        //clear previous data in filter array
+        this.setState({
+            filterData: []
+        })
+        //create array for store data
         let dataArr = [];
+        //start loop in data
         for (var i in data) {
             let dataFilter = data[i];
-            if (e == undefined) {
-                if (dataFilter.date == date) {
-                    dataArr = [...dataArr, dataFilter]
-                    this.setState({
-                        filterData: dataArr
-                    })
+            //check current user data
+            if (dataFilter.userId == userId) {
+                //get data of current date
+                if (e == undefined) {
+                    if (dataFilter.date == date) {
+                        dataArr = [...dataArr, dataFilter]
+                        this.setState({
+                            filterData: dataArr
+                        })
+                    }
                 }
-            }
-            else if (e != undefined) {
-                if (dataFilter.date == e) {
-                    dataArr = [...dataArr, dataFilter]
+                //get data with choseing date
+                else if (e != undefined) {
                     this.setState({
-                        filterData: dataArr,
                         date: e
                     })
+                    if (dataFilter.date == e) {
+                        dataArr = [...dataArr, dataFilter]
+                        this.setState({
+                            filterData: dataArr,
+                            date: e
+                        })
+                    }
                 }
             }
         }
     }
 
     _keyExtractor = (item, index) => item.id;
-    
+
+    //rendering excersice data in flate list
     renderDataItems = ({ item }) => {
         return (
-        <View style={styles.bodyChildOne}>
-            {/* <View style={styles.bodyContainer}> */}
-
-            <TouchableOpacity style={styles.resultCardLeft} id={item.id}>
-                <Text style={styles.resultText}>
-                    {item.exerciseName}
-                </Text>
-                <Text style={styles.resultTextAmount}>
-                    {item.exerciseAmount}
-                </Text>
-                <Text style={styles.resultTextUnit}>
-                    {item.exerciseUnit}
-                </Text>
-            </TouchableOpacity>
-        </View>
+            <View style={styles.bodyChildOne}>
+                <TouchableOpacity style={styles.resultCardLeft} id={item.id}>
+                    <Text style={styles.resultText}>
+                        {item.exerciseName}
+                    </Text>
+                    <Text style={styles.resultTextAmount}>
+                        {item.exerciseAmount}
+                    </Text>
+                    <Text style={styles.resultTextUnit}>
+                        {item.exerciseUnit}
+                    </Text>
+                </TouchableOpacity>
+            </View>
         )
-
     }
 
     render() {
-        const { date, filterData } = this.state;
-
+        const { date, filterData, maxDate } = this.state;
         return (
             <View style={styles.mainContainer}>
-
                 <View style={styles.childContainer}>
                     <View style={styles.headingContainer}>
                         <Text style={styles.headingStyle}>
                             Exercise Log
-                            </Text>
+                        </Text>
                     </View>
                     <View style={styles.arrowContainer}>
                         <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity>
-                        {/* <Text>Today</Text> */}
                         <DatePicker
                             style={{ width: 120 }}
                             date={date}
@@ -109,7 +134,7 @@ class Exerciselog extends React.Component {
                             placeholder="select date"
                             format="DD-MM-YYYY"
                             minDate="01-01-1950"
-                            maxDate={date}
+                            maxDate={maxDate}
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
                             customStyles={{
@@ -123,75 +148,24 @@ class Exerciselog extends React.Component {
                             }}
                             onDateChange={
                                 this.dateFilter
-                                // (date) => { this.setState({ date: date }) }
                             }
                         />
                         <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
                     </View>
                     <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
-                        {/* {filterData.length >= 0 && filterData.map((elem, key) => {
-                            return (
-                                <View>
-
-                                </View>
-                            )
-                        })
-
-                        } */}
-
                         <FlatList
-                              data={filterData}
-                              renderItem={this.renderDataItems}
-                              keyExtractor={this._keyExtractor}
-                              numColumns={columsNum}
+                            data={filterData}
+                            renderItem={this.renderDataItems}
+                            keyExtractor={this._keyExtractor}
+                            numColumns={columsNum}
                         />
-
-
-
                     </ScrollView>
                     <View style={{
                         marginVertical: 70,
                         height: 30
                     }}>
-
                     </View>
-                    {/* <View style={styles.bodyContainer}>
-                            <View style={styles.bodyChildOne}>
-                                <TouchableOpacity style={styles.resultCardLeft}>
-                                    <Text style={styles.resultText}>
-                                        Push Ups
-                                     </Text>
-                                    <Text style={styles.resultTextAmount}>
-                                        24
-                                     </Text>
-                                    <Text style={styles.resultTextUnit}>
-                                        Reps
-                                     </Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.bodyChildTwo}>
-                                <TouchableOpacity style={styles.resultCardRight}>
-                                    <Text style={styles.resultText}>
-                                        Push Ups
-                                 </Text>
-                                    <Text style={styles.resultTextAmount}>
-                                        24
-                                 </Text>
-                                    <Text style={styles.resultTextUnit}>
-                                        Reps
-                                 </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View> */}
-
                 </View>
-
-
-
-
-
-
-
             </View>
         )
     }

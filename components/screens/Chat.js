@@ -9,7 +9,6 @@ import {
   Image
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import SoundRecorder from 'react-native-sound-recorder';
 import styles from '../Styling/ChatScreenStyle';
 import ImagePicker from 'react-native-image-picker';
 console.ignoredYellowBox = ['Remote debugger'];
@@ -23,7 +22,8 @@ import 'firebase/firestore';
 const db = firebase.database();
 import RNFS from 'react-native-fs';
 import FilePickerManager from 'react-native-file-picker';
-import RNFetchBlob from 'react-native-fetch-blob';
+// import SoundRecorder from 'react-native-sound-recorder';
+// import RNFetchBlob from 'react-native-fetch-blob';
 
 class Chatscreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
