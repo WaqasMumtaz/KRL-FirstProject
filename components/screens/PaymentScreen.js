@@ -4,7 +4,13 @@ import TextInputs from '../textInputs/TextInputs';
 // import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/PaymentScreenStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
+ import stripe from 'tipsi-stripe';
 const { height } = Dimensions.get('window');
+
+
+stripe.setOptions({
+  publishableKey: "pk_test_YspkzacmUJ26Adtvg8zkV0pC00Twd5LQRR"
+});
 
 class Payment extends React.Component{
   static navigationOptions =(navigation)=> {   

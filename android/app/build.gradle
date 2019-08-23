@@ -107,6 +107,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -144,6 +145,7 @@ android {
 }
 
 dependencies {
+    implementation project(':tipsi-stripe')
     implementation project(':react-native-svg')
     implementation project(':react-native-fetch-blob')
     implementation project(':react-native-file-opener')
@@ -169,6 +171,14 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    implementation 'com.android.support:design:27.1.0'
+    compile 'com.android.support:multidex:1.0.3'
+    compile (project(':tipsi-stripe')) {
+        exclude group: 'com.google.android.gms'
+        exclude group: 'com.google.firebase'
+        }
+
     // Firebase dependencies
     // implementation "com.google.android.gms:play-services-base:15.0.0"
     // implementation "com.google.firebase:firebase-core:15.0.2"

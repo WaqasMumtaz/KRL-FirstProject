@@ -33,6 +33,7 @@ import OverlayLoader from '../Loader/OverlaySpinner';
 import SettingScreen from '../screens/Setting';
 import ShowMeasurementsScreen from '../screens/ShowMeasurements';
 import StepCountScreen from '../screens/StepCountScreen';
+import Payment from '../screens/PaymentScreen';
 
 
 
@@ -40,7 +41,7 @@ import StepCountScreen from '../screens/StepCountScreen';
 
 const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
-  //  Login: {screen: Login},
+   Login: {screen: Login},
 
   //ShowMeasurementsScreen:ShowMeasurementsScreen,
 
@@ -49,15 +50,15 @@ const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
   // Login: {screen: Login},
 
-  Exerciselog: {
-    screen: Exerciselog,
-    navigationOptions: {
-      headerStyle: {
-        elevation: 0,
-      }
+  // Exerciselog: {
+  //   screen: Exerciselog,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
 
-    }
-   },
+  //   }
+  //  },
   // Exerciselog: {
   //   screen: Exerciselog,
   //   navigationOptions: {
@@ -224,6 +225,14 @@ const MainNavigator= createStackNavigator({
   },
   EditProfileScreen:{
     screen:EditProfileScreen,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
+  Payment:{
+    screen:Payment,
     navigationOptions: {
       headerStyle: {
         elevation: 0,

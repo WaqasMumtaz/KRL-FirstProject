@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
 import styles from '../Styling/ReportsScreenStyle';
 import Wheelspiner from '../Progress Wheel/Progress';
-import ChartScreen from '../BarChart/BarChart';
+//import ChartScreen from '../BarChart/BarChart';
 import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -250,7 +250,7 @@ class Reportscreen extends React.Component {
                 <Text style={styles.headingText}>Weight{'\n'}status</Text>
                 <View style={styles.statusGraphContainer}>
                   <View style={styles.midBox}>
-                    <ChartScreen lastWeek={lastWeek} cureentWeek={cureentWeek} />
+                    {/* <ChartScreen lastWeek={lastWeek} cureentWeek={cureentWeek} /> */}
                   </View>
                   <View style={styles.borderLines1}>
                     <Text style={styles.kgTextOne}>
