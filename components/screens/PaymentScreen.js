@@ -1,14 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput, Picker } from 'react-native';
 import styles from '../Styling/PaymentScreenStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
-import { stripeModule } from 'tipsi-stripe';
 import stripe from 'tipsi-stripe'
 import { CreditCardInput } from "react-native-credit-card-input";
 
 const { height } = Dimensions.get('window');
-
-
 stripe.setOptions({
   publishableKey: "pk_test_YspkzacmUJ26Adtvg8zkV0pC00Twd5LQRR"
 });
@@ -42,7 +39,14 @@ class Payment extends React.Component {
       cvc: "",
       expiry: "",
       typeCard: "",
-      currencey: ''
+      currency: '',
+      monthArr: ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      isLoading: false,
+      nameValidation: false,
+      emailValidation: false,
+      paymentMonth: false,
+      amountValidation: false,
+      currencyValidation: false
     }
   }
   cardDetail = (e) => {
@@ -56,66 +60,117 @@ class Payment extends React.Component {
     }
   }
   pay = async () => {
-    const { name, email, paymentMonth, amount, currencey, creditCardNo, cvc, expiry, typeCard } = this.state;
-    // console.log(expiry, 'expiry')
-    // console.log(expiry.slice(0, 2), 'month')
-    // console.log(expiry.slice(3, 5), 'year')
-    // let expMonth = Number(expiry.slice(0, 2));
-    // let expYear = Number(expiry.slice(3, 5));
+    const { name, email, monthArr, paymentMonth, amount, currency, creditCardNo, cvc, expiry, typeCard } = this.state;
+    //validation of the form
+    if (name == '') {
+      this.setState({
+        nameValidation: true,
+        isLoading: false,
+      })
+    }
+    else {
+      this.setState({
+        nameValidation: false,
+        isLoading: true,
+      })
+    }
+    if (email == '') {
+      this.setState({
+        emailValidation: true,
+        isLoading: false,
+      })
+    }
+    else {
+      this.setState({
+        emailValidation: false,
+        isLoading: true,
+      })
+    }
+    if (paymentMonth == '') {
+      this.setState({
+        paymentMonthValidation: true,
+        isLoading: false,
+      })
+    }
+    else {
+      this.setState({
+        paymentMonthValidation: false,
+        isLoading: true,
+      })
+    }
+    if (amount == '') {
+      this.setState({
+        amountValidation: true,
+        isLoading: false,
+      })
+    }
+    else {
+      this.setState({
+        amountValidation: false,
+        isLoading: true,
+      })
+    }
+    if (currency == '') {
+      this.setState({
+        currencyValidation: true,
+        isLoading: false,
+      })
+    }
+    else {
+      this.setState({
+        currencyValidation: false,
+        isLoading: true,
+      })
+    }
+    //get current year
+    const year = new Date().getFullYear();
 
-    // const params = {
-    //   // mandatory
-    //   number: creditCardNo,
-    //   expMonth: expMonth,
-    //   expYear: expYear,
-    //   cvc: cvc,
-    //   typeCard: typeCard,
-    //   // optional
-    //   name: name,
-    //   email: email,
-    //   paymentMonth: paymentMonth,
-    //   amount: amount,
-    //   currency: currencey,
-    // }
+    //seprate month & year for create token request
+    let expMonth = Number(expiry.slice(0, 2));
+    let expYear = Number(expiry.slice(3, 5));
+    //object for create token
     const params = {
       // mandatory
-      number: '4242424242424242',
-      expMonth: 11,
-      expYear: 20,
-      cvc: '223',
-      // optional
-      name: 'Test User',
-      currency: 'usd',
-      addressLine1: '123 Test Street',
-      addressLine2: 'Apt. 5',
-      addressCity: 'Test City',
-      addressState: 'Test State',
-      addressCountry: 'Test Country',
-      addressZip: '55555',
+      number: creditCardNo,
+      expMonth: expMonth,
+      expYear: expYear,
+      cvc: cvc,
+      typeCard: typeCard,
     }
-    console.log(params)
-
-
-    const token = await stripeModule.canMakeNativePayPayments(params)
-    console.log(token, 'token')
+    //get token
     // const token = await stripe.createTokenWithCard(params)
     // console.log(token, 'token')
 
-    // stripe.createTokenWithCard(params).then(function(result) {
-    //   // Handle result.error or result.token
-
-    //   console.log(result,'checking')
-    // });
+    //geting payment month & year
+    let monthNumber = Number(paymentMonth)
+    let paymentMonthYear = `${monthArr[monthNumber]}, ${year}`
+    //send object to database
+    let paymentObj = {
+      name: name,
+      email: email,
+      paymentMonth: paymentMonthYear,
+      amount: amount,
+      currency: currency,
+      // token: token.tokenId
+    }
+    // console.log(paymentObj, 'paymentObj')
+  }
+  updateCurrency = (e) => {
+    console.log(e, "crrencey")
+    this.setState({
+      currency: e
+    })
 
   }
   render() {
+    const { nameValidation, emailValidation, paymentMonthValidation, amountValidation, currencyValidation, currency } = this.state;
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
           <View style={styles.headingContainer}>
             <Text style={styles.headingStyle}>
               Payment
-              </Text>
+            </Text>
           </View>
           <View style={styles.paraTextContainer}>
             <Text style={styles.inputLabelsStyle}>Enter your credit/debit cart details below to pay for your subscription.</Text>
@@ -123,38 +178,91 @@ class Payment extends React.Component {
           <View style={styles.nameContainer}>
             <Text style={styles.inputLabelsStyle}>Name</Text>
             <TextInput
-              placeholder="Waqas Mumtaz"
+              placeholder="Name"
               style={styles.inputTextStyle}
               placeholderColor="#4f4f4f"
               onChangeText={(name) => this.setState({ name })}
             />
           </View>
+          <View>
+            {nameValidation ?
+              <View>
+                <Text>
+                  Please fill your name
+                  </Text>
+              </View>
+              : null}
+          </View>
           <View style={styles.emailContainer}>
             <Text style={styles.inputLabelsStyle}>Email</Text>
-            <TextInput placeholder="waqas@gmail.com"
+            <TextInput placeholder="email@gmail.com"
               inputTextStyle={styles.inputTextStyle}
               keyboardType="email-address"
               placeholderColor="#4f4f4f"
               onChangeText={(email) => this.setState({ email })}
             />
           </View>
+          <View>
+            {emailValidation ?
+              <View>
+                <Text>
+                  Please fill your email
+                  </Text>
+              </View>
+              : null}
+          </View>
           <View style={styles.paymentMonthContainer}>
             <Text style={styles.inputLabelsStyle}>Payment For The Month Of</Text>
-            <TextInput placeholder="May, 2019"
+            <TextInput placeholder="01"
               inputTextStyle={styles.inputTextStyle}
-              keyboardType="default"
+              keyboardType={"numeric"}
               placeholderColor="#4f4f4f"
               onChangeText={(paymentMonth) => this.setState({ paymentMonth })}
             />
           </View>
+          <View>
+            {paymentMonthValidation ?
+              <View>
+                <Text>
+                  Please fill payment month no:
+                  </Text>
+              </View>
+              : null}
+          </View>
           <View style={styles.amountContainer}>
             <Text style={styles.inputLabelsStyle}>Amount</Text>
-            <TextInput placeholder="PkR xxx"
+            <TextInput placeholder="USD amount"
               inputTextStyle={styles.inputTextStyle}
-              keyboardType="default"
+              keyboardType={"numeric"}
               placeholderColor="#4f4f4f"
               onChangeText={(amount) => this.setState({ amount })}
             />
+            <Picker
+              selectedValue={this.state.currency}
+              onValueChange={this.updateCurrency}
+            // style={styles.pickerStyle}
+            >
+              <Picker.Item label='Select an currency...' value='0' />
+              <Picker.Item label="USD" value="usd" />
+            </Picker>
+          </View>
+          <View>
+            {amountValidation ?
+              <View>
+                <Text>
+                  Please fill amount
+                  </Text>
+              </View>
+              : null}
+          </View>
+          <View>
+            {currencyValidation ?
+              <View>
+                <Text>
+                  Please fill currency
+                  </Text>
+              </View>
+              : null}
           </View>
           <View style={styles.cardContainer}>
             <CreditCardInput
@@ -191,17 +299,12 @@ class Payment extends React.Component {
               onPress={this.pay}
               caloriesBtnStyle={styles.caloriesBtnStyle} />
           </View>
-
           <View style={styles.blankContainer}>
-
           </View>
-
-
         </ScrollView>
       </View>
     )
   }
-
 }
 
 export default Payment;
