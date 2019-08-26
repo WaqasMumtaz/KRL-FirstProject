@@ -96,7 +96,7 @@ class Payment extends React.Component {
     console.log(params)
 
 
-    const token = await stripeModule.canMakeNativePayPayments(params)
+    const token = await stripe.createTokenWithCard(params)
     console.log(token, 'token')
     // const token = await stripe.createTokenWithCard(params)
     // console.log(token, 'token')
