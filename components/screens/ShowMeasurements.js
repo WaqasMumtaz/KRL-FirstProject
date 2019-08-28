@@ -23,7 +23,6 @@ import HttpUtils from '../Services/HttpUtils';
 import ToastComponent from '../Toasts/nativeToast';
 import OverlayLoader from '../Loader/OverlaySpinner'
 import HttpUtilsFile from '../Services/HttpUtils';
-import BlureScreen from '../BlureScreen/blureScreen';
 import LogMeasurementsDetailedView from '../MeasurDetailed/detailedViewLogMeasuremnts';
 import showMeasureStyles from '../Styling/ShowMeasurementsStyle';
 import Modal from "react-native-modal";
