@@ -153,7 +153,6 @@ class Payment extends React.Component {
       currency: currency,
       // token: token.tokenId
     }
-    // console.log(paymentObj, 'paymentObj')
   }
   updateCurrency = (e) => {
     console.log(e, "crrencey")
