@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput, Picker } from 'react-native';
+import { StyleSheet, Image, Text, View, ScrollView, Dimensions, TextInput, Picker, TouchableOpacity } from 'react-native';
 import styles from '../Styling/PaymentScreenStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import stripe from 'tipsi-stripe';
 import { CreditCardInput } from "react-native-credit-card-input";
 import HttpUtils from '../Services/HttpUtils';
+import Modal from "react-native-modal";
 
 const { height } = Dimensions.get('window');
 
@@ -49,16 +50,27 @@ class Payment extends React.Component {
       emailValidation: false,
       paymentMonth: false,
       amountValidation: false,
-      currencyValidation: false
+      currencyValidation: false,
+      isVisibleModal: false,
+      btnDisable: false,
+      dataSubmit: false
     }
   }
   cardDetail = (e) => {
-    if (e.status.number == 'valid' && e.status.expiry == 'valid' && e.status.cvc == 'valid' && e.valid == true) {
+    if (e.status.number == "invalid" || e.status.expiry == 'invalid' || e.status.cvc == 'invalid',
+      e.status.number == "incomplete" || e.status.expiry == 'incomplete' || e.status.cvc == 'incomplete') {
+      this.setState({
+        btnDisable: true
+      })
+
+    }
+    else if (e.status.number == 'valid' && e.status.expiry == 'valid' && e.status.cvc == 'valid' && e.valid == true) {
       this.setState({
         creditCardNo: e.values.number,
         cvc: e.values.cvc,
         expiry: e.values.expiry,
         typeCard: e.values.type,
+        btnDisable: false
       })
     }
   }
@@ -156,23 +168,42 @@ class Payment extends React.Component {
       paymentMonth: paymentMonthYear,
       amount: amount,
       currency: currency,
-      
-      token: token.tokenId
+      token: token.tokenId,
     }
     console.log(paymentObj, 'paymentObj')
     let res = await HttpUtils.post('payment', paymentObj);
 
+    if (res.code == 200) {
+      this.setState({
+        dataSubmit: true,
+        isVisibleModal: true
+      })
+    }
+    else {
+
+    }
     console.log(res, 'payemnt response')
   }
+
   updateCurrency = (e) => {
-    console.log(e, "crrencey")
     this.setState({
       currency: e
     })
+  }
 
+  backToPage = () => {
+    const { dataSubmit } = this.state;
+    const { navigate } = this.props.navigation;
+    if (dataSubmit) {
+      this.setState({
+        dataSubmit: false,
+        isVisibleModal: false
+      })
+      navigate('Homescreen');
+    }
   }
   render() {
-    const { nameValidation, emailValidation, paymentMonthValidation, amountValidation, currencyValidation, currency } = this.state;
+    const { nameValidation, emailValidation, paymentMonthValidation, amountValidation, currencyValidation, currency, btnDisable, dataSubmit } = this.state;
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -279,6 +310,33 @@ class Payment extends React.Component {
             />
 
           </View>
+          {dataSubmit ?
+            <Modal
+              isVisible={this.state.isVisibleModal}
+              animationIn='zoomIn'
+              //animationOut='zoomOutDown'
+              backdropOpacity={0.8}
+              backdropColor='white'
+              coverScreen={true}
+              animationInTiming={800}
+              animationOutTiming={500}
+            >
+              <View style={styles.cardContainer}>
+                <View style={styles.dateWithCancelIcon}>
+                  <Text style={{ color: '#10f000', fontSize: 12 }}>Data has been submitted successfully</Text>
+                  <TouchableOpacity onPress={this.backToPage} activeOpacity={1.6}>
+                    <Image source={require('../icons/cancel.png')} />
+                  </TouchableOpacity>
+                </View>
+                {/* <View > */}
+                  <Image source={require('../icons/green-check-mark.gif')} style={styles.forImages} resizeMode='contain' />
+                {/* </View> */}
+              </View>
+            </Modal>
+            :
+            null
+          }
+
           {/* <View style={styles.cardContainer}>
             <Text style={styles.inputLabelsStyle}>Credit/Debit Card Number</Text>
             <TextInputs placeholder="xxxx xxxx xxxx xxxx"
@@ -305,8 +363,10 @@ class Payment extends React.Component {
           </View> */}
           <View style={styles.btnContainer}>
             <CaloriesSetupBtn title='Confirm And Pay'
+              btnDisable={btnDisable}
               onPress={this.pay}
-              caloriesBtnStyle={styles.caloriesBtnStyle} />
+              caloriesBtnStyle={styles.caloriesBtnStyle}
+              caloriesBtnStyleDisabled={styles.caloriesBtnStyleDisabled} />
           </View>
           <View style={styles.blankContainer}>
           </View>

@@ -41,7 +41,7 @@ import Payment from '../screens/PaymentScreen';
 
 const MainNavigator= createStackNavigator({
   // Profile:{screen:Profile},
-     Login: {screen: Login},
+    //  Login: {screen: Login},
 
   //ShowMeasurementsScreen:ShowMeasurementsScreen,
 
