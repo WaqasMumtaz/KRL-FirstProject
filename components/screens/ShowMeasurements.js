@@ -1,18 +1,20 @@
 import React from 'react';
-import { 
-    Text, 
+import {
+    Text,
     Alert,
-    View, 
-    ScrollView, 
-    Button, 
-    Image, 
-    Dimensions, 
-    TextInput, 
-    TouchableOpacity, 
-    Picker, 
+    View,
+    ScrollView,
+    Button,
+    Image,
+    Dimensions,
+    TextInput,
+    TouchableOpacity,
+    Picker,
     StyleSheet,
     ActivityIndicator,
-    } from 'react-native';
+    FlatList,
+
+} from 'react-native';
 // import Toast, {DURATION} from 'react-native-easy-toast'
 import styles from '../Styling/ShowMeasurementsStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
@@ -20,46 +22,171 @@ import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
 import ToastComponent from '../Toasts/nativeToast';
 import OverlayLoader from '../Loader/OverlaySpinner'
+import HttpUtilsFile from '../Services/HttpUtils';
+import LogMeasurementsDetailedView from '../MeasurDetailed/detailedViewLogMeasuremnts';
+import showMeasureStyles from '../Styling/ShowMeasurementsStyle';
+import Modal from "react-native-modal";
+//import ModalComponent from '../Modal/modal';
 const { height } = Dimensions.get('window');
 
-class ShowMeasurementsScreen extends React.Component{
-    constructor(props){
+
+const columsNum = 2;
+class ShowMeasurementsScreen extends React.Component {
+    constructor(props) {
         super(props);
 
-        this.state={
-
+        this.state = {
+            userData: '',
+            allDataUser: [],
+            blureShow: false,
+            flatListShow: true,
+            detailCardShow: false,
+            detailData: {},
+            isVisibleModal: false,
+            modalVisible: false
         }
     }
 
-    render(){
-        return(
+    async componentWillMount() {
+        await this.getData()
+    }
+
+    getData = async () => {
+        try {
+            let dataUser = await HttpUtilsFile.get('getweightlog')
+            console.log(dataUser, 'dataUser');
+            let code = dataUser.code;
+            if (code) {
+                let getUserData = await AsyncStorage.getItem('currentUser');
+                let dataArr = [];
+                //console.log(b);
+                let parseUserData = JSON.parse(getUserData);
+                //console.log(parseUserData._id);
+                let loginUserId = parseUserData._id;
+                //console.log(dataUser.content)
+                let checkId = dataUser.content;
+                for (const i in checkId) {
+                    //console.log(checkId[i])
+                    let data = checkId[i];
+                    if (data.userId == loginUserId) {
+                        dataArr = [...dataArr, data]
+                        this.setState({
+                            allDataUser: dataArr
+                        })
+                    }
+                }
+
+            }
+            else {
+                console.log('User Not Login')
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    _keyExtractor = (item, index) => item.id;
+
+    abc = () => {
+        this.setState({
+            modalVisible: true
+        })
+    }
+
+    renderDataItems = ({ item }) => {
+        //console.log(item)
+        return (
+            <View style={styles.bodyChildOne}>
+                <TouchableOpacity
+                    style={styles.cardLeft}
+                    activeOpacity={0.7}
+                    onPress={this.showBlureScreen.bind(this, item)}
+                //onPress={this.abc}
+                >
+                    <View style={styles.childContainer}>
+                        <View style={styles.cardNumberContainer}>
+                            <Text style={styles.cardDateStyle}>{item.date}</Text>
+                            <Text style={styles.weightTextStyle}>{item.weight}</Text>
+                            <Text style={styles.textStyle}>Weight</Text>
+
+                            <Text style={styles.waistTextStyle}>{item.waist}</Text>
+                            <Text style={styles.textStyle}>Waist</Text>
+
+                            <View style={styles.detailViewContainer}>
+                                <Text style={styles.detailViewTextStyle}>View detailed</Text>
+
+                            </View>
+                        </View>
+
+                    </View>
+                </TouchableOpacity>
+            </View>
+
+        )
+
+    }
+
+    showBlureScreen(e) {
+        this.setState({
+            detailData: e,
+            isVisibleModal: true
+        })
+    }
+
+    backToPage = () => {
+        this.setState({
+            isVisibleModal: false,
+
+        })
+    }
+
+    render() {
+        const {
+            allDataUser,
+            blureShow,
+            flatListShow,
+            detailCardShow,
+            detailData,
+            openModal
+        } = this.state;
+        //console.log('detailData -->>', detailData)
+        return (
             <View style={styles.mainContainer}>
-               <View style={styles.childContainer}>
+                <View style={styles.smallChildContainer}>
                     <View style={styles.headingContainer}>
                         <Text style={styles.headingStyle}>Log Measurements</Text>
                     </View>
-                    <ScrollView style={{ flex: 1, backgroundColor: '#FFFFFF', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
-                      
-                            <TouchableOpacity style={styles.cardContainer}>
-                              <Text style={styles.currntDateStyle}>Current Date</Text>
-                              <Text style={styles.textStyle}>Weight</Text>
-                              <Text style={styles.forBorder}></Text>
-                              <Text style={styles.textStyle}>Shoulder</Text>
-                              <Text style={styles.forBorder}></Text>
-                              <Text style={styles.textStyle}>Neck</Text>
-                              <Text style={styles.forBorder}></Text>
-                              <Text style={styles.textStyle}>Waist</Text>
-                              <Text style={styles.forBorder}></Text>
-                              <Text style={styles.textStyle}>Bicep</Text>
-                              <Text style={styles.forBorder}></Text>
-                              <Text style={styles.textStyle}>Chest</Text>
-                              <Text style={styles.forBorder}></Text>
-                              <Text style={styles.textStyle}>Thigh</Text>
-                            </TouchableOpacity>
-                     
 
-                    </ScrollView>
-               </View>
+                    {flatListShow &&
+                        <FlatList
+                            data={allDataUser}
+                            renderItem={this.renderDataItems}
+                            keyExtractor={this._keyExtractor}
+                            numColumns={columsNum}
+                        />
+                    }
+
+                </View>
+                <Modal
+                    isVisible={this.state.isVisibleModal}
+                    animationIn='zoomIn'
+                    //animationOut='zoomOutDown'
+                    backdropOpacity={0.8}
+                    backdropColor='white'
+                    coverScreen={true}
+                    animationInTiming={800}
+                    animationOutTiming={500}
+                >
+
+                    <LogMeasurementsDetailedView
+                        userDetailData={detailData}
+                        backToPage={this.backToPage}
+                    />
+
+
+                </Modal>
+
             </View>
         )
     }

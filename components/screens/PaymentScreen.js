@@ -147,7 +147,7 @@ class Payment extends React.Component {
 
     //geting payment month & year
     let monthNumber = Number(paymentMonth)
-    
+
     let paymentMonthYear = `${monthArr[monthNumber]}, ${year}`
     //send object to database
     let paymentObj = {
@@ -159,7 +159,7 @@ class Payment extends React.Component {
       
       token: token.tokenId
     }
-    console.log(paymentObj ,'paymentObj')
+    console.log(paymentObj, 'paymentObj')
     let res = await HttpUtils.post('payment', paymentObj);
 
     console.log(res, 'payemnt response')
