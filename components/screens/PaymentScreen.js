@@ -156,6 +156,7 @@ class Payment extends React.Component {
       paymentMonth: paymentMonthYear,
       amount: amount,
       currency: currency,
+      
       token: token.tokenId
     }
     console.log(paymentObj ,'paymentObj')
