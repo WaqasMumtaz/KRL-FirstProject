@@ -2,16 +2,19 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput, Picker } from 'react-native';
 import styles from '../Styling/PaymentScreenStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
-import stripe from 'tipsi-stripe'
+import stripe from 'tipsi-stripe';
 import { CreditCardInput } from "react-native-credit-card-input";
+import HttpUtils from '../Services/HttpUtils';
 
 const { height } = Dimensions.get('window');
-stripe.setOptions({
-  publishableKey: "pk_test_YspkzacmUJ26Adtvg8zkV0pC00Twd5LQRR"
-});
+
 
 class Payment extends React.Component {
   static navigationOptions = (navigation) => {
+    // console.log(navigation.navigation.state.params.stripeKey,'Nnnnnnnnn')
+    stripe.setOptions({
+      publishableKey: navigation.navigation.state.params.stripeKey
+    });
     //const { params = {} } = navigation.state;
     const { navigate } = navigation.navigation.navigate
     return {
@@ -137,12 +140,14 @@ class Payment extends React.Component {
       cvc: cvc,
       typeCard: typeCard,
     }
-    //get token
-    // const token = await stripe.createTokenWithCard(params)
-    // console.log(token, 'token')
+    console.log(params)
+
+    const token = await stripe.createTokenWithCard(params)
+    console.log(token, 'token')
 
     //geting payment month & year
     let monthNumber = Number(paymentMonth)
+
     let paymentMonthYear = `${monthArr[monthNumber]}, ${year}`
     //send object to database
     let paymentObj = {
@@ -151,8 +156,12 @@ class Payment extends React.Component {
       paymentMonth: paymentMonthYear,
       amount: amount,
       currency: currency,
-      // token: token.tokenId
+      token: token.tokenId
     }
+    console.log(paymentObj, 'paymentObj')
+    let res = await HttpUtils.post('payment', paymentObj);
+
+    console.log(res, 'payemnt response')
   }
   updateCurrency = (e) => {
     console.log(e, "crrencey")
