@@ -6,6 +6,8 @@ import stripe from 'tipsi-stripe';
 import { CreditCardInput } from "react-native-credit-card-input";
 import HttpUtils from '../Services/HttpUtils';
 import Modal from "react-native-modal";
+import OverlayLoader from '../Loader/OverlaySpinner';
+import Toast, { DURATION } from 'react-native-easy-toast';
 
 const { height } = Dimensions.get('window');
 
@@ -53,7 +55,20 @@ class Payment extends React.Component {
       currencyValidation: false,
       isVisibleModal: false,
       btnDisable: false,
-      dataSubmit: false
+      dataSubmit: false,
+      isLoading: false,
+      position: 'top',
+    }
+  }
+  componentWillMount() {
+    this.btnDisabledFunc();
+  }
+  btnDisabledFunc = () => {
+    if (name == '' || email == '' || paymentMonth == '' || amount == '' || creditCardNo == '' ||
+      cvc == '' || expiry == '' || typeCard == '' || currency == '') {
+      this.setState({
+        btnDisable: true
+      })
     }
   }
   cardDetail = (e) => {
@@ -75,7 +90,7 @@ class Payment extends React.Component {
     }
   }
   pay = async () => {
-    const { name, email, monthArr, paymentMonth, amount, currency, creditCardNo, cvc, expiry, typeCard } = this.state;
+    const { name, email, monthArr, paymentMonth, amount, currency, creditCardNo, cvc, expiry, typeCard, isLoading } = this.state;
     //validation of the form
     if (name == '') {
       this.setState({
@@ -153,10 +168,14 @@ class Payment extends React.Component {
       typeCard: typeCard,
     }
     console.log(params)
+    if (params) {
+      this.setState({
+        isLoading: true
+      })
+    }
 
     const token = await stripe.createTokenWithCard(params)
     console.log(token, 'token')
-
     //geting payment month & year
     let monthNumber = Number(paymentMonth)
 
@@ -175,12 +194,17 @@ class Payment extends React.Component {
 
     if (res.code == 200) {
       this.setState({
+        isLoading: false,
         dataSubmit: true,
         isVisibleModal: true
       })
     }
     else {
-
+      this.setState({
+        isLoading: false
+      }, () => {
+        this.toastFunction(`Some thing went wrong of ${res.error}`, this.state.position, DURATION.LENGTH_LONG, true)
+      })
     }
     console.log(res, 'payemnt response')
   }
@@ -202,8 +226,20 @@ class Payment extends React.Component {
       navigate('Homescreen');
     }
   }
+
+  toastFunction = (text, position, duration, withStyle) => {
+    this.setState({
+      position: position,
+    })
+    if (withStyle) {
+      this.refs.toastWithStyle.show(text, duration);
+    } else {
+      this.refs.toast.show(text, duration);
+    }
+  }
+
   render() {
-    const { nameValidation, emailValidation, paymentMonthValidation, amountValidation, currencyValidation, currency, btnDisable, dataSubmit } = this.state;
+    const { nameValidation, emailValidation, paymentMonthValidation, amountValidation, currencyValidation, currency, btnDisable, dataSubmit, isLoading } = this.state;
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -308,8 +344,10 @@ class Payment extends React.Component {
             <CreditCardInput
               onChange={this.cardDetail}
             />
-
           </View>
+          {/* loader show */}
+          {isLoading ? <OverlayLoader /> : null}
+          {/* payment succesfully show modal */}
           {dataSubmit ?
             <Modal
               isVisible={this.state.isVisibleModal}
@@ -323,44 +361,29 @@ class Payment extends React.Component {
             >
               <View style={styles.cardContainer}>
                 <View style={styles.dateWithCancelIcon}>
-                  <Text style={{ color: '#10f000', fontSize: 12 }}>Data has been submitted successfully</Text>
-                  <TouchableOpacity onPress={this.backToPage} activeOpacity={1.6}>
+                  <Text style={{ color: '#000000', fontSize: 18 }}>Data has been submitted successfully</Text>
+                  <TouchableOpacity onPress={this.backToPage} activeOpacity={0.6}>
                     <Image source={require('../icons/cancel.png')} />
                   </TouchableOpacity>
                 </View>
-                {/* <View > */}
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
                   <Image source={require('../icons/green-check-mark.gif')} style={styles.forImages} resizeMode='contain' />
-                {/* </View> */}
+                </View>
               </View>
             </Modal>
             :
             null
           }
-
-          {/* <View style={styles.cardContainer}>
-            <Text style={styles.inputLabelsStyle}>Credit/Debit Card Number</Text>
-            <TextInputs placeholder="xxxx xxxx xxxx xxxx"
-              inputTextStyle={styles.inputTextStyle}
-              keyboardType="numeric"
-              placeholderColor="#4f4f4f"
-            />
-          </View>
-          <View style={styles.validContainer}>
-            <View style={styles.validThru}>
-              <Text>Valid Thru</Text>
-              <TextInputs placeholder="04/2"
-                inputTextStyle={styles.inputTextStyle}
-                placeholderColor="#4f4f4f"
-              />
-            </View>
-            <View style={styles.cvv}>
-              <Text>CVV</Text>
-              <TextInputs placeholder="xxx"
-                inputTextStyle={styles.inputTextStyle}
-                placeholderColor="#4f4f4f"
-              />
-            </View>
-          </View> */}
+          {/* in case error of payment stripe the show toast */}
+          <Toast ref="toastWithStyle"
+            style={{ backgroundColor: '#FF6200' }}
+            position={this.state.position}
+            positionValue={50}
+            fadeInDuration={750}
+            fadeOutDuration={1000}
+            opacity={0.8}
+            textStyle={{ color: 'white', fontFamily: 'MontserratLight', }}
+          />
           <View style={styles.btnContainer}>
             <CaloriesSetupBtn title='Confirm And Pay'
               btnDisable={btnDisable}

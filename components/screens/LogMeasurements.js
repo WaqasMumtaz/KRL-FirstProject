@@ -4,7 +4,7 @@ import styles from '../Styling/LogMeasurementsStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
-import Toast, { DURATION } from 'react-native-easy-toast'
+import Toast, { DURATION } from 'react-native-easy-toast';
 // import PickDate from '../Common/datePicker';
 // import DatePicker from 'react-native-datepicker';
 import OverlayLoader from '../Loader/OverlaySpinner'
