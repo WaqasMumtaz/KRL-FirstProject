@@ -1,5 +1,7 @@
 import { AsyncStorage } from '@callstack/async-storage'
 
+// const BASE_URL = 'http://localhost:8000/';
+
 const BASE_URL = 'https://getfit-server.herokuapp.com';
 // const BASE_URL = 'https://pakjazba.com/api';
  //const BASE_URL = 'https://pure-hollows-17968.herokuapp.com/api';

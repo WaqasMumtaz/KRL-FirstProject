@@ -39,13 +39,13 @@ import Payment from '../screens/PaymentScreen';
 
 
 
-const MainNavigator= createStackNavigator({
+const MainNavigator = createStackNavigator({
   // Profile:{screen:Profile},
-    //  Login: {screen: Login},
+   Login: { screen: Login },
 
   //ShowMeasurementsScreen:ShowMeasurementsScreen,
 
-//BriskScreen: { screen: BriskScreen },
+  //BriskScreen: { screen: BriskScreen },
 
   // Profile:{screen:Profile},
   // Login: {screen: Login},
@@ -114,11 +114,11 @@ const MainNavigator= createStackNavigator({
   //   }
   // },
 
-  
+
 
   //  ResetpasswordScreen:{screen:ResetpasswordScreen},
   //  ConfirmResetPassword:{screen:ConfirmResetPassword},
- //const MainNavigator = createStackNavigator({
+  //const MainNavigator = createStackNavigator({
   // Login: {screen: Login},
   //  ResetpasswordScreen:{screen:ResetpasswordScreen},
   // ConfirmResetPassword:{screen:ConfirmResetPassword},
@@ -145,7 +145,7 @@ const MainNavigator= createStackNavigator({
   // },
 
 
-  
+
 
   // Setupscreen:{screen:Setupscreen},
   // Setupscreen1:{screen:Setupscreen1}, 
@@ -159,7 +159,7 @@ const MainNavigator= createStackNavigator({
   // Setupscreen:{screen:Setupscreen},
   // LastSetUpScreen: { screen: LastSetUpScreen },
   // Wheelspiner:{screen:Wheelspiner},
-  
+
   // ChartScreen: { screen: ChartScreen },
 
   BottomTabe: {
@@ -168,8 +168,8 @@ const MainNavigator= createStackNavigator({
       header: null
     }
   },
-  ResetpasswordScreen:{screen:ResetpasswordScreen},
-  StepCountScreen:{screen:StepCountScreen},
+  ResetpasswordScreen: { screen: ResetpasswordScreen },
+  StepCountScreen: { screen: StepCountScreen },
   AddExercise: {
     screen: AddExercise,
     navigationOptions: {
@@ -215,39 +215,39 @@ const MainNavigator= createStackNavigator({
 
     }
   },
-  Profile:{
-    screen:Profile,
+  Profile: {
+    screen: Profile,
     navigationOptions: {
       headerStyle: {
         elevation: 0,
       }
     }
   },
-  EditProfileScreen:{
-    screen:EditProfileScreen,
+  EditProfileScreen: {
+    screen: EditProfileScreen,
     navigationOptions: {
       headerStyle: {
         elevation: 0,
       }
     }
   },
-  Payment:{
-    screen:Payment,
+  Payment: {
+    screen: Payment,
     navigationOptions: {
       headerStyle: {
         elevation: 0,
       }
     }
   },
-  SettingScreen:{
-    screen:SettingScreen,
-    navigationOptions:{
+  SettingScreen: {
+    screen: SettingScreen,
+    navigationOptions: {
       headerStyle: {
         elevation: 0,
       }
     }
   }
-  
+
 
 },
 
