@@ -6,7 +6,8 @@ import {
   TextInput,
   Platform,
   TouchableOpacity,
-  Image
+  Image,
+  // NativeModules
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import styles from '../Styling/ChatScreenStyle';
@@ -22,8 +23,11 @@ import 'firebase/firestore';
 const db = firebase.database();
 import RNFS from 'react-native-fs';
 import FilePickerManager from 'react-native-file-picker';
-// import SoundRecorder from 'react-native-sound-recorder';
-// import RNFetchBlob from 'react-native-fetch-blob';
+import HttpUtils from '../Services/HttpUtils';
+import Modal from "react-native-modal";
+var CryptoJS = require('crypto-js');
+// import FileOpener from 'react-native-file-opener';
+
 
 class Chatscreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -53,8 +57,11 @@ class Chatscreen extends React.Component {
       userId: '',
       opponentId: '',
       file: '',
-      opponnetAvatarSource:'',
-      name:''
+      opponnetAvatarSource: '',
+      name: '',
+      isVisibleModal: false,
+      modal: '',
+      imagePath: ''
     }
   }
 
@@ -75,19 +82,19 @@ class Chatscreen extends React.Component {
   }
 
   componentWillMount() {
-     AsyncStorage.getItem('opponentProfile').then((value) => {
+    AsyncStorage.getItem('opponentProfile').then((value) => {
       let userData = JSON.parse(value);
-      if(value){
-      console.log(userData ,'userData')
-      this.setState({
-        opponnetAvatarSource:userData.image,
-        name:userData.name
-      })
-      }
-      else if(userData.name != undefined){
+      if (value) {
+        console.log(userData, 'userData')
         this.setState({
-          opponnetAvatarSource:userData.image,
-          name:userData.name
+          opponnetAvatarSource: userData.image,
+          name: userData.name
+        })
+      }
+      else if (userData.name != undefined) {
+        this.setState({
+          opponnetAvatarSource: userData.image,
+          name: userData.name
         })
       }
     })
@@ -103,13 +110,17 @@ class Chatscreen extends React.Component {
       let data = snapshot.val()
       for (var i in data) {
         let firbaseData = data[i]
+        // console.log(firbaseData , 'firebase data')
         if (firbaseData.reciverId == dataFromLocalStorage._id && firbaseData.senderId == dataFromLocalStorage.trainnerId
           || firbaseData.senderId == dataFromLocalStorage.tainnyId) {
           chatArrayTemp.push(firbaseData)
+          // console.log(chatArrayTemp, 'condition work ')
+          // console.log(chatArrayTemp, 'chatArrayTemp')
         }
         if (firbaseData.senderId == dataFromLocalStorage._id && firbaseData.reciverId == dataFromLocalStorage.trainnerId ||
           firbaseData.senderId == dataFromLocalStorage._id && firbaseData.reciverId == dataFromLocalStorage.tainnyId) {
           chatArrayTemp.push(firbaseData)
+          // console.log(chatArrayTemp, 'condition work 2')
         }
       }
       if (dataFromLocalStorage.trainnerId) {
@@ -122,6 +133,7 @@ class Chatscreen extends React.Component {
           opponentId: dataFromLocalStorage.tainnyId,
         })
       }
+      // console.log(chatArrayTemp , 'chatArrayTemp')
       this.setState({
         chatMessages: chatArrayTemp,
         userId: dataFromLocalStorage._id,
@@ -130,7 +142,7 @@ class Chatscreen extends React.Component {
     });
   }
 
-  uplaodDataOnFirebase = (userMessage) => {
+  uplaodDataOnFirebase = (userMessage, type, name) => {
     const { date, time } = this.state;
     let mgs = {}
     let data;
@@ -145,7 +157,9 @@ class Chatscreen extends React.Component {
           mgs.senderId = data._id;
           mgs.date = date;
           mgs.time = time;
-          // `${mgs}.${dd}`
+          mgs.type = type;
+          mgs.name = name;
+          console.log(mgs, 'message')
           db.ref(`chatRoom/`).push(mgs);
         }
         else if (data.assignTrainny != undefined && data.tainnyId != undefined) {
@@ -156,17 +170,20 @@ class Chatscreen extends React.Component {
           mgs.senderId = data._id;
           mgs.date = date;
           mgs.time = time;
+          mgs.name = name;
+          mgs.type = type;
+          mgs.name = name;
+          console.log(mgs, 'message')
           db.ref(`chatRoom/`).push(mgs);
         }
       }
     });
-
-
   }
   sendMessage = async () => {
     const { textMessage } = this.state;
+    let type = 'text';
     //message send on firebase
-    this.uplaodDataOnFirebase(textMessage)
+    this.uplaodDataOnFirebase(textMessage, type)
     this.setState({
       textMessage: '',
       messagContainer: true,
@@ -203,44 +220,25 @@ class Chatscreen extends React.Component {
         console.log('User tapped custom button: ', response.customButton);
       }
       else {
-        let contentType = response.type;
-        fetch(apiUrl, {
-          body: JSON.stringify(data),
-          headers: {
-            'content-type': 'application/json'
-          },
-          method: 'POST',
-        }).then(async r => {
-          let data = await r.json()
-          //send image on firebase
-          this.uplaodDataOnFirebase(data.secure_url)
-          // this.setState({
-          //   avatarSource: data.secure_url,
-          // })
-          return data.secure_url
-        }).catch(err => console.log(err))
-
-
-        // let res = await RNFS.readFile(response.uri, 'base64')
-        // let imgBase644 = `data:application/${contentType};base64,${res}`;
-        // let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
-        // let data = {
-        //   "file": imgBase644,
-        //   "upload_preset": "toh6r3p2",
-        // }
-        // fetch(apiUrl, {
-        //   body: JSON.stringify(data),
-        //   headers: {
-        //     'content-type': 'application/json'
-        //   },
-        //   method: 'POST',
-        // }).then(async r => {
-        //   let data = await r.json()
-        //   //send image on firebase
-        //   this.uplaodDataOnFirebase(data.secure_url)
-        //   return data.secure_url
-        // }).catch(err => console.log(err))
-
+        let timestamp = (Date.now() / 1000 | 0).toString();
+        let api_key = '878178936665133'
+        let api_secret = 'U8W4mHcSxhKNRJ2_nT5Oz36T6BI'
+        let cloud = 'dxk0bmtei'
+        let hash_string = 'timestamp=' + timestamp + api_secret
+        let signature = CryptoJS.SHA1(hash_string).toString();
+        let upload_url = 'https://api.cloudinary.com/v1_1/' + cloud + '/upload'
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', upload_url);
+        xhr.onload = () => {
+          let uploadData = JSON.parse(xhr._response)
+          this.uplaodDataOnFirebase(uploadData.secure_url, 'image', uploadData.original_filename)
+        };
+        let formdata = new FormData();
+        formdata.append('file', { uri: response.uri, type: response.type, name: response.fileName });
+        formdata.append('timestamp', timestamp);
+        formdata.append('api_key', api_key);
+        formdata.append('signature', signature);
+        xhr.send(formdata);
         // You can also display the image using data:
         this.setState({
           attachOrange: true,
@@ -250,9 +248,12 @@ class Chatscreen extends React.Component {
     })
   }
 
-  fileUpload = (e) => {
-    console.log(e, 'file upload')
-    FilePickerManager.showFilePicker(null, async (response) => {
+  fileUpload = async (e) => {
+    const options = {
+      noData: true,
+      mediaType: 'file'
+    }
+    FilePickerManager.showFilePicker(options, async (response) => {
       if (response.didCancel) {
         console.log('User cancelled file picker');
       }
@@ -260,85 +261,62 @@ class Chatscreen extends React.Component {
         console.log('FilePickerManager Error: ', response.error);
       }
       else {
-        console.log(response, 'responnse')
-        let apiUrl = 'https://api.cloudinary.com/v1_1/dxk0bmtei/image/upload';
-        // RNFetchBlob.fetch('POST', apiUrl, {
-        //   Authorization: "Bearer access-token",
-        //   otherHeader: "foo",
-        //   'Content-Type': 'multipart/form-data',
-        //   "upload_preset": "toh6r3p2",
-        // }, [
-        //   {
-        //     filename: response.fileName,
-        //     type: response.type,
-        //     data: RNFetchBlob.wrap(response.uri),
-        //     "upload_preset": "toh6r3p2",
-        //     }
-        //   ]).then((resp) => {
-        //     console.log(resp, 'respone from fetch')
-        //   }).catch((err) => {
-        //     console.log(err, 'error')
-        //     // ...
-        //   })
-
-
-
-        // //with fs method and fetch
-        var fileName = response.fileName.substring(response.fileName.lastIndexOf(".") + 1);
-        // console.log(fileName, 'file extention')
-        let res = await RNFS.readFile(response.uri, 'base64')
-        let imgBase644 = `data:application/${fileName};base64,${res}`;
-        console.log(imgBase644, 'contents');
-        // console.log(response.path)
-        // var url = response.uri.substring(response.uri.lastIndexOf("/") + 1);
-        // console.log(url , 'uri')
-        // let data = {
-        //   'file': url,
-        //   "upload_preset": "toh6r3p2",
-        // }
-        // RNFetchBlob.fetch('POST', apiUrl, {
-        //   // headers: {
-        //     // 'content-type': 'application/json',
-        //     Authorization: "Bearer access-token",
-        //       otherHeader: "foo",
-        //       'Content-Type': 'multipart/form-data',
-        //   // },
-        //   body: {
-        //     filename: response.fileName,
-        //     type: response.type,
-        //     data: RNFetchBlob.wrap(response.uri),
-        //     "upload_preset": "toh6r3p2",
-        //   }
-        // }).then(async r => {
-        //   let data = await r.json()
-        //   console.log(data, 'data')
-        //   return data.secure_url
-        // }).catch(err => console.log(err))
-
-
-        // fetch(apiUrl, {
-        //   body: JSON.stringify(data),
-        //   headers: {
-        //     'content-type': 'application/json'
-        //   },
-        //   method: 'POST',
-        // }).then(async r => {
-        //   let data = await r.json()
-        //   console.log(data, 'data')
-        //   return data.secure_url
-        // }).catch(err => console.log(err))
+        let timestamp = (Date.now() / 1000 | 0).toString();
+        let api_key = '878178936665133'
+        let api_secret = 'U8W4mHcSxhKNRJ2_nT5Oz36T6BI'
+        let cloud = 'dxk0bmtei'
+        let hash_string = 'timestamp=' + timestamp + api_secret
+        let signature = CryptoJS.SHA1(hash_string).toString();
+        let upload_url = 'https://api.cloudinary.com/v1_1/' + cloud + '/upload'
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', upload_url);
+        xhr.onload = () => {
+          var type = response.path.substring(response.path.lastIndexOf(".") + 1);
+          let uploadData = JSON.parse(xhr._response)
+          console.log(uploadData, 'uploadData')
+          this.uplaodDataOnFirebase(uploadData.secure_url, type, uploadData.original_filename)
+        };
+        let formdata = new FormData();
+        formdata.append('file', { uri: response.uri, type: response.type, name: response.fileName });
+        formdata.append('timestamp', timestamp);
+        formdata.append('api_key', api_key);
+        formdata.append('signature', signature);
+        xhr.send(formdata);
       }
     });
   }
 
-  expandImg = () => {
+  expandImg = (e) => {
     const { expand } = this.state;
     this.setState({
       expand: true,
+      isVisibleModal: true,
+      imagePath: e
     })
   }
-  shortPic = (e) => {
-    console.log(e)
+  backToPage = () => {
+    this.setState({
+      expand: false,
+      isVisibleModal: false
+    })
+  }
+
+
+  fileOpner(e, type, g) {
+    // console.log(e, 'e')
+    // console.log(type, 'path')
+    // console.log(g, 'path')
+    const FilePath = e; // path of the file
+    const FileMimeType = type; // mime type of the
+    // FileOpener.open(
+    //   FilePath,
+    //   FileMimeType
+    // ).then((msg) => {
+    //   console.log(msg, 'success!!')
+    // }, (err) => {
+    //   console.log(err , 'error!!')
+    // });
+
   }
   changeIcon = () => {
     this.setState({
@@ -382,47 +360,136 @@ class Chatscreen extends React.Component {
       shareFiles: false
     })
   }
-checkProfile = () =>{
+  checkProfile = () => {
     const { navigate } = this.props.navigation;
-  console.log('checkProfile')
-  navigate('Profile', {
-        opponentProfile: true,
-      });
-
-}
+    // console.log('checkProfile')
+    navigate('Profile', {
+      opponentProfile: true,
+    });
+  }
 
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
-      attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId , opponnetAvatarSource , name} = this.state;
-
+      attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId, opponnetAvatarSource, name, imagePath } = this.state;
+    // console.log(userId , 'userId')
+    // console.log(expand , 'opponentId')
+    // let modal
+    // // console.log(this.state.chatMessages, 'chatMessages')
+    // if (expand) {
+    //   modal = <Modal
+    //     isVisible={this.state.isVisibleModal}
+    //     animationIn='zoomIn'
+    //     //animationOut='zoomOutDown'
+    //     backdropOpacity={0.8}
+    //     backdropColor='white'
+    //     coverScreen={true}
+    //     animationInTiming={800}
+    //     animationOutTiming={500}
+    //   >
+    //     <View style={styles.cardContainer}>
+    //       <View style={styles.dateWithCancelIcon}>
+    //         <TouchableOpacity onPress={this.backToPage} activeOpacity={0.6}>
+    //           <Image source={require('../icons/cancel.png')} />
+    //         </TouchableOpacity>
+    //       </View>
+    //       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+    //         <Image style={styles.mgsImges} source={{
+    //           uri: `${imagePath}`
+    //         }} />
+    //       </View>
+    //     </View>
+    //   </Modal>
+    // }
     const chatMessages = this.state.chatMessages.map((message, key) => (
       <View>
         {message.senderId == userId &&
+          message.type == 'text' ?
           <Text key={key} style={styles.msgsTextStyle}>
-            {message.textMessage}
+            {message.message}
           </Text>
-          // : null
-          // expand ?
-          //   <TouchableOpacity activeOpacity={0.5}
-          //     style={styles.showPhotoContainer}
-          //     onPress={this.expandImg}
-          //   >
-          //     <Image key={key} style={styles.canvas} source={{
-          //       uri: `${message.image}`
-          //     }} />
-          //   </TouchableOpacity>
-          //   :
-          // <TouchableOpacity activeOpacity={0.5}
-          //   style={styles.showPhotoContainer}
-          //   onPress={this.expandImg}
-          // >
-          //   <Image key={key} style={styles.mgsImges} source={{
-          //     // uri: `${message.image}`
-          //     uri: `${message.image}`
-          //   }} />
-          // </TouchableOpacity>
+          :
+          message.type == 'image' ?
+            // <Image key={key} style={styles.mgsImges} source={{
+            //   uri: `${message.message}`
+            // }} />
+            expand ?
+              <Modal
+                isVisible={this.state.isVisibleModal}
+                animationIn='zoomIn'
+                //animationOut='zoomOutDown'
+                backdropOpacity={0.8}
+                backdropColor='white'
+                coverScreen={true}
+                animationInTiming={800}
+                animationOutTiming={500}
+              >
+                <View style={styles.cardContainer}>
+                  <View style={styles.dateWithCancelIcon}>
+                    <TouchableOpacity onPress={this.backToPage} activeOpacity={0.6}>
+                      <Image source={require('../icons/cancel.png')} />
+                    </TouchableOpacity>
+                  </View>
+                  {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}> */}
+                    <Image style={styles.expandImges} source={{
+                      uri: `${imagePath}`
+                    }} />
+                  {/* </View> */}
+                </View>
+              </Modal>
+              :
+              <TouchableOpacity activeOpacity={0.5}
+                style={styles.showPhotoContainer}
+                onPress={this.expandImg.bind(this, message.message)}
+              >
+                <Image key={key} style={styles.mgsImges} source={{
+                  // uri: `${message.image}`
+                  uri: `${message.message}`
+                }} />
+              </TouchableOpacity>
+            :
+            message.type == 'txt' || message.type == 'docx' || message.type == 'doc' || message.type == 'pptx' || message.type == 'pdf'
+              || message.type == 'mp4' || message.type == 'mp3' || message.type == 'wma' ?
+              <View>
+                <TouchableOpacity activeOpacity={0.5}
+                  style={styles.showPhotoContainer}
+                  onPress={this.fileOpner.bind(this, message.message, message.type)}
+                >
+                  <Text style={styles.thumbnailTextStyle}>{message.type}</Text>
+                  <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+
+                </TouchableOpacity>
+              </View>
+              : null
         }
-        {message.senderId == opponentId &&
+        {/* {expand ? <View> {modal}</View> : null} */}
+        {/* {message.senderId == opponentId &&
+          message.type == 'text' ?
+          <Text key={key} style={styles.replyMessagesStyle}>
+            {message.message}
+          </Text>
+          :
+          message.type == 'image' ?
+            <Image key={key} style={styles.mgsImges} source={{
+              uri: `${message.message}`
+            }} />
+            :
+            message.type == 'txt' || message.type == 'docx' || message.type == 'doc' || message.type == 'pptx' || message.type == 'pdf'
+              || message.type == 'mp4' || message.type == 'mp3' || message.type == 'wma' ?
+              <View>
+                <TouchableOpacity activeOpacity={0.5}
+                  style={styles.showPhotoContainer}
+                  onPress={this.fileOpner.bind(this, message.message)}
+                >
+                  <Text style={styles.thumbnailTextStyle}>{message.type}</Text>
+                  <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+
+                </TouchableOpacity>
+              </View>
+              : null
+        } */}
+
+
+        {/* {message.senderId == opponentId &&
           // message.textMessage ?
           <Text key={key} style={styles.replyMessagesStyle}>
             {message.textMessage}
@@ -437,7 +504,7 @@ checkProfile = () =>{
           //     uri: `${message.image}`
           //   }} /> 
           //   </TouchableOpacity>
-        }
+        } */}
 
       </View>
     ))
@@ -446,8 +513,8 @@ checkProfile = () =>{
         <View style={styles.childMainContainer}>
           <View style={styles.chatProfileContainer}>
             <Text style={styles.profileNameStyle}>{name}</Text>
-             <TouchableOpacity activeOpacity={0.5} onPress={this.checkProfile}>
-            <Image source={{uri: `${opponnetAvatarSource}`}}style={styles.profilPicStyle} />
+            <TouchableOpacity activeOpacity={0.5} onPress={this.checkProfile}>
+              <Image source={{ uri: `${opponnetAvatarSource}` }} style={styles.profilPicStyle} />
             </TouchableOpacity>
           </View>
           <ScrollView style={styles.scrollContainer} contentContainerStyle={{ flexGrow: 1 }}
@@ -459,24 +526,14 @@ checkProfile = () =>{
               {recodringBody && <View style={styles.recordingContainer}>
 
               </View>}
-              {/* {messagContainer && <View style={styles.chatMessagsContainer}>
-                     {chatMessages}
-            </View>} */}
               {chatMessages}
               {<TouchableOpacity activeOpacity={0.5}
                 style={styles.showPhotoContainer}
                 onPress={this.expandImg}
               >
                 <Image source={{ uri: avatarSource }}
-                  // {/* <Image source={{ uri: `data:image/gif;base64,${avatarSource}` }} /> 
-
                   style={styles.photoContainer} />
               </TouchableOpacity>}
-
-              {/* {expand &&
-                <Image source={{ uri: this.state.avatarSource }} style={styles.canvas} />
-              } */}
-              {/* {replyMessages} */}
               {shareFiles && <View style={styles.sendFielsTypeContainer}>
                 <Text style={styles.shareTextStyle}>Share...</Text>
                 <View style={styles.filesContainer}>
@@ -527,7 +584,6 @@ checkProfile = () =>{
               {sendIcon && <TouchableOpacity onPress={this.sendMessage}>
                 <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
               </TouchableOpacity>}
-
               {micIcon && <TouchableOpacity onPress={this.toggelMic}>
                 <Image source={require('../icons/mic.png')} style={styles.micIconStyle} />
               </TouchableOpacity>}

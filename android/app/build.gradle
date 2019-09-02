@@ -145,6 +145,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-sha1')
+    implementation project(':react-native-fileupload')
     implementation project(':tipsi-stripe')
     implementation project(':react-native-svg')
     implementation project(':react-native-fetch-blob')

@@ -6,4 +6,6 @@ target 'FirstProject' do
   inherit! :search_paths
   pod 'tipsi-stripe', :path => '../node_modules/tipsi-stripe'
 
+  pod 'RNSha1', :path => '../node_modules/react-native-sha1'
+
 end
