@@ -125,6 +125,15 @@ const styles = StyleSheet.create({
         width: 150,
         height: 150
     },
+    replymgsImges: {
+        padding: 20,
+        color: '#4f4f4f',
+        marginBottom: 20,
+        marginRight: '50%',
+        borderRadius: 10,
+        width: 150,
+        height: 150
+    },
     expandImges: {
         padding: 60,
         // color: '#A6A6A6',
@@ -155,6 +164,25 @@ const styles = StyleSheet.create({
         borderRadius: 5
         // borderBottomLeftRadius:6,
         // borderBottomRightRadius:6
+    },
+    replythumbnailTextStyle: {
+        padding: 20,
+        color: '#4f4f4f',
+        marginBottom: 20,
+        marginRight: '50%',
+        borderRadius: 10,
+        // width: 150,
+        // height: 150,
+    },
+    replythumbnailNameTextStyle: {
+        padding: 20,
+        color: '#ff6200',
+        marginBottom: 20,
+        marginRight: '50%',
+        borderRadius: 10,
+        width: 150,
+        height: 150,
+        fontFamily: 'MontserratLight',
     },
     cardContainer: {
         width: 400,
@@ -261,6 +289,10 @@ const styles = StyleSheet.create({
     },
     showPhotoContainer: {
         marginLeft: '50%',
+        marginBottom: 20
+    },
+    replyshowPhotoContainer: {
+        marginRight: '50%',
         marginBottom: 20
     },
     canvas: {

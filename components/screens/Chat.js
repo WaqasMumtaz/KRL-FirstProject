@@ -5,6 +5,7 @@ import {
   ScrollView,
   TextInput,
   Platform,
+  Linking,
   TouchableOpacity,
   Image,
   // NativeModules
@@ -23,10 +24,11 @@ import 'firebase/firestore';
 const db = firebase.database();
 import RNFS from 'react-native-fs';
 import FilePickerManager from 'react-native-file-picker';
+import FileViewer from 'react-native-file-viewer';
 import HttpUtils from '../Services/HttpUtils';
 import Modal from "react-native-modal";
 var CryptoJS = require('crypto-js');
-// import FileOpener from 'react-native-file-opener';
+import FileOpener from 'react-native-file-opener';
 
 
 class Chatscreen extends React.Component {
@@ -183,7 +185,7 @@ class Chatscreen extends React.Component {
     const { textMessage } = this.state;
     let type = 'text';
     //message send on firebase
-    this.uplaodDataOnFirebase(textMessage, type)
+    this.uplaodDataOnFirebase(textMessage, type , 'text')
     this.setState({
       textMessage: '',
       messagContainer: true,
@@ -303,19 +305,16 @@ class Chatscreen extends React.Component {
 
 
   fileOpner(e, type, g) {
-    // console.log(e, 'e')
-    // console.log(type, 'path')
-    // console.log(g, 'path')
     const FilePath = e; // path of the file
+    console.log(FilePath)
     const FileMimeType = type; // mime type of the
-    // FileOpener.open(
-    //   FilePath,
-    //   FileMimeType
-    // ).then((msg) => {
-    //   console.log(msg, 'success!!')
-    // }, (err) => {
-    //   console.log(err , 'error!!')
-    // });
+    Linking.openURL(
+      FilePath
+    ).then((msg) => {
+      console.log(msg, 'success!!')
+    }, (err) => {
+      console.log(err, 'error!!')
+    });
 
   }
   changeIcon = () => {
@@ -371,35 +370,7 @@ class Chatscreen extends React.Component {
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
       attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId, opponnetAvatarSource, name, imagePath } = this.state;
-    // console.log(userId , 'userId')
-    // console.log(expand , 'opponentId')
-    // let modal
-    // // console.log(this.state.chatMessages, 'chatMessages')
-    // if (expand) {
-    //   modal = <Modal
-    //     isVisible={this.state.isVisibleModal}
-    //     animationIn='zoomIn'
-    //     //animationOut='zoomOutDown'
-    //     backdropOpacity={0.8}
-    //     backdropColor='white'
-    //     coverScreen={true}
-    //     animationInTiming={800}
-    //     animationOutTiming={500}
-    //   >
-    //     <View style={styles.cardContainer}>
-    //       <View style={styles.dateWithCancelIcon}>
-    //         <TouchableOpacity onPress={this.backToPage} activeOpacity={0.6}>
-    //           <Image source={require('../icons/cancel.png')} />
-    //         </TouchableOpacity>
-    //       </View>
-    //       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-    //         <Image style={styles.mgsImges} source={{
-    //           uri: `${imagePath}`
-    //         }} />
-    //       </View>
-    //     </View>
-    //   </Modal>
-    // }
+    console.log(this.state.chatMessages)
     const chatMessages = this.state.chatMessages.map((message, key) => (
       <View>
         {message.senderId == userId &&
@@ -409,14 +380,10 @@ class Chatscreen extends React.Component {
           </Text>
           :
           message.type == 'image' ?
-            // <Image key={key} style={styles.mgsImges} source={{
-            //   uri: `${message.message}`
-            // }} />
             expand ?
               <Modal
                 isVisible={this.state.isVisibleModal}
                 animationIn='zoomIn'
-                //animationOut='zoomOutDown'
                 backdropOpacity={0.8}
                 backdropColor='white'
                 coverScreen={true}
@@ -429,11 +396,9 @@ class Chatscreen extends React.Component {
                       <Image source={require('../icons/cancel.png')} />
                     </TouchableOpacity>
                   </View>
-                  {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}> */}
-                    <Image style={styles.expandImges} source={{
-                      uri: `${imagePath}`
-                    }} />
-                  {/* </View> */}
+                  <Image style={styles.expandImges} source={{
+                    uri: `${imagePath}`
+                  }} />
                 </View>
               </Modal>
               :
@@ -442,7 +407,6 @@ class Chatscreen extends React.Component {
                 onPress={this.expandImg.bind(this, message.message)}
               >
                 <Image key={key} style={styles.mgsImges} source={{
-                  // uri: `${message.image}`
                   uri: `${message.message}`
                 }} />
               </TouchableOpacity>
@@ -461,51 +425,57 @@ class Chatscreen extends React.Component {
               </View>
               : null
         }
-        {/* {expand ? <View> {modal}</View> : null} */}
-        {/* {message.senderId == opponentId &&
+        {message.senderId == opponentId &&
           message.type == 'text' ?
           <Text key={key} style={styles.replyMessagesStyle}>
             {message.message}
           </Text>
           :
           message.type == 'image' ?
-            <Image key={key} style={styles.mgsImges} source={{
-              uri: `${message.message}`
-            }} />
+            expand ?
+              <Modal
+                isVisible={this.state.isVisibleModal}
+                animationIn='zoomIn'
+                backdropOpacity={0.8}
+                backdropColor='white'
+                coverScreen={true}
+                animationInTiming={800}
+                animationOutTiming={500}
+              >
+                <View style={styles.cardContainer}>
+                  <View style={styles.dateWithCancelIcon}>
+                    <TouchableOpacity onPress={this.backToPage} activeOpacity={0.6}>
+                      <Image source={require('../icons/cancel.png')} />
+                    </TouchableOpacity>
+                  </View>
+                  <Image style={styles.expandImges} source={{
+                    uri: `${imagePath}`
+                  }} />
+                </View>
+              </Modal>
+              :
+              <TouchableOpacity activeOpacity={0.5}
+                style={styles.replyshowPhotoContainer}
+                onPress={this.expandImg.bind(this, message.message)}
+              >
+                <Image key={key} style={styles.replymgsImges} source={{
+                  uri: `${message.message}`
+                }} />
+              </TouchableOpacity>
             :
             message.type == 'txt' || message.type == 'docx' || message.type == 'doc' || message.type == 'pptx' || message.type == 'pdf'
               || message.type == 'mp4' || message.type == 'mp3' || message.type == 'wma' ?
               <View>
                 <TouchableOpacity activeOpacity={0.5}
                   style={styles.showPhotoContainer}
-                  onPress={this.fileOpner.bind(this, message.message)}
+                  onPress={this.fileOpner.bind(this, message.message, message.type)}
                 >
-                  <Text style={styles.thumbnailTextStyle}>{message.type}</Text>
-                  <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
-
+                  <Text style={styles.replythumbnailTextStyle}>{message.type}</Text>
+                  <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
                 </TouchableOpacity>
               </View>
               : null
-        } */}
-
-
-        {/* {message.senderId == opponentId &&
-          // message.textMessage ?
-          <Text key={key} style={styles.replyMessagesStyle}>
-            {message.textMessage}
-          </Text>
-          // :
-
-          // <TouchableOpacity activeOpacity={0.5}
-          //   style={styles.showPhotoContainer}
-          //   onPress={this.expandImg.bind(this, )}
-          // >
-          //   <Image key={key} style={styles.mgsImges} source={{
-          //     uri: `${message.image}`
-          //   }} /> 
-          //   </TouchableOpacity>
-        } */}
-
+        }
       </View>
     ))
     return (
