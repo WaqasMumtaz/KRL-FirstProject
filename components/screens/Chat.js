@@ -379,7 +379,7 @@ class Chatscreen extends React.Component {
             {message.message}
           </Text>
           :
-          message.type == 'image' ?
+          message.senderId == userId && message.type == 'image' ?
             expand ?
               <Modal
                 isVisible={this.state.isVisibleModal}
@@ -411,7 +411,7 @@ class Chatscreen extends React.Component {
                 }} />
               </TouchableOpacity>
             :
-            message.type == 'txt' || message.type == 'docx' || message.type == 'doc' || message.type == 'pptx' || message.type == 'pdf'
+            message.senderId == userId && message.type == 'txt' || message.type == 'docx' || message.type == 'doc' || message.type == 'pptx' || message.type == 'pdf'
               || message.type == 'mp4' || message.type == 'mp3' || message.type == 'wma' ?
               <View>
                 <TouchableOpacity activeOpacity={0.5}
@@ -431,7 +431,7 @@ class Chatscreen extends React.Component {
             {message.message}
           </Text>
           :
-          message.type == 'image' ?
+          message.senderId == opponentId && message.type == 'image' ?
             expand ?
               <Modal
                 isVisible={this.state.isVisibleModal}
@@ -463,7 +463,7 @@ class Chatscreen extends React.Component {
                 }} />
               </TouchableOpacity>
             :
-            message.type == 'txt' || message.type == 'docx' || message.type == 'doc' || message.type == 'pptx' || message.type == 'pdf'
+            message.senderId == opponentId && message.type == 'txt' || message.type == 'docx' || message.type == 'doc' || message.type == 'pptx' || message.type == 'pdf'
               || message.type == 'mp4' || message.type == 'mp3' || message.type == 'wma' ?
               <View>
                 <TouchableOpacity activeOpacity={0.5}
