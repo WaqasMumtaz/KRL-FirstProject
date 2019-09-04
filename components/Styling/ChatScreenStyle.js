@@ -15,11 +15,6 @@ const styles = StyleSheet.create({
         flex: 1,
         marginHorizontal: 15
     },
-    // container:{
-    //     flex:1,
-    //     marginHorizontal:12,
-    //     backgroundColor:'black'
-    // },
     scrollContainer: {
         flex: 1,
         backgroundColor: 'white',
@@ -29,7 +24,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-end',
-        //backgroundColor:'red',
     },
     textInputContainer: {
         flexDirection: 'row',
@@ -38,22 +32,15 @@ const styles = StyleSheet.create({
     inputStyle: {
         flex: 1,
         height: 45,
-        //    borderWidth:3,
-        //    borderColor:'black',
-        //marginRight:7,
-        //borderRadius:3,
         paddingLeft: 16,
         backgroundColor: '#e5e5e5',
         color: '#4f4f4f',
         borderBottomLeftRadius: 3,
         borderTopLeftRadius: 3
-
     },
     sentBtnContainer: {
         width: 45,
         height: 45,
-        //borderWidth:3,
-        //borderColor:'#FF6200',
         borderRadius: 45 / 2,
         backgroundColor: '#FF6200',
         justifyContent: 'center',
@@ -74,8 +61,6 @@ const styles = StyleSheet.create({
     orangeMicContainer: {
         width: 45,
         height: 45,
-        //borderWidth:3,
-        //borderColor:'#FF6200',
         borderRadius: 45 / 2,
         backgroundColor: 'black',
         justifyContent: 'center',
@@ -84,18 +69,9 @@ const styles = StyleSheet.create({
     recordingContainer: {
         height: 120,
         borderRadius: 5,
-        //borderWidth:2,
         backgroundColor: '#e5e5e5',
         marginBottom: 30
     },
-    // chatMessagsContainer:{
-    //     marginBottom:10,
-    //     backgroundColor:'black',
-    //     marginLeft:'50%',
-    //     borderBottomLeftRadius:6,
-    //     borderBottomRightRadius:6
-
-    // },
     msgsTextStyle: {
         padding: 10,
         color: '#A6A6A6',
@@ -104,8 +80,6 @@ const styles = StyleSheet.create({
         marginLeft: '50%',
         backgroundColor: 'black',
         borderRadius: 10
-        // borderBottomLeftRadius:6,
-        // borderBottomRightRadius:6
     },
     replyMessagesStyle: {
         padding: 10,
@@ -117,72 +91,100 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     mgsImges: {
-        padding: 20,
+        padding: 10,
         color: '#A6A6A6',
         marginBottom: 20,
-        marginLeft: '50%',
-        borderRadius: 10,
-        width: 150,
-        height: 150
+        borderRadius: 5,
+        width: 200,
+        height: 200,
+        resizeMode: 'contain',
     },
     replymgsImges: {
-        padding: 20,
+        padding: 10,
         color: '#4f4f4f',
         marginBottom: 20,
         marginRight: '50%',
-        borderRadius: 10,
-        width: 150,
-        height: 150
+        borderRadius: 5,
+        width: 200,
+        height: 200,
+        resizeMode: 'contain'
     },
     expandImges: {
         padding: 60,
-        // color: '#A6A6A6',
-        // marginBottom: 10,
-        // marginLeft: '50%',
-        // borderRadius: 10,
+        margin: 10,
+        borderRadius: 10,
         width: '80%',
-        height: '80%'
+        height: '80%',
+        resizeMode: 'contain'
     },
-    thumbnailTextStyle: {
-        padding: 5,
-        color: '#A6A6A6',
-        fontFamily: 'MontserratLight',
-        // marginBottom: 5,
-        marginLeft: '20%',
+    mgsTouctable: {
+        marginBottom: 20,
+        width: 200,
+        marginLeft: '35%',
+    },
+    fileTagStyle: {
+        padding: 10,
         backgroundColor: 'black',
-        borderRadius: 5
-        // borderBottomLeftRadius:6,
-        // borderBottomRightRadius:6
+        borderRadius: 10,
+        marginVertical: 10,
+        flexDirection: 'row',
+    },
+    extensionFile: {
+        color: '#ffffff',
+        backgroundColor: '#807c7c',
+        width: 80,
+        height: 90,
+        borderRadius: 10,
+        marginVertical: 10
+
+    },
+    thumbnailImageStyle: {
+        padding: 10,
+        margin: 13,
+        justifyContent: 'center',
+        // marginVertical: 10
     },
     thumbnailNameTextStyle: {
-        padding: 5,
+        padding: 10,
+        fontSize: 14,
         color: '#ff6200',
-        fontFamily: 'MontserratLight',
-        // marginBottom: 5,
-        marginLeft: '20%',
-        backgroundColor: 'black',
-        borderRadius: 5
-        // borderBottomLeftRadius:6,
-        // borderBottomRightRadius:6
+        fontFamily: 'MontserratMedium',
+        marginRight: '35%',
+        marginVertical: 15,
+        justifyContent: 'center',
     },
-    replythumbnailTextStyle: {
-        padding: 20,
-        color: '#4f4f4f',
+    replymgsTouctable: {
         marginBottom: 20,
-        marginRight: '50%',
+        width: 200,
+        marginRight: '35%',
+    },
+    replyfileTagStyle: {
+        padding: 10,
+        backgroundColor: '#e5e5e5',
         borderRadius: 10,
-        // width: 150,
-        // height: 150,
+        flexDirection: 'row',
+    },
+    replyextensionFile: {
+        color: '#4f4f4f',
+        backgroundColor: '#000000',
+        width: 80,
+        height: 90,
+        borderRadius: 10,
+        marginVertical: 10
+    },
+    replythumbnailImageStyle: {
+        padding: 10,
+        margin: 13,
+        justifyContent: 'center',
     },
     replythumbnailNameTextStyle: {
-        padding: 20,
-        color: '#ff6200',
-        marginBottom: 20,
-        marginRight: '50%',
-        borderRadius: 10,
-        width: 150,
-        height: 150,
-        fontFamily: 'MontserratLight',
+        padding: 10,
+        fontSize: 14,
+        color: '#4f4f4f',
+        fontFamily: 'MontserratMedium',
+        marginRight: '35%',
+        marginVertical: 15,
+        justifyContent: 'center',
     },
     cardContainer: {
         width: 400,
@@ -191,13 +193,9 @@ const styles = StyleSheet.create({
     },
     dateWithCancelIcon: {
         flexDirection: 'row',
-        // justifyContent: 'space-between'
     },
     fileAttachContainer: {
         height: 44,
-        //borderColor:'black',
-        //borderWidth:1,
-        //borderRadius:3,
         marginRight: 10,
         backgroundColor: '#e5e5e5',
         width: 40,
@@ -287,12 +285,13 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
 
     },
+
     showPhotoContainer: {
-        marginLeft: '50%',
+        marginLeft: '45%',
         marginBottom: 20
     },
     replyshowPhotoContainer: {
-        marginRight: '50%',
+        marginRight: '45%',
         marginBottom: 20
     },
     canvas: {
@@ -301,7 +300,7 @@ const styles = StyleSheet.create({
         // left: 0,
         // bottom: 0,
         // right: 0,
-        marginVertical:25,
+        marginVertical: 25,
         // color: '#A6A6A6',
         marginBottom: 20,
         marginLeft: '50%',
