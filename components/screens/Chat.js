@@ -4,7 +4,6 @@ import {
   View,
   ScrollView,
   TextInput,
-  Platform,
   Linking,
   TouchableOpacity,
   Image,
@@ -21,11 +20,13 @@ YellowBox.ignoreWarnings([
 ]);
 import firebase from '../../Config/Firebase';
 import 'firebase/firestore';
-const db = firebase.database();
 import FilePickerManager from 'react-native-file-picker';
 import HttpUtils from '../Services/HttpUtils';
-var CryptoJS = require('crypto-js');
-import ImageViewer from 'react-native-image-zoom-viewer';
+// import VideoPlayer from 'react-native-video-controls';
+
+// import Modal from "react-native-modal";
+const db = firebase.database();
+const CryptoJS = require('crypto-js');
 
 class Chatscreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -83,7 +84,6 @@ class Chatscreen extends React.Component {
     AsyncStorage.getItem('opponentProfile').then((value) => {
       let userData = JSON.parse(value);
       if (value) {
-        console.log(userData, 'userData')
         this.setState({
           opponnetAvatarSource: userData.image,
           name: userData.name
@@ -106,19 +106,15 @@ class Chatscreen extends React.Component {
     });
     db.ref('chatRoom').on("value", snapshot => {
       let data = snapshot.val()
-      for (var i in data) {
+      for (let i in data) {
         let firbaseData = data[i]
-        // console.log(firbaseData , 'firebase data')
         if (firbaseData.reciverId == dataFromLocalStorage._id && firbaseData.senderId == dataFromLocalStorage.trainnerId
           || firbaseData.senderId == dataFromLocalStorage.tainnyId) {
           chatArrayTemp.push(firbaseData)
-          // console.log(chatArrayTemp, 'condition work ')
-          // console.log(chatArrayTemp, 'chatArrayTemp')
         }
         if (firbaseData.senderId == dataFromLocalStorage._id && firbaseData.reciverId == dataFromLocalStorage.trainnerId ||
           firbaseData.senderId == dataFromLocalStorage._id && firbaseData.reciverId == dataFromLocalStorage.tainnyId) {
           chatArrayTemp.push(firbaseData)
-          // console.log(chatArrayTemp, 'condition work 2')
         }
       }
       if (dataFromLocalStorage.trainnerId) {
@@ -131,7 +127,6 @@ class Chatscreen extends React.Component {
           opponentId: dataFromLocalStorage.tainnyId,
         })
       }
-      // console.log(chatArrayTemp , 'chatArrayTemp')
       this.setState({
         chatMessages: chatArrayTemp,
         userId: dataFromLocalStorage._id,
@@ -157,7 +152,6 @@ class Chatscreen extends React.Component {
           mgs.time = time;
           mgs.type = type;
           mgs.name = name;
-          console.log(mgs, 'message')
           db.ref(`chatRoom/`).push(mgs);
         }
         else if (data.assignTrainny != undefined && data.tainnyId != undefined) {
@@ -171,7 +165,6 @@ class Chatscreen extends React.Component {
           mgs.name = name;
           mgs.type = type;
           mgs.name = name;
-          console.log(mgs, 'message')
           db.ref(`chatRoom/`).push(mgs);
         }
       }
@@ -269,9 +262,8 @@ class Chatscreen extends React.Component {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', upload_url);
         xhr.onload = () => {
-          var type = response.path.substring(response.path.lastIndexOf(".") + 1);
+          let type = response.path.substring(response.path.lastIndexOf(".") + 1);
           let uploadData = JSON.parse(xhr._response)
-          console.log(uploadData, 'uploadData')
           this.uplaodDataOnFirebase(uploadData.secure_url, type, uploadData.original_filename)
         };
         let formdata = new FormData();
@@ -285,7 +277,6 @@ class Chatscreen extends React.Component {
   }
 
   expandImg = (e) => {
-    console.log(e, 'exppand image')
     this.setState({
       expand: true,
       isVisibleModal: true,
@@ -302,7 +293,6 @@ class Chatscreen extends React.Component {
 
   fileOpner(e, type, g) {
     const FilePath = e; // path of the file
-    console.log(FilePath)
     const FileMimeType = type; // mime type of the
     Linking.openURL(
       FilePath
@@ -369,11 +359,9 @@ class Chatscreen extends React.Component {
     const images = [{
       url: `${imagePath}`,
     }]
-    console.log(expand, 'expand')
     const chatMessages = this.state.chatMessages.map((message, key) => (
       <View>
-        {message.senderId == userId &&
-          message.type == 'text' ?
+        {message.senderId == userId && message.type == 'text' ?
           <Text key={key} style={styles.msgsTextStyle}>
             {message.message}
           </Text>
@@ -388,9 +376,7 @@ class Chatscreen extends React.Component {
               }} />
             </TouchableOpacity>
             :
-            message.senderId == userId &&
-              message.type == 'pdf'
-              ?
+            message.senderId == userId && message.type == 'pdf' ?
               <View>
                 <TouchableOpacity activeOpacity={0.5}
                   style={styles.mgsTouctable}
@@ -405,86 +391,101 @@ class Chatscreen extends React.Component {
                 </TouchableOpacity>
               </View>
               :
-              message.senderId == userId &&
-              message.type == 'txt'
-              ?
-              <View>
-                <TouchableOpacity activeOpacity={0.5}
-                  style={styles.mgsTouctable}
-                  onPress={this.fileOpner.bind(this, message.message, message.type)}
-                >
-                  <View style={styles.fileTagStyle}>
-                    <View style={styles.extensionFile}>
-                      <Image style={styles.thumbnailImageStyle} source={require('../icons/txt.png')} />
+              message.senderId == userId && message.type == 'txt' ?
+                <View>
+                  <TouchableOpacity activeOpacity={0.5}
+                    style={styles.mgsTouctable}
+                    onPress={this.fileOpner.bind(this, message.message, message.type)}
+                  >
+                    <View style={styles.fileTagStyle}>
+                      <View style={styles.extensionFile}>
+                        <Image style={styles.thumbnailImageStyle} source={require('../icons/txt.png')} />
+                      </View>
+                      <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
                     </View>
-                    <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                  </TouchableOpacity>
+                </View>
+                :
+                message.senderId == userId && message.type == 'docx' ?
+                  <View>
+                    <TouchableOpacity activeOpacity={0.5}
+                      style={styles.mgsTouctable}
+                      onPress={this.fileOpner.bind(this, message.message, message.type)}
+                    >
+                      <View style={styles.fileTagStyle}>
+                        <View style={styles.extensionFile}>
+                          <Image style={styles.thumbnailImageStyle} source={require('../icons/docx.png')} />
+                        </View>
+                        <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
-                </TouchableOpacity>
-              </View>
-              :
-              message.senderId == userId && message.type == 'docx'
-               ?
-               <View>
-                 <TouchableOpacity activeOpacity={0.5}
-                   style={styles.mgsTouctable}
-                   onPress={this.fileOpner.bind(this, message.message, message.type)}
-                 >
-                   <View style={styles.fileTagStyle}>
-                     <View style={styles.extensionFile}>
-                       <Image style={styles.thumbnailImageStyle} source={require('../icons/docx.png')} />
-                     </View>
-                     <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
-                   </View>
-                 </TouchableOpacity>
-               </View>
-               :
-               message.senderId == userId && message.type == 'doc'
-               ?
-               <View>
-                 <TouchableOpacity activeOpacity={0.5}
-                   style={styles.mgsTouctable}
-                   onPress={this.fileOpner.bind(this, message.message, message.type)}
-                 >
-                   <View style={styles.fileTagStyle}>
-                     <View style={styles.extensionFile}>
-                       <Image style={styles.thumbnailImageStyle} source={require('../icons/doc.png')} />
-                     </View>
-                     <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
-                   </View>
-                 </TouchableOpacity>
-               </View>
-                 :
-                 message.senderId == userId && message.type == 'pptx'
-                 ?
-                 <View>
-                   <TouchableOpacity activeOpacity={0.5}
-                     style={styles.mgsTouctable}
-                     onPress={this.fileOpner.bind(this, message.message, message.type)}
-                   >
-                     <View style={styles.fileTagStyle}>
-                       <View style={styles.extensionFile}>
-                         <Image style={styles.thumbnailImageStyle} source={require('../icons/ppt.png')} />
-                       </View>
-                       <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
-                     </View>
-                   </TouchableOpacity>
-                 </View>
-                  
-            // message.senderId == userId &&
-            //   message.type == 'mp4'
-            //   // || message.type == 'mp3' || message.type == 'wma' 
-            //   ?
-            //   <View>
-            //     <TouchableOpacity activeOpacity={0.5}
-            //       style={styles.showPhotoContainer}
-            //       onPress={this.fileOpner.bind(this, message.message, message.type)}
-            //     >
-            //       <Text style={styles.thumbnailTextStyle}>{message.type}</Text>
-            //       <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                  :
+                  message.senderId == userId && message.type == 'doc' ?
+                    <View>
+                      <TouchableOpacity activeOpacity={0.5}
+                        style={styles.mgsTouctable}
+                        onPress={this.fileOpner.bind(this, message.message, message.type)}
+                      >
+                        <View style={styles.fileTagStyle}>
+                          <View style={styles.extensionFile}>
+                            <Image style={styles.thumbnailImageStyle} source={require('../icons/doc.png')} />
+                          </View>
+                          <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                    :
+                    message.senderId == userId && message.type == 'pptx' ?
+                      <View>
+                        <TouchableOpacity activeOpacity={0.5}
+                          style={styles.mgsTouctable}
+                          onPress={this.fileOpner.bind(this, message.message, message.type)}
+                        >
+                          <View style={styles.fileTagStyle}>
+                            <View style={styles.extensionFile}>
+                              <Image style={styles.thumbnailImageStyle} source={require('../icons/ppt.png')} />
+                            </View>
+                            <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                      :
+                      message.senderId == userId && message.type == 'mp3' ||
+                        message.senderId == userId && message.type == 'wma' ?
+                        <View>
+                          <TouchableOpacity activeOpacity={0.5}
+                            style={styles.mgsTouctable}
+                            onPress={this.fileOpner.bind(this, message.message, message.type)}
+                          >
+                            <View style={styles.fileTagStyle}>
+                              <View style={styles.extensionFile}>
+                                <Image style={styles.thumbnailImageStyle} source={require('../icons/audio.png')} />
+                              </View>
+                              <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                            </View>
+                          </TouchableOpacity>
+                        </View>
+                        // :
+                        // message.senderId == userId &&
+                        //   message.type == 'mp4'
+                        //   ?
+                          // <Video source={{ uri: `${message.message}` }} />
+                      //     <VideoPlayer
+                      //     source={{ uri: `${message.message}`}}
+                      //     // navigator={ this.props.navigator }
+                      // />
+                        //   <View>
+                        //     <TouchableOpacity activeOpacity={0.5}
+                        //       style={styles.showPhotoContainer}
+                        //       onPress={this.fileOpner.bind(this, message.message, message.type)}
+                        //     >
+                        //       <Text style={styles.thumbnailTextStyle}>{message.type}</Text>
+                        //       <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
 
-            //     </TouchableOpacity>
-            //   </View>
-            : null
+                        //     </TouchableOpacity>
+                        //   </View>
+                        : null
         }
         {message.senderId == opponentId && message.type == 'text' ?
           <Text key={key} style={styles.replyMessagesStyle}>
@@ -500,41 +501,23 @@ class Chatscreen extends React.Component {
                 uri: `${message.message}`
               }} />
             </TouchableOpacity>
-             :
-             message.senderId == opponentId && message.type == 'pdf'
-               ?
-               <View>
-                 <TouchableOpacity activeOpacity={0.5}
-                   style={styles.replymgsTouctable}
-                   onPress={this.fileOpner.bind(this, message.message, message.type)}
-                 >
-                   <View style={styles.replyfileTagStyle}>
-                     <View style={styles.replyextensionFile}>
-                       <Image style={styles.replythumbnailImageStyle} source={require('../icons/pdf.png')} />
-                     </View>
-                     <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
-                   </View>
-                 </TouchableOpacity>
-               </View>
-               :
-               message.senderId == opponentId && message.type == 'txt'
-               ?
-               <View>
-                 <TouchableOpacity activeOpacity={0.5}
-                   style={styles.replymgsTouctable}
-                   onPress={this.fileOpner.bind(this, message.message, message.type)}
-                 >
-                   <View style={styles.replyfileTagStyle}>
-                     <View style={styles.replyextensionFile}>
-                       <Image style={styles.replythumbnailImageStyle} source={require('../icons/txt.png')} />
-                     </View>
-                     <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
-                   </View>
-                 </TouchableOpacity>
-               </View>
-               :
-               message.senderId == opponentId && message.type == 'docx'
-                ?
+            :
+            message.senderId == opponentId && message.type == 'pdf' ?
+              <View>
+                <TouchableOpacity activeOpacity={0.5}
+                  style={styles.replymgsTouctable}
+                  onPress={this.fileOpner.bind(this, message.message, message.type)}
+                >
+                  <View style={styles.replyfileTagStyle}>
+                    <View style={styles.replyextensionFile}>
+                      <Image style={styles.replythumbnailImageStyle} source={require('../icons/pdf.png')} />
+                    </View>
+                    <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              :
+              message.senderId == opponentId && message.type == 'txt' ?
                 <View>
                   <TouchableOpacity activeOpacity={0.5}
                     style={styles.replymgsTouctable}
@@ -542,31 +525,14 @@ class Chatscreen extends React.Component {
                   >
                     <View style={styles.replyfileTagStyle}>
                       <View style={styles.replyextensionFile}>
-                        <Image style={styles.replythumbnailImageStyle} source={require('../icons/docx.png')} />
+                        <Image style={styles.replythumbnailImageStyle} source={require('../icons/txt.png')} />
                       </View>
                       <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
                 :
-                message.senderId == opponentId && message.type == 'doc'
-                ?
-                <View>
-                  <TouchableOpacity activeOpacity={0.5}
-                    style={styles.replymgsTouctable}
-                    onPress={this.fileOpner.bind(this, message.message, message.type)}
-                  >
-                    <View style={styles.replyfileTagStyle}>
-                      <View style={styles.replyextensionFile}>
-                        <Image style={styles.replythumbnailImageStyle} source={require('../icons/doc.png')} />
-                      </View>
-                      <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                  :
-                  message.senderId == opponentId && message.type == 'pptx'
-                  ?
+                message.senderId == opponentId && message.type == 'docx' ?
                   <View>
                     <TouchableOpacity activeOpacity={0.5}
                       style={styles.replymgsTouctable}
@@ -574,28 +540,73 @@ class Chatscreen extends React.Component {
                     >
                       <View style={styles.replyfileTagStyle}>
                         <View style={styles.replyextensionFile}>
-                          <Image style={styles.replythumbnailImageStyle} source={require('../icons/ppt.png')} />
+                          <Image style={styles.replythumbnailImageStyle} source={require('../icons/docx.png')} />
                         </View>
                         <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
                       </View>
                     </TouchableOpacity>
                   </View>
-                   
-             // message.senderId == userId &&
-             //   message.type == 'mp4'
-             //   // || message.type == 'mp3' || message.type == 'wma' 
-             //   ?
-             //   <View>
-             //     <TouchableOpacity activeOpacity={0.5}
-             //       style={styles.showPhotoContainer}
-             //       onPress={this.fileOpner.bind(this, message.message, message.type)}
-             //     >
-             //       <Text style={styles.thumbnailTextStyle}>{message.type}</Text>
-             //       <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
- 
-             //     </TouchableOpacity>
-             //   </View>
-             : null
+                  :
+                  message.senderId == opponentId && message.type == 'doc' ?
+                    <View>
+                      <TouchableOpacity activeOpacity={0.5}
+                        style={styles.replymgsTouctable}
+                        onPress={this.fileOpner.bind(this, message.message, message.type)}
+                      >
+                        <View style={styles.replyfileTagStyle}>
+                          <View style={styles.replyextensionFile}>
+                            <Image style={styles.replythumbnailImageStyle} source={require('../icons/doc.png')} />
+                          </View>
+                          <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                    :
+                    message.senderId == opponentId && message.type == 'pptx' ?
+                      <View>
+                        <TouchableOpacity activeOpacity={0.5}
+                          style={styles.replymgsTouctable}
+                          onPress={this.fileOpner.bind(this, message.message, message.type)}
+                        >
+                          <View style={styles.replyfileTagStyle}>
+                            <View style={styles.replyextensionFile}>
+                              <Image style={styles.replythumbnailImageStyle} source={require('../icons/ppt.png')} />
+                            </View>
+                            <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                      :
+                      message.senderId == opponentId && message.type == 'mp3' ||
+                        message.senderId == opponentId && message.type == 'wma' ?
+                        <View>
+                          <TouchableOpacity activeOpacity={0.5}
+                            style={styles.replymgsTouctable}
+                            onPress={this.fileOpner.bind(this, message.message, message.type)}
+                          >
+                            <View style={styles.replyfileTagStyle}>
+                              <View style={styles.replyextensionFile}>
+                                <Image style={styles.replythumbnailImageStyle} source={require('../icons/audio.png')} />
+                              </View>
+                              <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
+                            </View>
+                          </TouchableOpacity>
+                        </View>
+                        // message.senderId == userId &&
+                        //   message.type == 'mp4'
+                        //   // || message.type == 'mp3' || message.type == 'wma' 
+                        //   ?
+                        //   <View>
+                        //     <TouchableOpacity activeOpacity={0.5}
+                        //       style={styles.showPhotoContainer}
+                        //       onPress={this.fileOpner.bind(this, message.message, message.type)}
+                        //     >
+                        //       <Text style={styles.thumbnailTextStyle}>{message.type}</Text>
+                        //       <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+
+                        //     </TouchableOpacity>
+                        //   </View>
+                        : null
         }
       </View>
     ))
@@ -639,17 +650,7 @@ class Chatscreen extends React.Component {
                     }} />
                   </View>
                 </Modal>
-                // <Modal visible={true} transparent={true}>
-                //   <ImageViewer imageUrls={images} />
-                // </Modal>
                 : null}
-              {/* {<TouchableOpacity activeOpacity={0.5}
-                style={styles.showPhotoContainer}
-                onPress={this.expandImg}
-              >
-                <Image source={{ uri: avatarSource }}
-                  style={styles.photoContainer} />
-              </TouchableOpacity>} */}
               {shareFiles && <View style={styles.sendFielsTypeContainer}>
                 <Text style={styles.shareTextStyle}>Share...</Text>
                 <View style={styles.filesContainer}>

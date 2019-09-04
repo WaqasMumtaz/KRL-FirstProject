@@ -120,13 +120,13 @@ const styles = StyleSheet.create({
     mgsTouctable: {
         marginBottom: 20,
         width: 200,
-        marginBottom: 10,
         marginLeft: '35%',
     },
     fileTagStyle: {
         padding: 10,
         backgroundColor: 'black',
         borderRadius: 10,
+        marginVertical: 10,
         flexDirection: 'row',
     },
     extensionFile: {
@@ -134,12 +134,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#807c7c',
         width: 80,
         height: 90,
-        borderRadius: 10
+        borderRadius: 10,
+        marginVertical: 10
+
     },
     thumbnailImageStyle: {
         padding: 10,
-        margin: 10,
+        margin: 13,
         justifyContent: 'center',
+        // marginVertical: 10
     },
     thumbnailNameTextStyle: {
         padding: 10,
@@ -147,12 +150,12 @@ const styles = StyleSheet.create({
         color: '#ff6200',
         fontFamily: 'MontserratMedium',
         marginRight: '35%',
-        marginVertical: 10
+        marginVertical: 15,
+        justifyContent: 'center',
     },
     replymgsTouctable: {
         marginBottom: 20,
         width: 200,
-        marginBottom: 10,
         marginRight: '35%',
     },
     replyfileTagStyle: {
@@ -163,14 +166,15 @@ const styles = StyleSheet.create({
     },
     replyextensionFile: {
         color: '#4f4f4f',
-        backgroundColor: '#e5e5e5',
+        backgroundColor: '#000000',
         width: 80,
         height: 90,
-        borderRadius: 10
+        borderRadius: 10,
+        marginVertical: 10
     },
     replythumbnailImageStyle: {
         padding: 10,
-        margin: 10,
+        margin: 13,
         justifyContent: 'center',
     },
     replythumbnailNameTextStyle: {
@@ -179,7 +183,8 @@ const styles = StyleSheet.create({
         color: '#4f4f4f',
         fontFamily: 'MontserratMedium',
         marginRight: '35%',
-        marginVertical: 10
+        marginVertical: 15,
+        justifyContent: 'center',
     },
     cardContainer: {
         width: 400,
