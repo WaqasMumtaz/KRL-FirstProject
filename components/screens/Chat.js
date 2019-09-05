@@ -23,6 +23,7 @@ import 'firebase/firestore';
 import FilePickerManager from 'react-native-file-picker';
 import HttpUtils from '../Services/HttpUtils';
 // import VideoPlayer from 'react-native-video-controls';
+import VideoPlayer from 'react-native-video-player';
 
 // import Modal from "react-native-modal";
 const db = firebase.database();
@@ -60,7 +61,10 @@ class Chatscreen extends React.Component {
       name: '',
       isVisibleModal: false,
       modal: '',
-      imagePath: ''
+      imagePath: '',
+      video: { width: 300, height: 300, duration: 15 },
+      thumbnailUrl: "https://res.cloudinary.com/dxk0bmtei/image/upload/v1567431284/bnlfunig8cwespozlbmu.jpg",
+      videoUrl: undefined,
     }
   }
 
@@ -127,15 +131,16 @@ class Chatscreen extends React.Component {
           opponentId: dataFromLocalStorage.tainnyId,
         })
       }
-      this.setState({
+   this.setState({
         chatMessages: chatArrayTemp,
         userId: dataFromLocalStorage._id,
       })
       chatArrayTemp = [];
     });
+    this.getWeekReportData()
   }
 
-  uplaodDataOnFirebase = (userMessage, type, name) => {
+  uplaodDataOnFirebase = (userMessage, type) => {
     const { date, time } = this.state;
     let mgs = {}
     let data;
@@ -143,6 +148,7 @@ class Chatscreen extends React.Component {
       if (value) {
         data = JSON.parse(value);
         if (data.assignTrainner != undefined && data.trainnerId != undefined) {
+          console.log('test')
           mgs.message = userMessage;
           mgs.assignTrainner = data.assignTrainner;
           mgs.reciverId = data.trainnerId;
@@ -151,7 +157,6 @@ class Chatscreen extends React.Component {
           mgs.date = date;
           mgs.time = time;
           mgs.type = type;
-          mgs.name = name;
           db.ref(`chatRoom/`).push(mgs);
         }
         else if (data.assignTrainny != undefined && data.tainnyId != undefined) {
@@ -164,7 +169,6 @@ class Chatscreen extends React.Component {
           mgs.time = time;
           mgs.name = name;
           mgs.type = type;
-          mgs.name = name;
           db.ref(`chatRoom/`).push(mgs);
         }
       }
@@ -222,7 +226,7 @@ class Chatscreen extends React.Component {
         xhr.open('POST', upload_url);
         xhr.onload = () => {
           let uploadData = JSON.parse(xhr._response)
-          this.uplaodDataOnFirebase(uploadData.secure_url, 'image', uploadData.original_filename)
+          this.uplaodDataOnFirebase(uploadData, 'image')
         };
         let formdata = new FormData();
         formdata.append('file', { uri: response.uri, type: response.type, name: response.fileName });
@@ -264,7 +268,8 @@ class Chatscreen extends React.Component {
         xhr.onload = () => {
           let type = response.path.substring(response.path.lastIndexOf(".") + 1);
           let uploadData = JSON.parse(xhr._response)
-          this.uplaodDataOnFirebase(uploadData.secure_url, type, uploadData.original_filename)
+          console.log(uploadData, 'uploadData')
+          this.uplaodDataOnFirebase(uploadData, type)
         };
         let formdata = new FormData();
         formdata.append('file', { uri: response.uri, type: response.type, name: response.fileName });
@@ -274,6 +279,15 @@ class Chatscreen extends React.Component {
         xhr.send(formdata);
       }
     });
+  }
+
+  weeklyReport = () => {
+    console.log('test')
+    let test = <Text style={styles.msgsTextStyle}>
+      Test
+    </Text>
+    this.uplaodDataOnFirebase(test, 'component', 'wekkly report')
+
   }
 
   expandImg = (e) => {
@@ -352,13 +366,172 @@ class Chatscreen extends React.Component {
       opponentProfile: true,
     });
   }
+  //get data from database
+  getWeekReportData = async () => {
+    const { monthName } = this.state;
+    //create varibale for useage
+    let dataExcersiceArr = [];
+    let userId;
+    let weekBefore;
+    let cureentWeekData;
+    let loseWeight;
+    AsyncStorage.getItem("currentUser").then(value => {
+      if (value) {
+        let dataFromLocalStorage = JSON.parse(value);
+        userId = dataFromLocalStorage._id;
+      }
+    });
+    //getting api complete data excersice or weight mearsment
+    let dataExcersice = await HttpUtils.get('getallexerciselog');
+    let data = dataExcersice.content;
+    let dataWeight = await HttpUtils.get('getweightlog');
+    let weightData = dataWeight.content;
+    console.log(userId, 'funtion called')
+    console.log(data, 'funtion called')
+
+    //gettibg curent date
+    const currentDayOfWeek = new Date().getDay() + 1;
+    const currentDate = new Date().getDate();
+    let currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+    if (currentMonth == 1 || currentMonth == 2 || currentMonth == 3 || currentMonth == 4 || currentMonth == 5 ||
+      currentMonth == 6 || currentMonth == 7 || currentMonth == 8 || currentMonth == 9) {
+      currentMonth = `0${currentMonth}`
+    }
+    //getting weekly excersices 
+    for (var i in data) {
+      let dataApi = data[i];
+      if (dataApi.userId == userId) {
+        //get month name
+        let getMonthNo = dataApi.month.slice(1) - 1;
+        let getMontName = monthName[getMonthNo];
+        dataApi.monthName = getMontName;
+        //check week of the month
+        let checkDate = Number(dataApi.dayOfMonth) - currentDate;
+        let checkMonth = Number(dataApi.month) - currentMonth;
+        let checkYear = Number(dataApi.year) - currentYear;
+        if (checkDate == 0 || checkDate == -1 || checkDate == -2 || checkDate == -3 || checkDate == -4 || checkDate == -5 ||
+          checkDate == -6 || checkDate == -7 && checkMonth == 0 && checkYear == 0) {
+          dataExcersiceArr = [...dataExcersiceArr, dataApi];
+          // this.setState({
+          //   dataExcersices: dataExcersiceArr
+          // })
+          console.log(dataExcersiceArr)
+        }
+      }
+    }
+
+    // //get week wise data and show bar chart line 
+    // for (var i in weightData) {
+    //   let dataApi = weightData[i];
+    //   if (dataApi.userId == userId) {
+    //     //check week of the month
+    //     let checkWeekDay = (Math.abs(currentDayOfWeek - dataApi.dayOfWeek));
+    //     let checkDate = Number(dataApi.dayOfMonth) - currentDate;
+    //     let checkMonth = Number(dataApi.month) - currentMonth;
+    //     let checkYear = Number(dataApi.year) - currentYear;
+    //     //condition check week ago data
+    //     if (checkWeekDay == 0 && checkDate != 0 && checkMonth == 0 && checkYear == 0) {
+    //       weekBefore = dataApi
+    //       this.setState({
+    //         weekAgoDateDataWeights: weekBefore
+    //       })
+    //     }
+    //     //if data not has week ago then check a last week any day data
+    //     if (checkWeekDay != 0 && checkMonth == 0 && checkYear == 0) {
+    //       if (checkWeekDay == 1 && checkMonth == 0 && checkYear == 0) {
+    //         weekBefore = dataApi
+    //         this.setState({
+    //           weekAgoDateDataWeights: weekBefore
+    //         })
+    //       }
+    //       else if (checkWeekDay == 2 && checkMonth == 0 && checkYear == 0) {
+    //         weekBefore = dataApi
+    //         this.setState({
+    //           weekAgoDateDataWeights: weekBefore
+    //         })
+    //       }
+    //       else if (checkWeekDay == 3 && checkMonth == 0 && checkYear == 0) {
+    //         weekBefore = dataApi
+    //         this.setState({
+    //           weekAgoDateDataWeights: weekBefore
+    //         })
+    //       }
+    //       else if (checkWeekDay == 4 && checkMonth == 0 && checkYear == 0) {
+    //         weekBefore = dataApi
+    //         this.setState({
+    //           weekAgoDateDataWeights: weekBefore
+    //         })
+    //       } else if (checkWeekDay == 5 && checkMonth == 0 && checkYear == 0) {
+    //         weekBefore = dataApi
+    //         this.setState({
+    //           weekAgoDateDataWeights: weekBefore
+    //         })
+    //       } else if (checkWeekDay == 6 && checkMonth == 0 && checkYear == 0) {
+    //         weekBefore = dataApi
+    //         this.setState({
+    //           weekAgoDateDataWeights: weekBefore
+    //         })
+    //       } else if (checkWeekDay == 7 && checkMonth == 0 && checkYear == 0) {
+    //         weekBefore = dataApi
+    //         this.setState({
+    //           weekAgoDateDataWeights: weekBefore
+    //         })
+    //       }
+    //     }
+    //     //current date data
+    //     if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
+    //       cureentWeekData = dataApi
+    //       this.setState({
+    //         currentDateDataWeights: cureentWeekData
+    //       })
+    //     }
+    //   }
+    // }
+    //availbe current date and week ago ago data then get lose or gain wieght
+    // if (cureentWeekData != undefined && weekBefore != undefined) {
+    //   let weekAgoWieght = weekBefore.weight.substring(0, weekBefore.weight.length - 2);
+    //   let currentWeekWieght = cureentWeekData.weight.substring(0, cureentWeekData.weight.length - 2);
+    //   loseWeight = weekAgoWieght - currentWeekWieght;
+    // }
+    // //lose weight
+    // if (loseWeight > 0) {
+    //   this.setState({
+    //     loseWeight: loseWeight,
+    //     lastWeek: 6,
+    //     cureentWeek: 5
+    //   })
+    // }
+    // //gain weight
+    // else if (loseWeight < 0) {
+    //   let gainWeight = Math.abs(loseWeight);
+    //   this.setState({
+    //     lastWeek: 5,
+    //     cureentWeek: 6,
+    //     gainWeight: gainWeight
+    //   })
+    // }
+    // //not gain or lose weight
+    // else if (loseWeight == 0) {
+    //   this.setState({
+    //     loseWeight: loseWeight,
+    //     lastWeek: 6,
+    //     cureentWeek: 6
+    //   })
+    // }
+    // //not availeble today data
+    // else if (cureentWeekData == undefined) {
+    //   this.setState({
+    //     loseWeight: 0,
+    //     lastWeek: 6,
+    //     cureentWeek: 0
+    //   })
+    // }
+  }
 
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
       attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId, opponnetAvatarSource, name, imagePath } = this.state;
-    const images = [{
-      url: `${imagePath}`,
-    }]
     const chatMessages = this.state.chatMessages.map((message, key) => (
       <View>
         {message.senderId == userId && message.type == 'text' ?
@@ -369,10 +542,10 @@ class Chatscreen extends React.Component {
           message.senderId == userId && message.type == 'image' ?
             <TouchableOpacity activeOpacity={0.5}
               style={styles.showPhotoContainer}
-              onPress={this.expandImg.bind(this, message.message)}
+              onPress={this.expandImg.bind(this, message.message.secure_url)}
             >
               <Image key={key} style={styles.mgsImges} source={{
-                uri: `${message.message}`
+                uri: `${message.message.secure_url}`
               }} />
             </TouchableOpacity>
             :
@@ -380,13 +553,13 @@ class Chatscreen extends React.Component {
               <View>
                 <TouchableOpacity activeOpacity={0.5}
                   style={styles.mgsTouctable}
-                  onPress={this.fileOpner.bind(this, message.message, message.type)}
+                  onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                 >
                   <View style={styles.fileTagStyle}>
                     <View style={styles.extensionFile}>
                       <Image style={styles.thumbnailImageStyle} source={require('../icons/pdf.png')} />
                     </View>
-                    <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                    <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -395,13 +568,13 @@ class Chatscreen extends React.Component {
                 <View>
                   <TouchableOpacity activeOpacity={0.5}
                     style={styles.mgsTouctable}
-                    onPress={this.fileOpner.bind(this, message.message, message.type)}
+                    onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                   >
                     <View style={styles.fileTagStyle}>
                       <View style={styles.extensionFile}>
                         <Image style={styles.thumbnailImageStyle} source={require('../icons/txt.png')} />
                       </View>
-                      <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                      <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -410,13 +583,13 @@ class Chatscreen extends React.Component {
                   <View>
                     <TouchableOpacity activeOpacity={0.5}
                       style={styles.mgsTouctable}
-                      onPress={this.fileOpner.bind(this, message.message, message.type)}
+                      onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                     >
                       <View style={styles.fileTagStyle}>
                         <View style={styles.extensionFile}>
                           <Image style={styles.thumbnailImageStyle} source={require('../icons/docx.png')} />
                         </View>
-                        <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                        <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -425,13 +598,13 @@ class Chatscreen extends React.Component {
                     <View>
                       <TouchableOpacity activeOpacity={0.5}
                         style={styles.mgsTouctable}
-                        onPress={this.fileOpner.bind(this, message.message, message.type)}
+                        onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                       >
                         <View style={styles.fileTagStyle}>
                           <View style={styles.extensionFile}>
                             <Image style={styles.thumbnailImageStyle} source={require('../icons/doc.png')} />
                           </View>
-                          <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                          <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -440,13 +613,13 @@ class Chatscreen extends React.Component {
                       <View>
                         <TouchableOpacity activeOpacity={0.5}
                           style={styles.mgsTouctable}
-                          onPress={this.fileOpner.bind(this, message.message, message.type)}
+                          onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                         >
                           <View style={styles.fileTagStyle}>
                             <View style={styles.extensionFile}>
                               <Image style={styles.thumbnailImageStyle} source={require('../icons/ppt.png')} />
                             </View>
-                            <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                            <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                           </View>
                         </TouchableOpacity>
                       </View>
@@ -456,36 +629,31 @@ class Chatscreen extends React.Component {
                         <View>
                           <TouchableOpacity activeOpacity={0.5}
                             style={styles.mgsTouctable}
-                            onPress={this.fileOpner.bind(this, message.message, message.type)}
+                            onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                           >
                             <View style={styles.fileTagStyle}>
                               <View style={styles.extensionFile}>
                                 <Image style={styles.thumbnailImageStyle} source={require('../icons/audio.png')} />
                               </View>
-                              <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
+                              <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                             </View>
                           </TouchableOpacity>
                         </View>
-                        // :
-                        // message.senderId == userId &&
-                        //   message.type == 'mp4'
-                        //   ?
-                          // <Video source={{ uri: `${message.message}` }} />
-                      //     <VideoPlayer
-                      //     source={{ uri: `${message.message}`}}
-                      //     // navigator={ this.props.navigator }
-                      // />
-                        //   <View>
-                        //     <TouchableOpacity activeOpacity={0.5}
-                        //       style={styles.showPhotoContainer}
-                        //       onPress={this.fileOpner.bind(this, message.message, message.type)}
-                        //     >
-                        //       <Text style={styles.thumbnailTextStyle}>{message.type}</Text>
-                        //       <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
-
-                        //     </TouchableOpacity>
-                        //   </View>
-                        : null
+                        :
+                        message.senderId == userId &&
+                          message.type == 'mp4'
+                          ?
+                          <View style={styles.videoTagMgs}>
+                            <VideoPlayer
+                              // videoWidth={this.state.video.width}
+                              // videoHeight={this.state.video.height}
+                              duration={message.message.duration}
+                              video={{ uri: `${message.message.secure_url}` }}
+                              ref={r => this.player = r}
+                              style={styles.backgroundVideo}
+                            />
+                          </View>
+                          : null
         }
         {message.senderId == opponentId && message.type == 'text' ?
           <Text key={key} style={styles.replyMessagesStyle}>
@@ -495,10 +663,10 @@ class Chatscreen extends React.Component {
           message.senderId == opponentId && message.type == 'image' ?
             <TouchableOpacity activeOpacity={0.5}
               style={styles.replyshowPhotoContainer}
-              onPress={this.expandImg.bind(this, message.message)}
+              onPress={this.expandImg.bind(this, message.message.secure_url)}
             >
               <Image key={key} style={styles.replymgsImges} source={{
-                uri: `${message.message}`
+                uri: `${message.message.secure_url}`
               }} />
             </TouchableOpacity>
             :
@@ -506,13 +674,13 @@ class Chatscreen extends React.Component {
               <View>
                 <TouchableOpacity activeOpacity={0.5}
                   style={styles.replymgsTouctable}
-                  onPress={this.fileOpner.bind(this, message.message, message.type)}
+                  onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                 >
                   <View style={styles.replyfileTagStyle}>
                     <View style={styles.replyextensionFile}>
                       <Image style={styles.replythumbnailImageStyle} source={require('../icons/pdf.png')} />
                     </View>
-                    <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
+                    <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -521,13 +689,13 @@ class Chatscreen extends React.Component {
                 <View>
                   <TouchableOpacity activeOpacity={0.5}
                     style={styles.replymgsTouctable}
-                    onPress={this.fileOpner.bind(this, message.message, message.type)}
+                    onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                   >
                     <View style={styles.replyfileTagStyle}>
                       <View style={styles.replyextensionFile}>
                         <Image style={styles.replythumbnailImageStyle} source={require('../icons/txt.png')} />
                       </View>
-                      <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
+                      <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -536,13 +704,13 @@ class Chatscreen extends React.Component {
                   <View>
                     <TouchableOpacity activeOpacity={0.5}
                       style={styles.replymgsTouctable}
-                      onPress={this.fileOpner.bind(this, message.message, message.type)}
+                      onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                     >
                       <View style={styles.replyfileTagStyle}>
                         <View style={styles.replyextensionFile}>
                           <Image style={styles.replythumbnailImageStyle} source={require('../icons/docx.png')} />
                         </View>
-                        <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
+                        <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -551,13 +719,13 @@ class Chatscreen extends React.Component {
                     <View>
                       <TouchableOpacity activeOpacity={0.5}
                         style={styles.replymgsTouctable}
-                        onPress={this.fileOpner.bind(this, message.message, message.type)}
+                        onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                       >
                         <View style={styles.replyfileTagStyle}>
                           <View style={styles.replyextensionFile}>
                             <Image style={styles.replythumbnailImageStyle} source={require('../icons/doc.png')} />
                           </View>
-                          <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
+                          <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -566,13 +734,13 @@ class Chatscreen extends React.Component {
                       <View>
                         <TouchableOpacity activeOpacity={0.5}
                           style={styles.replymgsTouctable}
-                          onPress={this.fileOpner.bind(this, message.message, message.type)}
+                          onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                         >
                           <View style={styles.replyfileTagStyle}>
                             <View style={styles.replyextensionFile}>
                               <Image style={styles.replythumbnailImageStyle} source={require('../icons/ppt.png')} />
                             </View>
-                            <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
+                            <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                           </View>
                         </TouchableOpacity>
                       </View>
@@ -582,31 +750,31 @@ class Chatscreen extends React.Component {
                         <View>
                           <TouchableOpacity activeOpacity={0.5}
                             style={styles.replymgsTouctable}
-                            onPress={this.fileOpner.bind(this, message.message, message.type)}
+                            onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                           >
                             <View style={styles.replyfileTagStyle}>
                               <View style={styles.replyextensionFile}>
                                 <Image style={styles.replythumbnailImageStyle} source={require('../icons/audio.png')} />
                               </View>
-                              <Text style={styles.replythumbnailNameTextStyle}>{message.name}</Text>
+                              <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                             </View>
                           </TouchableOpacity>
                         </View>
-                        // message.senderId == userId &&
-                        //   message.type == 'mp4'
-                        //   // || message.type == 'mp3' || message.type == 'wma' 
-                        //   ?
-                        //   <View>
-                        //     <TouchableOpacity activeOpacity={0.5}
-                        //       style={styles.showPhotoContainer}
-                        //       onPress={this.fileOpner.bind(this, message.message, message.type)}
-                        //     >
-                        //       <Text style={styles.thumbnailTextStyle}>{message.type}</Text>
-                        //       <Text style={styles.thumbnailNameTextStyle}>{message.name}</Text>
-
-                        //     </TouchableOpacity>
-                        //   </View>
-                        : null
+                        :
+                        message.senderId == opponentId &&
+                          message.type == 'mp4'
+                          ?
+                          <View style={styles.replyvideoTagMgs}>
+                            <VideoPlayer
+                              // videoWidth={this.state.video.width}
+                              // videoHeight={this.state.video.height}
+                              duration={message.message.duration}
+                              video={{ uri: `${message.message.secure_url}` }}
+                              ref={r => this.player = r}
+                              style={styles.backgroundVideo}
+                            />
+                          </View>
+                          : null
         }
       </View>
     ))
@@ -664,7 +832,7 @@ class Chatscreen extends React.Component {
                       style={styles.attachFilesStyle}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={this.weeklyReport}>
                     <Image source={require('../icons/attach-report.png')}
                       style={styles.attachFilesStyle}
                     />

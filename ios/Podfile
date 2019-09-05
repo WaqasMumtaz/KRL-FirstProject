@@ -8,4 +8,6 @@ target 'FirstProject' do
 
   pod 'RNSha1', :path => '../node_modules/react-native-sha1'
 
+  pod 'react-native-video', :path => '../node_modules/react-native-video'
+
 end

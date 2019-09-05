@@ -153,6 +153,23 @@ const styles = StyleSheet.create({
         marginVertical: 15,
         justifyContent: 'center',
     },
+    backgroundVideo: {
+        // position: 'absolute',
+        top: 1,
+        left: 1,
+        bottom: 1,
+        right: 1,
+        // marginBottom:12,
+        // marginLeft: '30%',
+        resizeMode: "contain"
+    },
+    videoTagMgs: {
+        // width: 150,
+        height: 150,
+        marginBottom: 12,
+        marginLeft: '30%',
+        // backgroundColor:"#e5e5e5"
+    },
     replymgsTouctable: {
         marginBottom: 20,
         width: 200,
@@ -185,6 +202,12 @@ const styles = StyleSheet.create({
         marginRight: '35%',
         marginVertical: 15,
         justifyContent: 'center',
+    },
+    replyvideoTagMgs: {
+        // width: 150,
+        // height: 150,
+        marginBottom: 12,
+        marginRight: '30%',
     },
     cardContainer: {
         width: 400,
