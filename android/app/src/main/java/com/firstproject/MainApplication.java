@@ -5,7 +5,6 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.brentvatne.react.ReactVideoPackage;
 import com.sha1lib.Sha1Package;
-import com.yoloci.fileupload.FileUploadPackage;
 import com.gettipsi.stripe.StripeReactPackage;
 import com.horcrux.svg.SvgPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -52,7 +51,6 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new ReactVideoPackage(),
             new Sha1Package(),
-            new FileUploadPackage(),
             new StripeReactPackage(),
             new SvgPackage(),
             new RNFetchBlobPackage(),

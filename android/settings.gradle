@@ -3,8 +3,6 @@ include ':react-native-video'
 project(':react-native-video').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-video/android')
 include ':react-native-sha1'
 project(':react-native-sha1').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sha1/android')
-include ':react-native-fileupload'
-project(':react-native-fileupload').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fileupload/android')
 include ':tipsi-stripe'
 project(':tipsi-stripe').projectDir = new File(rootProject.projectDir, '../node_modules/tipsi-stripe/android')
 include ':react-native-svg'
