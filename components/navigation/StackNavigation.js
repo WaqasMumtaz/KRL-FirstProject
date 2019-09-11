@@ -42,127 +42,14 @@ import Invoices from '../screens/InvoicesScreen';
 
 const MainNavigator = createStackNavigator({
   // Profile:{screen:Profile},
-  // Login: { screen: Login },
 
-
-  //ShowMeasurementsScreen:ShowMeasurementsScreen,
-
-  //BriskScreen: { screen: BriskScreen },
-
-  // Profile:{screen:Profile},
-  // Login: {screen: Login},
-
-  // Exerciselog: {
-  //   screen: Exerciselog,
-  //   navigationOptions: {
-  //     headerStyle: {
-  //       elevation: 0,
-  //     }
-
-  //   }
-  //  },
-  // Exerciselog: {
-  //   screen: Exerciselog,
-  //   navigationOptions: {
-  //     headerStyle: {
-  //       elevation: 0,
-  //     }
-
-  //   }
-  // },
-  // AddExercise: {
-  //   screen: AddExercise,
-  //   navigationOptions: {
-  //     headerStyle: {
-  //       elevation: 0,
-  //     }
-
-  // Logweight: {
-  //   screen: Logweight,
-
-  //   navigationOptions: {
-  //     headerStyle: {
-  //       elevation: 0,
-  //     }
-
-  //   }
-  // },
-
-  // LogMeasurementsScreen: {
-  //   screen: LogMeasurementsScreen,
-  //   navigationOptions: {
-  //     headerStyle: {
-  //       elevation: 0,
-  //     }
-
-  //   }
-  // },
-
-  //  EditProfileScreen:{
-  //   screen:EditProfileScreen,
-  //   navigationOptions: {
-  //     headerStyle: {
-  //       elevation: 0,
-  //     }
-  //   }
-  // },
-  // BMICalculator: {
-  //   screen: BMICalculator,
-  //   navigationOptions: {
-  //     headerStyle: {
-  //       elevation: 0,
-  //     }
-
-  //   }
-  // },
-
-
-
-  //  ResetpasswordScreen:{screen:ResetpasswordScreen},
-  //  ConfirmResetPassword:{screen:ConfirmResetPassword},
-  //const MainNavigator = createStackNavigator({
-  // Login: {screen: Login},
-  //  ResetpasswordScreen:{screen:ResetpasswordScreen},
-  // ConfirmResetPassword:{screen:ConfirmResetPassword},
-  // Signup:{screen:Signup},
-  // ActivateSpinner:{screen:ActivateSpinner},
-
-
-  // Setupscreen1:{screen:Setupscreen1}, 
-  // Setupscreen:{screen:Setupscreen},
-  // LastSetUpScreen: { screen: LastSetUpScreen },
-  // ToastComponent:{screen:ToastComponent},
-
-  //OverlayLoader:{screen:OverlayLoader},
-
-
-  // BMICalculator: {
-  //   screen: BMICalculator,
-  //   navigationOptions: {
-  //     headerStyle: {
-  //       elevation: 0,
-  //     }
-
-  //   }
-  // },
-
-
-
-
-  // Setupscreen:{screen:Setupscreen},
-  // Setupscreen1:{screen:Setupscreen1}, 
-  // LastSetUpScreen: { screen: LastSetUpScreen },
-
-
-  // Setupscreen1:{screen:Setupscreen1}, 
-  //Setupscreen:{screen:Setupscreen},
-  //LastSetUpScreen: { screen: LastSetUpScreen },
-
-  // Setupscreen:{screen:Setupscreen},
-  // LastSetUpScreen: { screen: LastSetUpScreen },
-  // Wheelspiner:{screen:Wheelspiner},
-
-  // ChartScreen: { screen: ChartScreen },
+  Login: { screen: Login },
+  Signup: { screen: Signup },
+  ResetpasswordScreen: { screen: ResetpasswordScreen },
+  ConfirmResetPassword: { screen: ConfirmResetPassword },
+  Setupscreen1: { screen: Setupscreen1 },
+  Setupscreen: { screen: Setupscreen },
+  LastSetUpScreen: { screen: LastSetUpScreen },
 
   BottomTabe: {
     screen: BottomTabe,
@@ -170,8 +57,7 @@ const MainNavigator = createStackNavigator({
       header: null
     }
   },
-  ResetpasswordScreen: { screen: ResetpasswordScreen },
-  StepCountScreen: { screen: StepCountScreen },
+
   AddExercise: {
     screen: AddExercise,
     navigationOptions: {
@@ -257,7 +143,14 @@ const MainNavigator = createStackNavigator({
       }
     }
   },
-
+  StepCountScreen: {
+    screen: StepCountScreen,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
   SettingScreen: {
     screen: SettingScreen,
     navigationOptions: {
@@ -266,18 +159,13 @@ const MainNavigator = createStackNavigator({
       }
     }
   },
-  
+
 
 
 },
 
-
   {
-    // headerMode: 'none',
-    // mode: 'modal',
-    // defaultNavigationOptions: {
-    //   gesturesEnabled: false,
-    // },
+    
     transitionConfig: () => ({
       transitionSpec: {
         duration: 750,

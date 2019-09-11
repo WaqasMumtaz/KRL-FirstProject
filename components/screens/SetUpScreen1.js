@@ -140,13 +140,13 @@ class Setupscreen1 extends React.Component {
                                 cancelBtnText="Cancel"
                                 customStyles={{
                                     dateIcon: {
-                                        position: 'absolute',
-                                        left: 0,
-                                        top: 4,
-                                        marginLeft: 0
+                                        width: 0,
+                                        height: 0,
                                     },
                                     dateInput: {
-                                        marginLeft: 36
+                                        
+                                        backgroundColor:'white',
+                                        opacity:0.4
                                     }
                                 }}
                                 onDateChange={(date) => { this.setState({ dob: date }) }}

@@ -14,6 +14,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import styles from '../Styling/LoginScreenStyle';
 import HttpUtilsFile from '../Services/HttpUtils';
 import firebase from '../../Config/Firebase';
+import OverlayLoader from '../Loader/OverlaySpinner';
+
 import 'firebase/firestore';
 const db = firebase.database();
 
@@ -32,7 +34,9 @@ class Login extends React.Component {
       psswrdInstruction: false,
       isLoading: false,
       passwordNotMatch: '',
-      psswrdNotMatchShow: false
+      psswrdNotMatchShow: false,
+      emailAndPasswrd:false
+      
     }
   }
 
@@ -56,10 +60,12 @@ class Login extends React.Component {
       }
       try {
         let dataUser = await HttpUtilsFile.post('signin', userObj)
-        console.log(dataUser, 'dataUser');
+        console.log( 'dataUser >>>',dataUser);
         let getUserCode = dataUser.code;
         let userWrong = dataUser.Match;
+        console.log('user status >>>', userWrong)
         let userMsg = dataUser.msg;
+        console.log('user mesg >>>',userMsg)
         if (getUserCode) {
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
           let myProfile = dataUser.profile[0];
@@ -76,26 +82,38 @@ class Login extends React.Component {
             AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
           }
           db.ref(`users/`).push(dataUser)
-          navigate('BottomTabe')
+          this.setState({
+            isLoading:false 
+          },()=>navigate('BottomTabe'))
+          
         }
-        else if (userWrong == false) {
+       if (userWrong == false) {
           this.setState({
             isLoading: false,
+            psswrdNotMatchShow: true,
             passwordNotMatch: userMsg,
-            psswrdNotMatchShow: true
-          }, () => {
-            setTimeout(() => {
-              this.setState({
-                psswrdNotMatchShow: false
-              })
-            }, 2000)
+            
           })
-          console.log(dataUser);
+         setTimeout(()=>{
+          this.setState({
+            psswrdNotMatchShow: false
+          })
+         },5000) 
+         
         }
 
       }
       catch (error) {
         console.log(error)
+        this.setState({
+          isLoading: false,
+          emailAndPasswrd:true,
+        })
+        setTimeout(()=>{
+          this.setState({
+            emailAndPasswrd: false
+          })
+         },5000) 
       }
       this.setState({
         email: '',
@@ -144,7 +162,7 @@ class Login extends React.Component {
   }
   render() {
     const { navigate } = this.props.navigation;
-    const { email, password, psswrdInstruction, isLoading, passwordNotMatch, psswrdNotMatchShow } = this.state;
+    const { email, password, psswrdInstruction, isLoading, passwordNotMatch, psswrdNotMatchShow,emailAndPasswrd } = this.state;
     return (
       <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
         <View style={styles.loginTextContainer}>
@@ -193,14 +211,22 @@ class Login extends React.Component {
             value={password}
             style={[styles.inputTexts, !this.state.passwrdValidate ? styles.errorInput : null]} />
         </View>
-        {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
+        {/* {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
           <ActivityIndicator size='large' color="#FF6200" />
-        </View>}
-        {psswrdNotMatchShow && <View style={styles.passMatchContainer}>
+        </View>} */}
+        {isLoading ? <OverlayLoader /> : null}
+        {psswrdNotMatchShow ? <View style={styles.passMatchContainer}>
           <Text style={styles.passNotMatchStyle}>
             {passwordNotMatch}
           </Text>
-        </View>}
+        </View>: null}
+        {emailAndPasswrd ? 
+         <View style={styles.passMatchContainer}>
+         <Text style={styles.passNotMatchStyle}>
+           Email and password not match
+         </Text>
+       </View>: null}
+
         {psswrdInstruction && <View style={styles.passwrdInstructionContainer}>
           <Text style={styles.instructionStyle}>
             Password strength is required maximum 9 and greater then 4

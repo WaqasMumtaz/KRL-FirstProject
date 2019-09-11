@@ -8,12 +8,13 @@ import {
     Dimensions,
     ScrollView,
     TouchableOpacity,
-    ActivityIndicator
+    
 } from 'react-native';
 import styles from '../Styling/ResetPasswordScreenStyle';
 //import TextInputs from '../textInputs/TextInputs'
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import HttpUtilsFile from '../Services/HttpUtils';
+import OverlayLoader from '../Loader/OverlaySpinner';
 //console.log(HttpUtilsFile);
 const { height } = Dimensions.get('window');
 
@@ -49,6 +50,9 @@ class ResetpasswordScreen extends React.Component {
             if (emailValidate !== true) {
                 Alert.alert('Please enter correct field')
             }
+         this.setState({
+             emailValidate:false
+         })   
         }
         else {
             this.setState({ isLoading: true })
@@ -60,9 +64,10 @@ class ResetpasswordScreen extends React.Component {
             try {
                 
                 let getEmails = await HttpUtilsFile.get('getuseremail')
-                //console.log(getEmails);
+                console.log('allusers emails >>>',getEmails);
                 let emailCode = getEmails.code;
                 const emailContents = getEmails.content;
+                console.log('email contents >>>',emailContents)
                 const dataUser = await HttpUtilsFile.post('postemail', userEmail)
                 console.log(dataUser)
                 let resetCode = dataUser.code; 
@@ -80,9 +85,10 @@ class ResetpasswordScreen extends React.Component {
                     for (var i = 0; i < databaseEmails.length; i++) {
                         console.log(databaseEmails[i])
                         if (email == databaseEmails[i]) {
-                            console.log('email matched')
+                            //console.log('email matched')
                             this.setState({
                                 emailNotExist: false,
+                                isLoading:false
                             })
                             navigate('ConfirmResetPassword')
                             this.setState({
@@ -91,10 +97,16 @@ class ResetpasswordScreen extends React.Component {
                             break;
                         }
                         else if (email != databaseEmails[i]) {
-                            console.log('email not matched')
+                            //console.log('email not matched')
                             this.setState({
                                 emailNotExist: true,
+                                isLoading:false
                             })
+                            setTimeout(()=>{
+                                this.setState({
+                                    emailNotExist: false
+                                })
+                               },5000) 
                         }
 
 
@@ -166,17 +178,17 @@ class ResetpasswordScreen extends React.Component {
 
     render() {
 
-        const { navigate } = this.props.navigation;
         const { email, isLoading, emailNotExist } = this.state;
         //console.log(email);
         return (
             <View style={styles.mainContainer}>
-                <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
+                <ScrollView style={{backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
                     <View style={styles.container}>
                         <View style={styles.resetPasswrdContainer}>
                             <Text style={styles.resetTextStyle}>Reset Password</Text>
                         </View>
                         <Text style={styles.textsStyles}>Enter your GetFitAthletic email to reset password</Text>
+                        
                         <Text style={styles.emailTextStyle}>Email</Text>
                         <View style={styles.inputFields}>
                             <TextInput
@@ -192,9 +204,7 @@ class ResetpasswordScreen extends React.Component {
                                 style={[styles.inputTextStyle, !this.state.emailValidate ? styles.errorInput : null]}
                             />
                         </View>
-                        {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
-                            <ActivityIndicator size='large' color="#FF6200" />
-                        </View>}
+                        
                         {emailNotExist && <View style={styles.emailExistContainer}>
                             <Text style={styles.emailNotExistStyle}>
                                 Email is not registerd
@@ -207,8 +217,9 @@ class ResetpasswordScreen extends React.Component {
                                 onPress={() => { this.resetPassword() }}
                             />
                         </View>
-                        {/* </View> */}
+                        
                     </View>
+                    {isLoading ? <OverlayLoader /> : null}
                 </ScrollView>
             </View>
 

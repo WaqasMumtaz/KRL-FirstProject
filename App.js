@@ -15,9 +15,6 @@ class App extends Component {
   constructor(props){
     super(props);
 
-    this.state={
-      name:'waqas mumtaz'
-    }
     if(!firebase.apps.length) {
       //console.log(!firebase.apps.length)
      // firebase.initializeApp(ApiKeys.FirebaseConfig);
@@ -26,8 +23,6 @@ class App extends Component {
     }
   }
  render() {
-   const {name}=this.state
-   console.log(name);
     return <AppContainer/>
   }
 }
