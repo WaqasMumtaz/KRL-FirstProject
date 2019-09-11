@@ -5,7 +5,7 @@ import styles from '../Styling/StepCountScreenStyle';
 import DatePicker from 'react-native-datepicker';
 import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
-import moment from 'moment';
+// import moment from 'moment';
 import {
     DeviceEventEmitter // will emit events that you can listen to
 } from 'react-native';
@@ -16,7 +16,7 @@ import { NativeModules } from 'react-native';
 const rnHealthKit = NativeModules.RNHealthKit;
 //console.log('Fitness Api Data -->>',Fitness)
 // console.log('Health kit >>', rnHealthKit)
-const googleFit = NativeModules.RNGoogleFit;
+//const googleFit = NativeModules.RNGoogleFit;
 // console.log('GoogleFit -->>', GoogleFit)
 //console.log('small googlefit -->>', googleFit)
 // import FitService from '../StepCounterServices/fitService';
