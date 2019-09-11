@@ -170,6 +170,86 @@ const styles = StyleSheet.create({
         marginLeft: '30%',
         // backgroundColor:"#e5e5e5"
     },
+    //week excersice
+    cardRight: {
+        // flex: 1,
+        //backgroundColor:'pink',
+        marginLeft: '30%',
+        marginVertical:10
+    },
+    totalExerciseContainer: {
+        //    borderWidth:2,
+        //    borderColor:'black',
+        borderRadius: 3,
+        backgroundColor: 'black'
+    },
+    totalExercisHeading: {
+        marginLeft: 10,
+        marginTop: 10,
+        fontSize: 20,
+        color: 'white',
+        fontFamily: "MontserratMedium",
+    },
+    exerciseResultCard: {
+        borderBottomWidth: 1.5,
+        borderColor: '#a6a6a6',
+        height: 60,
+        marginBottom: 12,
+        marginLeft: 10,
+        width: '90%',
+        marginVertical: 10
+    },
+    resultHeading: {
+        color: '#a6a6a6',
+        fontFamily: 'MontserratLight',
+        fontSize: 12
+    },
+    dataResultParent: {
+        flexDirection: 'row'
+    },
+    timeShowContainer: {
+        flexDirection: 'row',
+        borderRightWidth: 0.5,
+        borderColor: '#a6a6a6',
+        width: 70,
+        height: 25,
+        //    marginTop:3
+    },
+    timeShow: {
+        color: '#a6a6a6',
+        fontFamily: 'MontserratLight',
+        fontSize: 11,
+        marginTop: 4
+    },
+    dateAndMonth: {
+        flexDirection: 'row',
+        borderLeftWidth: 0.5,
+        borderColor: '#a6a6a6',
+        width: 65,
+        height: 25,
+    },
+    dateAndMonthShow: {
+        color: '#a6a6a6',
+        fontFamily: 'MontserratLight',
+        fontSize: 11,
+        marginTop: 4,
+        marginLeft: 8
+    },
+    dateNumber: {
+        fontSize: 11,
+        lineHeight: 23,
+        marginLeft: 4,
+        color: '#a6a6a6',
+        fontFamily: 'MontserratLight',
+        marginVertical:5
+    },
+    superScriptTextStyle: {
+        fontSize: 9,
+        lineHeight: 14,
+        color: '#a6a6a6',
+        fontFamily: 'MontserratLight',
+    },
+
     replymgsTouctable: {
         marginBottom: 20,
         width: 200,
@@ -209,12 +289,91 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         marginRight: '30%',
     },
-    cardContainer: {
+     //week excersice
+    replycardRight: {
+        // flex: 1,
+        //backgroundColor:'pink',
+        marginRight: '30%',
+        marginVertical:10
+    },
+    replytotalExerciseContainer: {
+        //    borderWidth:2,
+        //    borderColor:'black',
+        borderRadius: 3,
+        backgroundColor: '#e5e5e5'
+    },
+    replytotalExercisHeading: {
+        marginLeft: 10,
+        marginTop: 10,
+        fontSize: 20,
+        color: 'black',
+        fontFamily: "MontserratMedium",
+    },
+    replyexerciseResultCard: {
+        borderBottomWidth: 1.5,
+        borderColor: '#a6a6a6',
+        height: 60,
+        marginBottom: 12,
+        marginLeft: 10,
+        width: '90%',
+        marginVertical: 10
+    },
+    replyresultHeading: {
+        color: '#000000',
+        fontFamily: 'MontserratLight',
+        fontSize: 12
+    },
+    replydataResultParent: {
+        flexDirection: 'row'
+    },
+    replytimeShowContainer: {
+        flexDirection: 'row',
+        borderRightWidth: 0.5,
+        borderColor: '#000000',
+        width: 70,
+        height: 25,
+        //    marginTop:3
+    },
+    replytimeShow: {
+        color: '#000000',
+        fontFamily: 'MontserratLight',
+        fontSize: 11,
+        marginTop: 4
+    },
+    replydateAndMonth: {
+        flexDirection: 'row',
+        borderLeftWidth: 0.5,
+        borderColor: '#000000',
+        width: 65,
+        height: 25,
+    },
+    replydateAndMonthShow: {
+        color: '#000000',
+        fontFamily: 'MontserratLight',
+        fontSize: 11,
+        marginTop: 4,
+        marginLeft: 8
+    },
+    replydateNumber: {
+        fontSize: 11,
+        lineHeight: 23,
+        marginLeft: 4,
+        color: '#000000',
+        fontFamily: 'MontserratLight',
+        marginBottom:5
+    },
+    replysuperScriptTextStyle: {
+        fontSize: 9,
+        lineHeight: 14,
+        color: '#000000',
+        fontFamily: 'MontserratLight',
+    },
+    replycardContainer: {
         width: 400,
         borderRadius: 5,
         padding: 15
     },
-    dateWithCancelIcon: {
+    replydateWithCancelIcon: {
         flexDirection: 'row',
     },
     fileAttachContainer: {

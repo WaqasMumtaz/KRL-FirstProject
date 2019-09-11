@@ -3,13 +3,15 @@ package com.firstproject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnative.googlefit.GoogleFitPackage;
+import com.sensormanager.SensorManagerPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.sha1lib.Sha1Package;
 import com.gettipsi.stripe.StripeReactPackage;
 import com.horcrux.svg.SvgPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.fileopener.FileOpenerPackage;
-import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
+//import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
 import com.filepicker.FilePickerPackage;
 import com.rnfs.RNFSPackage;
 import com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
@@ -49,13 +51,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new GoogleFitPackage(BuildConfig.APPLICATION_ID),
+            new SensorManagerPackage(),
             new ReactVideoPackage(),
             new Sha1Package(),
             new StripeReactPackage(),
             new SvgPackage(),
             new RNFetchBlobPackage(),
             new FileOpenerPackage(),
-            new RNFileViewerPackage(),
+            //new RNFileViewerPackage(),
             new FilePickerPackage(),
             new RNFSPackage(),
             new RNSoundRecorderPackage(),

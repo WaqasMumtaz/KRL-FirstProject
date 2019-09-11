@@ -104,11 +104,6 @@ export default class LogMeasurementsDetailedView extends React.Component {
                 </View>
             </View>
 
-
-
-
-
-
         )
     }
 }

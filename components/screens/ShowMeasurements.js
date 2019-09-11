@@ -88,11 +88,7 @@ class ShowMeasurementsScreen extends React.Component {
 
     _keyExtractor = (item, index) => item.id;
 
-    abc = () => {
-        this.setState({
-            modalVisible: true
-        })
-    }
+    
 
     renderDataItems = ({ item }) => {
         //console.log(item)
@@ -102,7 +98,7 @@ class ShowMeasurementsScreen extends React.Component {
                     style={styles.cardLeft}
                     activeOpacity={0.7}
                     onPress={this.showBlureScreen.bind(this, item)}
-                //onPress={this.abc}
+                
                 >
                     <View style={styles.childContainer}>
                         <View style={styles.cardNumberContainer}>

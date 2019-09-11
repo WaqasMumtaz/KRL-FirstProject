@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
 import styles from '../Styling/ReportsScreenStyle';
 import Wheelspiner from '../Progress Wheel/Progress';
-//import ChartScreen from '../BarChart/BarChart';
+import ChartScreen from '../BarChart/BarChart';
 import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -94,6 +94,7 @@ class Reportscreen extends React.Component {
         let checkYear = Number(dataApi.year) - currentYear;
         //condition check week ago data
         if (checkWeekDay == 0 && checkDate != 0 && checkMonth == 0 && checkYear == 0) {
+          console.log('weekago data')
           weekBefore = dataApi
           this.setState({
             weekAgoDateDataWeights: weekBefore
@@ -143,6 +144,7 @@ class Reportscreen extends React.Component {
         }
         //current date data
         if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
+          // console.log(currentDateDataWeights)
           cureentWeekData = dataApi
           this.setState({
             currentDateDataWeights: cureentWeekData
@@ -192,6 +194,7 @@ class Reportscreen extends React.Component {
   }
   render() {
     const { dataExcersices, currentDateDataWeights, weekAgoDateDataWeights, loseWeight, gainWeight, lastWeek, cureentWeek } = this.state
+    console.log(loseWeight , 'loseWeight')
     let weeklyExcersice = dataExcersices && dataExcersices.map((elem, key) => {
       return (
         <View style={styles.exerciseResultCard}>
@@ -250,7 +253,7 @@ class Reportscreen extends React.Component {
                 <Text style={styles.headingText}>Weight{'\n'}status</Text>
                 <View style={styles.statusGraphContainer}>
                   <View style={styles.midBox}>
-                    {/* <ChartScreen lastWeek={lastWeek} cureentWeek={cureentWeek} /> */}
+                    <ChartScreen lastWeek={lastWeek} cureentWeek={cureentWeek} />
                   </View>
                   <View style={styles.borderLines1}>
                     <Text style={styles.kgTextOne}>
@@ -264,7 +267,7 @@ class Reportscreen extends React.Component {
                     <Text style={styles.thisWeek}>This week</Text>
                     <Text style={styles.lastWeek}>Last week</Text>
                   </View>
-                  {loseWeight || loseWeight == 0 ?
+                  {loseWeight || loseWeight == 0 || loseWeight != ''?
                     <View>
                       <Text style={styles.lostKg}>{`${loseWeight} KG`} </Text>
                       <Text style={styles.lostText}>Lost</Text>

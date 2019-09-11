@@ -34,6 +34,7 @@ import SettingScreen from '../screens/Setting';
 import ShowMeasurementsScreen from '../screens/ShowMeasurements';
 import StepCountScreen from '../screens/StepCountScreen';
 import Payment from '../screens/PaymentScreen';
+import Invoices from '../screens/InvoicesScreen';
 
 
 
@@ -41,7 +42,8 @@ import Payment from '../screens/PaymentScreen';
 
 const MainNavigator = createStackNavigator({
   // Profile:{screen:Profile},
-  //  Login: { screen: Login },
+  // Login: { screen: Login },
+
 
   //ShowMeasurementsScreen:ShowMeasurementsScreen,
 
@@ -239,6 +241,23 @@ const MainNavigator = createStackNavigator({
       }
     }
   },
+  Invoices: {
+    screen: Invoices,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
+  ShowMeasurementsScreen: {
+    screen: ShowMeasurementsScreen,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
+
   SettingScreen: {
     screen: SettingScreen,
     navigationOptions: {
@@ -246,7 +265,8 @@ const MainNavigator = createStackNavigator({
         elevation: 0,
       }
     }
-  }
+  },
+  
 
 
 },
