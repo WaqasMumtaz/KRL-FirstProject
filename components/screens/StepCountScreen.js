@@ -14,17 +14,7 @@ import { SensorManager } from 'NativeModules';
 import GoogleFit, { Scopes } from 'react-native-google-fit'
 import { NativeModules } from 'react-native';
 const rnHealthKit = NativeModules.RNHealthKit;
-//console.log('Fitness Api Data -->>',Fitness)
-// console.log('Health kit >>', rnHealthKit)
-//const googleFit = NativeModules.RNGoogleFit;
-// console.log('GoogleFit -->>', GoogleFit)
-//console.log('small googlefit -->>', googleFit)
-// import FitService from '../StepCounterServices/fitService';
-// console.log(FitService);
-// console.log('sensormanagers >>>', SensorManager)
 
-//var mSensorManager = require('NativeModules').SensorManager;
-//const Pedometer = require('../Pedometer/Pedometer');
 const { height } = Dimensions.get('window');
 const date = new Date().getDate();
 

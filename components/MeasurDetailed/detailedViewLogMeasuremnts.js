@@ -1,39 +1,11 @@
 import React from 'react';
-import {
-    Text,
-    Alert,
-    View,
-    ScrollView,
-    Button,
-    Image,
-    Dimensions,
-    TextInput,
-    TouchableOpacity,
-    Picker,
-    StyleSheet,
-    ActivityIndicator,
-    FlatList,
-
-} from 'react-native';
-// import Toast, {DURATION} from 'react-native-easy-toast'
-
-import CaloriesSetupBtn from '../buttons/setUpBtn';
-import AsyncStorage from '@react-native-community/async-storage';
-import HttpUtils from '../Services/HttpUtils';
-import ToastComponent from '../Toasts/nativeToast';
-import OverlayLoader from '../Loader/OverlaySpinner'
-import HttpUtilsFile from '../Services/HttpUtils';
+import {Text,View,Image,TouchableOpacity,} from 'react-native';
 import styles from './styling/styling'
-//import Modal from "react-native-modal";
 
 
 export default class LogMeasurementsDetailedView extends React.Component {
     constructor(props) {
         super(props)
-
-        this.state = {
-            isVisibleModal: false
-        }
 
     }
     render() {
