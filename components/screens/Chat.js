@@ -24,6 +24,7 @@ import FilePickerManager from 'react-native-file-picker';
 import HttpUtils from '../Services/HttpUtils';
 // import VideoPlayer from 'react-native-video-controls';
 import VideoPlayer from 'react-native-video-player';
+import ChartScreen from '../BarChart/BarChart';
 
 // import Modal from "react-native-modal";
 const db = firebase.database();
@@ -65,6 +66,15 @@ class Chatscreen extends React.Component {
       video: { width: 300, height: 300, duration: 15 },
       thumbnailUrl: "https://res.cloudinary.com/dxk0bmtei/image/upload/v1567431284/bnlfunig8cwespozlbmu.jpg",
       videoUrl: undefined,
+      monthName: ["January", "February", "March", "April", "May", "June", "July", "August",
+        "September", "October", "November", "December"],
+      weekExcercise: [],
+      weekAgoDateDataWeights: [],
+      currentDateDataWeights: [],
+      loseWeight: '',
+      lastWeek: '',
+      cureentWeek: '',
+      gainWeight: ''
     }
   }
 
@@ -131,7 +141,7 @@ class Chatscreen extends React.Component {
           opponentId: dataFromLocalStorage.tainnyId,
         })
       }
-   this.setState({
+      this.setState({
         chatMessages: chatArrayTemp,
         userId: dataFromLocalStorage._id,
       })
@@ -282,11 +292,21 @@ class Chatscreen extends React.Component {
   }
 
   weeklyReport = () => {
-    console.log('test')
-    let test = <Text style={styles.msgsTextStyle}>
-      Test
-    </Text>
-    this.uplaodDataOnFirebase(test, 'component', 'wekkly report')
+    const { weekAgoDateDataWeights, currentDateDataWeights, loseWeight, lastWeek, cureentWeek, gainWeight } = this.state;
+    let weight = {
+      weekAgoDateDataWeights: weekAgoDateDataWeights,
+      currentDateDataWeights: currentDateDataWeights,
+      loseWeight: loseWeight,
+      lastWeek: lastWeek,
+      cureentWeek: cureentWeek,
+      gainWeight: gainWeight
+    }
+    console.log(this.state.weekExcercise, 'test')
+    let obj = {
+      weekExcercise: this.state.weekExcercise,
+      weight: weight
+    }
+    this.uplaodDataOnFirebase(obj, 'weeklyReport')
 
   }
 
@@ -386,9 +406,6 @@ class Chatscreen extends React.Component {
     let data = dataExcersice.content;
     let dataWeight = await HttpUtils.get('getweightlog');
     let weightData = dataWeight.content;
-    console.log(userId, 'funtion called')
-    console.log(data, 'funtion called')
-
     //gettibg curent date
     const currentDayOfWeek = new Date().getDay() + 1;
     const currentDate = new Date().getDate();
@@ -413,126 +430,126 @@ class Chatscreen extends React.Component {
         if (checkDate == 0 || checkDate == -1 || checkDate == -2 || checkDate == -3 || checkDate == -4 || checkDate == -5 ||
           checkDate == -6 || checkDate == -7 && checkMonth == 0 && checkYear == 0) {
           dataExcersiceArr = [...dataExcersiceArr, dataApi];
-          // this.setState({
-          //   dataExcersices: dataExcersiceArr
-          // })
-          console.log(dataExcersiceArr)
+          this.setState({
+            weekExcercise: dataExcersiceArr
+          })
         }
       }
     }
 
     // //get week wise data and show bar chart line 
-    // for (var i in weightData) {
-    //   let dataApi = weightData[i];
-    //   if (dataApi.userId == userId) {
-    //     //check week of the month
-    //     let checkWeekDay = (Math.abs(currentDayOfWeek - dataApi.dayOfWeek));
-    //     let checkDate = Number(dataApi.dayOfMonth) - currentDate;
-    //     let checkMonth = Number(dataApi.month) - currentMonth;
-    //     let checkYear = Number(dataApi.year) - currentYear;
-    //     //condition check week ago data
-    //     if (checkWeekDay == 0 && checkDate != 0 && checkMonth == 0 && checkYear == 0) {
-    //       weekBefore = dataApi
-    //       this.setState({
-    //         weekAgoDateDataWeights: weekBefore
-    //       })
-    //     }
-    //     //if data not has week ago then check a last week any day data
-    //     if (checkWeekDay != 0 && checkMonth == 0 && checkYear == 0) {
-    //       if (checkWeekDay == 1 && checkMonth == 0 && checkYear == 0) {
-    //         weekBefore = dataApi
-    //         this.setState({
-    //           weekAgoDateDataWeights: weekBefore
-    //         })
-    //       }
-    //       else if (checkWeekDay == 2 && checkMonth == 0 && checkYear == 0) {
-    //         weekBefore = dataApi
-    //         this.setState({
-    //           weekAgoDateDataWeights: weekBefore
-    //         })
-    //       }
-    //       else if (checkWeekDay == 3 && checkMonth == 0 && checkYear == 0) {
-    //         weekBefore = dataApi
-    //         this.setState({
-    //           weekAgoDateDataWeights: weekBefore
-    //         })
-    //       }
-    //       else if (checkWeekDay == 4 && checkMonth == 0 && checkYear == 0) {
-    //         weekBefore = dataApi
-    //         this.setState({
-    //           weekAgoDateDataWeights: weekBefore
-    //         })
-    //       } else if (checkWeekDay == 5 && checkMonth == 0 && checkYear == 0) {
-    //         weekBefore = dataApi
-    //         this.setState({
-    //           weekAgoDateDataWeights: weekBefore
-    //         })
-    //       } else if (checkWeekDay == 6 && checkMonth == 0 && checkYear == 0) {
-    //         weekBefore = dataApi
-    //         this.setState({
-    //           weekAgoDateDataWeights: weekBefore
-    //         })
-    //       } else if (checkWeekDay == 7 && checkMonth == 0 && checkYear == 0) {
-    //         weekBefore = dataApi
-    //         this.setState({
-    //           weekAgoDateDataWeights: weekBefore
-    //         })
-    //       }
-    //     }
-    //     //current date data
-    //     if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
-    //       cureentWeekData = dataApi
-    //       this.setState({
-    //         currentDateDataWeights: cureentWeekData
-    //       })
-    //     }
-    //   }
-    // }
-    //availbe current date and week ago ago data then get lose or gain wieght
-    // if (cureentWeekData != undefined && weekBefore != undefined) {
-    //   let weekAgoWieght = weekBefore.weight.substring(0, weekBefore.weight.length - 2);
-    //   let currentWeekWieght = cureentWeekData.weight.substring(0, cureentWeekData.weight.length - 2);
-    //   loseWeight = weekAgoWieght - currentWeekWieght;
-    // }
-    // //lose weight
-    // if (loseWeight > 0) {
-    //   this.setState({
-    //     loseWeight: loseWeight,
-    //     lastWeek: 6,
-    //     cureentWeek: 5
-    //   })
-    // }
-    // //gain weight
-    // else if (loseWeight < 0) {
-    //   let gainWeight = Math.abs(loseWeight);
-    //   this.setState({
-    //     lastWeek: 5,
-    //     cureentWeek: 6,
-    //     gainWeight: gainWeight
-    //   })
-    // }
-    // //not gain or lose weight
-    // else if (loseWeight == 0) {
-    //   this.setState({
-    //     loseWeight: loseWeight,
-    //     lastWeek: 6,
-    //     cureentWeek: 6
-    //   })
-    // }
-    // //not availeble today data
-    // else if (cureentWeekData == undefined) {
-    //   this.setState({
-    //     loseWeight: 0,
-    //     lastWeek: 6,
-    //     cureentWeek: 0
-    //   })
-    // }
+    for (var i in weightData) {
+      let dataApi = weightData[i];
+      if (dataApi.userId == userId) {
+        //check week of the month
+        let checkWeekDay = (Math.abs(currentDayOfWeek - dataApi.dayOfWeek));
+        let checkDate = Number(dataApi.dayOfMonth) - currentDate;
+        let checkMonth = Number(dataApi.month) - currentMonth;
+        let checkYear = Number(dataApi.year) - currentYear;
+        //condition check week ago data
+        if (checkWeekDay == 0 && checkDate != 0 && checkMonth == 0 && checkYear == 0) {
+          weekBefore = dataApi
+          this.setState({
+            weekAgoDateDataWeights: weekBefore
+          })
+        }
+        //if data not has week ago then check a last week any day data
+        if (checkWeekDay != 0 && checkMonth == 0 && checkYear == 0) {
+          if (checkWeekDay == 1 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          }
+          else if (checkWeekDay == 2 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          }
+          else if (checkWeekDay == 3 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          }
+          else if (checkWeekDay == 4 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          } else if (checkWeekDay == 5 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          } else if (checkWeekDay == 6 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          } else if (checkWeekDay == 7 && checkMonth == 0 && checkYear == 0) {
+            weekBefore = dataApi
+            this.setState({
+              weekAgoDateDataWeights: weekBefore
+            })
+          }
+        }
+        //current date data
+        if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
+          cureentWeekData = dataApi
+          this.setState({
+            currentDateDataWeights: cureentWeekData
+          })
+        }
+      }
+    }
+    // // availbe current date and week ago ago data then get lose or gain wieght
+    if (cureentWeekData != undefined && weekBefore != undefined) {
+      let weekAgoWieght = weekBefore.weight.substring(0, weekBefore.weight.length - 2);
+      let currentWeekWieght = cureentWeekData.weight.substring(0, cureentWeekData.weight.length - 2);
+      loseWeight = weekAgoWieght - currentWeekWieght;
+    }
+    //lose weight
+    if (loseWeight > 0) {
+      this.setState({
+        loseWeight: loseWeight,
+        lastWeek: 6,
+        cureentWeek: 5
+      })
+    }
+    //gain weight
+    else if (loseWeight < 0) {
+      let gainWeight = Math.abs(loseWeight);
+      this.setState({
+        lastWeek: 5,
+        cureentWeek: 6,
+        gainWeight: gainWeight
+      })
+    }
+    //not gain or lose weight
+    else if (loseWeight == 0) {
+      this.setState({
+        loseWeight: loseWeight,
+        lastWeek: 6,
+        cureentWeek: 6
+      })
+    }
+    //not availeble today data
+    else if (cureentWeekData == undefined) {
+      this.setState({
+        loseWeight: 0,
+        lastWeek: 6,
+        cureentWeek: 0
+      })
+    }
   }
 
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
       attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId, opponnetAvatarSource, name, imagePath } = this.state;
     const chatMessages = this.state.chatMessages.map((message, key) => (
+      // console.log(message , 'message')
       <View>
         {message.senderId == userId && message.type == 'text' ?
           <Text key={key} style={styles.msgsTextStyle}>
@@ -653,7 +670,76 @@ class Chatscreen extends React.Component {
                               style={styles.backgroundVideo}
                             />
                           </View>
-                          : null
+                          :
+                          message.senderId == userId && message.type == 'weeklyReport'
+                            ?
+                            <View style={styles.cardRight}>
+                              <View style={styles.totalExerciseContainer}>
+                                <Text style={styles.totalExercisHeading}>Total exercise{'\n'}done</Text>
+                                {
+                                  message.message.weekExcercise.map((elem, key) => {
+                                    return (
+                                      <View style={styles.exerciseResultCard}>
+                                        <Text style={styles.resultHeading}>
+                                          {elem.exerciseName}
+                                        </Text>
+                                        <View style={styles.dataResultParent}>
+                                          <View style={styles.timeShowContainer}>
+                                            <Text style={styles.timeShow}>
+                                              {`${elem.exerciseAmount} ${elem.exerciseUnit}`}
+                                            </Text>
+                                          </View>
+                                          <View style={styles.dateAndMonth}>
+                                            <Text maxLength={3} style={styles.dateAndMonthShow}>
+                                              {elem.monthName}
+                                            </Text>
+                                            <Text style={styles.dateNumber}>
+                                              {elem.dayOfMonth}
+                                            </Text>
+                                            <Text style={styles.superScriptTextStyle}>
+                                              {elem.dayOfMonth == 1 ? 'st' : elem.dayOfMonth == 2 ? '2nd' : elem.dayOfMonth == 3 ? 'rd' : 'th'}
+                                            </Text>
+                                          </View>
+                                        </View>
+                                      </View>
+                                    )
+                                  })
+                                }
+                              </View>
+                              <View style={styles.weightStatus}>
+                                <Text style={styles.headingText}>Weight{'\n'}status</Text>
+                                <View style={styles.statusGraphContainer}>
+                                  <View style={styles.midBox}>
+                                    <ChartScreen lastWeek={message.message.weight.lastWeek} cureentWeek={message.message.weight.cureentWeek} />
+                                  </View>
+                                  <View style={styles.borderLines1}>
+                                    <Text style={styles.kgTextOne}>
+                                      {message.message.weight.currentDateDataWeights.weight}
+                                    </Text>
+                                    <Text style={styles.kgTextTwo}>
+                                      {message.message.weight.weekAgoDateDataWeights.weight}
+                                    </Text>
+                                  </View>
+                                  <View style={styles.weeksTextContainer}>
+                                    <Text style={styles.thisWeek}>This week</Text>
+                                    <Text style={styles.lastWeek}>Last week</Text>
+                                  </View>
+                                  {message.message.weight.loseWeight || message.message.weight.loseWeight == 0 
+                                  || message.message.weight.loseWeight != undefined ?
+                                    <View>
+                                      <Text style={styles.lostKg}>{`${message.message.weight.loseWeight} KG`} </Text>
+                                      <Text style={styles.lostText}>Lost</Text>
+                                    </View>
+                                    :
+                                    <View>
+                                      <Text style={styles.lostKg}>{`${message.message.weight.gainWeight} KG`} </Text>
+                                      <Text style={styles.lostText}>Gain</Text>
+                                    </View>
+                                  }
+                                </View>
+                              </View>
+                            </View>
+                            : null
         }
         {message.senderId == opponentId && message.type == 'text' ?
           <Text key={key} style={styles.replyMessagesStyle}>
@@ -774,7 +860,78 @@ class Chatscreen extends React.Component {
                               style={styles.backgroundVideo}
                             />
                           </View>
-                          : null
+                          :
+                          message.senderId == opponentId && message.type == 'weeklyReport'
+                            ?
+                            <View style={styles.replycardRight}>
+                              <View style={styles.replytotalExerciseContainer}>
+                                <Text style={styles.replytotalExercisHeading}>Total exercise{'\n'}done</Text>
+                                {
+                                  message.message.weekExcercise.map((elem, key) => {
+                                    return (
+                                      <View style={styles.replyexerciseResultCard}>
+                                        <Text style={styles.replyresultHeading}>
+                                          {elem.exerciseName}
+                                        </Text>
+                                        <View style={styles.replydataResultParent}>
+                                          <View style={styles.replytimeShowContainer}>
+                                            <Text style={styles.replytimeShow}>
+                                              {`${elem.exerciseAmount} ${elem.exerciseUnit}`}
+                                            </Text>
+                                          </View>
+                                          <View style={styles.replydateAndMonth}>
+                                            <Text maxLength={3} style={styles.replydateAndMonthShow}>
+                                              {elem.monthName}
+                                            </Text>
+                                            <Text style={styles.replydateNumber}>
+                                              {elem.dayOfMonth}
+                                            </Text>
+                                            <Text style={styles.replysuperScriptTextStyle}>
+                                              {elem.dayOfMonth == 1 ? 'st' : elem.dayOfMonth == 2 ? '2nd' : elem.dayOfMonth == 3 ? 'rd' : 'th'}
+                                            </Text>
+                                          </View>
+                                        </View>
+                                      </View>
+                                    )
+                                  })
+                                }
+                              </View>
+                              <View style={styles.replyweightStatus}>
+                                <Text style={styles.replyheadingText}>Weight{'\n'}status</Text>
+                                <View style={styles.replystatusGraphContainer}>
+                                  <View style={styles.replymidBox}>
+                                    <ChartScreen lastWeek={message.message.weight.lastWeek} cureentWeek={message.message.weight.cureentWeek} />
+                                  </View>
+                                  <View style={styles.replyborderLines1}>
+                                    <Text style={styles.replykgTextOne}>
+                                      {message.message.weight.currentDateDataWeights.weight}
+                                    </Text>
+                                    <Text style={styles.replykgTextTwo}>
+                                      {message.message.weight.weekAgoDateDataWeights.weight}
+                                    </Text>
+                                  </View>
+                                  <View style={styles.replyweeksTextContainer}>
+                                    <Text style={styles.replythisWeek}>This week</Text>
+                                    <Text style={styles.replylastWeek}>Last week</Text>
+                                  </View>
+                                  {message.message.weight.loseWeight || message.message.weight.loseWeight == 0 
+                                  || message.message.weight.loseWeight != undefined ?
+                                    <View>
+                                      <Text style={styles.replylostKg}>{`${message.message.weight.loseWeight} KG`} </Text>
+                                      <Text style={styles.replylostText}>Lost</Text>
+                                    </View>
+                                    :
+                                    <View>
+                                      <Text style={styles.replylostKg}>{`${message.message.weight.gainWeight} KG`} </Text>
+                                      <Text style={styles.replylostText}>Gain</Text>
+                                    </View>
+                                  }
+                                </View>
+                              </View>
+                            </View>
+
+
+                            : null
         }
       </View>
     ))

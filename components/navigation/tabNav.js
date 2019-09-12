@@ -22,7 +22,6 @@ const MainNavigator = createMaterialTopTabNavigator({
     screen: Homescreen,
     navigationOptions: {
       tabBarIcon: (navigation) => {
-        //console.log('focused value--->', navigation.focused)
         const forFocused = navigation.focused;
         const renderHome = forFocused ? activeHome : inactiveHome;
         return (
@@ -41,9 +40,7 @@ const MainNavigator = createMaterialTopTabNavigator({
           renderChat
         )
       }
-
     }
-
   },
   Reportscreen: {
     screen: Reportscreen,
@@ -55,7 +52,6 @@ const MainNavigator = createMaterialTopTabNavigator({
           renderReports
         )
       }
-
     }
   },
   Options: {
@@ -71,7 +67,6 @@ const MainNavigator = createMaterialTopTabNavigator({
           renderMore
         )
       }
-
     },
   },
 
@@ -83,17 +78,12 @@ const MainNavigator = createMaterialTopTabNavigator({
     tabBarOptions: {
       showIcon: true,
       showLabel: false,
-      //activeTintColor:'white',
-      // inactiveTintColor:'red',
       tabStyle: {
         backgroundColor: '#fff',
-
       },
       style: {
-        //inactiveHome:'#fff',
         backgroundColor: '#fff'
       },
-
       labelStyle: {
         fontSize: 12,
         padding: 2
@@ -103,7 +93,6 @@ const MainNavigator = createMaterialTopTabNavigator({
 );
 
 const BottomTabe = createAppContainer(MainNavigator);
-
 
 export default BottomTabe;
 

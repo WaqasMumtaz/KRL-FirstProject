@@ -190,7 +190,7 @@ class Signup extends React.Component {
                         else {
                             const { navigate } = this.props.navigation;
                             return (
-                                navigate('BottomTabe')
+                                navigate('Setupscreen1')
                             )
                             //return false
 
@@ -202,7 +202,7 @@ class Signup extends React.Component {
                             isLoading: false
                         })
                         const { navigate } = this.props.navigation;
-                        navigate('BottomTabe');
+                        navigate('Setupscreen1');
                     }
 
 

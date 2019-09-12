@@ -61,19 +61,22 @@ class Login extends React.Component {
         let userWrong = dataUser.Match;
         let userMsg = dataUser.msg;
         if (getUserCode) {
+          console.log('condition arr')
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
-          let myProfile = dataUser.profile[0];
-          myProfile.type = dataUser.type;
-          AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
-          if (dataUser.trainnerProfileData[0]) {
-            let opponentData = dataUser.trainnerProfileData[0];
-            opponentData.type = "Coach";
-            AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
-          }
-          else if (dataUser.trainnyProfiledata[0]) {
-            let opponentData = dataUser.trainnyProfiledata[0];
-            opponentData.type = "Trainee";
-            AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+          if (dataUser.profile) {
+            let myProfile = dataUser.profile[0];
+            myProfile.type = dataUser.type;
+            AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
+            if (dataUser.trainnerProfileData[0]) {
+              let opponentData = dataUser.trainnerProfileData[0];
+              opponentData.type = "Coach";
+              AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+            }
+            else if (dataUser.trainnyProfiledata[0]) {
+              let opponentData = dataUser.trainnyProfiledata[0];
+              opponentData.type = "Trainee";
+              AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+            }
           }
           db.ref(`users/`).push(dataUser)
           navigate('BottomTabe')

@@ -20,11 +20,9 @@ static navigationOptions={
  }
 componentWillMount(){
   this.getPaymentKey();  
-  console.log('hhhhhhhhh')
  }
 
 getPaymentKey = async () =>{
-  console.log('hit function');
     let res = await HttpUtils.get('keys');
     console.log(res , 'keys')
     this.setState({
@@ -56,8 +54,8 @@ getPaymentKey = async () =>{
                   // onPress={()=>{navigate('Payment'),{stripeKey:publicKeys}} }
                   >
                   <Text style={styles.forText}>Payment </Text></TouchableOpacity></View>
-                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity><Text style={styles.forText}>Invoices</Text></TouchableOpacity></View>
-                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity><Text style={styles.forText}>Log Measurements</Text></TouchableOpacity></View>
+                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity  onPress={()=>{navigate('InvoicesScreen')}}><Text style={styles.forText}>Invoices</Text></TouchableOpacity></View>
+                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity  onPress={()=>{navigate('LogMeasurementsScreen')}}><Text style={styles.forText}>Log Measurements</Text></TouchableOpacity></View>
                 <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('SettingScreen')}}><Text style={styles.forText}>Settings</Text></TouchableOpacity></View>
                 </ScrollView>
            </View>
