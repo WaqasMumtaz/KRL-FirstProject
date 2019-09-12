@@ -27,7 +27,6 @@ const MainNavigator = createBottomTabNavigator({
     screen: Homescreen,
     navigationOptions: {
       tabBarIcon: (navigation) => {
-        //console.log('focused value--->', navigation.focused)
         const forFocused = navigation.focused;
         const renderHome = forFocused ? activeHome : inactiveHome;
         return (
@@ -50,12 +49,12 @@ const MainNavigator = createBottomTabNavigator({
           
         )
       }
+
      
 
     },
     
     
-
   },
 
   Reportscreen: {
@@ -68,7 +67,6 @@ const MainNavigator = createBottomTabNavigator({
           renderReports
         )
       }
-
     }
   },
   Options: {
@@ -84,7 +82,6 @@ const MainNavigator = createBottomTabNavigator({
           renderMore
         )
       }
-
     },
   },
 
@@ -96,17 +93,12 @@ const MainNavigator = createBottomTabNavigator({
     tabBarOptions: {
       showIcon: true,
       showLabel: false,
-      //activeTintColor:'white',
-      // inactiveTintColor:'red',
       tabStyle: {
         backgroundColor: '#fff',
-
       },
       style: {
-        //inactiveHome:'#fff',
         backgroundColor: '#fff'
       },
-
       labelStyle: {
         fontSize: 12,
         padding: 2
@@ -116,7 +108,6 @@ const MainNavigator = createBottomTabNavigator({
 );
 
 const BottomTabe = createAppContainer(MainNavigator);
-
 
 export default BottomTabe;
 

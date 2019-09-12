@@ -125,7 +125,9 @@ class LastSetUpScreen extends React.Component {
             macroObj.carbohydrates = carbohydratesVal;
             let dataUser = await HttpUtils.post('macrodata', macroObj)
             console.log(dataUser, 'dataUser')
-            this.props.navigation.navigate('BottomTabe')
+            if (dataUser.code == 200) {
+                this.props.navigation.navigate('BottomTabe')
+            }
 
 
         }
@@ -219,8 +221,8 @@ class LastSetUpScreen extends React.Component {
                         : null}
                     <Text style={styles.paraStyle}>Your Daily Macros*</Text>
                     <View style={styles.macrosContainer}>
-                        <TextInput placeholder="1640 Kcal calories" placeholderTextColor='black' style={styles.textInputOne}  value={calculteCalries + 'Kcal calories'} />
-                        <TextInput placeholder="159 g Carbohyderates " placeholderTextColor='black' style={styles.textInputTwo}  value={fatMass + 'g Carbohyderates'} />
+                        <TextInput placeholder="1640 Kcal calories" placeholderTextColor='black' style={styles.textInputOne} value={calculteCalries + 'Kcal calories'} />
+                        <TextInput placeholder="159 g Carbohyderates " placeholderTextColor='black' style={styles.textInputTwo} value={fatMass + 'g Carbohyderates'} />
                         <TextInput placeholder="107 g Proteins" placeholderTextColor='black' style={styles.textInputThree} value={proteins + 'g Proteins'} />
                         <TextInput placeholder="51 g Fat " placeholderTextColor='black' style={styles.textInputFour} value={carbohydrates + 'g Fat'} />
                     </View>

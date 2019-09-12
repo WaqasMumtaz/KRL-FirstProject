@@ -67,7 +67,11 @@ class Login extends React.Component {
         let userMsg = dataUser.msg;
         //console.log('user mesg >>>',userMsg)
         if (getUserCode) {
+
          // console.log('condition arr')
+
+          console.log('condition arr')
+
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
           if (dataUser.profile) {
             let myProfile = dataUser.profile[0];

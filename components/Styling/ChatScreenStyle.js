@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         // flex: 1,
         //backgroundColor:'pink',
         marginLeft: '30%',
-        marginVertical:10
+        marginVertical: 10
     },
     totalExerciseContainer: {
         //    borderWidth:2,
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
         marginLeft: 4,
         color: '#a6a6a6',
         fontFamily: 'MontserratLight',
-        marginVertical:5
+        marginVertical: 5
     },
     superScriptTextStyle: {
         fontSize: 9,
@@ -249,7 +249,85 @@ const styles = StyleSheet.create({
         color: '#a6a6a6',
         fontFamily: 'MontserratLight',
     },
+    weightStatus: {
+        //borderWidth:2,
+        //borderColor:'black',
+        borderRadius: 3,
+        marginTop: 15,
+        height: 290,
+        backgroundColor: 'black',
+        marginBottom: 15
 
+    },
+    headingText: {
+        marginLeft: 12,
+        marginTop: 12,
+        color: 'white',
+        fontFamily: "MontserratMedium",
+        fontSize: 20
+    },
+    statusGraphContainer: {
+        marginTop: 8,
+        // backgroundColor:'black'
+    },
+    midBox: {
+        //   borderWidth:1,
+        height: 110,
+        marginHorizontal: 10,
+
+    },
+    borderLines1: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginLeft: 12,
+        flexWrap: 'wrap',
+        //    borderWidth:1,
+        //    borderColor:'white',
+        height: 22,
+        width: '85%',
+        //    marginLeft:14
+    },
+    kgTextOne: {
+        color: '#FF6200',
+        fontFamily: 'MontserratLight',
+
+    },
+    kgTextTwo: {
+        color: '#a6a6a6',
+        fontFamily: 'MontserratLight'
+    },
+    weeksTextContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        //borderWidth:1,
+        //    borderColor:'white',
+        height: 30,
+        width: '87%',
+        marginLeft: 12,
+    },
+    thisWeek: {
+        color: '#a6a6a6',
+        fontFamily: 'MontserratLight',
+        fontSize: 11
+
+    },
+    lastWeek: {
+        color: '#a6a6a6',
+        fontFamily: 'MontserratLight',
+        fontSize: 11
+
+    },
+    lostKg: {
+        color: '#FF6200',
+        fontFamily: 'MontserratLight',
+        marginLeft: 14,
+    },
+    lostText: {
+        color: '#a6a6a6',
+        fontFamily: 'MontserratLight',
+        marginLeft: 14,
+        fontSize: 11
+    },
     replymgsTouctable: {
         marginBottom: 20,
         width: 200,
@@ -289,12 +367,13 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         marginRight: '30%',
     },
+    //week excersice
      //week excersice
     replycardRight: {
         // flex: 1,
         //backgroundColor:'pink',
         marginRight: '30%',
-        marginVertical:10
+        marginVertical: 10
     },
     replytotalExerciseContainer: {
         //    borderWidth:2,
@@ -360,7 +439,7 @@ const styles = StyleSheet.create({
         marginLeft: 4,
         color: '#000000',
         fontFamily: 'MontserratLight',
-        marginBottom:5
+        marginBottom: 5
     },
     replysuperScriptTextStyle: {
         fontSize: 9,
@@ -376,6 +455,87 @@ const styles = StyleSheet.create({
     replydateWithCancelIcon: {
         flexDirection: 'row',
     },
+
+    replyweightStatus: {
+        //borderWidth:2,
+        //borderColor:'black',
+        borderRadius: 3,
+        marginTop: 15,
+        height: 290,
+        backgroundColor: '#e5e5e5',
+        marginBottom: 15
+
+    },
+    replyheadingText: {
+        marginLeft: 12,
+        marginTop: 12,
+        color: 'black',
+        fontFamily: "MontserratMedium",
+        fontSize: 20
+    },
+    replystatusGraphContainer: {
+        marginTop: 8,
+        // backgroundColor:'black'
+    },
+    replymidBox: {
+        //   borderWidth:1,
+        height: 110,
+        marginHorizontal: 10,
+
+    },
+    replyborderLines1: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginLeft: 12,
+        flexWrap: 'wrap',
+        //    borderWidth:1,
+        //    borderColor:'white',
+        height: 22,
+        width: '85%',
+        //    marginLeft:14
+    },
+    replykgTextOne: {
+        color: '#000000',
+        fontFamily: 'MontserratLight',
+
+    },
+    replykgTextTwo: {
+        color: '#000000',
+        fontFamily: 'MontserratLight'
+    },
+    replyweeksTextContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        //borderWidth:1,
+        //    borderColor:'white',
+        height: 30,
+        width: '87%',
+        marginLeft: 12,
+    },
+    replythisWeek: {
+        color: '#000000',
+        fontFamily: 'MontserratLight',
+        fontSize: 11
+
+    },
+    replylastWeek: {
+        color: '#000000',
+        fontFamily: 'MontserratLight',
+        fontSize: 11
+
+    },
+    replylostKg: {
+        color: '#000000',
+        fontFamily: 'MontserratLight',
+        marginLeft: 14,
+    },
+    replylostText: {
+        color: '#000000',
+        fontFamily: 'MontserratLight',
+        marginLeft: 14,
+        fontSize: 11
+    },
+
     fileAttachContainer: {
         height: 44,
         marginRight: 10,

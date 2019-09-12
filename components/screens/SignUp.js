@@ -201,6 +201,13 @@ class Signup extends React.Component {
                          }
 
                     })
+                    if (signupCode) {
+                        this.setState({
+                            isLoading: false
+                        })
+                        const { navigate } = this.props.navigation;
+                        navigate('Setupscreen1');
+                    }
                     // if (signupCode) {
                     //     this.setState({
                     //         isLoading: false

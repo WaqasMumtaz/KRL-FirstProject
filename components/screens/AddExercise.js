@@ -95,24 +95,6 @@ class AddExercise extends React.Component {
         const { exerciseArr } = this.state;
         exercise = exerciseArr.map((elem, i) => {
             console.log(elem, 'elemt')
-            // return { label: elem, value: elem, id: i }
-            // return <Option>{elem}</Option>
-            // <View style={styles.listsContainer}>
-            //     {/* <TouchableOpacity
-            //         onPress={this.showFields.bind(this, elem)}
-            //     > */}
-            //         {/* <Text style={styles.listsTextStyle}>{elem}</Text> */}
-            //         <Picker style={styles.pickerStyle}
-            //             onValueChange={this.showFields.bind(this, elem)}
-            //         // onValueChange={(itemValue, itemPosition) =>  
-            //         //     this.setState({language: itemValue, choosenIndex: itemPosition})}  
-            //         >
-            //             <Picker.Item label={elem} value={elem} />
-            //             {/* <Picker.Item label="JavaScript" value="js" />  
-            //         <Picker.Item label="React Native" value="rn" />   */}
-            //         </Picker>
-            //     {/* </TouchableOpacity> */}
-            //  </View>
         })
         console.log(exercise, 'exercise')
     }
