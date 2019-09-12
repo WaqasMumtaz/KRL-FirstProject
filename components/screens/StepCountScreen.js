@@ -167,13 +167,15 @@ export default class StepCountScreen extends React.Component {
         SensorManager.startStepCounter(1000);
         DeviceEventEmitter.addListener('StepCounter', (data) => {
              console.log('sensor manager data -->>',data)
-            this.setState({ pedometerData: data.steps })
+            this.setState({ pedometerData: data.steps },()=>{
+                this.state.pedometerData.length > 1 ? this.countStepTime() : null
+            })
             // console.log('user steps -->', data.steps)
 
 
         });
-        this.countStepTime()
         this.matchTime()
+        
 
         if (Platform.OS === 'android') {
             const options = {
@@ -188,8 +190,9 @@ export default class StepCountScreen extends React.Component {
                     // console.log('authorized >>>', res)
                     GoogleFit.observeSteps((res) => {
                         console.log(res)
-
-                        this.setState({ pedometerData: res.steps })
+                        this.setState({ pedometerData: res.steps },()=>{
+                            this.state.pedometerData.length > 1 ? this.countStepTime() : null
+                        })
                     })
 
                 })

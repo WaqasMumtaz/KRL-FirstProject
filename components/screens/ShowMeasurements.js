@@ -26,7 +26,7 @@ import HttpUtilsFile from '../Services/HttpUtils';
 import LogMeasurementsDetailedView from '../MeasurDetailed/detailedViewLogMeasuremnts';
 import showMeasureStyles from '../Styling/ShowMeasurementsStyle';
 import Modal from "react-native-modal";
-//import ModalComponent from '../Modal/modal';
+
 const { height } = Dimensions.get('window');
 
 

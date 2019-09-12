@@ -16,10 +16,10 @@ const styles = StyleSheet.create({
         marginHorizontal: 15
     },
     scrollContainer: {
-        flex: 1,
+        // flex: 1,
         backgroundColor: 'white',
         height: screenHight,
-        marginHorizontal: 12
+        
     },
     container: {
         flex: 1,
@@ -489,6 +489,22 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 250,
         height: 350
+    },
+    withOutTrainerModal:{
+        width:250,
+        //justifyContent:'center',
+        height:120,
+        borderRadius:5,
+        backgroundColor:'#000000',
+        alignSelf:'center',
+        
+        
+    },
+    textColor:{
+        fontFamily: "MontserratMedium",
+        fontSize:14,
+        color:'white',
+       
     }
 });
 

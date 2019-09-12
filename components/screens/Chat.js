@@ -7,7 +7,7 @@ import {
   Linking,
   TouchableOpacity,
   Image,
-  Modal
+
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import styles from '../Styling/ChatScreenStyle';
@@ -24,17 +24,32 @@ import FilePickerManager from 'react-native-file-picker';
 import HttpUtils from '../Services/HttpUtils';
 // import VideoPlayer from 'react-native-video-controls';
 import VideoPlayer from 'react-native-video-player';
+import Modal from "react-native-modal";
 
 // import Modal from "react-native-modal";
 const db = firebase.database();
 const CryptoJS = require('crypto-js');
 
+function  checkTrainer (e)  {
+  if(e == "Chatscreen"){
+    console.log('funtion called')
+  }
+}
 class Chatscreen extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      header: () => null
-    }
-  };
+  // static navigationOptions = ({ navigation }) => {
+  //   console.log(navigation)
+  //   if(navigation.state.params != undefined){
+  //     checkTrainer(navigation.state.routeName);
+  //   }
+  //   const screenRout = navigation.state.routeName;
+  //   const getFunc = navigation.state.params;
+  //   console.log('screen state >>>', getFunc);
+    //const funcUser= getFunc.showModal
+    //  return {
+    // //   header: () => null
+    // //funcUser
+    //  }
+  //};
   constructor(props) {
     super(props);
     this.state = {
@@ -73,8 +88,10 @@ class Chatscreen extends React.Component {
       loseWeight: '',
       lastWeek: '',
       cureentWeek: '',
-      gainWeight: ''
+      gainWeight: '',
+      forTrainnerModal: false,
     }
+
   }
 
   componentDidMount() {
@@ -91,9 +108,33 @@ class Chatscreen extends React.Component {
       date: date + '-' + month + '-' + year,
       time: hours + ':' + min + ':' + sec
     })
+    
+  }
+  componentWillUnmount() {
+    // Remove the event listener
+    this.focusListener.remove();
   }
 
+  
+
+
   componentWillMount() {
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('didFocus', () => {
+      console.log('chat screen is focused')
+      AsyncStorage.getItem('currentUser').then((value) => {
+        let userData = JSON.parse(value)
+        console.log('login user data >>>', userData)
+        console.log('assignTrainner >>>', userData.assignTrainner)
+        if (userData.assignTrainner == undefined) {
+          console.log('not assign trainer contact us')
+          this.setState({
+            forTrainnerModal: true
+          })
+        }
+      })
+    });
+
     AsyncStorage.getItem('opponentProfile').then((value) => {
       let userData = JSON.parse(value);
       if (value) {
@@ -309,6 +350,14 @@ class Chatscreen extends React.Component {
     })
   }
 
+  removeModal=()=>{
+    const { navigate } = this.props.navigation;
+    this.setState({
+      forTrainnerModal:false
+    },()=>{ navigate('Homescreen')})
+   
+  }
+
 
   fileOpner(e, type, g) {
     const FilePath = e; // path of the file
@@ -371,6 +420,9 @@ class Chatscreen extends React.Component {
       opponentProfile: true,
     });
   }
+
+  
+
   //get data from database
   getWeekReportData = async () => {
     const { monthName } = this.state;
@@ -529,6 +581,7 @@ class Chatscreen extends React.Component {
       })
     }
   }
+
 
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
@@ -988,7 +1041,30 @@ class Chatscreen extends React.Component {
                 <Image source={require('../icons/mic-orange.png')} style={styles.micIconStyle} />
               </TouchableOpacity>}
             </View>}
+            {/* When user does not assign trainer show this modal*/}
+            <Modal
+              isVisible={this.state.forTrainnerModal}
+              animationIn='zoomIn'
+              //animationOut='zoomOutDown'
+              backdropOpacity={0.8}
+              backdropColor='white'
+              coverScreen={true}
+              animationInTiming={500}
+              animationOutTiming={500}
+            >
+              <View style={styles.withOutTrainerModal}>
+                <View style={{flexDirection:'row',justifyContent:'space-between',padding:8}}>
+                      <Text style={styles.textColor}>Contact To App Admin</Text>
+                      <TouchableOpacity onPress={this.removeModal} activeOpacity={0.6}>
+                      <Image source={require('../icons/cancel.png')} />
+                      </TouchableOpacity>
+                </View>
+              </View>
+
+            </Modal>
+
           </View>
+
         </View>
       </View>
     );
