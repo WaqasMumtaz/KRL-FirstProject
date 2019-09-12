@@ -368,6 +368,7 @@ const styles = StyleSheet.create({
         marginRight: '30%',
     },
     //week excersice
+     //week excersice
     replycardRight: {
         // flex: 1,
         //backgroundColor:'pink',

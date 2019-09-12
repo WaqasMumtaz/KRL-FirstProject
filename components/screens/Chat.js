@@ -22,11 +22,9 @@ import firebase from '../../Config/Firebase';
 import 'firebase/firestore';
 import FilePickerManager from 'react-native-file-picker';
 import HttpUtils from '../Services/HttpUtils';
-// import VideoPlayer from 'react-native-video-controls';
 import VideoPlayer from 'react-native-video-player';
 import ChartScreen from '../BarChart/BarChart';
 
-// import Modal from "react-native-modal";
 const db = firebase.database();
 const CryptoJS = require('crypto-js');
 
@@ -57,15 +55,10 @@ class Chatscreen extends React.Component {
       time: '',
       userId: '',
       opponentId: '',
-      file: '',
       opponnetAvatarSource: '',
       name: '',
       isVisibleModal: false,
-      modal: '',
       imagePath: '',
-      video: { width: 300, height: 300, duration: 15 },
-      thumbnailUrl: "https://res.cloudinary.com/dxk0bmtei/image/upload/v1567431284/bnlfunig8cwespozlbmu.jpg",
-      videoUrl: undefined,
       monthName: ["January", "February", "March", "April", "May", "June", "July", "August",
         "September", "October", "November", "December"],
       weekExcercise: [],
@@ -308,6 +301,9 @@ class Chatscreen extends React.Component {
     }
     this.uplaodDataOnFirebase(obj, 'weeklyReport')
 
+
+    // console.log(this.state.weekExcercise, 'test')
+    // this.uplaodDataOnFirebase(this.state.weekExcercise, 'weekExcerciseReport')
   }
 
   expandImg = (e) => {
@@ -549,7 +545,6 @@ class Chatscreen extends React.Component {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
       attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId, opponnetAvatarSource, name, imagePath } = this.state;
     const chatMessages = this.state.chatMessages.map((message, key) => (
-      // console.log(message , 'message')
       <View>
         {message.senderId == userId && message.type == 'text' ?
           <Text key={key} style={styles.msgsTextStyle}>
@@ -724,8 +719,8 @@ class Chatscreen extends React.Component {
                                     <Text style={styles.thisWeek}>This week</Text>
                                     <Text style={styles.lastWeek}>Last week</Text>
                                   </View>
-                                  {message.message.weight.loseWeight || message.message.weight.loseWeight == 0 
-                                  || message.message.weight.loseWeight != undefined ?
+                                  {message.message.weight.loseWeight || message.message.weight.loseWeight == 0
+                                    || message.message.weight.loseWeight != undefined ?
                                     <View>
                                       <Text style={styles.lostKg}>{`${message.message.weight.loseWeight} KG`} </Text>
                                       <Text style={styles.lostText}>Lost</Text>
@@ -914,8 +909,8 @@ class Chatscreen extends React.Component {
                                     <Text style={styles.replythisWeek}>This week</Text>
                                     <Text style={styles.replylastWeek}>Last week</Text>
                                   </View>
-                                  {message.message.weight.loseWeight || message.message.weight.loseWeight == 0 
-                                  || message.message.weight.loseWeight != undefined ?
+                                  {message.message.weight.loseWeight || message.message.weight.loseWeight == 0
+                                    || message.message.weight.loseWeight != undefined ?
                                     <View>
                                       <Text style={styles.replylostKg}>{`${message.message.weight.loseWeight} KG`} </Text>
                                       <Text style={styles.replylostText}>Lost</Text>
@@ -928,9 +923,7 @@ class Chatscreen extends React.Component {
                                   }
                                 </View>
                               </View>
-                            </View>
-
-
+                            </View >
                             : null
         }
       </View>
@@ -951,7 +944,6 @@ class Chatscreen extends React.Component {
             }}>
             <View style={styles.container}>
               {recodringBody && <View style={styles.recordingContainer}>
-
               </View>}
               {chatMessages}
               {expand ?
@@ -1041,6 +1033,4 @@ class Chatscreen extends React.Component {
     );
   }
 }
-
 export default Chatscreen;
-

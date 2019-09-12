@@ -38,30 +38,29 @@ import Invoices from '../screens/InvoicesScreen';
 
 
 
-
 const MainNavigator = createStackNavigator({
-  //BriskScreen: { screen: BriskScreen },
-  // Login: {
-  //   screen: Login
-  // },
-  // Signup: {
-  //   screen: Signup
-  // },
-  // ResetpasswordScreen: {
-  //   screen: ResetpasswordScreen
-  // },
-  // ConfirmResetPassword: {
-  //   screen: ConfirmResetPassword
-  // },
-  // Setupscreen1: {
-  //   screen: Setupscreen1
-  // },
-  // Setupscreen: {
-  //   screen: Setupscreen
-  // },
-  // LastSetUpScreen: {
-  //   screen: LastSetUpScreen
-  // },
+
+  Login: {
+    screen: Login
+  },
+  Signup: {
+    screen: Signup
+  },
+  ResetpasswordScreen: {
+    screen: ResetpasswordScreen
+  },
+  ConfirmResetPassword: {
+    screen: ConfirmResetPassword
+  },
+  Setupscreen1: {
+    screen: Setupscreen1
+  },
+  Setupscreen: {
+    screen: Setupscreen
+  },
+  LastSetUpScreen: {
+    screen: LastSetUpScreen
+  },
   BottomTabe: {
     screen: BottomTabe,
     navigationOptions: {
@@ -71,6 +70,7 @@ const MainNavigator = createStackNavigator({
   StepCountScreen: {
     screen: StepCountScreen
   },
+
   AddExercise: {
     screen: AddExercise,
     navigationOptions: {
@@ -117,7 +117,6 @@ const MainNavigator = createStackNavigator({
       headerStyle: {
         elevation: 0,
       }
-
     }
   },
   Profile: {
@@ -144,6 +143,30 @@ const MainNavigator = createStackNavigator({
       }
     }
   },
+  Invoices: {
+    screen: Invoices,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
+  ShowMeasurementsScreen: {
+    screen: ShowMeasurementsScreen,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
+  StepCountScreen: {
+    screen: StepCountScreen,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
   SettingScreen: {
     screen: SettingScreen,
     navigationOptions: {
@@ -153,34 +176,33 @@ const MainNavigator = createStackNavigator({
     }
   }
 },
+{
 
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration: 750,
+      easing: Easing.out(Easing.poly(4)),
+      timing: Animated.timing,
+      useNativeDriver: true
+    },
+    screenInterpolator: sceneProps => {
+      const { layout, position, scene } = sceneProps;
+      const { index } = scene;
 
-  {
-    transitionConfig: () => ({
-      transitionSpec: {
-        duration: 750,
-        easing: Easing.out(Easing.poly(4)),
-        timing: Animated.timing,
-        useNativeDriver: true
-      },
-      screenInterpolator: sceneProps => {
-        const { layout, position, scene } = sceneProps;
-        const { index } = scene;
+      const height = layout.initHeight;
+      const translateY = position.interpolate({
+        inputRange: [index - 1, index, index + 1],
+        outputRange: [height, 0, 2],
+      });
 
-        const height = layout.initHeight;
-        const translateY = position.interpolate({
-          inputRange: [index - 1, index, index + 1],
-          outputRange: [height, 0, 2],
-        });
+      const opacity = position.interpolate({
+        inputRange: [index - 1, index - 0.99, index],
+        outputRange: [0, 1, 1],
+      });
 
-        const opacity = position.interpolate({
-          inputRange: [index - 1, index - 0.99, index],
-          outputRange: [0, 1, 1],
-        });
-
-        return { opacity, transform: [{ translateY }] };
-      },
-    }),
+      return { opacity, transform: [{ translateY }] };
+    },
+  }),
   }
 
 

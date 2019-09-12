@@ -145,13 +145,15 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-google-fit')
+    implementation project(':react-native-sensor-manager')
     implementation project(':react-native-video')
     implementation project(':react-native-sha1')
     implementation project(':tipsi-stripe')
     implementation project(':react-native-svg')
     implementation project(':react-native-fetch-blob')
     implementation project(':react-native-file-opener')
-    implementation project(':react-native-file-viewer')
+    //implementation project(':react-native-file-viewer')
     implementation project(':react-native-file-picker')
     implementation project(':react-native-fs')
     implementation project(':react-native-sound-recorder')
@@ -173,9 +175,22 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    //implementation "androidx.annotation:annotation:1.1.0"
+    //implementation 'com.android.support:support-annotations:28.0.0'
+    //implementation fileTree(dir: "libs", include: ["*.jar"])
+    //implementation "androidx.core:core:1.0.2"
+    //implementation "androidx.annotation:annotation:1.1.0"
+    //implementation "androidx.appcompat:appcompat:${rootProject.ext.supportLibVersion}"
+    
+
+    
+
+    
+    // implementation 'com.android.support:support-v4:28.0.0'
+    // implementation 'com.android.support.v4.app.CoreComponentFactory'  
 
     implementation 'com.android.support:design:27.1.0'
-    compile 'com.android.support:multidex:1.0.3'
+    //compile 'com.android.support:multidex:1.0.3'
     compile (project(':tipsi-stripe')) {
         exclude group: 'com.google.android.gms'
         exclude group: 'com.google.firebase'

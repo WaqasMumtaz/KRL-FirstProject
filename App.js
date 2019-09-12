@@ -4,25 +4,17 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 import AppContainer from './components/navigation/StackNavigation';
 import ChartScreen from './components/BarChart/BarChart';
 import config from './Config/ApiKeys';
-import reactNativePedometer from './components/Pedometer/checkFile';
+//import reactNativePedometer from './components/Pedometer/checkFile';
 import * as firebase from 'firebase';
 //import firebase from 'react-native-firebase';
 
-//import console = require('console');
-//import InputImgsScreen from './components/screens/InputImgs';
-//import {createBottomTabNavigator, createAppContainer} from 'react-navigation';
-//import {TabNavigator,createAppContainer} from 'react-navigation';
-//import BottomTabe from './components/navigation/tabNav';
-//import DrawerNav from './components/navigation/DrawerNav';
+
 
 
 class App extends Component {
   constructor(props){
     super(props);
 
-    this.state={
-      name:'waqas mumtaz'
-    }
     if(!firebase.apps.length) {
       //console.log(!firebase.apps.length)
      // firebase.initializeApp(ApiKeys.FirebaseConfig);
@@ -31,8 +23,6 @@ class App extends Component {
     }
   }
  render() {
-   const {name}=this.state
-   console.log(name);
     return <AppContainer/>
   }
 }

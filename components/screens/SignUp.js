@@ -14,6 +14,7 @@ import CaloriesSetupBtn from '../buttons/setUpBtn'
 import styles from '../Styling/SignUpScreenStyle';
 import HttpUtilsFile from '../Services/HttpUtils';
 import { Dialog } from 'react-native-simple-dialogs';
+import OverlayLoader from '../Loader/OverlaySpinner';
 // import * as firebase from 'firebase';
 // import 'firebase/firestore';
 import firebase from 'react-native-firebase';
@@ -145,6 +146,7 @@ class Signup extends React.Component {
 
 
     signUpFunction = async () => {
+        const { navigate } = this.props.navigation;
         const { name, email, mobile, newPasswrd, cnfrmPasswrd, nameValidate, emailValidate, mobileValidate, passwrdValidate, cnfrmPasswrdValidate, isLoading } = this.state;
         if (name == '' || email == '' || mobile == '' || newPasswrd == '' || cnfrmPasswrd == '') {
             alert('Please Fill All Fields');
@@ -179,22 +181,23 @@ class Signup extends React.Component {
                     emailContents.map((item, index) => {
                         //console.log(item)
                         const { email } = this.state;
-                        console.log(email)
+                        // console.log('state email >>>',email)
+                        // console.log('user emails >>>',item)
                         if (email == item) {
                             return (
                                 this.setState({
+                                    isLoading:false,
                                     emailNotExist: true
                                 })
                             )
                         }
                         else {
-                            const { navigate } = this.props.navigation;
+                        
                             return (
                                 navigate('Setupscreen1')
                             )
-                            //return false
 
-                        }
+                         }
 
                     })
                     if (signupCode) {
@@ -204,6 +207,13 @@ class Signup extends React.Component {
                         const { navigate } = this.props.navigation;
                         navigate('Setupscreen1');
                     }
+                    // if (signupCode) {
+                    //     this.setState({
+                    //         isLoading: false
+                    //     })
+                    //     const { navigate } = this.props.navigation;
+                    //     navigate('BottomTabe');
+                    // }
 
 
                 }
@@ -229,22 +239,23 @@ class Signup extends React.Component {
     }
     checkValidateFunc = (text, type) => {
         let alpha = /^[a-zA-Z]+$/;
-        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        //let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        let reg =/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         let mobileNum = /^[0-9]+$/;
-        //let passwrd=/^[A-Za-z]\w{7,14}$/;
-        if (type == 'username') {
-            if (alpha.test(text)) {
-                this.setState({
-                    nameValidate: true,
-                })
-            }
-            else {
-                this.setState({
-                    nameValidate: false
-                })
-            }
-        }
-        else if (type == 'email') {
+        let passwrd=/^[A-Za-z]\w{7,14}$/;
+        // if (type == 'username') {
+        //     if (alpha.test(text)) {
+        //         this.setState({
+        //             nameValidate: true,
+        //         })
+        //     }
+        //     else {
+        //         this.setState({
+        //             nameValidate: false
+        //         })
+        //     }
+        // }
+         if (type == 'email') {
             if (reg.test(text)) {
                 this.setState({
                     emailValidate: true,
@@ -286,8 +297,6 @@ class Signup extends React.Component {
             passMatch,
             emailNotExist
         } = this.state;
-
-
         return (
 
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
@@ -397,9 +406,10 @@ class Signup extends React.Component {
                             Password Match
                        </Text>}
                     </View>
-                    {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
+                    {/* {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
                         <ActivityIndicator size='large' color="#FF6200" />
-                    </View>}
+                    </View>} */}
+                    {isLoading ? <OverlayLoader /> : null}
                     <View style={styles.buttonContainer}>
                         <CaloriesSetupBtn title='Create Account'
                             onPress={this.signUpFunction}

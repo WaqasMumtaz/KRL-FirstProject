@@ -171,7 +171,7 @@ const styles =StyleSheet.create({
          
    },
    exerciseResultCard:{
-       borderBottomWidth:1.5,
+       borderBottomWidth:0.5,
        borderColor:'#a6a6a6',
        height:60,
        marginBottom:12,

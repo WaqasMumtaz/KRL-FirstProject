@@ -13,6 +13,7 @@ import {
 import styles from '../Styling/ConfirmResetPasswordStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import HttpUtilsFile from '../Services/HttpUtils';
+import OverlayLoader from '../Loader/OverlaySpinner';
 console.log(HttpUtilsFile)
 const { height } = Dimensions.get('window');
 
@@ -235,7 +236,7 @@ class ConfirmResetPassword extends React.Component {
 
     return (
       <View style={styles.mainContainer}>
-        <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
+        <ScrollView style={{backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
           <View style={styles.container}>
             <View style={styles.heading}>
               <Text style={styles.headingStyle}>Set New Password</Text>
@@ -254,6 +255,7 @@ class ConfirmResetPassword extends React.Component {
                 onChangeText={(text)=>{this.setState({emailCode:text})}}
                 keyboardType="numeric"
                 placeholder="e.g:4567"
+                value={emailCode}
                 style={styles.emailCodeInputStyle} />
 
             </View>
@@ -269,6 +271,7 @@ class ConfirmResetPassword extends React.Component {
                 onChangeText={text => this.newPasswrdInputValueHandle(text)}
                 secureTextEntry={true}
                 placeholder="type new password"
+                value={newPassword}
                 style={[styles.newPasswordFieldStyle, !this.state.newPasswordValidate ? styles.errorInput : null]} />
 
             </View>
@@ -286,6 +289,7 @@ class ConfirmResetPassword extends React.Component {
                 onChangeText={(text)=>{this.retypePasswordInputHandle(text)}}
                 secureTextEntry={true}
                 placeholder="retype new password"
+                value={retypePassword}
                 style={[styles.newPasswordFieldStyle,!this.state.retypePasswordValidate ? styles.errorInput : null]}
                 underlineColorAndroid="transparent"
               />
@@ -300,14 +304,15 @@ class ConfirmResetPassword extends React.Component {
                             Password Match
                        </Text>}
                     </View>
-                    {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
+                    {/* {isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
                         <ActivityIndicator size='large' color="#FF6200" />
-                    </View>}
+                    </View>} */}
               <View style={styles.passMatchContainer}>
               {changePassword && <Text style={styles.passChangeTextStyle}>
                 {successPassChange}
               </Text>}
-            </View>        
+            </View>   
+            {isLoading ? <OverlayLoader /> : null}     
             
             <View style={styles.btnContainer}>
               <CaloriesSetupBtn

@@ -241,7 +241,15 @@ class Reportscreen extends React.Component {
               <View style={styles.weeklyStepWalk}>
                 <Text style={styles.headingText}>Total steps walked</Text>
                 <View style={styles.spinerContainer}>
-                  <Wheelspiner />
+                  <Wheelspiner 
+                  size={65}
+                  width={10}
+                  color={'#FF6200'}
+                  progress={60}
+                  backgroundColor={'gray'}
+                  animateFromValue={0}
+                  fullColor={'#FF6200'}
+                  />
                 </View>
                 <View style={styles.resultContainer}>
                   <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight' }}>60482</Text>

@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: '#e5e5e5',
         paddingLeft: 16,
-        marginTop: 5,
+       // marginTop: 5,
     },
     paymentMonthContainer: {
         flex: 1,
@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
     },
     btnContainer: {
         flex: 2,
-        marginTop: 20,
+        marginTop: 30,
+        marginBottom:10
     },
     caloriesBtnStyle: {
         flex: 2,
@@ -131,6 +132,88 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         // justifyContent: 'space-between'
     },
+    toggelBtnContainer:{
+        flexDirection:'row',
+        height:50,
+        //backgroundColor:'red',
+        marginTop:15
+    },
+    payScreenOneBtn:{
+        height:40,
+        width:'50%',
+        borderWidth:1,
+        borderColor:'#e5e5e5',
+        justifyContent:'center',
+        flexDirection:'row',
+        backgroundColor:'#FF6200',
+        alignItems:'center',
+        borderRadius:5
+        
+    },
+    payScreenTwoBtn:{
+        height:40,
+        width:'50%',
+        borderWidth:1,
+        borderColor:'#e5e5e5',
+        justifyContent:'center',
+        flexDirection:'row',
+        alignItems:'center',
+        borderRadius:5,
+        backgroundColor:'#FF6200',
+
+    },
+    textStyleOne:{
+        fontSize:14,
+        fontFamily: 'MontserratLight',
+        color:'white',
+        
+    },
+    unActiveBtnStyle:{
+        height:40,
+        width:'50%',
+        borderWidth:1,
+        borderColor:'#e5e5e5',
+        justifyContent:'center',
+        flexDirection:'row',
+        backgroundColor:'white',
+        alignItems:'center',
+        borderRadius:5
+        
+    },
+    unActiveTextStyle:{
+        fontSize:14,
+        fontFamily: 'MontserratLight',
+        color:'black',
+        
+    },
+    fileUploadContainer:{
+        flexDirection:'row',
+        marginTop:20,
+        justifyContent:'space-between',
+
+    },
+    fileRecipet:{
+        height:45,
+        width:130,
+        justifyContent:'center',
+       // flexDirection:'row',
+        
+    },
+    imgFile:{
+        height:45,
+        width:130,
+        justifyContent:'center',
+        flexDirection:'row',
+        alignItems:'center',
+        backgroundColor:'#e5e5e5'
+    },
+    textStyle:{
+        color:'#4f4f4f',
+        fontFamily: 'MontserratLight',
+    }
+    // pickerStyle:{
+    //     backgroundColor:'#e5e5e5'
+    // }
 })
 
 export default styles;

@@ -4,11 +4,11 @@ const screenWidth = Dimensions.get('window').width;
 const screenHight =Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-    mainContainer:{
-        flex:1,
-        width:screenWidth,
-        height:screenHight,
-    },
+    // mainContainer:{
+    //     flex:1,
+    //     width:screenWidth,
+    //     height:screenHight,
+    // },
     container: {
       flex: 1,
       //backgroundColor: 'red'

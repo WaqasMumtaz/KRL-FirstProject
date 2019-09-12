@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
       },
       emailExistContainer:{
         marginVertical:8,
+        marginBottom:15,
         alignItems:'center',
       },
       emailNotExistStyle:{

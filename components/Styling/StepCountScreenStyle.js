@@ -30,7 +30,7 @@ const styles =StyleSheet.create({
         alignItems:'center'
     },
     stepCountContainer:{
-         height:200,
+         height:220,
          borderWidth:2,
          //borderColor:'#FFFFFF',
          marginHorizontal:30,
