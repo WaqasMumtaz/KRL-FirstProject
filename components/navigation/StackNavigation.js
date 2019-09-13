@@ -40,27 +40,27 @@ import Invoices from '../screens/InvoicesScreen';
 
 const MainNavigator = createStackNavigator({
 
-  Login: {
-    screen: Login
-  },
-  Signup: {
-    screen: Signup
-  },
-  ResetpasswordScreen: {
-    screen: ResetpasswordScreen
-  },
-  ConfirmResetPassword: {
-    screen: ConfirmResetPassword
-  },
-  Setupscreen1: {
-    screen: Setupscreen1
-  },
-  Setupscreen: {
-    screen: Setupscreen
-  },
-  LastSetUpScreen: {
-    screen: LastSetUpScreen
-  },
+  // Login: {
+  //   screen: Login
+  // },
+  // Signup: {
+  //   screen: Signup
+  // },
+  // ResetpasswordScreen: {
+  //   screen: ResetpasswordScreen
+  // },
+  // ConfirmResetPassword: {
+  //   screen: ConfirmResetPassword
+  // },
+  // Setupscreen1: {
+  //   screen: Setupscreen1
+  // },
+  // Setupscreen: {
+  //   screen: Setupscreen
+  // },
+  // LastSetUpScreen: {
+  //   screen: LastSetUpScreen
+  // },
   BottomTabe: {
     screen: BottomTabe,
     navigationOptions: {

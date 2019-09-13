@@ -54,8 +54,8 @@ getPaymentKey = async () =>{
                   // onPress={()=>{navigate('Payment'),{stripeKey:publicKeys}} }
                   >
                   <Text style={styles.forText}>Payment </Text></TouchableOpacity></View>
-                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity  onPress={()=>{navigate('InvoicesScreen')}}><Text style={styles.forText}>Invoices</Text></TouchableOpacity></View>
-                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity  onPress={()=>{navigate('LogMeasurementsScreen')}}><Text style={styles.forText}>Log Measurements</Text></TouchableOpacity></View>
+                {/* <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity  onPress={()=>{navigate('InvoicesScreen')}}><Text style={styles.forText}>Invoices</Text></TouchableOpacity></View>
+                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity  onPress={()=>{navigate('LogMeasurementsScreen')}}><Text style={styles.forText}>Log Measurements</Text></TouchableOpacity></View> */}
                 <View style={{flex:0.6,flexDirection:'row'}}>
                   <TouchableOpacity onPress={()=>{navigate('Invoices')}}>
                   <Text style={styles.forText}>Invoices</Text>
