@@ -67,8 +67,9 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     cardContainer: {
-        flex: 1,
-        marginTop: 20
+        //flex: 1,
+        marginTop: 20,
+        
     },
 
     blankContainer: {

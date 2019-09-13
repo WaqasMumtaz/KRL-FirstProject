@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigation';
+import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Image } from 'react-native';
 import Chatscreen from '../screens/Chat';
@@ -16,7 +16,12 @@ const inactiveReports = <Image source={require('../icons/reports-inactive.png')}
 const activeMore = <Image source={require('../icons/more-active.png')} style={{ width: 26, height: 26 }} />
 const inactiveMore = <Image source={require('../icons/more-inactive.png')} style={{ width: 26, height: 26 }} />
 
-const MainNavigator = createMaterialTopTabNavigator({
+function getData(){
+  console.log('Chat Screen Function Called Success')
+}
+
+
+const MainNavigator = createBottomTabNavigator({
 
   Homescreen: {
     screen: Homescreen,
@@ -34,14 +39,24 @@ const MainNavigator = createMaterialTopTabNavigator({
     screen: Chatscreen,
     navigationOptions: {
       tabBarIcon: (navigation) => {
+        //console.log('tabBarIcon navigation >>>',navigation.state)
+        // console.log('chatscreen rout >>>', navigation.focused)
         const forFocused = navigation.focused;
         const renderChat = forFocused ? activeChat : inactiveChat;
+        //const routScreen = forFocused ? getData() : null;
         return (
           renderChat
+          
         )
       }
-    }
+
+     
+
+    },
+    
+    
   },
+
   Reportscreen: {
     screen: Reportscreen,
     navigationOptions: {

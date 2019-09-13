@@ -212,7 +212,7 @@ const styles =StyleSheet.create({
     borderLeftWidth:0.5,
     borderColor:'#a6a6a6',
     width:65,
-    height:25,
+    height:30,
    },
    dateAndMonthShow:{
     color:'#a6a6a6',

@@ -553,11 +553,14 @@ class Payment extends React.Component {
                 </View>
                 : null}
             </View>
-            <View style={styles.cardContainer}>
+            {/* <View style={styles.cardContainer}> */}
+            <View style={{marginTop:15}}></View>
               <CreditCardInput
                 onChange={this.cardDetail}
+                allowScroll={true}
+                
               />
-            </View>
+            {/* </View> */}
 
             {/* loader show */}
             {/* {isLoading ? <OverlayLoader /> : null} */}

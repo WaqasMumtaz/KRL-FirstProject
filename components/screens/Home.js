@@ -8,6 +8,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 const { height } = Dimensions.get('window');
 
 class Homescreen extends React.Component {
+  // static navigationOptions = ({ navigation }) => {
+  //   console.log(navigation)
+  // };
   constructor(props) {
     super(props);
     this.state = {

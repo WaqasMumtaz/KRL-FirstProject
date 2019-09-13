@@ -35,41 +35,46 @@ import ShowMeasurementsScreen from '../screens/ShowMeasurements';
 import StepCountScreen from '../screens/StepCountScreen';
 import Payment from '../screens/PaymentScreen';
 import Invoices from '../screens/InvoicesScreen';
+import Homescreen from '../screens/Home';
 
 
 
 const MainNavigator = createStackNavigator({
 
-  Login: {
-    screen: Login
-  },
-  Signup: {
-    screen: Signup
-  },
-  ResetpasswordScreen: {
-    screen: ResetpasswordScreen
-  },
-  ConfirmResetPassword: {
-    screen: ConfirmResetPassword
-  },
-  Setupscreen1: {
-    screen: Setupscreen1
-  },
-  Setupscreen: {
-    screen: Setupscreen
-  },
-  LastSetUpScreen: {
-    screen: LastSetUpScreen
-  },
+  // Login: {
+  //   screen: Login
+  // },
+  // Signup: {
+  //   screen: Signup
+  // },
+  // ResetpasswordScreen: {
+  //   screen: ResetpasswordScreen
+  // },
+  // ConfirmResetPassword: {
+  //   screen: ConfirmResetPassword
+  // },
+  // Setupscreen1: {
+  //   screen: Setupscreen1
+  // },
+  // Setupscreen: {
+  //   screen: Setupscreen
+  // },
+  // LastSetUpScreen: {
+  //   screen: LastSetUpScreen
+  // },
   BottomTabe: {
     screen: BottomTabe,
     navigationOptions: {
-      header: null
+      header: null,
     }
   },
+
+  Homescreen:{screen:Homescreen},
+
   StepCountScreen: {
     screen: StepCountScreen
   },
+
 
   AddExercise: {
     screen: AddExercise,

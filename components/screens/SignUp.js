@@ -194,7 +194,8 @@ class Signup extends React.Component {
                         else {
                         
                             return (
-                                navigate('Setupscreen1')
+                                //navigate('Setupscreen1')
+                                navigate('Login')
                             )
 
                          }
