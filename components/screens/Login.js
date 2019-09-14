@@ -77,9 +77,10 @@ class Login extends React.Component {
             let myProfile = dataUser.profile[0];
             myProfile.type = dataUser.type;
             AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
-            if (dataUser.trainnerProfileData[0]) {
-              let opponentData = dataUser.trainnerProfileData[0];
-              opponentData.type = "Coach";
+            if (dataUser.trainnerProfileData.length >= 0 ) {
+              let opponentData = dataUser.trainnerProfileData;
+              opponentData[0].type = "Coach";
+              console.log(opponentData , 'opponentData')
               AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
             }
             else if (dataUser.trainnyProfiledata[0]) {

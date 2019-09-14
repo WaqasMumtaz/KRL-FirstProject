@@ -23,34 +23,20 @@ import 'firebase/firestore';
 import FilePickerManager from 'react-native-file-picker';
 import HttpUtils from '../Services/HttpUtils';
 import VideoPlayer from 'react-native-video-player';
-
 import Modal from "react-native-modal";
-
 import ChartScreen from '../BarChart/BarChart';
 
 const db = firebase.database();
 const CryptoJS = require('crypto-js');
 
-function  checkTrainer (e)  {
-  if(e == "Chatscreen"){
-    console.log('funtion called')
-  }
-}
+
 class Chatscreen extends React.Component {
   // static navigationOptions = ({ navigation }) => {
-  //   console.log(navigation)
-  //   if(navigation.state.params != undefined){
-  //     checkTrainer(navigation.state.routeName);
+
+  //   return {
+  //     header: () => null
   //   }
-  //   const screenRout = navigation.state.routeName;
-  //   const getFunc = navigation.state.params;
-  //   console.log('screen state >>>', getFunc);
-    //const funcUser= getFunc.showModal
-    //  return {
-    // //   header: () => null
-    // //funcUser
-    //  }
-  //};
+  // };
   constructor(props) {
     super(props);
     this.state = {
@@ -86,6 +72,7 @@ class Chatscreen extends React.Component {
       cureentWeek: '',
       gainWeight: '',
       forTrainnerModal: false,
+      senderData: ''
     }
 
   }
@@ -104,48 +91,46 @@ class Chatscreen extends React.Component {
       date: date + '-' + month + '-' + year,
       time: hours + ':' + min + ':' + sec
     })
-    
-  }
-  componentWillUnmount() {
-    // Remove the event listener
-    this.focusListener.remove();
-  }
 
-  
+  }
+  // componentWillUnmount() {
+  //   // Remove the event listener
+  //   this.focusListener.remove();
+  // }
+
+
 
 
   componentWillMount() {
-    const { navigation } = this.props;
-    this.focusListener = navigation.addListener('didFocus', () => {
-      console.log('chat screen is focused')
-      AsyncStorage.getItem('currentUser').then((value) => {
-        let userData = JSON.parse(value)
-        console.log('login user data >>>', userData)
-        console.log('assignTrainner >>>', userData.assignTrainner)
-        if (userData.assignTrainner == undefined) {
-          console.log('not assign trainer contact us')
-          this.setState({
-            forTrainnerModal: true
-          })
-        }
-      })
-    });
-
-    AsyncStorage.getItem('opponentProfile').then((value) => {
-      let userData = JSON.parse(value);
-      if (value) {
+    const { senderData } = this.props.navigation.state.params;
+    console.log(senderData, 'senderData')
+    // const { navigation } = this.props;
+    // this.focusListener = navigation.addListener('didFocus', () => {
+    AsyncStorage.getItem('currentUser').then((value) => {
+      let userData = JSON.parse(value)
+      if (userData.assignTrainner == undefined) {
         this.setState({
-          opponnetAvatarSource: userData.image,
-          name: userData.name
-        })
-      }
-      else if (userData.name != undefined) {
-        this.setState({
-          opponnetAvatarSource: userData.image,
-          name: userData.name
+          forTrainnerModal: true
         })
       }
     })
+    // });
+
+    // AsyncStorage.getItem('opponentProfile').then((value) => {
+    //   let userData = JSON.parse(value);
+    //   if (value) {
+    //     this.setState({
+    //       opponnetAvatarSource: userData.image,
+    //       name: userData.name
+    //     })
+    //   }
+    //   else if (userData.name != undefined) {
+    //     this.setState({
+    //       opponnetAvatarSource: userData.image,
+    //       name: userData.name
+    //     })
+    //   }
+    // })
 
     let chatArrayTemp = [];
     let dataFromLocalStorage;
@@ -158,28 +143,29 @@ class Chatscreen extends React.Component {
       let data = snapshot.val()
       for (let i in data) {
         let firbaseData = data[i]
-        if (firbaseData.reciverId == dataFromLocalStorage._id && firbaseData.senderId == dataFromLocalStorage.trainnerId
-          || firbaseData.senderId == dataFromLocalStorage.tainnyId) {
+        if (firbaseData.reciverId == dataFromLocalStorage._id && firbaseData.senderId == senderData.userId) {
           chatArrayTemp.push(firbaseData)
         }
-        if (firbaseData.senderId == dataFromLocalStorage._id && firbaseData.reciverId == dataFromLocalStorage.trainnerId ||
-          firbaseData.senderId == dataFromLocalStorage._id && firbaseData.reciverId == dataFromLocalStorage.tainnyId) {
+        if (firbaseData.senderId == dataFromLocalStorage._id && firbaseData.reciverId == senderData.userId) {
           chatArrayTemp.push(firbaseData)
         }
       }
-      if (dataFromLocalStorage.trainnerId) {
-        this.setState({
-          opponentId: dataFromLocalStorage.trainnerId,
-        })
-      }
-      else if (dataFromLocalStorage.tainnyId) {
-        this.setState({
-          opponentId: dataFromLocalStorage.tainnyId,
-        })
-      }
+      // if (dataFromLocalStorage.trainnerId) {
+      // this.setState({
+
+      // })
+      // }
+      // else if (dataFromLocalStorage.tainnyId) {
+      //   this.setState({
+      //     opponentId: dataFromLocalStorage.tainnyId,
+      //   })
+      // }
       this.setState({
         chatMessages: chatArrayTemp,
         userId: dataFromLocalStorage._id,
+        opponentId: senderData.userId,
+        opponnetAvatarSource: senderData.image,
+        name: senderData.name
       })
       chatArrayTemp = [];
     });
@@ -343,10 +329,6 @@ class Chatscreen extends React.Component {
       weight: weight
     }
     this.uplaodDataOnFirebase(obj, 'weeklyReport')
-
-
-    // console.log(this.state.weekExcercise, 'test')
-    // this.uplaodDataOnFirebase(this.state.weekExcercise, 'weekExcerciseReport')
   }
 
   expandImg = (e) => {
@@ -363,12 +345,12 @@ class Chatscreen extends React.Component {
     })
   }
 
-  removeModal=()=>{
+  removeModal = () => {
     const { navigate } = this.props.navigation;
     this.setState({
-      forTrainnerModal:false
-    },()=>{ navigate('Homescreen')})
-   
+      forTrainnerModal: false
+    }, () => { navigate('Homescreen') })
+
   }
 
 
@@ -427,14 +409,18 @@ class Chatscreen extends React.Component {
     })
   }
   checkProfile = () => {
-    const { navigate } = this.props.navigation;
-    // console.log('checkProfile')
-    navigate('Profile', {
-      opponentProfile: true,
-    });
+    const { senderData } = this.props.navigation.state.params;
+    console.log('checkProfile')
+    this.props.navigation.navigate('Profile', {
+        opponentProfile: true,
+        senderData:senderData
+      })
+    // navigate('Profile', {
+    //   opponentProfile: true,
+    // });
   }
 
-  
+
 
   //get data from database
   getWeekReportData = async () => {
@@ -594,7 +580,6 @@ class Chatscreen extends React.Component {
       })
     }
   }
-
 
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
@@ -1094,11 +1079,11 @@ class Chatscreen extends React.Component {
               animationOutTiming={500}
             >
               <View style={styles.withOutTrainerModal}>
-                <View style={{flexDirection:'row',justifyContent:'space-between',padding:8}}>
-                      <Text style={styles.textColor}>Contact To App Admin</Text>
-                      <TouchableOpacity onPress={this.removeModal} activeOpacity={0.6}>
-                      <Image source={require('../icons/cancel.png')} />
-                      </TouchableOpacity>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 8 }}>
+                  <Text style={styles.textColor}>Contact To App Admin</Text>
+                  <TouchableOpacity onPress={this.removeModal} activeOpacity={0.6}>
+                    <Image source={require('../icons/cancel.png')} />
+                  </TouchableOpacity>
                 </View>
               </View>
 

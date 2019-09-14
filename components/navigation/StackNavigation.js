@@ -36,14 +36,14 @@ import StepCountScreen from '../screens/StepCountScreen';
 import Payment from '../screens/PaymentScreen';
 import Invoices from '../screens/InvoicesScreen';
 import Homescreen from '../screens/Home';
-
+import Chatscreen from '../screens/Chat';
 
 
 const MainNavigator = createStackNavigator({
 
-  // Login: {
-  //   screen: Login
-  // },
+  Login: {
+    screen: Login
+  },
   // Signup: {
   //   screen: Signup
   // },
@@ -69,13 +69,20 @@ const MainNavigator = createStackNavigator({
     }
   },
 
-  Homescreen:{screen:Homescreen},
-
+  Homescreen:{
+    screen:Homescreen
+  },
+  ChatBox:{
+    screen:Chatscreen,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
   StepCountScreen: {
     screen: StepCountScreen
   },
-
-
   AddExercise: {
     screen: AddExercise,
     navigationOptions: {

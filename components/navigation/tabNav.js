@@ -2,7 +2,8 @@ import * as React from 'react';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Image } from 'react-native';
-import Chatscreen from '../screens/Chat';
+import ChatInbox from '../screens/chatInbox';
+// import Chatscreen from '../screens/Chat';
 import Reportscreen from '../screens/Reports';
 import Homescreen from '../screens/Home';
 import Options from '../screens/Options';
@@ -36,7 +37,7 @@ const MainNavigator = createBottomTabNavigator({
     }
   },
   Chatscreen: {
-    screen: Chatscreen,
+    screen: ChatInbox,
     navigationOptions: {
       tabBarIcon: (navigation) => {
         //console.log('tabBarIcon navigation >>>',navigation.state)
