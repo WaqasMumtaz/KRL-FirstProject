@@ -67,7 +67,8 @@ class Payment extends React.Component {
       serviceValidation: "credit card",
       transactionIdValidation: false,
       serviceNameValidation: false,
-      receiptImgValidation: false
+      receiptImgValidation: false,
+      transactionId:''
     }
   }
   cardDetail = (e) => {
@@ -278,12 +279,12 @@ class Payment extends React.Component {
     let paymentObj = {
       name: name,
       email: email,
-      serviceName: serviceName,
+      // serviceName: serviceName,
       paymentMonth: paymentMonthYear,
       amount: amount,
       currency: currency,
-      transactionId: transactionId,
-      receiptImg: receiptImg,
+      // transactionId: transactionId,
+      // receiptImg: receiptImg,
       token: token.tokenId,
     }
     console.log(paymentObj, 'paymentObj')

@@ -40,8 +40,12 @@ import Linechart from '../chartKit/lineChart';
 //import ChartScreen from '../BarChart/BarChart'
 
 
+import Chatscreen from '../screens/Chat';
+
+
 
 const MainNavigator = createStackNavigator({
+
 
   // Profile:{screen:Profile},
   // Linechart: { screen: Linechart },
@@ -59,6 +63,11 @@ const MainNavigator = createStackNavigator({
   // Login: {
   //   screen: Login
   // },
+
+  Login: {
+    screen: Login
+  },
+
   // Signup: {
   //   screen: Signup
   // },
@@ -84,13 +93,25 @@ const MainNavigator = createStackNavigator({
     }
   },
 
+
   Homescreen: { screen: Homescreen },
+
+
+  Homescreen:{
+    screen:Homescreen
+  },
+  ChatBox:{
+    screen:Chatscreen,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
 
   StepCountScreen: {
     screen: StepCountScreen
   },
-
-
   AddExercise: {
     screen: AddExercise,
     navigationOptions: {

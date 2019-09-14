@@ -54,24 +54,26 @@ class Profile extends React.Component {
   }
 
   componentWillMount() {
+    const { senderData } = this.props.navigation.state.params;
+
     if (checkProfile) {
-      AsyncStorage.getItem('opponentProfile').then((value) => {
-        let userData = JSON.parse(value);
-        if (value) {
+      // AsyncStorage.getItem('opponentProfile').then((value) => {
+      //   let userData = JSON.parse(value);
+        if (senderData) {
           this.setState({
-            name: userData.name,
-            address: userData.address,
-            contactNo: userData.contactNo,
-            email: userData.email,
-            gender: userData.gender,
-            avatarSource: userData.image,
-            type: userData.type,
-            title: userData.type,
-            profileData: userData,
+            name: senderData.name,
+            address: senderData.address,
+            contactNo: senderData.contactNo,
+            email: senderData.email,
+            gender: senderData.gender,
+            avatarSource: senderData.image,
+            type: senderData.type,
+            title: senderData.type,
+            profileData: senderData,
             profile: 'opponentProfile'
           })
         }
-      })
+      // })
     }
     else {
       AsyncStorage.getItem('myProfile').then((value) => {
