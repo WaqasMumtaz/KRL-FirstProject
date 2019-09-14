@@ -80,11 +80,11 @@ class Homescreen extends React.Component {
           <Text style={styles.textStyleOne}>GetFit</Text>
           <Text style={styles.textStyleTwo}>Athletic</Text>
         </View>
-        <View style={styles.arrowContainer}>
+        {/* <View style={styles.arrowContainer}>
           <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity>
           <Text>Today</Text>
           <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
-        </View>
+        </View> */}
         <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
           <View style={styles.cardsContainer}>
             <View style={styles.childContainerOne}>

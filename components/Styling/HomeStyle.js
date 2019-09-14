@@ -11,7 +11,8 @@ container:{
 headingContainer:{
     height:'8%',
     //backgroundColor:'red',
-    flexDirection:'row'
+    flexDirection:'row',
+    marginTop:40
 
 },
 textStyleOne:{
