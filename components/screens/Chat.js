@@ -7,6 +7,7 @@ import {
   Linking,
   TouchableOpacity,
   Image,
+  ActivityIndicator
 
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -25,6 +26,7 @@ import HttpUtils from '../Services/HttpUtils';
 import VideoPlayer from 'react-native-video-player';
 import Modal from "react-native-modal";
 import ChartScreen from '../BarChart/BarChart';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const db = firebase.database();
 const CryptoJS = require('crypto-js');
@@ -72,10 +74,15 @@ class Chatscreen extends React.Component {
       cureentWeek: '',
       gainWeight: '',
       forTrainnerModal: false,
-      senderData: ''
+      senderData: '',
+      isLoading: false,
+      fileUpLoading:false
     }
 
   }
+
+
+
 
   componentDidMount() {
     const date = new Date().getDate();
@@ -296,10 +303,21 @@ class Chatscreen extends React.Component {
         let signature = CryptoJS.SHA1(hash_string).toString();
         let upload_url = 'https://api.cloudinary.com/v1_1/' + cloud + '/upload'
         let xhr = new XMLHttpRequest();
+        this.setState({
+          isLoading:true,
+          fileUpLoading:true
+        })
         xhr.open('POST', upload_url);
         xhr.onload = () => {
+         
           let type = response.path.substring(response.path.lastIndexOf(".") + 1);
           let uploadData = JSON.parse(xhr._response)
+          if (uploadData) {
+            this.setState({
+              isLoading:false,
+              fileUpLoading:false
+            })
+          }
           console.log(uploadData, 'uploadData')
           this.uplaodDataOnFirebase(uploadData, type)
         };
@@ -412,9 +430,9 @@ class Chatscreen extends React.Component {
     const { senderData } = this.props.navigation.state.params;
     console.log('checkProfile')
     this.props.navigation.navigate('Profile', {
-        opponentProfile: true,
-        senderData:senderData
-      })
+      opponentProfile: true,
+      senderData: senderData
+    })
     // navigate('Profile', {
     //   opponentProfile: true,
     // });
@@ -1030,6 +1048,23 @@ class Chatscreen extends React.Component {
               </View>}
             </View>
           </ScrollView>
+
+          {this.state.isLoading == true ?
+            <View style={styles.spinnerContainer}>
+              <Spinner
+                //visibility of Overlay Loading Spinner
+                visible={this.state.fileUpLoading}
+                //Text with the Spinner 
+                textContent={'File Loading...'}
+                //Text style of the Spinner Text
+                textStyle={styles.spinnerTextStyle}
+                color={'#FF6200'}
+                
+              />
+            </View>
+            : null
+          }
+
           <View style={styles.textInputContainer}>
             <TextInput
               onChangeText={(textMessage) => { this.setState({ textMessage }) }}
