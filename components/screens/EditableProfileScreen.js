@@ -12,18 +12,15 @@ import {
     TextInput,
     ActivityIndicator
 } from 'react-native';
-import TextInputs from '../textInputs/TextInputs';
-// import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/EditableProfileStyle';
 import styless from '../Styling/ProfilScreenStyle';
-
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
 import { thisExpression } from '@babel/types';
 import ImagePicker from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast, { DURATION } from 'react-native-easy-toast'
 import OverlayLoader from '../Loader/OverlaySpinner'
 
 const userDefaultPic = require('../icons/profile.png')
@@ -55,11 +52,11 @@ class EditProfileScreen extends React.Component {
             date: '',
             time: '',
             userId: '',
-            objectId:'',
-            male:false,
-            female:false,
-            position:'top',
-            profile:''
+            objectId: '',
+            male: false,
+            female: false,
+            position: 'top',
+            profile: ''
         }
     }
     componentDidMount() {
@@ -83,21 +80,31 @@ class EditProfileScreen extends React.Component {
             }
         });
     }
-    async componentWillMount(){
-        const { profileData , profile } = this.props.navigation.state.params;
-        await this.setState({
-            objectId:profileData._id,
-            email:profileData.email,
-            name:profileData.name,
-            address:profileData.address,
-            contactNo:profileData.contactNo,
-            gender:profileData.gender,
-            avatarSource:profileData.image,
-            type:profileData.type,
-            profile:profile
-        })
-        if(this.state.gender != ''){
-            this.getGender(this.state.gender);
+    async componentWillMount() {
+        const { profileData, profile } = this.props.navigation.state.params;
+        if (profileData.image != undefined) {
+            await this.setState({
+                objectId: profileData._id,
+                email: profileData.email,
+                name: profileData.name,
+                address: profileData.address,
+                contactNo: profileData.contactNo,
+                gender: profileData.gender,
+                avatarSource: profileData.image,
+                type: profileData.type,
+                profile: profile
+            })
+            if (this.state.gender != '') {
+                this.getGender(this.state.gender);
+            }
+        }
+        else {
+            this.setState({
+                email: profileData.email,
+                name: profileData.name,
+                type: profileData.type,
+                profile: profile
+            })
         }
     }
 
@@ -202,22 +209,22 @@ class EditProfileScreen extends React.Component {
             }
         })
     }
-    toastFunction=(text , position , duration ,withStyle )=>{
+    toastFunction = (text, position, duration, withStyle) => {
         this.setState({
             position: position,
         })
-        if(withStyle){
+        if (withStyle) {
             this.refs.toastWithStyle.show(text, duration);
-        }else {
+        } else {
             this.refs.toast.show(text, duration);
         }
     }
     updateUserProfileFunc = async () => {
         const { email, address, contactNo, gender, emailValidate, addressValidate, contactNoValidate, genderValidate,
-                avatarSource, date, time, userId, objectId, name, type , profile} = this.state;
+            avatarSource, date, time, userId, objectId, name, type, profile } = this.state;
         // const { profile } = this.props.navigation.state.params;
-        
-        if (email == '' || address == '' || contactNo == '' || gender == '' || name =='') {
+
+        if (email == '' || address == '' || contactNo == '' || gender == '' || name == '') {
             Alert.alert('Please Fill All Fields');
             if (emailValidate != true || addressValidate != true || contactNoValidate != true || genderValidate != true) {
                 Alert.alert('Please Enter Correct Field');
@@ -225,7 +232,7 @@ class EditProfileScreen extends React.Component {
         }
         else {
             const userObj = {
-                name:name,
+                name: name,
                 email: email,
                 address: address,
                 contactNo: contactNo,
@@ -234,44 +241,45 @@ class EditProfileScreen extends React.Component {
                 date: date,
                 time: time,
                 userId: userId,
-                objectId:objectId,
+                objectId: objectId,
+                type: type
             }
-             this.setState({
-                isLoading:true
+            this.setState({
+                isLoading: true
             })
             let dataUser = await HttpUtils.post('profile', userObj);
             let userMsg = dataUser.msg;
-            if(dataUser.code == 200){
+            if (dataUser.code == 200) {
                 this.setState({
-                    isLoading:false
-                }, ()=>{
-                    this.toastFunction(userMsg,this.state.position , DURATION.LENGTH_LONG,true)
+                    isLoading: false
+                }, () => {
+                    this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true)
                 })
-            let obj ={
-                address: dataUser.content.address,
-                contactNo: dataUser.content.contactNo,
-                date: dataUser.content.date,
-                email: dataUser.content.email,
-                gender: dataUser.content.gender,
-                image: dataUser.content.image,
-                name: dataUser.content.name,
-                _id:dataUser.content.objectId,
-                time: dataUser.content.time,
-                userId: dataUser.content.userId,
-                type:type
+                let obj = {
+                    address: dataUser.content.address,
+                    contactNo: dataUser.content.contactNo,
+                    date: dataUser.content.date,
+                    email: dataUser.content.email,
+                    gender: dataUser.content.gender,
+                    image: dataUser.content.image,
+                    name: dataUser.content.name,
+                    _id: dataUser.content.objectId,
+                    time: dataUser.content.time,
+                    userId: dataUser.content.userId,
+                    type: type
+                }
+                if (profile == "opponentProfile") {
+                    AsyncStorage.setItem('opponentProfile', JSON.stringify(obj));
+                }
+                else if (profile == 'myProfile') {
+                    AsyncStorage.setItem('myProfile', JSON.stringify(obj));
+                }
             }
-            if(profile == "opponentProfile"){
-                AsyncStorage.setItem('opponentProfile', JSON.stringify(obj));
-            }
-            else if(profile == 'myProfile'){
-                AsyncStorage.setItem('myProfile', JSON.stringify(obj));
-            }
-            }
-            else if(!dataUser.code){
+            else if (!dataUser.code) {
                 this.setState({
-                    isLoading:false
-                }, ()=>{
-                  this.toastFunction('Some thing went wrong',this.state.position , DURATION.LENGTH_LONG,true)
+                    isLoading: false
+                }, () => {
+                    this.toastFunction('Some thing went wrong', this.state.position, DURATION.LENGTH_LONG, true)
                 })
             }
         }
@@ -285,7 +293,7 @@ class EditProfileScreen extends React.Component {
                 gender: 'Male'
             })
         }
-        else if (gender == 'Female'|| gender == 'female') {
+        else if (gender == 'Female' || gender == 'female') {
             this.setState({
                 male: false,
                 female: true,
@@ -311,15 +319,15 @@ class EditProfileScreen extends React.Component {
             female,
             name,
         } = this.state;
-    return (
+        return (
             <View style={styles.mainContainer}>
                 <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={styles.profilPicContainer}>
                         <TouchableOpacity activeOpacity={0.5} onPress={this.chooseProfilePhoto}>
-                            {avatarSource ? 
-                                <Image source={{uri: `${avatarSource}`}} style={styles.profilPicStyle} />
+                            {avatarSource ?
+                                <Image source={{ uri: `${avatarSource}` }} style={styles.profilPicStyle} />
                                 :
-                                <Image source={userDefaultPic} style={styles.profilPicStyle}/>
+                                <Image source={userDefaultPic} style={styles.profilPicStyle} />
                             }
                         </TouchableOpacity>
                         {/* <View style={styles.nameContainer}>
@@ -329,13 +337,13 @@ class EditProfileScreen extends React.Component {
                             <Text style={styles.userTitleStyle}>Trainee</Text>
                         </View> */}
                     </View>
-                     <View style={styles.emailContainer}>
+                    <View style={styles.emailContainer}>
                         <Text style={styles.inputLabelsStyle}>Name</Text>
                         <TextInput
                             onChangeText={text => {
-                                    this.setState({
-                                        name: text
-                                    })
+                                this.setState({
+                                    name: text
+                                })
                             }}
                             placeholder="Enter your name"
                             placeholderColor="#4f4f4f"
@@ -346,7 +354,7 @@ class EditProfileScreen extends React.Component {
                         />
                     </View>
                     <View style={styles.emailContainer}>
-                   <Text style={styless.labelStyle}>Email</Text>
+                        <Text style={styless.labelStyle}>Email</Text>
                         <Text style={styless.userInsertedValueStyle}>{email}</Text>
                         {/* <TextInput
                             onChangeText={text => {
@@ -414,23 +422,23 @@ class EditProfileScreen extends React.Component {
                     <View style={styles.genderContainer}>
                         <Text style={styles.inputLabelsStyle}>Gender</Text>
                         <View style={styles.childGender}>
-                        <TouchableOpacity style={male ? styles.clickedMale : styles.maleTouchableOpacity} 
-                          onPress={this.getGender.bind(this, 'Male')}>
+                            <TouchableOpacity style={male ? styles.clickedMale : styles.maleTouchableOpacity}
+                                onPress={this.getGender.bind(this, 'Male')}>
                                 <Text style={styles.maleTextStyle}>
                                     Male
                             </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={female ? styles.clickedFemale : styles.femaleContainer} 
-                            onPress={this.getGender.bind(this, 'Female')}>
+                            <TouchableOpacity style={female ? styles.clickedFemale : styles.femaleContainer}
+                                onPress={this.getGender.bind(this, 'Female')}>
                                 <Text style={styles.maleTextStyle}>Female</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                     {
-                    //     isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
-                    //     <ActivityIndicator size='large' color="#FF6200" />
-                    // </View>
-                    isLoading ? <OverlayLoader/>: null
+                        //     isLoading && <View style={[styles.spinerContainer, styles.horizontal]}>
+                        //     <ActivityIndicator size='large' color="#FF6200" />
+                        // </View>
+                        isLoading ? <OverlayLoader /> : null
                     }
                     <View style={styles.btnContainer}>
                         <CaloriesSetupBtn
@@ -441,14 +449,14 @@ class EditProfileScreen extends React.Component {
                     </View>
                     <View style={styles.blankContainer}>
                     </View>
-                    <Toast ref="toastWithStyle" 
-                        style={{backgroundColor:'#FF6200'}} 
+                    <Toast ref="toastWithStyle"
+                        style={{ backgroundColor: '#FF6200' }}
                         position={this.state.position}
                         positionValue={50}
                         fadeInDuration={750}
                         fadeOutDuration={1000}
                         opacity={0.8}
-                        textStyle={{color:'white',fontFamily: 'MontserratLight',}}
+                        textStyle={{ color: 'white', fontFamily: 'MontserratLight', }}
                     />
 
                 </ScrollView>

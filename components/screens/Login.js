@@ -35,8 +35,8 @@ class Login extends React.Component {
       isLoading: false,
       passwordNotMatch: '',
       psswrdNotMatchShow: false,
-      emailAndPasswrd:false
-      
+      emailAndPasswrd: false
+
     }
   }
 
@@ -60,48 +60,58 @@ class Login extends React.Component {
       }
       try {
         let dataUser = await HttpUtilsFile.post('signin', userObj)
-        console.log( 'dataUser >>>',dataUser);
         let getUserCode = dataUser.code;
         let userWrong = dataUser.Match;
         let userMsg = dataUser.msg;
-        if (getUserCode) {
+        if (getUserCode == 200) {
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
-          if (dataUser.profile) {
+          console.log('dataUser >>>', dataUser);
+          if (dataUser.profile[0]) {
             let myProfile = dataUser.profile[0];
             myProfile.type = dataUser.type;
+            console.log(myProfile , 'myProfile')
             AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
-            if (dataUser.trainnerProfileData.length >= 0 ) {
-              let opponentData = dataUser.trainnerProfileData;
-              opponentData[0].type = "Coach";
-              console.log(opponentData , 'opponentData')
-              AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
-            }
-            else if (dataUser.trainnyProfiledata.length >= 0 ) {
-              let opponentData = dataUser.trainnyProfiledata;
-              console.log(opponentData , 'opponentData')
-              // opponentData.type = "Trainee";
-              // AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
-            }
           }
+          else{
+            let myProfile = {};
+            myProfile.name = dataUser.name;
+            myProfile.email = dataUser.email;
+            myProfile.userId = dataUser._id;
+            console.log(myProfile , 'myProfile')
+            AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
+          }
+          // if (dataUser.trainnerProfileData.length >= 0 ) {
+          //   let opponentData = dataUser.trainnerProfileData;
+          //   opponentData[0].type = "Coach";
+          //   console.log(opponentData , 'opponentData')
+          //   AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+          // }
+          // else if (dataUser.trainnyProfiledata.length >= 0 ) {
+          //   let opponentData = dataUser.trainnyProfiledata;
+          //   console.log(opponentData , 'opponentData')
+          //   // opponentData.type = "Trainee";
+          //   // AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+          // }
+
           db.ref(`users/`).push(dataUser)
           this.setState({
-            isLoading:false 
-          },()=>navigate('BottomTabe'))
-          
+            isLoading: false
+          }, () => navigate('BottomTabe'))
+
         }
-       if (userWrong == false) {
+        if (userWrong == false) {
           this.setState({
             isLoading: false,
             psswrdNotMatchShow: true,
             passwordNotMatch: userMsg,
-            
+
           })
-         setTimeout(()=>{
-          this.setState({
-            psswrdNotMatchShow: false
-          })
-         },5000) 
-         
+          setTimeout(() => {
+            this.setState({
+              psswrdNotMatchShow: false
+            })
+          }, 5000)
+
         }
 
       }
@@ -109,13 +119,13 @@ class Login extends React.Component {
         console.log(error)
         this.setState({
           isLoading: false,
-          emailAndPasswrd:true,
+          emailAndPasswrd: true,
         })
-        setTimeout(()=>{
+        setTimeout(() => {
           this.setState({
             emailAndPasswrd: false
           })
-         },5000) 
+        }, 5000)
       }
       this.setState({
         email: '',
@@ -164,7 +174,7 @@ class Login extends React.Component {
   }
   render() {
     const { navigate } = this.props.navigation;
-    const { email, password, psswrdInstruction, isLoading, passwordNotMatch, psswrdNotMatchShow,emailAndPasswrd } = this.state;
+    const { email, password, psswrdInstruction, isLoading, passwordNotMatch, psswrdNotMatchShow, emailAndPasswrd } = this.state;
     return (
       <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
         <View style={styles.loginTextContainer}>
@@ -221,13 +231,13 @@ class Login extends React.Component {
           <Text style={styles.passNotMatchStyle}>
             {passwordNotMatch}
           </Text>
-        </View>: null}
-        {emailAndPasswrd ? 
-         <View style={styles.passMatchContainer}>
-         <Text style={styles.passNotMatchStyle}>
-           Email and password not match
+        </View> : null}
+        {emailAndPasswrd ?
+          <View style={styles.passMatchContainer}>
+            <Text style={styles.passNotMatchStyle}>
+              Email and password not match
          </Text>
-       </View>: null}
+          </View> : null}
 
         {psswrdInstruction && <View style={styles.passwrdInstructionContainer}>
           <Text style={styles.instructionStyle}>

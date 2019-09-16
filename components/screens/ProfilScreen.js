@@ -54,39 +54,48 @@ class Profile extends React.Component {
   }
 
   componentWillMount() {
-    const { senderData } = this.props.navigation.state.params;
-
+    console.log(checkProfile, 'checkProfile')
     if (checkProfile) {
-      // AsyncStorage.getItem('opponentProfile').then((value) => {
-      //   let userData = JSON.parse(value);
-        if (senderData) {
-          this.setState({
-            name: senderData.name,
-            address: senderData.address,
-            contactNo: senderData.contactNo,
-            email: senderData.email,
-            gender: senderData.gender,
-            avatarSource: senderData.image,
-            type: senderData.type,
-            title: senderData.type,
-            profileData: senderData,
-            profile: 'opponentProfile'
-          })
-        }
-      // })
+      const { senderData } = this.props.navigation.state.params;
+      if (senderData) {
+        this.setState({
+          name: senderData.name,
+          address: senderData.address,
+          contactNo: senderData.contactNo,
+          email: senderData.email,
+          gender: senderData.gender,
+          avatarSource: senderData.image,
+          type: senderData.type,
+          title: senderData.type,
+          profileData: senderData,
+          profile: 'opponentProfile'
+        })
+      }
     }
     else {
       AsyncStorage.getItem('myProfile').then((value) => {
         let userData = JSON.parse(value);
-        if (value) {
+        console.log(userData , 'userData')
+        if (userData.image != undefined) {
+          console.log('proffile complete data')
           this.setState({
             name: userData.name,
+            email: userData.email,
+            type: userData.type,
             address: userData.address,
             contactNo: userData.contactNo,
-            email: userData.email,
             gender: userData.gender,
-            type: userData.type,
             avatarSource: userData.image,
+            title: 'My',
+            profileData: userData,
+            profile: 'myProfile'
+          })
+        }
+        else{
+          this.setState({
+            name: userData.name,
+            email: userData.email,
+            type: userData.type,
             title: 'My',
             profileData: userData,
             profile: 'myProfile'
@@ -102,7 +111,6 @@ class Profile extends React.Component {
       profileData: profileData,
       profile: profile
     });
-    // this.props.navigation.navigate('EditProfileScreen');
   }
 
   componentDidMount() {
