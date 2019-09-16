@@ -63,15 +63,8 @@ class Login extends React.Component {
         console.log( 'dataUser >>>',dataUser);
         let getUserCode = dataUser.code;
         let userWrong = dataUser.Match;
-        //console.log('user status >>>', userWrong)
         let userMsg = dataUser.msg;
-        //console.log('user mesg >>>',userMsg)
         if (getUserCode) {
-
-         // console.log('condition arr')
-
-          console.log('condition arr')
-
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
           if (dataUser.profile) {
             let myProfile = dataUser.profile[0];
@@ -83,10 +76,11 @@ class Login extends React.Component {
               console.log(opponentData , 'opponentData')
               AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
             }
-            else if (dataUser.trainnyProfiledata[0]) {
-              let opponentData = dataUser.trainnyProfiledata[0];
-              opponentData.type = "Trainee";
-              AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+            else if (dataUser.trainnyProfiledata.length >= 0 ) {
+              let opponentData = dataUser.trainnyProfiledata;
+              console.log(opponentData , 'opponentData')
+              // opponentData.type = "Trainee";
+              // AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
             }
           }
           db.ref(`users/`).push(dataUser)

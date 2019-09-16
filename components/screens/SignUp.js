@@ -161,9 +161,10 @@ class Signup extends React.Component {
                 name: name,
                 email: email,
                 mobileNo: mobile,
-                password: newPasswrd
+                password: newPasswrd,
+                type:'trainee'
             }
-            // console.log(userObj)
+            console.log(userObj)
 
             try {
                 let dataUser = await HttpUtilsFile.post('signup', userObj)
@@ -171,7 +172,7 @@ class Signup extends React.Component {
                 let getEmails = await HttpUtilsFile.get('getuseremail')
                 let emailCode = getEmails.code;
                 const emailContents = getEmails.content;
-                //console.log(emailContents);
+                console.log(dataUser , 'dataUser');
                 // console.log(getToken);
                 //console.log(getCode)
                 if (emailCode) {
