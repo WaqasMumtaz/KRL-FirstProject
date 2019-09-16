@@ -26,7 +26,7 @@ const styles =StyleSheet.create({
         
     },
     dateContainer:{
-        height:50,
+        height:20,
         alignItems:'center'
     },
     stepCountContainer:{

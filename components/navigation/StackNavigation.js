@@ -36,14 +36,36 @@ import StepCountScreen from '../screens/StepCountScreen';
 import Payment from '../screens/PaymentScreen';
 import Invoices from '../screens/InvoicesScreen';
 import Homescreen from '../screens/Home';
+import Linechart from '../chartKit/lineChart';
+//import ChartScreen from '../BarChart/BarChart'
+
+
 import Chatscreen from '../screens/Chat';
+
 
 
 const MainNavigator = createStackNavigator({
 
-  Login: {
-    screen: Login
-  },
+
+  // Profile:{screen:Profile},
+  // Linechart: { screen: Linechart },
+  //StepCountScreen:{screen:StepCountScreen},
+ //Login: { screen: Login },
+  // Signup: { screen: Signup },
+  // ResetpasswordScreen: { screen: ResetpasswordScreen },
+  // ConfirmResetPassword: { screen: ConfirmResetPassword },
+  // Setupscreen1: { screen: Setupscreen1 },
+  // Setupscreen: { screen: Setupscreen },
+  // LastSetUpScreen: { screen: LastSetUpScreen },
+
+
+
+  // Login: {
+  //   screen: Login
+  // },
+
+  
+
   // Signup: {
   //   screen: Signup
   // },
@@ -69,6 +91,10 @@ const MainNavigator = createStackNavigator({
     }
   },
 
+
+  Homescreen: { screen: Homescreen },
+
+
   Homescreen:{
     screen:Homescreen
   },
@@ -80,6 +106,7 @@ const MainNavigator = createStackNavigator({
       }
     }
   },
+
   StepCountScreen: {
     screen: StepCountScreen
   },
@@ -188,33 +215,33 @@ const MainNavigator = createStackNavigator({
     }
   }
 },
-{
+  {
 
-  transitionConfig: () => ({
-    transitionSpec: {
-      duration: 750,
-      easing: Easing.out(Easing.poly(4)),
-      timing: Animated.timing,
-      useNativeDriver: true
-    },
-    screenInterpolator: sceneProps => {
-      const { layout, position, scene } = sceneProps;
-      const { index } = scene;
+    transitionConfig: () => ({
+      transitionSpec: {
+        duration: 750,
+        easing: Easing.out(Easing.poly(4)),
+        timing: Animated.timing,
+        useNativeDriver: true
+      },
+      screenInterpolator: sceneProps => {
+        const { layout, position, scene } = sceneProps;
+        const { index } = scene;
 
-      const height = layout.initHeight;
-      const translateY = position.interpolate({
-        inputRange: [index - 1, index, index + 1],
-        outputRange: [height, 0, 2],
-      });
+        const height = layout.initHeight;
+        const translateY = position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [height, 0, 2],
+        });
 
-      const opacity = position.interpolate({
-        inputRange: [index - 1, index - 0.99, index],
-        outputRange: [0, 1, 1],
-      });
+        const opacity = position.interpolate({
+          inputRange: [index - 1, index - 0.99, index],
+          outputRange: [0, 1, 1],
+        });
 
-      return { opacity, transform: [{ translateY }] };
-    },
-  }),
+        return { opacity, transform: [{ translateY }] };
+      },
+    }),
   }
 
 

@@ -677,7 +677,27 @@ const styles = StyleSheet.create({
         color: 'black',
         marginLeft: 10,
         marginVertical: 10
-    }
+    },
+    activaterContainer: {
+        flex: 1,
+        justifyContent: 'center'
+      },
+      horizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10
+      },
+      spinnerContainer:{
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      spinnerTextStyle:{
+        color: '#FF6200',
+      },
+      overLayStyle:{
+          color:'white',
+          opacity:0.3
+      }
 });
 
 export default styles;
