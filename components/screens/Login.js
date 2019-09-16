@@ -69,29 +69,40 @@ class Login extends React.Component {
           if (dataUser.profile[0]) {
             let myProfile = dataUser.profile[0];
             myProfile.type = dataUser.type;
-            console.log(myProfile , 'myProfile')
+            console.log(myProfile, 'myProfile')
             AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
           }
-          else{
+          else {
             let myProfile = {};
             myProfile.name = dataUser.name;
             myProfile.email = dataUser.email;
             myProfile.userId = dataUser._id;
-            console.log(myProfile , 'myProfile')
+            myProfile.type = dataUser.type;
+            console.log(myProfile, 'myProfile')
             AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
           }
-          // if (dataUser.trainnerProfileData.length >= 0 ) {
-          //   let opponentData = dataUser.trainnerProfileData;
-          //   opponentData[0].type = "Coach";
-          //   console.log(opponentData , 'opponentData')
-          //   AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
-          // }
-          // else if (dataUser.trainnyProfiledata.length >= 0 ) {
-          //   let opponentData = dataUser.trainnyProfiledata;
-          //   console.log(opponentData , 'opponentData')
-          //   // opponentData.type = "Trainee";
-          //   // AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
-          // }
+          if (dataUser.trainnerProfileData[0]) {
+            let opponentData = dataUser.trainnerProfileData;
+            opponentData[0].type = "Coach";
+            console.log(opponentData, 'opponentData')
+            AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+          }
+          else if (dataUser.trainnyProfiledata.length >= 0) {
+            // let opponentData = dataUser.trainnyProfiledata;
+            // let traineesData = {  }
+            // let traineeName = dataUser.assignTrainny;
+            // let traineeIds = dataUser.tainnyId;
+            // for (let i = 0; i < traineeName.length; i++) {
+            //   traineesData[i] = name.traineeName[i]
+            // }
+            // console.log(traineesData, 'traineesData')
+            // console.log(opponentData , 'opponentData')
+            // console.log(traineeName , 'traineeName')
+            // console.log(traineeIds , 'traineeIds')
+
+            // opponentData.type = "Trainee";
+            // AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+          }
 
           db.ref(`users/`).push(dataUser)
           this.setState({

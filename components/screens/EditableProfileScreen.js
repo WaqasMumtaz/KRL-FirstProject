@@ -56,7 +56,8 @@ class EditProfileScreen extends React.Component {
             male: false,
             female: false,
             position: 'top',
-            profile: ''
+            profile: '',
+            type: ''
         }
     }
     componentDidMount() {
@@ -82,7 +83,9 @@ class EditProfileScreen extends React.Component {
     }
     async componentWillMount() {
         const { profileData, profile } = this.props.navigation.state.params;
-        if (profileData.image != undefined) {
+        if (profileData.image != undefined || profileData._id != undefined || profileData.address != undefined
+            || profileData.contactNo != undefined || profileData.gender != undefined) {
+            console.log(profileData._id, 'user data')
             await this.setState({
                 objectId: profileData._id,
                 email: profileData.email,
@@ -99,6 +102,7 @@ class EditProfileScreen extends React.Component {
             }
         }
         else {
+            console.log(profile)
             this.setState({
                 email: profileData.email,
                 name: profileData.name,
@@ -237,7 +241,7 @@ class EditProfileScreen extends React.Component {
                 address: address,
                 contactNo: contactNo,
                 gender: gender,
-                image: avatarSource.uri,
+                image: avatarSource,
                 date: date,
                 time: time,
                 userId: userId,
@@ -247,8 +251,11 @@ class EditProfileScreen extends React.Component {
             this.setState({
                 isLoading: true
             })
+            console.log(userObj, 'userObj')
             let dataUser = await HttpUtils.post('profile', userObj);
             let userMsg = dataUser.msg;
+            console.log(dataUser, 'profile submit')
+
             if (dataUser.code == 200) {
                 this.setState({
                     isLoading: false
@@ -263,15 +270,13 @@ class EditProfileScreen extends React.Component {
                     gender: dataUser.content.gender,
                     image: dataUser.content.image,
                     name: dataUser.content.name,
-                    _id: dataUser.content.objectId,
+                    _id: dataUser.content._id,
                     time: dataUser.content.time,
                     userId: dataUser.content.userId,
                     type: type
                 }
-                if (profile == "opponentProfile") {
-                    AsyncStorage.setItem('opponentProfile', JSON.stringify(obj));
-                }
-                else if (profile == 'myProfile') {
+                if (profile == 'myProfile') {
+                    console.log(obj, 'profile submit store local storage')
                     AsyncStorage.setItem('myProfile', JSON.stringify(obj));
                 }
             }
