@@ -154,14 +154,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     backgroundVideo: {
-        // position: 'absolute',
+        //position: 'absolute',
         top: 1,
         left: 1,
         bottom: 1,
         right: 1,
         // marginBottom:12,
         // marginLeft: '30%',
-        resizeMode: "contain"
+        resizeMode: "contain",
+        
     },
     videoTagMgs: {
         // width: 150,
@@ -169,6 +170,11 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         marginLeft: '30%',
         // backgroundColor:"#e5e5e5"
+    },
+    largeVideoSize:{
+        height: 150,
+        marginBottom: 12,
+       
     },
     //week excersice
     cardRight: {

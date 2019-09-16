@@ -7,9 +7,12 @@ import {
   Linking,
   TouchableOpacity,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
+  Dimensions
 
 } from 'react-native';
+const screenWidth = Dimensions.get('window').width;
+const screenHight = Dimensions.get('window').height;
 import AsyncStorage from '@react-native-community/async-storage';
 import styles from '../Styling/ChatScreenStyle';
 import ImagePicker from 'react-native-image-picker';
@@ -76,13 +79,23 @@ class Chatscreen extends React.Component {
       forTrainnerModal: false,
       senderData: '',
       isLoading: false,
-      fileUpLoading:false
+      fileUpLoading:false,
+      forVideoModal:false,
+      smallVideo:true,
+      largeSizeVideo:false
     }
 
   }
 
-
-
+  handleFullScreenVideo=()=>{
+     console.log('video tag fullscreen',)
+    
+    
+  }
+  // endVideo=()=>{
+  //   console.log('End Video success')
+    
+  // }
 
   componentDidMount() {
     const date = new Date().getDate();
@@ -604,6 +617,25 @@ class Chatscreen extends React.Component {
       attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId, opponnetAvatarSource, name, imagePath } = this.state;
     const chatMessages = this.state.chatMessages.map((message, key) => (
       <View>
+        {/* {this.state.forVideoModal ? 
+             <Modal
+             isVisible={this.state.forVideoModal}
+             animationIn='zoomIn'
+             backdropOpacity={0.8}
+             backdropColor='white'
+             coverScreen={true}
+             animationInTiming={300}
+             animationOutTiming={300}
+           >
+
+              <View style={styles.cardContainer}> 
+              <Text>Hello To The World</Text>
+             </View>
+             
+           </Modal>               
+           : null
+
+          } */}
         {message.senderId == userId && message.type == 'text' ?
           <Text key={key} style={styles.msgsTextStyle}>
             {message.message}
@@ -715,14 +747,37 @@ class Chatscreen extends React.Component {
                           ?
                           <View style={styles.videoTagMgs}>
                             <VideoPlayer
-                              // videoWidth={this.state.video.width}
-                              // videoHeight={this.state.video.height}
+                              //videoWidth={300}
+                              //videoHeight={this.state.video.height}
                               duration={message.message.duration}
                               video={{ uri: `${message.message.secure_url}` }}
-                              ref={r => this.player = r}
+                              ref={r => this.player = console.log(r)}
                               style={styles.backgroundVideo}
+                              onLoad={this.handleFullScreenVideo}
+                              fullScreen={true}
+                             
                             />
+                            
                           </View>
+                          
+                          // :
+                          // message.senderId == userId &&
+                          // message.type == 'mp4' && this.state.largeSizeVideo == true ?
+                          // <View style={styles.largeVideoSize}>
+                          //   <VideoPlayer
+                          //     //videoWidth={300}
+                          //     //videoHeight={this.state.video.height}
+                          //     duration={message.message.duration}
+                          //     video={{ uri: `${message.message.secure_url}` }}
+                          //     ref={r => this.player = console.log(r)}
+                          //     style={styles.backgroundVideo}
+                          //     onEnd={this.endVideo}
+                             
+                
+                              
+                          //   />
+                            
+                          // </View>
                           :
                           message.senderId == userId && message.type == 'weeklyReport'
                             ?
@@ -794,6 +849,8 @@ class Chatscreen extends React.Component {
                             </View>
                             : null
         }
+
+            
         {message.senderId == opponentId && message.type == 'text' ?
           <Text key={key} style={styles.replyMessagesStyle}>
             {message.message}
@@ -909,8 +966,9 @@ class Chatscreen extends React.Component {
                               // videoHeight={this.state.video.height}
                               duration={message.message.duration}
                               video={{ uri: `${message.message.secure_url}` }}
-                              ref={r => this.player = r}
+                              ref={r => this.player = console.log(r)}
                               style={styles.backgroundVideo}
+                              fullScreen={true}
                             />
                           </View>
                           :
@@ -1124,8 +1182,10 @@ class Chatscreen extends React.Component {
 
             </Modal>
 
-          </View>
+            
 
+          </View>
+          
         </View>
       </View>
     );

@@ -1,6 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Button, Dimensions, Image, TouchableOpacity } from 'react-native';
 import styles from '../Styling/InvoicesScreenStyle';
+import AsyncStorage from '@react-native-community/async-storage';
+import HttpUtilsFile from '../Services/HttpUtils';
+import Modal from "react-native-modal";
+
+
 const { height } = Dimensions.get('window');
 
 class Invoices extends React.Component {
@@ -23,11 +28,34 @@ class Invoices extends React.Component {
       }
     constructor(props) {
         super(props);
+        this.state={
+
+        }
 
     }
-    //  onChangeTab=(value)=>{
-    //   console.log(value)
-    // }
+
+    async componentWillMount(){
+     await this.dataRetrieve()
+    }
+
+ dataRetrieve= async ()=>{
+    AsyncStorage.getItem("currentUser").then(value => {
+        const dataFromLocalStorage = JSON.parse(value);
+        console.log('userData from local storage >>>', dataFromLocalStorage)
+       });
+       const getId = dataFromLocalStorage._id;
+       const userID = {   
+        userId:getId
+         }
+     console.log('user id >>',userID)
+         const userData = await HttpUtilsFile.post('invoice', userID);
+         console.log('user api data -->>',userData)
+     
+ }   
+
+ 
+
+
     render() {
         const { navigate } = this.props.navigation;
 
