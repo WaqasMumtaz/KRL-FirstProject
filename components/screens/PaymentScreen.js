@@ -9,6 +9,7 @@ import Modal from "react-native-modal";
 import OverlayLoader from '../Loader/OverlaySpinner';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import ImagePicker from 'react-native-image-picker';
+import AsyncStorage from '@react-native-community/async-storage';
 const CryptoJS = require('crypto-js');
 
 const { height } = Dimensions.get('window');
@@ -16,21 +17,13 @@ const { height } = Dimensions.get('window');
 
 class Payment extends React.Component {
   static navigationOptions = (navigation) => {
-    // console.log(navigation.navigation.state.params.stripeKey,'Nnnnnnnnn')
     stripe.setOptions({
       publishableKey: navigation.navigation.state.params.stripeKey
     });
-    //const { params = {} } = navigation.state;
     const { navigate } = navigation.navigation.navigate
     return {
-      // headerRight:
-      //      <TouchableOpacity style={styles.headerIconContainer}>
-      //          <Image source={require('../icons/edit-pencil.png')} style={styles.headerIcon}/>
-      //      </TouchableOpacity>,
-
       headerStyle: {
         backgroundColor: 'white'
-
       },
       headerTintColor: 'gray',
     }
@@ -51,7 +44,7 @@ class Payment extends React.Component {
       monthArr: ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       nameValidation: false,
       emailValidation: false,
-      paymentMonth: false,
+      // paymentMonth: false,
       amountValidation: false,
       currencyValidation: false,
       isVisibleModal: false,
@@ -68,8 +61,19 @@ class Payment extends React.Component {
       transactionIdValidation: false,
       serviceNameValidation: false,
       receiptImgValidation: false,
-      transactionId:''
+      transactionId: '',
+      userId: '',
+      serviceName: ''
     }
+  }
+  componentWillMount() {
+    AsyncStorage.getItem('currentUser').then((value) => {
+      let userData = JSON.parse(value)
+      console.log(userData, 'userDatas')
+      this.setState({
+        userId: userData._id
+      })
+    })
   }
   cardDetail = (e) => {
     if (e.status.number == "invalid" || e.status.expiry == 'invalid' || e.status.cvc == 'invalid',
@@ -91,9 +95,8 @@ class Payment extends React.Component {
   }
   pay = async () => {
     const { name, email, monthArr, paymentMonth, amount, currency, creditCardNo, cvc, expiry, typeCard,
-      isLoading, serviceValidation } = this.state;
-    console.log(serviceValidation, 'serviceValidation')
-
+      isLoading, serviceValidation, userId, serviceName, transactionId, receiptImg } = this.state;
+    let res;
     //validation of the form
     if (serviceValidation == "credit card") {
       if (name == '') {
@@ -244,53 +247,58 @@ class Payment extends React.Component {
         })
       }
     }
+
     //get current year
     const year = new Date().getFullYear();
-
-    //seprate month & year for create token request
-    let expMonth = Number(expiry.slice(0, 2));
-    let expYear = Number(expiry.slice(3, 5));
-    //object for create token
-    const params = {
-      // mandatory
-      number: creditCardNo,
-      expMonth: expMonth,
-      expYear: expYear,
-      cvc: cvc,
-      typeCard: typeCard,
-    }
-    console.log(params)
-    if (params.number != '') {
-      console.log('true')
-      this.setState({
-        isLoading: true
-      })
-    }
-
-    const token = await stripe.createTokenWithCard(params)
-    console.log(token, 'token')
-    //geting payment month & year
+    // //geting payment month & year
     let monthNumber = Number(paymentMonth)
-    console.log(monthNumber , 'monthNumber')
     let paymentMonthYear = `${monthArr[monthNumber]}, ${year}`
-    console.log(paymentMonthYear , 'paymentMonthYear')
 
-    //send object to database
-    let paymentObj = {
-      name: name,
-      email: email,
-      // serviceName: serviceName,
-      paymentMonth: paymentMonthYear,
-      amount: amount,
-      currency: currency,
-      // transactionId: transactionId,
-      // receiptImg: receiptImg,
-      token: token.tokenId,
+    if (serviceValidation == "credit card") {
+      //seprate month & year for create token request
+      let expMonth = Number(expiry.slice(0, 2));
+      let expYear = Number(expiry.slice(3, 5));
+      //object for create token
+      const params = {
+        // mandatory
+        number: creditCardNo,
+        expMonth: expMonth,
+        expYear: expYear,
+        cvc: cvc,
+        typeCard: typeCard,
+      }
+      if (params.number != '') {
+        this.setState({
+          isLoading: true
+        })
+      }
+      const token = await stripe.createTokenWithCard(params)
+      // send object to database
+      let paymentObj = {
+        name: name,
+        email: email,
+        paymentMonth: paymentMonthYear,
+        amount: amount,
+        currency: currency,
+        token: token.tokenId,
+        userId: userId
+      }
+      res = await HttpUtils.post('payment', paymentObj);
     }
-    console.log(paymentObj, 'paymentObj')
-    let res = await HttpUtils.post('payment', paymentObj);
-    console.log(res, 'res')
-
+    else if(serviceValidation == "other"){
+      // other screen data send on api
+      let paymentObj = {
+        serviceName: serviceName,
+        email: email,
+        paymentMonth: paymentMonthYear,
+        amount: amount,
+        currency: currency,
+        transactionId: transactionId,
+        receiptImg: receiptImg,
+        userId: userId
+      }
+      res = await HttpUtils.post('otherpayment', paymentObj);
+    }
     if (res.code == 200) {
       this.setState({
         isLoading: false,
@@ -305,7 +313,6 @@ class Payment extends React.Component {
         this.toastFunction(`Some thing went wrong of ${res.error}`, this.state.position, DURATION.LENGTH_LONG, true)
       })
     }
-    console.log(res, 'payemnt response')
   }
 
   updateCurrency = (e) => {
@@ -427,8 +434,10 @@ class Payment extends React.Component {
       receiptImg,
       serviceNameValidation,
       transactionIdValidation,
-      receiptImgValidation
+      receiptImgValidation,
+      serviceValidation
     } = this.state;
+    console.log(serviceValidation , 'serviceValidation')
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={{ backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -555,18 +564,18 @@ class Payment extends React.Component {
                 : null}
             </View>
             {/* <View style={styles.cardContainer}> */}
-            <View style={{marginTop:15}}></View>
-              <CreditCardInput
-                onChange={this.cardDetail}
-                allowScroll={true}
-                
-              />
+            <View style={{ marginTop: 15 }}></View>
+            <CreditCardInput
+              onChange={this.cardDetail}
+              allowScroll={true}
+
+            />
             {/* </View> */}
 
             {/* loader show */}
-            {/* {isLoading ? <OverlayLoader /> : null} */}
+            {isLoading ? <OverlayLoader /> : null}
             {/* payment succesfully show modal */}
-            {/* {dataSubmit ?
+            {dataSubmit ?
               <Modal
                 isVisible={this.state.isVisibleModal}
                 animationIn='zoomIn'
@@ -591,8 +600,8 @@ class Payment extends React.Component {
               </Modal>
               :
               null
-            } */}
-            {/* in case error of payment stripe the show toast
+            }
+            {/* in case error of payment stripe the show toast */}
             <Toast ref="toastWithStyle"
               style={{ backgroundColor: '#FF6200' }}
               position={this.state.position}
@@ -601,7 +610,7 @@ class Payment extends React.Component {
               fadeOutDuration={1000}
               opacity={0.8}
               textStyle={{ color: 'white', fontFamily: 'MontserratLight', }}
-            /> */}
+            />
           </View>
             :
             <View>
@@ -728,7 +737,7 @@ class Payment extends React.Component {
                   {receiptImg == '' ?
                     <Text style={styles.textStyle}>Upload Receipt</Text>
                     :
-                    <Image source={{ uri: `${receiptImg}` }} style={styles.profilPicStyle} />
+                    <Image source={{ uri: `${receiptImg}` }} style={styles.reciptImg} />
                   }
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.imgFile} onPress={this.choosePhotoFunc}>

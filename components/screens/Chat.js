@@ -36,12 +36,17 @@ const CryptoJS = require('crypto-js');
 
 
 class Chatscreen extends React.Component {
-  // static navigationOptions = ({ navigation }) => {
-
-  //   return {
-  //     header: () => null
-  //   }
-  // };
+  static navigationOptions = {
+    title: 'Chat',
+    headerTitleStyle: {
+      fontFamily: "MontserratExtraBold",
+      fontSize: 15,
+      color: '#000000',
+      textAlign: 'center',
+      alignSelf: 'center',
+    },
+    headerTintColor: '#808080',
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -136,22 +141,6 @@ class Chatscreen extends React.Component {
     })
     // });
 
-    // AsyncStorage.getItem('opponentProfile').then((value) => {
-    //   let userData = JSON.parse(value);
-    //   if (value) {
-    //     this.setState({
-    //       opponnetAvatarSource: userData.image,
-    //       name: userData.name
-    //     })
-    //   }
-    //   else if (userData.name != undefined) {
-    //     this.setState({
-    //       opponnetAvatarSource: userData.image,
-    //       name: userData.name
-    //     })
-    //   }
-    // })
-
     let chatArrayTemp = [];
     let dataFromLocalStorage;
     AsyncStorage.getItem("currentUser").then(value => {
@@ -170,16 +159,6 @@ class Chatscreen extends React.Component {
           chatArrayTemp.push(firbaseData)
         }
       }
-      // if (dataFromLocalStorage.trainnerId) {
-      // this.setState({
-
-      // })
-      // }
-      // else if (dataFromLocalStorage.tainnyId) {
-      //   this.setState({
-      //     opponentId: dataFromLocalStorage.tainnyId,
-      //   })
-      // }
       this.setState({
         chatMessages: chatArrayTemp,
         userId: dataFromLocalStorage._id,

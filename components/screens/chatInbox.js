@@ -16,11 +16,12 @@ YellowBox.ignoreWarnings([
 
 
 class ChatInbox extends React.Component {
-    static navigationOptions = ({ navigation }) => {
-        return {
-            header: () => null
-        }
-    };
+   
+    // static navigationOptions = ({ navigation }) => {
+    //     return {
+    //         header: () => null
+    //     }
+    // };
     constructor(props) {
         super(props);
         this.state = {
