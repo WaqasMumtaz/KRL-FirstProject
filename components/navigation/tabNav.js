@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
-import Icon from 'react-native-vector-icons/FontAwesome';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 import { Image } from 'react-native';
 import ChatInbox from '../screens/chatInbox';
 // import Chatscreen from '../screens/Chat';

@@ -445,17 +445,14 @@ class Macrocalculator extends React.Component {
                                 maxDate={date}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
-                                // customStyles={{
-                                //     dateIcon: {
-                                //         position: 'absolute',
-                                //         left: 0,
-                                //         top: 4,
-                                //         marginLeft: 0
-                                //     },
-                                //     dateInput: {
-                                //         marginLeft: 36
-                                //     }
-                                // }}
+                                customStyles={{
+                                    dateIcon: {
+                                        width: 0,
+                                        height: 0,
+                                    },
+                                    backgroundColor:'white',
+                                    opacity:0.3
+                                }}
                                 onDateChange={(date) => { this.setState({ dob: date }) }}
                             />
                         </View>
