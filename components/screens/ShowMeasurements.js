@@ -171,8 +171,8 @@ class ShowMeasurementsScreen extends React.Component {
                     backdropOpacity={0.8}
                     backdropColor='white'
                     coverScreen={true}
-                    animationInTiming={800}
-                    animationOutTiming={500}
+                    animationInTiming={700}
+                    animationOutTiming={300}
                 >
 
                     <LogMeasurementsDetailedView

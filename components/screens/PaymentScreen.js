@@ -625,11 +625,11 @@ class Payment extends React.Component {
                   style={{ backgroundColor: '#e5e5e5', height: 40, fontFamily: 'MontserratLight' }}
                 >
                   <Picker.Item label='Select a service...' color='gray' value='0' />
-                  <Picker.Item label="Easy Piasa" value="easyPiasa" />
-                  <Picker.Item label="Mobi Cash" value="mobiCash" />
-                  <Picker.Item label="Ubl Omni" value="ublOmni" />
-                  <Picker.Item label="Cheque" value="cheque" />
-                  <Picker.Item label="Other" value="other" />
+                  <Picker.Item label="Easy Piasa" value="Easypaisa" />
+                  <Picker.Item label="Mobi Cash" value="Mobicash" />
+                  <Picker.Item label="Ubl Omni" value="Ublomni" />
+                  <Picker.Item label="Cheque" value="Cheque" />
+                  <Picker.Item label="Other" value="Other" />
                 </Picker>
               </View>
               <View>
@@ -661,7 +661,7 @@ class Payment extends React.Component {
               </View>
               <View style={styles.paymentMonthContainer}>
                 <Text style={styles.inputLabelsStyle}>Payment For The Month Of</Text>
-                <TextInput placeholder="e.g 01"
+                <TextInput placeholder="e.g sep."
                   style={styles.inputTextStyle}
                   keyboardType={"numeric"}
                   placeholderColor="#4f4f4f"

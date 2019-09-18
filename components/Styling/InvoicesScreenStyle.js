@@ -34,14 +34,14 @@ forImgs:{
 },
 bodyContainer:{
     flex:1,
-    //backgroundColor:'red',
-    flexDirection:'row',
+        //backgroundColor:'yellow',
+        flexDirection:'row',
+        //flexWrap:'wrap',
+        justifyContent:'space-evenly',
+        padding:10
 },
 leftContainer:{
-    flex:1,
-    //backgroundColor:'yellow',
-    marginRight:8,
-
+    
 },
 rightContainer:{
     flex:1,
@@ -51,8 +51,9 @@ rightContainer:{
 cardLeft:{
     // borderWidth:3,
     // borderColor:'black',
-    height:216,
+    height:255,
     borderRadius:5,
+    width:175,
     backgroundColor:'black',
     marginTop:15,
 },
@@ -122,6 +123,25 @@ superScriptTextStyle:{
        flex:1,
        marginBottom:30
        
+   },
+   checkReceipt:{
+       marginTop:5,
+       flexDirection:'row',
+       justifyContent:'space-between'
+   },
+   checkReceiptText:{
+    color:'#a6a6a6',
+    fontFamily:'MontserratLight',
+   },
+   iconStyle:{
+       height:20,
+       width:20,
+       
+   },
+   receiptImgStyle:{
+       height:390,
+       width:370,
+       marginTop:10
    }
 })
 
