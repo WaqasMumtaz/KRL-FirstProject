@@ -69,7 +69,6 @@ class Login extends React.Component {
           if (dataUser.profile[0]) {
             let myProfile = dataUser.profile[0];
             myProfile.type = dataUser.type;
-            console.log(myProfile, 'myProfile')
             AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
           }
           else {
@@ -78,30 +77,161 @@ class Login extends React.Component {
             myProfile.email = dataUser.email;
             myProfile.userId = dataUser._id;
             myProfile.type = dataUser.type;
-            console.log(myProfile, 'myProfile')
             AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
           }
           if (dataUser.trainnerProfileData[0]) {
             let opponentData = dataUser.trainnerProfileData;
             opponentData[0].type = "Coach";
-            console.log(opponentData, 'opponentData')
             AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
           }
           else if (dataUser.trainnyProfiledata.length >= 0) {
-            // let opponentData = dataUser.trainnyProfiledata;
-            // let traineesData = {  }
-            // let traineeName = dataUser.assignTrainny;
-            // let traineeIds = dataUser.tainnyId;
-            // for (let i = 0; i < traineeName.length; i++) {
-            //   traineesData[i] = name.traineeName[i]
-            // }
-            // console.log(traineesData, 'traineesData')
-            // console.log(opponentData , 'opponentData')
-            // console.log(traineeName , 'traineeName')
-            // console.log(traineeIds , 'traineeIds')
+            let opponentData = dataUser.trainnyProfiledata;
+            let traineeName = dataUser.assignTrainny;
+            let traineeIds = dataUser.tainnyId;
+            let traineeDataArr = [];
+            let finalDataTrainee = [];
+            for (let i = 0; i < traineeName.length; i++) {
+              let traineesData = {}
+              traineesData["name"] = traineeName[i];
+              traineesData['userId'] = traineeIds[i];
+              traineesData['type'] = "Trainee";
+              traineeDataArr.push(traineesData)
+            }
+            let openentData = []
+            opponentData.map((opponent, key) => {
+              opponent.map((ele, key) => {
+                openentData.push(ele)
+              })
+            })
 
-            // opponentData.type = "Trainee";
-            // AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+            // console.log(openentData.valueOf().userId, 'openentData')
+            // for (var i = 0; i < traineeDataArr.length; i++) {
+
+
+            //   // if(traineeDataArr.includes(openentData.userId)){
+            //   //   finalDataTrainee.push(openentData[i])
+            //   // }
+            //   // else{
+            //   //   finalDataTrainee.push(traineeDataArr[i])
+            //   // }
+
+            //   // console.log(traineeDataArr.includes(openentData[i].userId), 'kkjkkkkk')
+            //   // openentData.map((ele, key) => {
+            //   // traineeDataArr.map((elem, key) => {
+            //   for (let j in traineeDataArr) {
+            //     if (openentData[i] != undefined) {
+            //       if (traineeDataArr[j].userId == openentData[i].userId) {
+            //         finalDataTrainee.push(openentData[i]);
+            //         console.log('ids matched')
+            //       }
+            //     }
+            //     else {
+            //       finalDataTrainee.push(traineeDataArr[i]);
+            //       // console.log(finalDataTrainee, 'finalDataTrainee')
+            //     }
+            //     // if (traineeDataArr[i].userId == '') {
+            //     //   finalDataTrainee.push(openentData);
+            //     //   console.log('panoti')
+            //     //   console.log(finalDataTrainee, 'finalDataTrainee')
+            //     // }
+            //     // else {
+            //     //   console.log('not found')
+            //     //   finalDataTrainee.push(traineeDataArr[i]);
+            //     // }
+            //   }
+            //   // else {
+            //   //   finalDataTrainee.push(traineeDataArr[i]);
+            //   //   console.log(finalDataTrainee, 'finalDataTrainee')
+            //   // }
+            //   // console.log(openentData[i], 'openentData')
+            //   // console.log(traineeDataArr[i], 'traineeDataArr')
+
+            //   // })
+
+            //   // })
+            // }
+
+
+            // traineeDataArr.map((elem, key) => {
+            //   // if (openentData[key] != undefined) {
+            //   openentData.map((ele, key) => {
+            //     if (elem.userId == ele.userId) {
+            //       finalDataTrainee.push(ele);
+            //       break;
+            //     }
+            //     else {
+            //       finalDataTrainee.push(elem);
+            //     }
+            //   })
+            //   // }
+            //   // else {
+            //   //   finalDataTrainee.push(elem);
+            //   // }
+            //   // AsyncStorage.setItem('opponentProfile', JSON.stringify(finalDataTrainee));
+            // })
+
+            // for (var i = 0; i < traineeDataArr.length; i++) {
+            //   // for (var j = 0; j < openentData.length; j++) {
+            //   // openentData.map((ele, key) => {
+            //   // var a = openentData.indexOf(traineeDataArr);
+            //   // if (traineeDataArr.indexOf(openentData)) {
+            //   // if (openentData[i] != undefined) {
+            //     if (traineeDataArr[i].userId == opponentData[i].userId) {
+            //       console.log('userId matched')
+            //       // break;
+            //       finalDataTrainee.push(openentData[i]);
+            //     }
+            //   // }
+            //   // else {
+            //   //   finalDataTrainee.push(traineeDataArr[i]);
+            //   // }
+            //   // })
+            //   // }
+            //   // else {
+            //   //   finalDataTrainee.push(elem);
+            //   // }
+            //   // AsyncStorage.setItem('opponentProfile', JSON.stringify(finalDataTrainee));
+            //   // }
+            // }
+
+
+            console.log(finalDataTrainee, 'finalDataTrainee')
+
+
+            // for (var propertyName in traineeDataArr) {
+            //   if (traineeDataArr[propertyName] !== openentData[propertyName]) {
+            //     console.log('if true')
+            //     // objectsAreSame = false;
+            //     // break;
+            //   }
+            //   else{
+            //     console.log('else true')
+
+            //   }
+            // }
+
+
+            // traineeDataArr.forEach((e1) => openentData.forEach((e2) => {
+            //   if (e1 === e2) {
+            //     finalDataTrainee.push(e2)
+            //   }
+            //   else {
+            //     finalDataTrainee.push(e1)
+
+            //   }
+            // }
+            // ));
+
+
+            // const arraysEqual = (a1, a2) =>
+            //   a1.length === a2.length && a1.every((o, idx) => objectsEqual(o, a2[idx]));
+            // for (var i = 0; i < traineeDataArr.length; i++) {
+            //   console.log(arraysEqual(traineeDataArr, openentData), 'finalDataTrainee')
+
+            // }
+
+
+
           }
 
           db.ref(`users/`).push(dataUser)
