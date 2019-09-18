@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Alert,
     StyleSheet,
     Text,
     View,
@@ -53,9 +54,12 @@ class Invoices extends React.Component {
             showPicker: false,
             monthArr: ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             fullDate: '',
-            allDataShow:true,
-            monthRelatedData:false,
-            renderMonthData:''
+            allDataShow: true,
+            monthRelatedData: false,
+            renderMonthData: '',
+            noFound: false,
+            releaseMonth:''
+
 
         }
 
@@ -149,8 +153,8 @@ class Invoices extends React.Component {
     _keyExtractor = (item, index) => item.id;
 
     renderDataItems = ({ item }) => {
-        console.log('data items >>', item)
-        console.log('service name >>>', item.serviceName)
+        // console.log('data items >>', item)
+        // console.log('service name >>>', item.serviceName)
         return (
             <View style={styles.bodyContainer}>
                 <View style={styles.cardLeft}>
@@ -197,66 +201,69 @@ class Invoices extends React.Component {
         )
     }
 
-    monthAndYearRenderData =({ item }) => {
+    
+
+    monthAndYearRenderData = ({ item }) => {
         console.log('data items >>', item)
-        console.log('service name >>>', item.paymentMonth)
+        console.log('service name >>>', item.paymentMonth);
         return (
             <View style={styles.bodyContainer}>
+                
                 {
-                    item.paymentMonth == this.state.renderMonthData ? 
-                    <View style={styles.cardLeft}>
-                    <View style={styles.childContainer}>
-                        <View style={styles.cardNumberContainer}>
-                            <Text style={styles.cardNumberStyle}>{item.serviceName == undefined ?
-                                'Online Payment'
-                                : item.serviceName
-                            }</Text>
-                            {item.serviceName != undefined ?
-                                <View style={styles.checkReceipt}>
-                                    <Text style={styles.checkReceiptText}>Check Receipt</Text>
-                                    <TouchableOpacity onPress={this.openModal}>
-                                        <Image source={require('../icons/attach-orange.png')}
-                                            style={styles.iconStyle}
-                                            resizeMode='cover'
-                                        />
-                                    </TouchableOpacity>
+
+                    item.paymentMonth == this.state.renderMonthData ?
+                        <View style={styles.cardLeft}>
+                            <View style={styles.childContainer}>
+                                <View style={styles.cardNumberContainer}>
+                                    <Text style={styles.cardNumberStyle}>{item.serviceName == undefined ?
+                                        'Online Payment'
+                                        : item.serviceName
+                                    }</Text>
+                                    {item.serviceName != undefined ?
+                                        <View style={styles.checkReceipt}>
+                                            <Text style={styles.checkReceiptText}>Check Receipt</Text>
+                                            <TouchableOpacity onPress={this.openModal}>
+                                                <Image source={require('../icons/attach-orange.png')}
+                                                    style={styles.iconStyle}
+                                                    resizeMode='cover'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                        : null
+                                    }
+                                    <Text style={styles.priceDetail}>
+                                        Rs. {item.amount}
+                                    </Text>
+                                    <Text style={styles.textStyle}>Coach fees</Text>
+                                    <View style={styles.dateMonthContainer}>
+                                        <Text style={styles.monthName}>
+                                            {item.paymentMonth}
+                                        </Text>
+                                        
+                                    </View>
+                                    <Text style={styles.textStyle}>Issue date</Text>
+                                    <View style={styles.paymentStatusContainer}>
+                                        <Text style={styles.unpaidTextStyle}>paid</Text>
+                                        <Text style={styles.textStyle}>Payment status</Text>
+                                    </View>
                                 </View>
-                                : null
-                            }
-                            <Text style={styles.priceDetail}>
-                                Rs. {item.amount}
-                            </Text>
-                            <Text style={styles.textStyle}>Coach fees</Text>
-                            <View style={styles.dateMonthContainer}>
-                                <Text style={styles.monthName}>
-                                    {item.paymentMonth}
-                                </Text>
-                                {/* <Text style={styles.dateNumber}>1</Text>
-              <Text style={styles.superScriptTextStyle}>st</Text>
-              <Text style={styles.yearStyle}>,2019</Text> */}
-                            </View>
-                            <Text style={styles.textStyle}>Issue date</Text>
-                            <View style={styles.paymentStatusContainer}>
-                                <Text style={styles.unpaidTextStyle}>paid</Text>
-                                <Text style={styles.textStyle}>Payment status</Text>
+
                             </View>
                         </View>
-
-                    </View>
-                </View>
-                :
-                console.log('Not data find')
+                        
+                        :
+                        // this.setState({noFound:true})
+                        console.log('No found Data')
+                        
 
                 }
+                
                 
             </View>
         )
     }
 
-    componentDidMount() {
-        console.log('month >>>', this.state.month)
-
-    }
+   
     showMonthPicker = () => {
         this.setState({
             showPicker: true
@@ -267,7 +274,7 @@ class Invoices extends React.Component {
 
     render() {
         const { navigate } = this.props.navigation;
-        const { allDataUser, date, month, showPicker,allDataShow ,monthRelatedData} = this.state;
+        const { allDataUser, date, month, showPicker, allDataShow, monthRelatedData,releaseMonth } = this.state;
         console.log('render all data user >>>', allDataUser);
         // console.log('Receipt image >>>', this.state.receipt_img);
         //console.log('year month >>>', this.state.month)
@@ -282,7 +289,7 @@ class Invoices extends React.Component {
                 <View style={styles.arrowContainer}>
                     {/* <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity> */}
 
-                    <TouchableOpacity onPress={this.showMonthPicker}><Text>Click Here</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={this.showMonthPicker}><Text>Select Month</Text></TouchableOpacity>
                     {/* <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity> */}
                 </View>
                 <ScrollView style={{ flex: 1, backgrousndColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
@@ -292,6 +299,7 @@ class Invoices extends React.Component {
                             <MonthSelectorCalendar
                                 //selectedDate={}
                                 onMonthTapped={(date) => this.setState({ month: date }, () => {
+                                    //this.renderDataFun.bind(this, date._i)
                                     if (date._i) {
                                         this.setState({ showPicker: false, })
                                         const getMonth = Number(date._i.slice(3, 4));
@@ -302,12 +310,13 @@ class Invoices extends React.Component {
                                         const concatMonthYear = `${getMonthName}, ${getYear}`;
                                         console.log('concate month >>>', concatMonthYear)
                                         this.setState({
-                                           renderMonthData: concatMonthYear,
-                                           allDataShow:false,
-                                           monthRelatedData:true
+                                            renderMonthData: concatMonthYear,
+                                            allDataShow: false,
+                                            monthRelatedData: true,
                                         })
-
+                                     
                                     }
+                                    
                                 })}
                             />
                             : null
@@ -321,15 +330,40 @@ class Invoices extends React.Component {
                         />
                     }
                     {
-                        monthRelatedData && 
-                        
+                        monthRelatedData &&
                         <FlatList
                             data={allDataUser}
                             renderItem={this.monthAndYearRenderData}
                             keyExtractor={this._keyExtractor}
                             numColumns={columsNum}
                         />
+                    
                     }
+                    {/* {
+                        this.state.noFound ?
+                            // <View style={{ justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
+                            //     <Text style={{ fontFamily: 'MontserratLight', color: '#FF6200' }}>No Found Record Selected Month</Text>
+                            // </View>
+                            alert('No Found Data')
+                            :
+                            null
+                    } */}
+                    {
+                        this.state.noFound == true && showPicker == false ?
+                          Alert.alert('NO Found Data',
+                          [
+                            {text: 'OK', onPress: () => 
+                           this.setState({
+                               allDataShow:true,
+                               noFound:false
+                           })
+                            },
+                          ],
+                          )
+                          : 
+                          null
+                    }
+                     
 
 
 
