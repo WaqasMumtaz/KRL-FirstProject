@@ -47,7 +47,7 @@ class ChatInbox extends React.Component {
         const senderName = messageUser && messageUser.map((elem, key) => {
             return (
                 <View style={styles.nameContainer}>
-                    <TouchableOpacity onPress={this.sendOppentUserData.bind(this, elem)}>
+                    <TouchableOpacity style={styles.nameOpacity} onPress={this.sendOppentUserData.bind(this, elem)}>
                         <Text style={styles.name}>{elem.name}</Text>
                     </TouchableOpacity>
                 </View>
