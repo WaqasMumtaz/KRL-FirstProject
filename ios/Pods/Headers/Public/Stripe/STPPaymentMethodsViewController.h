@@ -1,1 +1,5 @@
+XSym
+0070
+d1020633d54534220e7d309bd48ed10e
 ../../../Stripe/Stripe/PublicHeaders/STPPaymentMethodsViewController.h
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

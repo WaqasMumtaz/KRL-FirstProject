@@ -1,1 +1,5 @@
+XSym
+0052
+a611d24f21cb0165bd774c37c11ad523
 ../../../Stripe/Stripe/STPMultipartFormDataEncoder.h
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           

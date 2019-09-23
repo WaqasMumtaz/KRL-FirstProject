@@ -50,18 +50,13 @@ const MainNavigator = createStackNavigator({
   // Profile:{screen:Profile},
   // Linechart: { screen: Linechart },
   //StepCountScreen:{screen:StepCountScreen},
-
-  // Login: { screen: Login },
-
-//  Login: { screen: Login },
-
-  // Signup: { screen: Signup },
-  // ResetpasswordScreen: { screen: ResetpasswordScreen }
-  // ConfirmResetPassword: { screen: ConfirmResetPassword },
-  // Setupscreen1: { screen: Setupscreen1 },
-  // Setupscreen: { screen: Setupscreen },
-  // LastSetUpScreen: { screen: LastSetUpScreen },
-
+  Login: { screen: Login },
+  Signup: { screen: Signup },
+  ResetpasswordScreen: { screen: ResetpasswordScreen },
+  ConfirmResetPassword: { screen: ConfirmResetPassword },
+  Setupscreen1: { screen: Setupscreen1 },
+  Setupscreen: { screen: Setupscreen },
+  LastSetUpScreen: { screen: LastSetUpScreen },
 
 
   // Login: {
@@ -69,25 +64,6 @@ const MainNavigator = createStackNavigator({
   // },
 
   
-
-  // Signup: {
-  //   screen: Signup
-  // },
-  // ResetpasswordScreen: {
-  //   screen: ResetpasswordScreen
-  // },
-  // ConfirmResetPassword: {
-  //   screen: ConfirmResetPassword
-  // },
-  // Setupscreen1: {
-  //   screen: Setupscreen1
-  // },
-  // Setupscreen: {
-  //   screen: Setupscreen
-  // },
-  // LastSetUpScreen: {
-  //   screen: LastSetUpScreen
-  // },
   BottomTabe: {
     screen: BottomTabe,
     navigationOptions: {

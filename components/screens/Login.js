@@ -15,7 +15,6 @@ import styles from '../Styling/LoginScreenStyle';
 import HttpUtilsFile from '../Services/HttpUtils';
 import firebase from '../../Config/Firebase';
 import OverlayLoader from '../Loader/OverlaySpinner';
-
 import 'firebase/firestore';
 const db = firebase.database();
 
@@ -38,7 +37,31 @@ class Login extends React.Component {
       emailAndPasswrd: false
 
     }
+    this.checkUserLogin()
   }
+
+  checkUserLogin= async ()=>{
+    const { navigate } = this.props.navigation;
+    this.setState({
+      isLoading: true
+    })
+    const getData = await AsyncStorage.getItem("currentUser");
+          // const parsForm = JSON.parse(getData)
+          // console.log('current user data >>>',parsForm)
+          if(getData){
+            this.setState({
+              isLoading: false
+            })
+           navigate('BottomTabe')
+          }
+          else {
+            this.setState({
+              isLoading: false
+            })
+            navigate('Login')
+          }
+  }
+  
 
   loginFunc = async () => {
     const { navigate } = this.props.navigation;
@@ -104,133 +127,12 @@ class Login extends React.Component {
               })
             })
 
-            // console.log(openentData.valueOf().userId, 'openentData')
-            // for (var i = 0; i < traineeDataArr.length; i++) {
-
-
-            //   // if(traineeDataArr.includes(openentData.userId)){
-            //   //   finalDataTrainee.push(openentData[i])
-            //   // }
-            //   // else{
-            //   //   finalDataTrainee.push(traineeDataArr[i])
-            //   // }
-
-            //   // console.log(traineeDataArr.includes(openentData[i].userId), 'kkjkkkkk')
-            //   // openentData.map((ele, key) => {
-            //   // traineeDataArr.map((elem, key) => {
-            //   for (let j in traineeDataArr) {
-            //     if (openentData[i] != undefined) {
-            //       if (traineeDataArr[j].userId == openentData[i].userId) {
-            //         finalDataTrainee.push(openentData[i]);
-            //         console.log('ids matched')
-            //       }
-            //     }
-            //     else {
-            //       finalDataTrainee.push(traineeDataArr[i]);
-            //       // console.log(finalDataTrainee, 'finalDataTrainee')
-            //     }
-            //     // if (traineeDataArr[i].userId == '') {
-            //     //   finalDataTrainee.push(openentData);
-            //     //   console.log('panoti')
-            //     //   console.log(finalDataTrainee, 'finalDataTrainee')
-            //     // }
-            //     // else {
-            //     //   console.log('not found')
-            //     //   finalDataTrainee.push(traineeDataArr[i]);
-            //     // }
-            //   }
-            //   // else {
-            //   //   finalDataTrainee.push(traineeDataArr[i]);
-            //   //   console.log(finalDataTrainee, 'finalDataTrainee')
-            //   // }
-            //   // console.log(openentData[i], 'openentData')
-            //   // console.log(traineeDataArr[i], 'traineeDataArr')
-
-            //   // })
-
-            //   // })
-            // }
-
-
-            // traineeDataArr.map((elem, key) => {
-            //   // if (openentData[key] != undefined) {
-            //   openentData.map((ele, key) => {
-            //     if (elem.userId == ele.userId) {
-            //       finalDataTrainee.push(ele);
-            //       break;
-            //     }
-            //     else {
-            //       finalDataTrainee.push(elem);
-            //     }
-            //   })
-            //   // }
-            //   // else {
-            //   //   finalDataTrainee.push(elem);
-            //   // }
-            //   // AsyncStorage.setItem('opponentProfile', JSON.stringify(finalDataTrainee));
-            // })
-
-            // for (var i = 0; i < traineeDataArr.length; i++) {
-            //   // for (var j = 0; j < openentData.length; j++) {
-            //   // openentData.map((ele, key) => {
-            //   // var a = openentData.indexOf(traineeDataArr);
-            //   // if (traineeDataArr.indexOf(openentData)) {
-            //   // if (openentData[i] != undefined) {
-            //     if (traineeDataArr[i].userId == opponentData[i].userId) {
-            //       console.log('userId matched')
-            //       // break;
-            //       finalDataTrainee.push(openentData[i]);
-            //     }
-            //   // }
-            //   // else {
-            //   //   finalDataTrainee.push(traineeDataArr[i]);
-            //   // }
-            //   // })
-            //   // }
-            //   // else {
-            //   //   finalDataTrainee.push(elem);
-            //   // }
-            //   // AsyncStorage.setItem('opponentProfile', JSON.stringify(finalDataTrainee));
-            //   // }
-            // }
-
+            
 
             console.log(finalDataTrainee, 'finalDataTrainee')
 
 
-            // for (var propertyName in traineeDataArr) {
-            //   if (traineeDataArr[propertyName] !== openentData[propertyName]) {
-            //     console.log('if true')
-            //     // objectsAreSame = false;
-            //     // break;
-            //   }
-            //   else{
-            //     console.log('else true')
-
-            //   }
-            // }
-
-
-            // traineeDataArr.forEach((e1) => openentData.forEach((e2) => {
-            //   if (e1 === e2) {
-            //     finalDataTrainee.push(e2)
-            //   }
-            //   else {
-            //     finalDataTrainee.push(e1)
-
-            //   }
-            // }
-            // ));
-
-
-            // const arraysEqual = (a1, a2) =>
-            //   a1.length === a2.length && a1.every((o, idx) => objectsEqual(o, a2[idx]));
-            // for (var i = 0; i < traineeDataArr.length; i++) {
-            //   console.log(arraysEqual(traineeDataArr, openentData), 'finalDataTrainee')
-
-            // }
-
-
+            
 
           }
 

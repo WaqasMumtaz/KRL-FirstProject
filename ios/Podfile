@@ -1,13 +1,7 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
-target 'FirstProject' do
+target 'GetFit' do
   pod 'Stripe', '~> 14.0.0'
   inherit! :search_paths
-  pod 'tipsi-stripe', :path => '../node_modules/tipsi-stripe'
-
-  pod 'RNSha1', :path => '../node_modules/react-native-sha1'
-
-  pod 'react-native-video', :path => '../node_modules/react-native-video'
-
 end

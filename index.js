@@ -4,8 +4,22 @@
 
 import {AppRegistry} from 'react-native';
 import App from './App';
-//import reactNativePedometer from './components/Pedometer/checkFile';
 import {name as appName} from './app.json';
+import firebase, { RemoteMessage } from 'react-native-firebase';
+
+
+// const handleFCMNotification = async (message: RemoteMessage) => {
+//     console.log('FCM OFFLINE: ', message);
+//     return Promise.resolve();
+//   }
+// const handleFCMNotification = async (message: RemoteMessage) => {
+//     console.log('FCM OFFLINE: ', message);
+//     return Promise.resolve();
+//   }
+  
 
  AppRegistry.registerComponent(appName, () => App);
-// AppRegistry.registerComponent(appName, () => reactNativePedometer);
+
+//  AppRegistry.registerHeadlessTask('RNFirebaseBackgroundMessage', () => PushNotificationService.handleFCMNotification);
+
+  

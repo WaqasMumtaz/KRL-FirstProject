@@ -1,4 +1,4 @@
-package com.firstproject;
+package com.getfit;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -14,16 +14,16 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "FirstProject";
+        return "GetFit";
     }
-      @Override
-        protected ReactActivityDelegate createReactActivityDelegate() {
-             return new ReactActivityDelegate(this, getMainComponentName()) {
-      @Override
-            protected ReactRootView createRootView() {
-       return new RNGestureHandlerEnabledRootView(MainActivity.this);
-      }
-      
-    };
+    @Override
+    protected ReactActivityDelegate createReactActivityDelegate() {
+         return new ReactActivityDelegate(this, getMainComponentName()) {
+  @Override
+        protected ReactRootView createRootView() {
+   return new RNGestureHandlerEnabledRootView(MainActivity.this);
   }
+  
+};
+}
 }

@@ -17,8 +17,8 @@ import HttpUtilsFile from '../Services/HttpUtils';
 import Modal from "react-native-modal";
 import DatePicker from 'react-native-datepicker';
 import MonthSelectorCalendar from 'react-native-month-selector';
-import moment from 'react-native';
-console.log('moment', moment)
+// import moment from 'react-native';
+// console.log('moment', moment)
 
 const { height } = Dimensions.get('window');
 const columsNum = 2;
@@ -58,7 +58,9 @@ class Invoices extends React.Component {
             monthRelatedData: false,
             renderMonthData: '',
             noFound: false,
-            releaseMonth:''
+            releaseMonth: '',
+            noInvoices: '',
+            showNullInvoices: false
 
 
         }
@@ -88,12 +90,6 @@ class Invoices extends React.Component {
 
 
     dataRetrieve = async () => {
-        //  AsyncStorage.getItem("currentUser").then(value => {
-        //     const userData = JSON.parse(value);
-
-        //    });
-        // console.log('userData from local storage >>>', userData)
-
         const getData = await AsyncStorage.getItem("currentUser");
         const parsForm = JSON.parse(getData)
         console.log(parsForm)
@@ -110,6 +106,10 @@ class Invoices extends React.Component {
                 console.log('api success')
                 if (userContent.length == 0) {
                     console.log(userData.msg)
+                    this.setState({
+                        noInvoices: userData.msg,
+                        showNullInvoices: true
+                    })
                 }
                 else {
                     //    let arrayData = this.state.allDataUser;
@@ -201,14 +201,14 @@ class Invoices extends React.Component {
         )
     }
 
-    
+
 
     monthAndYearRenderData = ({ item }) => {
         console.log('data items >>', item)
         console.log('service name >>>', item.paymentMonth);
         return (
             <View style={styles.bodyContainer}>
-                
+
                 {
 
                     item.paymentMonth == this.state.renderMonthData ?
@@ -239,7 +239,7 @@ class Invoices extends React.Component {
                                         <Text style={styles.monthName}>
                                             {item.paymentMonth}
                                         </Text>
-                                        
+
                                     </View>
                                     <Text style={styles.textStyle}>Issue date</Text>
                                     <View style={styles.paymentStatusContainer}>
@@ -250,20 +250,20 @@ class Invoices extends React.Component {
 
                             </View>
                         </View>
-                        
+
                         :
                         // this.setState({noFound:true})
                         console.log('No found Data')
-                        
+
 
                 }
-                
-                
+
+
             </View>
         )
     }
 
-   
+
     showMonthPicker = () => {
         this.setState({
             showPicker: true
@@ -274,7 +274,17 @@ class Invoices extends React.Component {
 
     render() {
         const { navigate } = this.props.navigation;
-        const { allDataUser, date, month, showPicker, allDataShow, monthRelatedData,releaseMonth } = this.state;
+        const {
+            allDataUser,
+            date,
+            month,
+            showPicker,
+            allDataShow,
+            monthRelatedData,
+            releaseMonth,
+            noInvoices,
+            showNullInvoices
+        } = this.state;
         console.log('render all data user >>>', allDataUser);
         // console.log('Receipt image >>>', this.state.receipt_img);
         //console.log('year month >>>', this.state.month)
@@ -314,13 +324,28 @@ class Invoices extends React.Component {
                                             allDataShow: false,
                                             monthRelatedData: true,
                                         })
-                                     
+
                                     }
-                                    
+
                                 })}
                             />
                             : null
                     }
+
+
+                    {
+                        showNullInvoices ?
+                            <View style={{
+                                justifyContent: 'center',
+                                alignItems: 'center', alignSelf: 'center',
+                                alignContent:'center'
+                            }}>
+                                <Text style={{ color: '#FF6200', fontFamily: "MontserratMedium" }}>{noInvoices}</Text>
+                            </View>
+                            :
+                            null
+                    }
+
                     {allDataShow &&
                         <FlatList
                             data={allDataUser}
@@ -329,6 +354,7 @@ class Invoices extends React.Component {
                             numColumns={columsNum}
                         />
                     }
+
                     {
                         monthRelatedData &&
                         <FlatList
@@ -337,7 +363,7 @@ class Invoices extends React.Component {
                             keyExtractor={this._keyExtractor}
                             numColumns={columsNum}
                         />
-                    
+
                     }
                     {/* {
                         this.state.noFound ?
@@ -350,20 +376,21 @@ class Invoices extends React.Component {
                     } */}
                     {
                         this.state.noFound == true && showPicker == false ?
-                          Alert.alert('NO Found Data',
-                          [
-                            {text: 'OK', onPress: () => 
-                           this.setState({
-                               allDataShow:true,
-                               noFound:false
-                           })
-                            },
-                          ],
-                          )
-                          : 
-                          null
+                            Alert.alert('NO Found Data',
+                                [
+                                    {
+                                        text: 'OK', onPress: () =>
+                                            this.setState({
+                                                allDataShow: true,
+                                                noFound: false
+                                            })
+                                    },
+                                ],
+                            )
+                            :
+                            null
                     }
-                     
+
 
 
 
@@ -395,119 +422,8 @@ class Invoices extends React.Component {
 
 
                     </Modal>
-                    {/* <View style={styles.bodyContainer}>
-                        <View style={styles.leftContainer}>
-                            <TouchableOpacity style={styles.cardLeft}>
-                                <View style={styles.childContainer}>
-                                    <View style={styles.cardNumberContainer}>
-                                      <Text style={styles.cardNumberStyle}>#26532</Text>
-                                      <Text style={styles.priceDetail}>
-                                        Rs. 6500
-                                      </Text>
-                                      <Text style={styles.textStyle}>Coach fees</Text>
-                                      <View style={styles.dateMonthContainer}>
-                                      <Text style={styles.monthName}>
-                                       May 
-                                      </Text>
-                                      <Text style={styles.dateNumber}>1</Text>
-                                      <Text style={styles.superScriptTextStyle}>st</Text>
-                                      <Text style={styles.yearStyle}>,2019</Text>
-                                      </View>
-                                      <Text style={styles.textStyle}>Issue date</Text>
-                                      <View style={styles.paymentStatusContainer}>
-                                      <Text style={styles.unpaidTextStyle}>Unpaid</Text>
-                                      <Text style={styles.textStyle}>Payment status</Text>
-                                      </View>
-                                    </View>
-
-                                </View>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.cardLeft}>
-                                <View style={styles.childContainer}>
-                                    <View style={styles.cardNumberContainer}>
-                                      <Text style={styles.cardNumberStyle}>#26532</Text>
-                                      <Text style={styles.priceDetail}>
-                                        Rs. 6500
-                                      </Text>
-                                      <Text style={styles.textStyle}>Coach fees</Text>
-                                      <View style={styles.dateMonthContainer}>
-                                      <Text style={styles.monthName}>
-                                       May 
-                                      </Text>
-                                      <Text style={styles.dateNumber}>1</Text>
-                                      <Text style={styles.superScriptTextStyle}>st</Text>
-                                      <Text style={styles.yearStyle}>,2019</Text>
-                                      </View>
-                                      <Text style={styles.textStyle}>Issue date</Text>
-                                      <View style={styles.paymentStatusContainer}>
-                                      <Text style={styles.unpaidTextStyle}>Unpaid</Text>
-                                      <Text style={styles.textStyle}>Payment status</Text>
-                                      </View>
-                                    </View>
-
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.rightContainer}>
-                            <TouchableOpacity style={styles.cardRight}>
-                                <View style={styles.childContainer}>
-                                <View style={styles.cardNumberContainer}>
-                                      <Text style={styles.cardNumberStyle}>#26532</Text>
-                                      <Text style={styles.priceDetail}>
-                                        Rs. 6500
-                                      </Text>
-                                      <Text style={styles.textStyle}>Coach fees</Text>
-                                      <View style={styles.dateMonthContainer}>
-                                      <Text style={styles.monthName}>
-                                       May 
-                                      </Text>
-                                      <Text style={styles.dateNumber}>1</Text>
-                                      <Text style={styles.superScriptTextStyle}>st</Text>
-                                      <Text style={styles.yearStyle}>,2019</Text>
-                                      </View>
-                                      <Text style={styles.textStyle}>Issue date</Text>
-                                      <View style={styles.paymentStatusContainer}>
-                                      <Text style={styles.unpaidTextStyle}>Unpaid</Text>
-                                      <Text style={styles.textStyle}>Payment status</Text>
-                                      </View>
-                                    </View>
-                                </View>
-
-                            </TouchableOpacity>
 
 
-                            <TouchableOpacity style={styles.cardLeft}>
-                                <View style={styles.childContainer}>
-                                    <View style={styles.cardNumberContainer}>
-                                      <Text style={styles.cardNumberStyle}>#26532</Text>
-                                      <Text style={styles.priceDetail}>
-                                        Rs. 6500
-                                      </Text>
-                                      <Text style={styles.textStyle}>Coach fees</Text>
-                                      <View style={styles.dateMonthContainer}>
-                                      <Text style={styles.monthName}>
-                                       May 
-                                      </Text>
-                                      <Text style={styles.dateNumber}>1</Text>
-                                      <Text style={styles.superScriptTextStyle}>st</Text>
-                                      <Text style={styles.yearStyle}>,2019</Text>
-                                      </View>
-                                      <Text style={styles.textStyle}>Issue date</Text>
-                                      <View style={styles.paymentStatusContainer}>
-                                      <Text style={styles.unpaidTextStyle}>Unpaid</Text>
-                                      <Text style={styles.textStyle}>Payment status</Text>
-                                      </View>
-                                    </View>
-
-                                </View>
-                            </TouchableOpacity>
-
-                        </View>
-                    </View>
-                    <View style={styles.blankView}>
-
-                    </View> */}
 
 
                 </ScrollView>

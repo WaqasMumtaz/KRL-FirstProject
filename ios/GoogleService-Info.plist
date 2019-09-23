@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>253025208867-7685fdc9j7mkknc9gr8t7gp579opek4t.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.253025208867-7685fdc9j7mkknc9gr8t7gp579opek4t</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>253025208867-lgea0ttt59f4aulqe70nhnkgoo9n1j5l.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAyHmJqH1RR_t0TMlo8qaVZFv_kx2fTlR8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>253025208867</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.getfit</string>
+	<key>PROJECT_ID</key>
+	<string>getfit-application</string>
+	<key>STORAGE_BUCKET</key>
+	<string>getfit-application.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:253025208867:ios:99835a3b287bf23479ff96</string>
+	<key>DATABASE_URL</key>
+	<string>https://getfit-application.firebaseio.com</string>
+</dict>
+</plist>

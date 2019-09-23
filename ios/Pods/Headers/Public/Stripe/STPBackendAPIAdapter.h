@@ -1,1 +1,5 @@
+XSym
+0059
+a4a7f8408d404fb2315e86d7fb5a4053
 ../../../Stripe/Stripe/PublicHeaders/STPBackendAPIAdapter.h
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    

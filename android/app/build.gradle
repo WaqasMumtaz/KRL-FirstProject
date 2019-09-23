@@ -96,13 +96,13 @@ def enableProguardInReleaseBuilds = false
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    // compileOptions {
-    //     sourceCompatibility JavaVersion.VERSION_1_8
-    //     targetCompatibility JavaVersion.VERSION_1_8
-    // }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
-        applicationId "com.firstproject"
+        applicationId "com.getfit"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -124,12 +124,6 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
-    //pre build AndroidX object custom file viewer
-    preBuild.doFirst {
-    ant.replaceregexp(match:'androidx.core.content.', replace:'android.support.v4.content.', flags:'g', byline:true) {
-        fileset(dir: '../../node_modules/react-native-file-viewer/android/src/main/java/com/vinzscam/reactnativefileviewer', includes: '*.java')
-    }
-}
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -146,11 +140,19 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-firebase')
+    implementation project(':@react-native-community_async-storage')
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(':react-native-gesture-handler')
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation project(':tipsi-stripe')
+
     implementation project(':react-native-google-fit')
     implementation project(':react-native-sensor-manager')
     implementation project(':react-native-video')
     implementation project(':react-native-sha1')
-    implementation project(':tipsi-stripe')
+    //implementation project(':tipsi-stripe')
     implementation project(':react-native-svg')
     implementation project(':react-native-fetch-blob')
     implementation project(':react-native-file-opener')
@@ -158,51 +160,61 @@ dependencies {
     implementation project(':react-native-file-picker')
     implementation project(':react-native-fs')
     implementation project(':react-native-sound-recorder')
-    implementation project(':react-native-firebase')
-    implementation project(':@react-native-community_async-storage')
+
     implementation project(':react-native-image-picker')
-    //Add here new files
+    //old version dependencies firebase
     implementation "com.google.android.gms:play-services-base:16.0.1"
     implementation "com.google.firebase:firebase-core:16.0.6"
     implementation "com.google.firebase:firebase-ads:15.0.1"
     implementation "com.google.firebase:firebase-analytics:16.0.4"
-    // implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
-    //     transitive = true
-    // }
-    // implementation project(':react-native-charts-wrapper')
-    // implementation project(':react-native-mp-android-chart')
-    // implementation project(':react-native-vector-icons')
-    implementation project(':react-native-gesture-handler')
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
-    implementation "com.facebook.react:react-native:+"  // From node_modules
-    //implementation "androidx.annotation:annotation:1.1.0"
-    //implementation 'com.android.support:support-annotations:28.0.0'
-    //implementation fileTree(dir: "libs", include: ["*.jar"])
-    //implementation "androidx.core:core:1.0.2"
-    //implementation "androidx.annotation:annotation:1.1.0"
-    //implementation "androidx.appcompat:appcompat:${rootProject.ext.supportLibVersion}"
-    
+    implementation "com.google.firebase:firebase-database:16.0.6"
 
-    
-
-    
-    // implementation 'com.android.support:support-v4:28.0.0'
-    // implementation 'com.android.support.v4.app.CoreComponentFactory'  
-
-    implementation 'com.android.support:design:27.1.0'
-    //compile 'com.android.support:multidex:1.0.3'
     compile (project(':tipsi-stripe')) {
         exclude group: 'com.google.android.gms'
         exclude group: 'com.google.firebase'
         }
 
-    // Firebase dependencies
+
+    // implementation "androidx.arch.core:core-common"
+    // implementation "androidx.arch.core:core"
     // implementation "com.google.android.gms:play-services-base:15.0.0"
-    // implementation "com.google.firebase:firebase-core:15.0.2"
+    //  implementation "com.google.firebase:firebase-core:15.0.0"
+    // implementation "com.google.android.gms:play-services-base:16.0.1"
+    // implementation "com.google.firebase:firebase-auth:17.0.0"
+     //implementation "com.google.firebase:firebase-core:16.0.6"
+    //implementation "com.google.firebase:firebase-ads:15.0.1"
+    //implementation "com.google.firebase:firebase-analytics:16.0.4"
+   // implementation  "com.google.firebase:firebase-messaging:17.5.0"
+    //implementation "com.google.firebase:firebase-messaging:15.0.2"
+
+    // implementation "com.google.firebase:firebase-messaging:18.0.0"
+    //implementation 'me.leolin:ShortcutBadger:1.1.21@aar' 
+   
+    //latest dependencies firebase
+     //implementation "com.google.android.gms:play-servisces-base:17.1.0"
+     //implementation "com.google.firebase:firebase-auth:17.0.0"
+    //  implementation "com.google.firebase:firebase-auth:19.0.0"
+    //  implementation 'com.google.firebase:firebase-analytics:17.2.0'
+    //  implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    //  implementation "com.google.firebase:firebase-core:17.2.0"
+    // implementation "com.google.firebase:firebase-ads:18.2.0"
+    // implementation "com.google.firebase:firebase-iid:19.0.0"
+    // implementation  "com.google.firebase:firebase-messaging:17.5.0"
+    //implementation "com.google.firebase:firebase-messaging:18.0.0"
+    // implementation 'me.leolin:ShortcutBadger:1.1.21@aar' 
+    // implementation "com.google.firebase:firebase-messaging:20.0.0"
     
-    //compile project(':reactNativeMPAndroidChart')
-    //compile project(':react-native-charts-wrapper')
+    
+
+    implementation 'com.android.support:design:27.1.0'
+    //compile 'com.android.support:multidex:1.0.3'
+    // compile (project(':tipsi-stripe')) {
+    //     exclude group: 'com.google.android.gms'
+    //     exclude group: 'com.google.firebase'
+    //     }
+
+    
+    
 }
 
 // Run this once to be able to run the application with BUCK
@@ -211,4 +223,7 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
 //apply plugin: 'com.google.gms.google-services'
+
+//  com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true

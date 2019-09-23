@@ -2,13 +2,11 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import AppContainer from './components/navigation/StackNavigation';
-import ChartScreen from './components/BarChart/BarChart';
+//import ChartScreen from './components/BarChart/BarChart';
 import config from './Config/ApiKeys';
-//import reactNativePedometer from './components/Pedometer/checkFile';
+//import reactNativePedometer from './components/Pedometer/checkFile'
+import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase';
-//import firebase from 'react-native-firebase';
-
-
 
 
 class App extends Component {
@@ -21,7 +19,11 @@ class App extends Component {
       firebase.initializeApp(config);
       //console.log(firebase.initializeApp)
     }
+   
+
   }
+  
+
  render() {
     return <AppContainer/>
   }

@@ -1,1 +1,5 @@
+XSym
+0055
+5ef1872658286eea6ae53fb46025bb2d
 ../../../Stripe/Stripe/PublicHeaders/STPPaymentIntent.h
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        

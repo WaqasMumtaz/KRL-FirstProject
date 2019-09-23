@@ -126,7 +126,7 @@ class Exerciselog extends React.Component {
                         </Text>
                     </View>
                     <View style={styles.arrowContainer}>
-                        <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity>
+                        {/* <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity> */}
                         <DatePicker
                             style={{ width: 120 }}
                             date={date}
@@ -150,7 +150,7 @@ class Exerciselog extends React.Component {
                                 this.dateFilter
                             }
                         />
-                        <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
+                        {/* <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity> */}
                     </View>
                     <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                         <FlatList

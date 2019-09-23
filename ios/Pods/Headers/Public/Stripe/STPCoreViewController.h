@@ -1,1 +1,5 @@
+XSym
+0060
+7c6b07d7011449f01ea1e9e3efd4428b
 ../../../Stripe/Stripe/PublicHeaders/STPCoreViewController.h
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   

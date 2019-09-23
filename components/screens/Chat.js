@@ -31,6 +31,7 @@ import Modal from "react-native-modal";
 import ChartScreen from '../BarChart/BarChart';
 import Spinner from 'react-native-loading-spinner-overlay';
 
+
 const db = firebase.database();
 const CryptoJS = require('crypto-js');
 

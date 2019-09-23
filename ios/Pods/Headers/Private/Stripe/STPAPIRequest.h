@@ -1,1 +1,5 @@
+XSym
+0038
+1674b384e869eba8120dae1e9f057ba9
 ../../../Stripe/Stripe/STPAPIRequest.h
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
