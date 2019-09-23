@@ -85,22 +85,22 @@ class Chatscreen extends React.Component {
       forTrainnerModal: false,
       senderData: '',
       isLoading: false,
-      fileUpLoading:false,
-      forVideoModal:false,
-      smallVideo:true,
-      largeSizeVideo:false
+      fileUpLoading: false,
+      forVideoModal: false,
+      smallVideo: true,
+      largeSizeVideo: false
     }
 
   }
 
-  handleFullScreenVideo=()=>{
-     console.log('video tag fullscreen',)
-    
-    
+  handleFullScreenVideo = () => {
+    console.log('video tag fullscreen')
+
+
   }
   // endVideo=()=>{
   //   console.log('End Video success')
-    
+
   // }
 
   componentDidMount() {
@@ -147,27 +147,27 @@ class Chatscreen extends React.Component {
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         dataFromLocalStorage = JSON.parse(value);
+        db.ref('chatRoom').on("value", snapshot => {
+          let data = snapshot.val()
+          for (let i in data) {
+            let firbaseData = data[i]
+            if (firbaseData.reciverId == dataFromLocalStorage._id && firbaseData.senderId == senderData.userId) {
+              chatArrayTemp.push(firbaseData)
+            }
+            if (firbaseData.senderId == dataFromLocalStorage._id && firbaseData.reciverId == senderData.userId) {
+              chatArrayTemp.push(firbaseData)
+            }
+          }
+          this.setState({
+            chatMessages: chatArrayTemp,
+            userId: dataFromLocalStorage._id,
+            opponentId: senderData.userId,
+            opponnetAvatarSource: senderData.image,
+            name: senderData.name
+          })
+          chatArrayTemp = [];
+        });
       }
-    });
-    db.ref('chatRoom').on("value", snapshot => {
-      let data = snapshot.val()
-      for (let i in data) {
-        let firbaseData = data[i]
-        if (firbaseData.reciverId == dataFromLocalStorage._id && firbaseData.senderId == senderData.userId) {
-          chatArrayTemp.push(firbaseData)
-        }
-        if (firbaseData.senderId == dataFromLocalStorage._id && firbaseData.reciverId == senderData.userId) {
-          chatArrayTemp.push(firbaseData)
-        }
-      }
-      this.setState({
-        chatMessages: chatArrayTemp,
-        userId: dataFromLocalStorage._id,
-        opponentId: senderData.userId,
-        opponnetAvatarSource: senderData.image,
-        name: senderData.name
-      })
-      chatArrayTemp = [];
     });
     this.getWeekReportData()
   }
@@ -297,18 +297,18 @@ class Chatscreen extends React.Component {
         let upload_url = 'https://api.cloudinary.com/v1_1/' + cloud + '/upload'
         let xhr = new XMLHttpRequest();
         this.setState({
-          isLoading:true,
-          fileUpLoading:true
+          isLoading: true,
+          fileUpLoading: true
         })
         xhr.open('POST', upload_url);
         xhr.onload = () => {
-         
+
           let type = response.path.substring(response.path.lastIndexOf(".") + 1);
           let uploadData = JSON.parse(xhr._response)
           if (uploadData) {
             this.setState({
-              isLoading:false,
-              fileUpLoading:false
+              isLoading: false,
+              fileUpLoading: false
             })
           }
           console.log(uploadData, 'uploadData')
@@ -595,6 +595,7 @@ class Chatscreen extends React.Component {
   render() {
     const { textMessage, sendIcon, micIcon, micOrange, sendBtnContainer, orangeMicContainer, recodringBody, messagContainer,
       attachGray, attachOrange, shareFiles, avatarSource, expand, userId, opponentId, opponnetAvatarSource, name, imagePath } = this.state;
+    console.log(opponnetAvatarSource, 'opponnetAvatarSource')
     const chatMessages = this.state.chatMessages.map((message, key) => (
       <View>
         {/* {this.state.forVideoModal ? 
@@ -735,11 +736,11 @@ class Chatscreen extends React.Component {
                               style={styles.backgroundVideo}
                               onLoad={this.handleFullScreenVideo}
                               fullScreen={true}
-                             
+
                             />
-                            
+
                           </View>
-                          
+
                           // :
                           // message.senderId == userId &&
                           // message.type == 'mp4' && this.state.largeSizeVideo == true ?
@@ -752,11 +753,11 @@ class Chatscreen extends React.Component {
                           //     ref={r => this.player = console.log(r)}
                           //     style={styles.backgroundVideo}
                           //     onEnd={this.endVideo}
-                             
-                
-                              
+
+
+
                           //   />
-                            
+
                           // </View>
                           :
                           message.senderId == userId && message.type == 'weeklyReport'
@@ -830,7 +831,7 @@ class Chatscreen extends React.Component {
                             : null
         }
 
-            
+
         {message.senderId == opponentId && message.type == 'text' ?
           <Text key={key} style={styles.replyMessagesStyle}>
             {message.message}
@@ -1027,12 +1028,21 @@ class Chatscreen extends React.Component {
     return (
       <View style={styles.mainContainer}>
         <View style={styles.childMainContainer}>
-          <View style={styles.chatProfileContainer}>
-            <Text style={styles.profileNameStyle}>{name}</Text>
-            <TouchableOpacity activeOpacity={0.5} onPress={this.checkProfile}>
-              <Image source={{ uri: `${opponnetAvatarSource}` }} style={styles.profilPicStyle} />
-            </TouchableOpacity>
-          </View>
+          {opponnetAvatarSource != undefined ?
+            <View style={styles.chatProfileContainer}>
+              <Text style={styles.profileNameStyle}>{name}</Text>
+              <TouchableOpacity activeOpacity={0.5} onPress={this.checkProfile}>
+                <Image source={{ uri: `${opponnetAvatarSource}` }} style={styles.profilPicStyle} />
+              </TouchableOpacity>
+            </View>
+            :
+            <View style={styles.chatProfileContainer}>
+              <Text style={styles.profileNameStyle}>{name}</Text>
+              <TouchableOpacity activeOpacity={0.5} onPress={this.checkProfile}>
+                <Image source={require('../icons/profile.png')} style={styles.profilPicStyle} />
+              </TouchableOpacity>
+            </View>
+          }
           <ScrollView style={styles.scrollContainer} contentContainerStyle={{ flexGrow: 1 }}
             ref={ref => this.scrollView = ref}
             onContentSizeChange={(contentWidth, contentHeight) => {
@@ -1097,7 +1107,7 @@ class Chatscreen extends React.Component {
                 //Text style of the Spinner Text
                 textStyle={styles.spinnerTextStyle}
                 color={'#FF6200'}
-                
+
               />
             </View>
             : null
@@ -1141,7 +1151,7 @@ class Chatscreen extends React.Component {
               </TouchableOpacity>}
             </View>}
             {/* When user does not assign trainer show this modal*/}
-            <Modal
+            {/* <Modal
               isVisible={this.state.forTrainnerModal}
               animationIn='zoomIn'
               //animationOut='zoomOutDown'
@@ -1160,12 +1170,12 @@ class Chatscreen extends React.Component {
                 </View>
               </View>
 
-            </Modal>
+            </Modal> */}
 
-            
+
 
           </View>
-          
+
         </View>
       </View>
     );

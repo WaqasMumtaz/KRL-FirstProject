@@ -108,7 +108,7 @@ class Login extends React.Component {
             AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
           }
           else if (dataUser.trainnyProfiledata.length >= 0) {
-            let opponentData = dataUser.trainnyProfiledata;
+            // let opponentData = dataUser.trainnyProfiledata;
             let traineeName = dataUser.assignTrainny;
             let traineeIds = dataUser.tainnyId;
             let traineeDataArr = [];
@@ -120,12 +120,14 @@ class Login extends React.Component {
               traineesData['type'] = "Trainee";
               traineeDataArr.push(traineesData)
             }
-            let openentData = []
-            opponentData.map((opponent, key) => {
-              opponent.map((ele, key) => {
-                openentData.push(ele)
-              })
-            })
+            console.log(traineeDataArr , 'traineeDataArr')
+            AsyncStorage.setItem('opponentProfile', JSON.stringify(traineeDataArr));
+            // let openentData = []
+            // opponentData.map((opponent, key) => {
+            //   opponent.map((ele, key) => {
+            //     openentData.push(ele)
+            //   })
+            // })
 
             
 

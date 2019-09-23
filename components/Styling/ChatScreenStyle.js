@@ -675,14 +675,17 @@ const styles = StyleSheet.create({
     nameContainer: {
         flex: 1,
         justifyContent: 'flex-start',
-        marginTop: 20
+        // marginTop: 15
     },
     name: {
         fontFamily: "MontserratExtraBold",
         fontSize: 14,
         color: 'black',
         marginLeft: 10,
-        marginVertical: 10
+        // marginVertical: 5
+    },
+    nameOpacity:{
+        marginTop: 10
     },
     activaterContainer: {
         flex: 1,

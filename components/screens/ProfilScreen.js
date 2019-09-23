@@ -6,6 +6,7 @@ import styles from '../Styling/ProfilScreenStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import AsyncStorage from '@react-native-community/async-storage';
 import { thisExpression } from '@babel/types';
+import HttpUtils from '../Services/HttpUtils';
 const { height } = Dimensions.get('window');
 let checkProfile = false;
 
@@ -53,11 +54,12 @@ class Profile extends React.Component {
     }
   }
 
-  componentWillMount() {
+  async  componentWillMount() {
     console.log(checkProfile, 'checkProfile')
     if (checkProfile) {
       const { senderData } = this.props.navigation.state.params;
-      if (senderData) {
+      console.log(senderData, 'sender data')
+      if (senderData.image != undefined) {
         this.setState({
           name: senderData.name,
           address: senderData.address,
@@ -71,11 +73,42 @@ class Profile extends React.Component {
           profile: 'opponentProfile'
         })
       }
+      else {
+        let obj = {
+          userId: senderData.userId
+        }
+        let profileData = await HttpUtils.post('getProfile', obj);
+        let dataProfile = profileData.content[0]
+        if (profileData.mgs == 'User not created profile yet') {
+          this.setState({
+            name: senderData.name,
+            type: senderData.type,
+            title: senderData.type,
+            profileData: senderData,
+            profile: 'opponentProfile'
+          })
+        }
+        else {
+          this.setState({
+            name: dataProfile.name,
+            address: dataProfile.address,
+            contactNo: dataProfile.contactNo,
+            email: dataProfile.email,
+            gender: dataProfile.gender,
+            avatarSource: dataProfile.image,
+            type: dataProfile.type,
+            title: dataProfile.type.charAt(0).toUpperCase() + dataProfile.type.slice(1),
+            profileData: dataProfile,
+            profile: 'opponentProfile'
+          })
+        }
+      }
+
     }
     else {
       AsyncStorage.getItem('myProfile').then((value) => {
         let userData = JSON.parse(value);
-        console.log(userData , 'userData')
+        console.log(userData, 'userData')
         if (userData.image != undefined) {
           console.log('proffile complete data')
           this.setState({
@@ -91,7 +124,7 @@ class Profile extends React.Component {
             profile: 'myProfile'
           })
         }
-        else{
+        else {
           this.setState({
             name: userData.name,
             email: userData.email,
