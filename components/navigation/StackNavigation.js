@@ -52,12 +52,11 @@ const MainNavigator = createStackNavigator({
   //StepCountScreen:{screen:StepCountScreen},
   Login: { screen: Login },
   Signup: { screen: Signup },
-  ResetpasswordScreen: { screen: ResetpasswordScreen },
-  ConfirmResetPassword: { screen: ConfirmResetPassword },
   Setupscreen1: { screen: Setupscreen1 },
   Setupscreen: { screen: Setupscreen },
   LastSetUpScreen: { screen: LastSetUpScreen },
-
+  ResetpasswordScreen: { screen: ResetpasswordScreen },
+  ConfirmResetPassword: { screen: ConfirmResetPassword },
 
   // Login: {
   //   screen: Login

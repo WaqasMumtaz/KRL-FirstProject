@@ -83,6 +83,7 @@ class Login extends React.Component {
       }
       try {
         let dataUser = await HttpUtilsFile.post('signin', userObj)
+        console.log('login user res >>>',dataUser)
         let getUserCode = dataUser.code;
         let userWrong = dataUser.Match;
         let userMsg = dataUser.msg;

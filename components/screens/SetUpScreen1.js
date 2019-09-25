@@ -112,6 +112,7 @@ class Setupscreen1 extends React.Component {
 
     render() {
         const { dobValidation, genderValidation, male, female, date, dob } = this.state;
+        console.log('current date >>>',date)
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
                 <View style={styles.mainContainer}>

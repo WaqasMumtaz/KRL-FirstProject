@@ -183,7 +183,7 @@ export default class StepCountScreen extends React.Component {
                         .then((res) => {
                              console.log('authorized >>>', res)
                             GoogleFit.observeSteps((res) => {
-                                console.log(res)
+                                console.log('google fit steps',res)
                                 this.setState({ pedometerData: res.steps }, () => {
                                     if (res.steps > Number(1)) {
                                         this.countStepTime()

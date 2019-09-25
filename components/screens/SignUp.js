@@ -168,6 +168,7 @@ class Signup extends React.Component {
 
             try {
                 let dataUser = await HttpUtilsFile.post('signup', userObj)
+                console.log('signup data user >>>',dataUser)
                 let signupCode = dataUser.code;
                 let getEmails = await HttpUtilsFile.get('getuseremail')
                 let emailCode = getEmails.code;
@@ -179,6 +180,8 @@ class Signup extends React.Component {
                     this.setState({
                         isLoading: false
                     })
+                    await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
+                     console.log('dataUser >>>', dataUser);
                     emailContents.map((item, index) => {
                         //console.log(item)
                         const { email } = this.state;
