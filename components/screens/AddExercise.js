@@ -266,9 +266,9 @@ class AddExercise extends React.Component {
                             <Image source={require('../icons/right.png')} style={styles.forImgs} />
                         </TouchableOpacity>
                     </View> */}
-                    <View style={styles.bodyContainer}>
+                    {/* <View style={styles.bodyContainer}>
                         <TextInput placeholder="Search exercise" placeholderTextColor="black" style={styles.inputFieldStyle} />
-                    </View>
+                    </View> */}
                     {show && <View style={styles.listsContainer}>
                         <TouchableOpacity
                             onPress={this.showFields.bind(this, 'Brisk Walk')}

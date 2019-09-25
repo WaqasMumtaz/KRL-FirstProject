@@ -3,6 +3,7 @@ import { Alert, StyleSheet, Text, View, ScrollView, Button, TextInput, Dimension
 import styles from '../Styling/LastScreenStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn'
 import HttpUtils from '../Services/HttpUtils';
+import OverlayLoader from '../Loader/OverlaySpinner';
 const { height } = Dimensions.get('window');
 
 class LastSetUpScreen extends React.Component {
@@ -126,7 +127,8 @@ class LastSetUpScreen extends React.Component {
             let dataUser = await HttpUtils.post('macrodata', macroObj)
             console.log(dataUser, 'dataUser')
             if (dataUser.code == 200) {
-                this.props.navigation.navigate('BottomTabe')
+                this.props.navigation.navigate('Login')
+              //console.log('success data user')
             }
 
 
@@ -222,10 +224,10 @@ class LastSetUpScreen extends React.Component {
                         : null}
                     <Text style={styles.paraStyle}>Your Daily Macros*</Text>
                     <View style={styles.macrosContainer}>
-                        <TextInput placeholder="1640 Kcal calories" placeholderTextColor='black' style={styles.textInputOne} value={calculteCalries + 'Kcal calories'} />
-                        <TextInput placeholder="159 g Carbohyderates " placeholderTextColor='black' style={styles.textInputTwo} value={fatMass + 'g Carbohyderates'} />
-                        <TextInput placeholder="107 g Proteins" placeholderTextColor='black' style={styles.textInputThree} value={proteins + 'g Proteins'} />
-                        <TextInput placeholder="51 g Fat " placeholderTextColor='black' style={styles.textInputFour} value={carbohydrates + 'g Fat'} />
+                        <TextInput placeholder="1640 Kcal calories" placeholderTextColor='black' style={styles.textInputOne} value={calculteCalries + ' Kcal calories'} />
+                        <TextInput placeholder="159 g Carbohyd. " placeholderTextColor='black' style={styles.textInputTwo} value={fatMass + ' g Carbohyd.'} />
+                        <TextInput placeholder="107 g Proteins" placeholderTextColor='black' style={styles.textInputThree} value={proteins + ' g Proteins'} />
+                        <TextInput placeholder="51 g Fat " placeholderTextColor='black' style={styles.textInputFour} value={carbohydrates + ' g Fat'} />
                     </View>
                     <Text style={styles.paraStyle}>*This is the daily calories limit as calculated by the app using the above information . If
                         your coach has set another limit for you , please enter it above.

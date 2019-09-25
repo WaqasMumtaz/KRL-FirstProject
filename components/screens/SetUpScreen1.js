@@ -5,6 +5,7 @@ import TextInputs from '../textInputs/TextInputs';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import DatePicker from 'react-native-datepicker';
 import AsyncStorage from '@react-native-community/async-storage';
+import OverlayLoader from '../Loader/OverlaySpinner';
 const screenWidth = Dimensions.get('window').width;
 const { height } = Dimensions.get('window');
 
@@ -29,7 +30,8 @@ class Setupscreen1 extends React.Component {
             date: "",
             time: '',
             userId: '',
-            dob: ''
+            dob: '',
+            isLoading: false,
         }
     }
     componentWillMount() {
@@ -111,7 +113,7 @@ class Setupscreen1 extends React.Component {
     }
 
     render() {
-        const { dobValidation, genderValidation, male, female, date, dob } = this.state;
+        const { dobValidation, genderValidation, male, female, date, dob,isLoading } = this.state;
         console.log('current date >>>',date)
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >

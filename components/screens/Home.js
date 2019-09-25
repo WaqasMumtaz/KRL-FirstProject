@@ -16,7 +16,8 @@ class Homescreen extends React.Component {
     super(props);
     this.state = {
       todayData: '',
-      yestertdayData: ''
+      yestertdayData: '',
+      pedometerData:'',
     }
 
   }
@@ -24,14 +25,17 @@ class Homescreen extends React.Component {
 
 
   async componentWillMount() {
+    
     //getting user id from local storage
     let userId;
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
+    // console.log(value ,'value')
         let dataFromLocalStorage = JSON.parse(value);
         userId = dataFromLocalStorage._id;
       }
     });
+
     //get all excersice log data
     let dataUser = await HttpUtils.get('getallexerciselog');
     let data = dataUser.content;
@@ -45,6 +49,7 @@ class Homescreen extends React.Component {
     //looping with data
     for (var i in data) {
       let dataApi = data[i];
+      // console.log(dataApi)
       //check user id with api data and get current user data
       if (dataApi.userId == userId) {
         //get today & yesterday of excersice from database 
@@ -53,6 +58,7 @@ class Homescreen extends React.Component {
         let checkMonth = Number(dataApi.month) - currMonth;
         let checkYear = Number(dataApi.year) - currentYear;
         if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
+          console.log(dataApi , 'dataApi')
           this.setState({
             todayData: dataApi
           })
@@ -64,6 +70,7 @@ class Homescreen extends React.Component {
         }
       }
     }
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
   changeRout(e) {
     const { navigate } = this.props.navigation;
@@ -76,103 +83,9 @@ class Homescreen extends React.Component {
   }
 
 
-//   async componentDidMount() {
-//     await this.checkPermission();
-//     await this.createNotificationListeners();
-//    }
-   
-//      //1
-//     checkPermission= async ()=>{
-//      const enabled = await firebase.messaging().hasPermission();
-//      if (enabled) {
-//          this.getToken();
-//      } else {
-//          this.requestPermission();
-//      }
-//    }
-   
-//      //3
-//     getToken =async ()=> {
-//      let fcmToken = await AsyncStorage.getItem('fcmToken');
-//      if (!fcmToken) {
-//          fcmToken = await firebase.messaging().getToken();
 
-//          if (fcmToken) {
-//              // user has a device token
-//              await AsyncStorage.setItem('fcmToken', fcmToken);
-//              console.log('user device token >>>',fcmToken)
-//          }
-//      }
-//    }
-   
-//      //2
-//     requestPermission=async ()=>{
-//      try {
-//          await firebase.messaging().requestPermission();
-//          // User has authorised
-//          this.getToken();
-//      } catch (error) {
-//          // User has rejected permissions
-//          console.log('permission rejected');
-//      }
-   
-
-
-//  }
-
-//  //Remove listeners allocated in createNotificationListeners()
-// componentWillUnmount() {
-//   this.notificationListener();
-//   this.notificationOpenedListener();
+//   componentWillMount() {
 // }
-
-//  createNotificationListeners= async ()=> {
-//   /*
-//   * Triggered when a particular notification has been received in foreground
-//   * */
-//   this.notificationListener = firebase.notifications().onNotification((notification) => {
-//       const { title, body } = notification;
-//       this.showAlert(title, body);
-//   });
-
-//   /*
-//   * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
-//   * */
-//   this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-//       const { title, body } = notificationOpen.notification;
-//       this.showAlert(title, body);
-//   });
-
-//   /*
-//   * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
-//   * */
-//   const notificationOpen = await firebase.notifications().getInitialNotification();
-//   if (notificationOpen) {
-//       const { title, body } = notificationOpen.notification;
-//       this.showAlert(title, body);
-//   }
-//   /*
-//   * Triggered for data only payload in foreground
-//   * */
-//   this.messageListener = firebase.messaging().onMessage((message) => {
-//     //process data message
-//     console.log(JSON.stringify(message));
-//   });
-// }
-
-// showAlert=(title, body)=>{
-//   Alert.alert(
-//     title, body,
-//     [
-//         { text: 'OK', onPress: () => console.log('OK Pressed') },
-//     ],
-//     { cancelable: false },
-//   );
-// }
-
-  componentWillMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-}
 
 handleBackButton= async ()=>{
     console.log('pressed back button')
@@ -189,13 +102,7 @@ handleBackButton= async ()=>{
 
 }
 
-// componentDidMount() {
-//   const { navigation } = this.props;
-//   this.focusListener = navigation.addListener('didFocus', () => {
-//     // The screen is focused
-//     // Call any action
-//   });
-// }
+
 
 componentWillUnmount() {
   BackHandler.removeEventListener('hardwareBackPress');
@@ -204,7 +111,7 @@ componentWillUnmount() {
 
 
   render() {
-    const { todayData, yestertdayData } = this.state;
+    const { todayData, yestertdayData,pedometerData } = this.state;
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
@@ -240,14 +147,14 @@ componentWillUnmount() {
                     size={65}
                     width={10}
                     color={'#FF6200'}
-                    progress={60}
+                    progress={pedometerData == '' ? 0 : pedometerData}
                     backgroundColor={'gray'}
                     animateFromValue={0}
                     fullColor={'#FF6200'}
                   />
                 </View>
                 <View style={styles.resultContainer}>
-                  <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight' }}>6842</Text>
+                  <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight' }}>{pedometerData == '' ? 0 : pedometerData}</Text>
                   <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight' }}>/10,000</Text>
                 </View>
                 <Text style={{ color: '#a6a6a6', marginLeft: 14, fontFamily: 'MontserratLight' }}>steps</Text>

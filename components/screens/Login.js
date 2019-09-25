@@ -40,28 +40,28 @@ class Login extends React.Component {
     this.checkUserLogin()
   }
 
-  checkUserLogin= async ()=>{
+  checkUserLogin = async () => {
     const { navigate } = this.props.navigation;
     this.setState({
       isLoading: true
     })
     const getData = await AsyncStorage.getItem("currentUser");
-          // const parsForm = JSON.parse(getData)
-          // console.log('current user data >>>',parsForm)
-          if(getData){
-            this.setState({
-              isLoading: false
-            })
-           navigate('BottomTabe')
-          }
-          else {
-            this.setState({
-              isLoading: false
-            })
-            navigate('Login')
-          }
+    // const parsForm = JSON.parse(getData)
+    // console.log('current user data >>>',parsForm)
+    if (getData) {
+      this.setState({
+        isLoading: false
+      })
+      navigate('BottomTabe')
+    }
+    else {
+      this.setState({
+        isLoading: false
+      })
+      navigate('Login')
+    }
   }
-  
+
 
   loginFunc = async () => {
     const { navigate } = this.props.navigation;
@@ -83,16 +83,19 @@ class Login extends React.Component {
       }
       try {
         let dataUser = await HttpUtilsFile.post('signin', userObj)
-        console.log('login user res >>>',dataUser)
+        console.log('Assign Trainer >>>', dataUser.assignTrainner)
+        const assignTrainerName = dataUser.assignTrainner;
         let getUserCode = dataUser.code;
         let userWrong = dataUser.Match;
         let userMsg = dataUser.msg;
         if (getUserCode) {
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
           console.log('dataUser >>>', dataUser);
-          if (dataUser.profile[0]) {
+          if (dataUser.profile) {
             let myProfile = dataUser.profile[0];
             myProfile.type = dataUser.type;
+            // console.log(dataUser.type , 'dataUser.type')
+            // console.log(myProfile , 'profile condition')
             AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
           }
           else {
@@ -103,12 +106,17 @@ class Login extends React.Component {
             myProfile.type = dataUser.type;
             AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
           }
-          if (dataUser.trainnerProfileData[0]) {
+        //const assignTrainerName = dataUser.assignTrainner;
+          if (assignTrainerName) {
+            console.log('Assign Trainer Condition Successfully')
             let opponentData = dataUser.trainnerProfileData;
             opponentData[0].type = "Coach";
-            AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+            console.log('opponentData >>>',opponentData)
+            await AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+            //console.log(dataUser.trainnerProfileData, 'dataUser.trainnyProfiledata')
           }
-          else if (dataUser.trainnyProfiledata.length >= 0) {
+          else if (dataUser.assignTrainny) {
+          // else if (dataUser.trainnyProfiledata) {
             // let opponentData = dataUser.trainnyProfiledata;
             let traineeName = dataUser.assignTrainny;
             let traineeIds = dataUser.tainnyId;
@@ -121,7 +129,7 @@ class Login extends React.Component {
               traineesData['type'] = "Trainee";
               traineeDataArr.push(traineesData)
             }
-            console.log(traineeDataArr , 'traineeDataArr')
+            console.log(traineeDataArr, 'traineeDataArr')
             AsyncStorage.setItem('opponentProfile', JSON.stringify(traineeDataArr));
             // let openentData = []
             // opponentData.map((opponent, key) => {
@@ -131,14 +139,15 @@ class Login extends React.Component {
             // })
 
             console.log(finalDataTrainee, 'finalDataTrainee')
-
-
+            // }
           }
 
           db.ref(`users/`).push(dataUser)
           this.setState({
             isLoading: false
-          }, () => navigate('BottomTabe'))
+          }, 
+          () => navigate('BottomTabe')
+          )
 
         }
         if (userWrong == false) {
@@ -162,7 +171,7 @@ class Login extends React.Component {
         console.log(error)
         this.setState({
           isLoading: false,
-          // emailAndPasswrd: true,
+          emailAndPasswrd: true,
         })
         setTimeout(() => {
           this.setState({

@@ -59,7 +59,8 @@ const styles=StyleSheet.create({
         alignItems:'center',
         //opacity:0.3,
         marginTop:10,
-        marginLeft:20
+        marginLeft:20,
+       // width:250
     },
     btnContainer:{
         flex:1,
@@ -100,31 +101,31 @@ const styles=StyleSheet.create({
     // },
     textInputOne:{
           height: 80,
-          width:150,
+          width:170,
           flexWrap:'wrap',
           paddingBottom:28,
           borderTopLeftRadius:5,
         //   borderTopRightRadius:20,
-          color: 'white',
+         // color: 'white',
           backgroundColor:'white',
         //   paddingRight:5,
           opacity:0.3
     },
     textInputTwo:{
         height: 80,
-          width:160,
+          width:180,
           //backgroundColor:'gray',
           flexWrap:'wrap',
           //marginLeft:10,
           paddingBottom:28,
           borderTopRightRadius:5,
           backgroundColor:'white',
-          paddingLeft:15,
+          paddingLeft:5,
           opacity:0.3
     },
     textInputThree:{
         height: 80,
-          width:150,
+          width:170,
          // backgroundColor:'gray',
           flexWrap:'wrap',
           paddingBottom:28,
@@ -135,7 +136,7 @@ const styles=StyleSheet.create({
     },
     textInputFour:{
          height: 80,
-          width:160,
+          width:180,
           //backgroundColor:'gray',
           flexWrap:'wrap',
           //marginLeft:10,

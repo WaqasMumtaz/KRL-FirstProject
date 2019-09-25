@@ -15,6 +15,7 @@ import styles from '../Styling/SignUpScreenStyle';
 import HttpUtilsFile from '../Services/HttpUtils';
 import { Dialog } from 'react-native-simple-dialogs';
 import OverlayLoader from '../Loader/OverlaySpinner';
+import AsyncStorage from '@react-native-community/async-storage';
 // import * as firebase from 'firebase';
 // import 'firebase/firestore';
 import firebase from 'react-native-firebase';
@@ -171,9 +172,10 @@ class Signup extends React.Component {
                 console.log('signup data user >>>',dataUser)
                 let signupCode = dataUser.code;
                 let getEmails = await HttpUtilsFile.get('getuseremail')
+                console.log('all emails from database >>>',getEmails)
                 let emailCode = getEmails.code;
                 const emailContents = getEmails.content;
-                console.log(dataUser , 'dataUser');
+                console.log(emailContents , 'emails');
                 // console.log(getToken);
                 //console.log(getCode)
                 if (emailCode) {
@@ -195,23 +197,24 @@ class Signup extends React.Component {
                                 })
                             )
                         }
-                        // else {
+                        else {
                         
-                        //     return (
-                        //         //navigate('Setupscreen1')
-                        //         navigate('Login')
-                        //     )
+                            return (
+                                //navigate('Setupscreen1')
+                                //navigate('Login')
+                                navigate('Setupscreen1')
+                            )
 
-                        //  }
+                         }
 
                     })
-                    if (signupCode) {
-                        this.setState({
-                            isLoading: false
-                        })
-                        const { navigate } = this.props.navigation;
-                        navigate('Setupscreen1');
-                    }
+                    // if(signupCode) {
+                    //     this.setState({
+                    //         isLoading: false
+                    //     })
+                    //     // const { navigate } = this.props.navigation;
+                    //     // navigate('Setupscreen1');
+                    // }
                     // if (signupCode) {
                     //     this.setState({
                     //         isLoading: false

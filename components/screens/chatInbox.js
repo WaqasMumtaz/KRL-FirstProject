@@ -30,27 +30,70 @@ class ChatInbox extends React.Component {
             messageUser: '',
             forTrainnerModal: false
         }
-    this.checkTrainy()    
+        //this.getData()
+        this.checkTrainy()
     }
+     async componentWillMount() {
+         await AsyncStorage.getItem('opponentProfile').then((value) => {
+           let userData = JSON.parse(value);
+           console.log('opponent data chatbox >>>',userData)
 
-componentWillUnmount() {
-    // Remove the event listener
-    this.focusListener.remove();
-  }
-    checkTrainy = () => {
+           this.setState({
+               messageUser: userData
+           })
+       })
+        
+    }
+// getData= async ()=>{
+//     await AsyncStorage.getItem('opponentProfile').then((value) => {
+//         let userData = JSON.parse(value);
+//         console.log('opponent data chatbox >>>',userData)
+//         this.setState({
+//             messageUser: userData
+//         })
+//     })
+// }
+
+    // componentWillUnmount() {
+    //     // Remove the event listener
+    //     this.focusListener.remove();
+    // }
+    checkTrainy =  () => {
         // const { senderData } = this.props.navigation.state.params;
-        // console.log(senderData, 'senderData')
-        const { navigation } = this.props;
-        this.focusListener = navigation.addListener('didFocus', () => {
-            AsyncStorage.getItem('currentUser').then((value) => {
+        console.log( 'senderData')
+       // const { navigation } = this.props;
+        // this.focusListener = navigation.addListener('didFocus',  () => {
+               AsyncStorage.getItem('currentUser').then((value) => {
                 let userData = JSON.parse(value)
-                if (userData.assignTrainner == undefined) {
+                console.log(userData , 'userData')
+                console.log(userData.assignTrainner  , 'userData assignTrainner ')
+                  
+                if (userData.assignTrainner != undefined) {
+                console.log(userData.assignTrainny  , 'userData.assignTrainny ')
+                    this.setState({
+                        forTrainnerModal: false
+                    })
+                }
+                else if(userData.assignTrainny != undefined ){
+                console.log(userData.assignTrainny , 'userData assignTrainny length')
+                    this.setState({
+                        forTrainnerModal: false
+                    })
+                }
+                // else if(userData.assignTrainner != undefined && userData.assignTrainny.length != 0){
+                //     // console.log(userData.assignTrainny.length  , 'userData assignTrainny length')
+                //     this.setState({
+                //         forTrainnerModal: false
+                //     })
+                // }
+                else {
+                    console.log('else')
                     this.setState({
                         forTrainnerModal: true
                     })
                 }
             })
-        });
+        // });
     }
 
 
@@ -62,24 +105,20 @@ componentWillUnmount() {
 
     }
 
-    componentWillMount() {
-        AsyncStorage.getItem('opponentProfile').then((value) => {
-            let userData = JSON.parse(value);
-            this.setState({
-                messageUser: userData
-            })
-        })
-
-    }
+   
     sendOppentUserData(userData) {
         const { navigate } = this.props.navigation;
         navigate('ChatBox', {
             senderData: userData
         });
     }
+
+    
+
     render() {
-        const { messageUser } = this.state;
-        const senderName = messageUser && messageUser.map((elem, key) => {
+        const { messageUser , forTrainnerModal} = this.state;
+        console.log('user message >>>',messageUser)
+        const senderName = messageUser && messageUser.map((elem, key) => {     
             return (
                 <View style={styles.nameContainer}>
                     <TouchableOpacity style={styles.nameOpacity} onPress={this.sendOppentUserData.bind(this, elem)}>
@@ -101,9 +140,10 @@ componentWillUnmount() {
                         }}>
 
                         {senderName != '' && senderName}
+                        {/* <Text>Hello World</Text> */}
 
                     </ScrollView>
-                    <Modal
+                      <Modal
                         isVisible={this.state.forTrainnerModal}
                         animationIn='zoomIn'
                         //animationOut='zoomOutDown'
@@ -123,7 +163,12 @@ componentWillUnmount() {
                         </View>
 
                     </Modal>
-
+                     
+                     {/* {forTrainnerModal ? 
+                      <View><Text>Contact App Admin</Text></View>
+                      :
+                      null
+                    } */}
                 </View>
             </View>
         );

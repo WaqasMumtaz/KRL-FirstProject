@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, View, TextInput, Picker, Dimensions, TouchableOpacity, ScrollView, Image } from 'react-native';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import styles from '../Styling/SetUpScreenStyle';
+import OverlayLoader from '../Loader/OverlaySpinner';
 const screenWidth = Dimensions.get('window').width;
 const { height } = Dimensions.get('window');
 

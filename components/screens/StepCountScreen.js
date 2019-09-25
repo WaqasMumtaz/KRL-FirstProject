@@ -171,65 +171,76 @@ export default class StepCountScreen extends React.Component {
         this.updateTime()
         //console.log('all data of user >>>',this.state.allDataUser)
         this.matchTime()
-        if (Platform.OS === 'android') {
-                    const options = {
-                        scopes: [
-                            Scopes.FITNESS_ACTIVITY_READ_WRITE,
-                            Scopes.FITNESS_BODY_READ_WRITE,
-                        ],
-                    }
-        
-                    GoogleFit.authorize(options)
-                        .then((res) => {
-                             console.log('authorized >>>', res)
-                            GoogleFit.observeSteps((res) => {
-                                console.log('google fit steps',res)
-                                this.setState({ pedometerData: res.steps }, () => {
-                                    if (res.steps > Number(1)) {
-                                        this.countStepTime()
-                                        this.setState({
-                                            firstValue:res.steps
-                                        })
-                                    }
+        this.countStepTime()
+
+        const userWeight = this.state.userCurrentWeight.slice(0, 3)
+        // console.log('number weight >>>', userWeight)
+        this.setState({
+            weightNoUnit: userWeight
+        })
+
+        // if (Platform.OS === 'android') {
+        //             const options = {
+        //                 scopes: [
+        //                     Scopes.FITNESS_ACTIVITY_READ_WRITE,
+        //                     Scopes.FITNESS_BODY_READ_WRITE,
+        //                 ],
+        //             }
+        //             GoogleFit.authorize(options)
+        //                 .then((res) => {
+        //                      console.log('authorized >>>', res)
+        //                      alert(`${res.message}`)
+        //                     GoogleFit.observeSteps((res) => {
+        //                         console.log('google fit steps',res)
+        //                         this.setState({ pedometerData: res.steps }, () => {
+        //                             if (res.steps > Number(1)) {
+        //                                 // this.countStepTime()
+        //                                 this.setState({
+        //                                     firstValue:res.steps
+        //                                 })
+        //                             }
                                     
-                                })
-                            })
+        //                         })
+        //                     })
         
-                        })
+        //                 })
         
-                        .catch((err) => {
-                            console.log('err >>> ', err)
-                        })
+        //                 .catch((err) => {
+        //                     console.log('err >>> ', err)
+        //                 })
         
         
-                } else if (Platform.OS === 'ios') {
-                    const options = {
-                        scopes: [
-                            Scopes.FITNESS_ACTIVITY_READ_WRITE,
-                            Scopes.FITNESS_BODY_READ_WRITE,
-                        ],
-                    }
+        //         } else if (Platform.OS === 'ios') {
+        //             const options = {
+        //                 scopes: [
+        //                     Scopes.FITNESS_ACTIVITY_READ_WRITE,
+        //                     Scopes.FITNESS_BODY_READ_WRITE,
+        //                 ],
+        //             }
         
-                    rnHealthKit.authorize(options)
-                        .then((res) => {
-                            // console.log('authorized >>>', res)
-                            rnHealthKit.observeSteps((res) => {
-                                // console.log(res)
-                                this.setState({ pedometerData: res.steps },()=>{
-                                    if (res.steps > Number(1)) {
-                                        this.countStepTime()
-                                        this.setState({
-                                            firstValue:res.steps
-                                        })
-                                    }
+        //             rnHealthKit.authorize(options)
+        //                 .then((res) => {
+        //                      console.log('authorized >>>', res)
+        //                     rnHealthKit.observeSteps((res) => {
+        //                         // console.log(res)
+        //                         this.setState({ pedometerData: res.steps },()=>{
+        //                             if (res.steps > Number(1)) {
+        //                                 //this.countStepTime()
+        //                                 this.setState({
+        //                                     firstValue:res.steps
+        //                                 })
+        //                             }
                                     
-                                })
-                            })
+        //                         })
+        //                     })
         
         
-                        })
+        //                 })
+        //                 .catch((err) => {
+        //                     console.log('err >>> ', err)
+        //                 })
         
-                }
+        //         }
                 
         
 
@@ -242,7 +253,6 @@ export default class StepCountScreen extends React.Component {
             const min = new Date().getMinutes(); //Current Minutes
             const sec = new Date().getSeconds(); //Current Seconds
             const currentTime = hours + ':' + min + ':' + sec;
-
             console.log('current time >>>', currentTime)
             const resetTime = '0' + ':' + '0' + ':' + '0';
             const eightTime = '8' + ':' + '0' + ':' + '0';
@@ -284,7 +294,7 @@ export default class StepCountScreen extends React.Component {
                     console.log('sensor manager data -->>', data)
                     this.setState({ pedometerData: data.steps }, () => {
                         if (data.steps > Number(1)) {
-                                this.countStepTime()
+                                //this.countStepTime()
                                 this.setState({
                                     firstValue:data.steps
                                 })
@@ -325,7 +335,7 @@ export default class StepCountScreen extends React.Component {
                     console.log('sensor manager data -->>', data)
                     this.setState({ pedometerData: data.steps }, () => {
                         if (data.steps > Number(1)) {
-                            this.countStepTime()
+                            //this.countStepTime()
                             this.setState({
                                 secondValue: data.steps
                             })
@@ -411,7 +421,7 @@ export default class StepCountScreen extends React.Component {
                     console.log('sensor manager data -->>', data)
                     this.setState({ pedometerData: data.steps }, () => {
                         if (data.steps > Number(1)) {
-                            this.countStepTime()
+                            //this.countStepTime()
                             this.setState({
                                 thirdValue: data.steps
                             })

@@ -25,6 +25,7 @@ const styles =StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-between',
         marginTop:14,
+       
     },
     iconSize:{
         width:18,
@@ -49,7 +50,7 @@ const styles =StyleSheet.create({
          //borderWidth:5,
          //borderColor:'red',
         //borderRadius:3,
-         height:45,
+         height:48,
         // width:'100%',
         backgroundColor:'black',
         justifyContent:'space-between',

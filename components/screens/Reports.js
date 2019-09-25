@@ -228,13 +228,13 @@ class Reportscreen extends React.Component {
           <Text style={styles.textStyleOne}>Weekly</Text>
           <Text style={styles.textStyleTwo}>Report</Text>
         </View>
-        <View style={styles.arrowContainer}>
+        {/* <View style={styles.arrowContainer}>
           <TouchableOpacity style={{ marginRight: 20 }}>
             <Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity>
           <Text>This week</Text>
           <TouchableOpacity style={{ marginLeft: 20 }}>
             <Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
-        </View>
+        </View> */}
         <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
           <View style={styles.bodyContainer}>
             <View style={styles.cardLeft}>
