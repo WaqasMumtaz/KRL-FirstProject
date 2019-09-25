@@ -192,14 +192,14 @@ class Signup extends React.Component {
                                 })
                             )
                         }
-                        else {
+                        // else {
                         
-                            return (
-                                //navigate('Setupscreen1')
-                                navigate('Login')
-                            )
+                        //     return (
+                        //         //navigate('Setupscreen1')
+                        //         navigate('Login')
+                        //     )
 
-                         }
+                        //  }
 
                     })
                     if (signupCode) {

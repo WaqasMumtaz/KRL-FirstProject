@@ -167,7 +167,8 @@ class LastSetUpScreen extends React.Component {
             macroObj.carbohydrates = carbohydratesVal;
             let dataUser = await HttpUtils.post('macrodata', macroObj)
             console.log(dataUser, 'dataUser')
-            this.props.navigation.navigate('BottomTabe')
+            //this.props.navigation.navigate('BottomTabe')
+            this.props.navigation.navigate('Login')
         }
     }
 

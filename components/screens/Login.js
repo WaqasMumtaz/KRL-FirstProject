@@ -86,7 +86,7 @@ class Login extends React.Component {
         let getUserCode = dataUser.code;
         let userWrong = dataUser.Match;
         let userMsg = dataUser.msg;
-        if (getUserCode == 200) {
+        if (getUserCode) {
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
           console.log('dataUser >>>', dataUser);
           if (dataUser.profile[0]) {
@@ -129,12 +129,8 @@ class Login extends React.Component {
             //   })
             // })
 
-            
-
             console.log(finalDataTrainee, 'finalDataTrainee')
 
-
-            
 
           }
 
@@ -149,6 +145,7 @@ class Login extends React.Component {
             isLoading: false,
             psswrdNotMatchShow: true,
             passwordNotMatch: userMsg,
+            // emailAndPasswrd: true,
 
           })
           setTimeout(() => {
@@ -164,7 +161,7 @@ class Login extends React.Component {
         console.log(error)
         this.setState({
           isLoading: false,
-          emailAndPasswrd: true,
+          // emailAndPasswrd: true,
         })
         setTimeout(() => {
           this.setState({

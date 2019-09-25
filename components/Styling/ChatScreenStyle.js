@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     },
     textInputContainer: {
         flexDirection: 'row',
-
+        marginBottom:20
     },
     inputStyle: {
         flex: 1,
@@ -673,15 +673,15 @@ const styles = StyleSheet.create({
 
     },
     nameContainer: {
-        flex: 1,
+        // flex: 1,
         justifyContent: 'flex-start',
-        // marginTop: 15
+        padding:10
     },
     name: {
         fontFamily: "MontserratExtraBold",
         fontSize: 14,
         color: 'black',
-        marginLeft: 10,
+        marginLeft: 8,
         // marginVertical: 5
     },
     nameOpacity:{

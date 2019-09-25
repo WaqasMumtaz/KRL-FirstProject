@@ -53,7 +53,7 @@ class Chatscreen extends React.Component {
     this.state = {
       textMessage: '',
       chatMessages: [],
-      sendIcon: false,
+      sendIcon: true,
       micIcon: true,
       micOrange: false,
       sendBtnContainer: true,
@@ -119,10 +119,7 @@ class Chatscreen extends React.Component {
     })
 
   }
-  // componentWillUnmount() {
-  //   // Remove the event listener
-  //   this.focusListener.remove();
-  // }
+  
 
 
 
@@ -130,17 +127,6 @@ class Chatscreen extends React.Component {
   componentWillMount() {
     const { senderData } = this.props.navigation.state.params;
     console.log(senderData, 'senderData')
-    // const { navigation } = this.props;
-    // this.focusListener = navigation.addListener('didFocus', () => {
-    AsyncStorage.getItem('currentUser').then((value) => {
-      let userData = JSON.parse(value)
-      if (userData.assignTrainner == undefined) {
-        this.setState({
-          forTrainnerModal: true
-        })
-      }
-    })
-    // });
 
     let chatArrayTemp = [];
     let dataFromLocalStorage;
@@ -213,23 +199,35 @@ class Chatscreen extends React.Component {
     this.uplaodDataOnFirebase(textMessage, type, 'text')
     this.setState({
       textMessage: '',
-      messagContainer: true,
-    }, () => {
-      const { textMessage } = this.state;
-      if (textMessage == '') {
-        this.setState({
-          micIcon: true,
-          sendIcon: false
-        })
-      }
-      else {
-        this.setState({
-          sendIcon: true,
-          micIcon: false
-        })
-      }
+      // messagContainer: true,
     })
   }
+
+  // sendMessage = async () => {
+  //   const { textMessage } = this.state;
+  //   let type = 'text';
+  //   //message send on firebase
+  //   this.uplaodDataOnFirebase(textMessage, type, 'text')
+  //   this.setState({
+  //     textMessage: '',
+  //     messagContainer: true,
+  //   }, () => {
+  //     const { textMessage } = this.state;
+  //     if (textMessage == '') {
+  //       this.setState({
+  //         micIcon: true,
+  //         sendIcon: false
+  //       })
+  //     }
+  //     else {
+  //       this.setState({
+  //         sendIcon: true,
+  //         micIcon: false
+  //       })
+  //     }
+  //   })
+  // }
+
 
   choosePhotoFunc = () => {
     const options = {
@@ -356,14 +354,7 @@ class Chatscreen extends React.Component {
     })
   }
 
-  removeModal = () => {
-    const { navigate } = this.props.navigation;
-    this.setState({
-      forTrainnerModal: false
-    }, () => { navigate('Homescreen') })
-
-  }
-
+  
 
   fileOpner(e, type, g) {
     const FilePath = e; // path of the file
@@ -385,25 +376,17 @@ class Chatscreen extends React.Component {
   }
 
 
-  toggelMic = async () => {
-    this.setState({
-      micIcon: false,
-      micOrange: true,
-      sendBtnContainer: false,
-      orangeMicContainer: true,
-      recodringBody: true
-    })
-  }
+  // toggelMic = async () => {
+  //   this.setState({
+  //     micIcon: false,
+  //     micOrange: true,
+  //     sendBtnContainer: false,
+  //     orangeMicContainer: true,
+  //     recodringBody: true
+  //   })
+  // }
 
-  toggelMicOrange = () => {
-    //const {micIcon , micOrange}=this.state;
-    this.setState({
-      // recodringBody:true,
-      // micOrange:true,
-      // sendBtnContainer:true,
-      // orangeMicContainer:false
-    })
-  }
+  
 
   grayIconAttachFielFunc = () => {
     this.setState({
@@ -1118,7 +1101,7 @@ class Chatscreen extends React.Component {
               onChangeText={(textMessage) => { this.setState({ textMessage }) }}
               autoCorrect={false}
               placeholder="Type message here..."
-              onKeyPress={() => { this.changeIcon() }}
+              //onKeyPress={() => { this.changeIcon() }}
               value={textMessage}
               style={styles.inputStyle}
             />
@@ -1141,37 +1124,17 @@ class Chatscreen extends React.Component {
               {sendIcon && <TouchableOpacity onPress={this.sendMessage}>
                 <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
               </TouchableOpacity>}
-              {micIcon && <TouchableOpacity onPress={this.toggelMic}>
+              {/* {micIcon && <TouchableOpacity onPress={this.toggelMic}>
                 <Image source={require('../icons/mic.png')} style={styles.micIconStyle} />
               </TouchableOpacity>}
             </View>}
             {orangeMicContainer && <View style={styles.orangeMicContainer}>
               {micOrange && <TouchableOpacity onPress={this.toggelMicOrange}>
                 <Image source={require('../icons/mic-orange.png')} style={styles.micIconStyle} />
-              </TouchableOpacity>}
+              </TouchableOpacity>} */}
             </View>}
             {/* When user does not assign trainer show this modal*/}
-            {/* <Modal
-              isVisible={this.state.forTrainnerModal}
-              animationIn='zoomIn'
-              //animationOut='zoomOutDown'
-              backdropOpacity={0.8}
-              backdropColor='white'
-              coverScreen={true}
-              animationInTiming={500}
-              animationOutTiming={500}
-            >
-              <View style={styles.withOutTrainerModal}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 8 }}>
-                  <Text style={styles.textColor}>Contact To App Admin</Text>
-                  <TouchableOpacity onPress={this.removeModal} activeOpacity={0.6}>
-                    <Image source={require('../icons/cancel.png')} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-            </Modal> */}
-
+            
 
 
           </View>

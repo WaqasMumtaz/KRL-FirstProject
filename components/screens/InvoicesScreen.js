@@ -46,6 +46,7 @@ class Invoices extends React.Component {
 
         this.state = {
             allDataUser: [],
+            invoiceData: [],
             isVisibleModal: false,
             receipt_img: '',
             month: '',
@@ -60,8 +61,9 @@ class Invoices extends React.Component {
             noFound: false,
             releaseMonth: '',
             noInvoices: '',
-            showNullInvoices: false
-
+            showNullInvoices: false,
+            notMatch: false,
+            showalert: false
 
         }
 
@@ -115,7 +117,8 @@ class Invoices extends React.Component {
                     //    let arrayData = this.state.allDataUser;
                     //    arrayData = [...arrayData, userContent]
                     this.setState({
-                        allDataUser: userContent
+                        allDataUser: userContent,
+                        invoiceData: userContent
                     }, () => {
                         for (let i in this.state.allDataUser) {
                             const dataUser = this.state.allDataUser[i];
@@ -203,65 +206,64 @@ class Invoices extends React.Component {
 
 
 
-    monthAndYearRenderData = ({ item }) => {
-        console.log('data items >>', item)
-        console.log('service name >>>', item.paymentMonth);
-        return (
-            <View style={styles.bodyContainer}>
+    // monthAndYearRenderData = ({ item }) => {
+    //     console.log('data items >>', item)
+    //     console.log('service name >>>', item.paymentMonth);
+    //     return (
+    //         <View style={styles.bodyContainer}>
 
-                {
+    //             {
 
-                    item.paymentMonth == this.state.renderMonthData ?
-                        <View style={styles.cardLeft}>
-                            <View style={styles.childContainer}>
-                                <View style={styles.cardNumberContainer}>
-                                    <Text style={styles.cardNumberStyle}>{item.serviceName == undefined ?
-                                        'Online Payment'
-                                        : item.serviceName
-                                    }</Text>
-                                    {item.serviceName != undefined ?
-                                        <View style={styles.checkReceipt}>
-                                            <Text style={styles.checkReceiptText}>Check Receipt</Text>
-                                            <TouchableOpacity onPress={this.openModal}>
-                                                <Image source={require('../icons/attach-orange.png')}
-                                                    style={styles.iconStyle}
-                                                    resizeMode='cover'
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        : null
-                                    }
-                                    <Text style={styles.priceDetail}>
-                                        Rs. {item.amount}
-                                    </Text>
-                                    <Text style={styles.textStyle}>Coach fees</Text>
-                                    <View style={styles.dateMonthContainer}>
-                                        <Text style={styles.monthName}>
-                                            {item.paymentMonth}
-                                        </Text>
+    //                 item.paymentMonth == this.state.renderMonthData ?
+    //                     <View style={styles.cardLeft}>
+    //                         <View style={styles.childContainer}>
+    //                             <View style={styles.cardNumberContainer}>
+    //                                 <Text style={styles.cardNumberStyle}>{item.serviceName == undefined ?
+    //                                     'Online Payment'
+    //                                     : item.serviceName
+    //                                 }</Text>
+    //                                 {item.serviceName != undefined ?
+    //                                     <View style={styles.checkReceipt}>
+    //                                         <Text style={styles.checkReceiptText}>Check Receipt</Text>
+    //                                         <TouchableOpacity onPress={this.openModal}>
+    //                                             <Image source={require('../icons/attach-orange.png')}
+    //                                                 style={styles.iconStyle}
+    //                                                 resizeMode='cover'
+    //                                             />
+    //                                         </TouchableOpacity>
+    //                                     </View>
+    //                                     : null
+    //                                 }
+    //                                 <Text style={styles.priceDetail}>
+    //                                     Rs. {item.amount}
+    //                                 </Text>
+    //                                 <Text style={styles.textStyle}>Coach fees</Text>
+    //                                 <View style={styles.dateMonthContainer}>
+    //                                     <Text style={styles.monthName}>
+    //                                         {item.paymentMonth}
+    //                                     </Text>
 
-                                    </View>
-                                    <Text style={styles.textStyle}>Issue date</Text>
-                                    <View style={styles.paymentStatusContainer}>
-                                        <Text style={styles.unpaidTextStyle}>paid</Text>
-                                        <Text style={styles.textStyle}>Payment status</Text>
-                                    </View>
-                                </View>
+    //                                 </View>
+    //                                 <Text style={styles.textStyle}>Issue date</Text>
+    //                                 <View style={styles.paymentStatusContainer}>
+    //                                     <Text style={styles.unpaidTextStyle}>paid</Text>
+    //                                     <Text style={styles.textStyle}>Payment status</Text>
+    //                                 </View>
+    //                             </View>
 
-                            </View>
-                        </View>
-
-                        :
-                        // this.setState({noFound:true})
-                        console.log('No found Data')
-
-
-                }
+    //                         </View>
+    //                     </View>
+    //                     :
+    //                     this.setState({ noFound: true })
+    //                 // console.log('No found Data')
 
 
-            </View>
-        )
-    }
+    //             }
+
+
+    //         </View>
+    //     )
+    // }
 
 
     showMonthPicker = () => {
@@ -270,7 +272,42 @@ class Invoices extends React.Component {
         })
 
     }
+    monthSelect = (date) => {
+        const { allDataUser } = this.state;
+        let arr = []
+        // console.log(e, 'month')
+        const getMonth = Number(date._i.slice(3, 4));
+        const getYear = date._i.slice(5, 9);
+        const getMonthName = this.state.monthArr[getMonth];
+        const concatMonthYear = `${getMonthName}, ${getYear}`;
+        console.log(concatMonthYear, 'concatMonthYear')
+        for (var i = 0; i < allDataUser.length; i++) {
+            console.log(allDataUser[i], 'data')
+            if (allDataUser[i].paymentMonth == concatMonthYear) {
+                arr.push(allDataUser[i])
+                this.setState({
+                    invoiceData: arr,
+                    showPicker: false,
+                    showalert: false
+                })
+            }
+            else if (allDataUser[i].paymentMonth != concatMonthYear) {
+                console.log('Condition Worked Fine')
+                this.setState({
+                    invoiceData: arr,
+                    showPicker: false,
+                })
+            }
+            // else if (allDataUser.length < 0){
+            //     alert('No Found Data')
+            // }
+        }
+        // this.setState({
+        //     allDataUser: arr,
+        //     showPicker: false
+        // })
 
+    }
 
     render() {
         const { navigate } = this.props.navigation;
@@ -283,11 +320,13 @@ class Invoices extends React.Component {
             monthRelatedData,
             releaseMonth,
             noInvoices,
-            showNullInvoices
+            showNullInvoices,
+            showalert,
+            invoiceData
         } = this.state;
-        console.log('render all data user >>>', allDataUser);
+
+        // console.log('render all data user >>>', allDataUser);
         // console.log('Receipt image >>>', this.state.receipt_img);
-        //console.log('year month >>>', this.state.month)
 
         return (
 
@@ -308,26 +347,25 @@ class Invoices extends React.Component {
                         showPicker ?
                             <MonthSelectorCalendar
                                 //selectedDate={}
-                                onMonthTapped={(date) => this.setState({ month: date }, () => {
-                                    //this.renderDataFun.bind(this, date._i)
-                                    if (date._i) {
-                                        this.setState({ showPicker: false, })
-                                        const getMonth = Number(date._i.slice(3, 4));
-                                        const getYear = date._i.slice(5, 9);
-                                        console.log('get month >>', getMonth)
-                                        console.log('get month >>', getYear)
-                                        const getMonthName = this.state.monthArr[getMonth];
-                                        const concatMonthYear = `${getMonthName}, ${getYear}`;
-                                        console.log('concate month >>>', concatMonthYear)
-                                        this.setState({
-                                            renderMonthData: concatMonthYear,
-                                            allDataShow: false,
-                                            monthRelatedData: true,
-                                        })
-
-                                    }
-
-                                })}
+                                onMonthTapped={(e) => this.monthSelect(e)}
+                            // onMonthTapped={(date) => this.setState({ month: date }, () => {
+                            //     //this.renderDataFun.bind(this, date._i)
+                            //     if (date._i) {
+                            //         this.setState({ showPicker: false, })
+                            //         const getMonth = Number(date._i.slice(3, 4));
+                            //         const getYear = date._i.slice(5, 9);
+                            //         // console.log('get month >>', getMonth)
+                            //         // console.log('get year >>', getYear)
+                            //         const getMonthName = this.state.monthArr[getMonth];
+                            //         const concatMonthYear = `${getMonthName}, ${getYear}`;
+                            //         //console.log('concate month >>>', concatMonthYear)
+                            //         this.setState({
+                            //             renderMonthData: concatMonthYear,
+                            //             allDataShow: false,
+                            //             monthRelatedData: true,
+                            //         })
+                            //     }
+                            // })}
                             />
                             : null
                     }
@@ -338,7 +376,7 @@ class Invoices extends React.Component {
                             <View style={{
                                 justifyContent: 'center',
                                 alignItems: 'center', alignSelf: 'center',
-                                alignContent:'center'
+                                alignContent: 'center'
                             }}>
                                 <Text style={{ color: '#FF6200', fontFamily: "MontserratMedium" }}>{noInvoices}</Text>
                             </View>
@@ -346,53 +384,42 @@ class Invoices extends React.Component {
                             null
                     }
 
-                    {allDataShow &&
-                        <FlatList
-                            data={allDataUser}
-                            renderItem={this.renderDataItems}
-                            keyExtractor={this._keyExtractor}
-                            numColumns={columsNum}
-                        />
-                    }
-
-                    {
-                        monthRelatedData &&
-                        <FlatList
-                            data={allDataUser}
-                            renderItem={this.monthAndYearRenderData}
-                            keyExtractor={this._keyExtractor}
-                            numColumns={columsNum}
-                        />
-
-                    }
                     {/* {
-                        this.state.noFound ?
-                            // <View style={{ justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }}>
-                            //     <Text style={{ fontFamily: 'MontserratLight', color: '#FF6200' }}>No Found Record Selected Month</Text>
-                            // </View>
-                            alert('No Found Data')
-                            :
-                            null
-                    } */}
-                    {
-                        this.state.noFound == true && showPicker == false ?
-                            Alert.alert('NO Found Data',
+                        this.state.notMatch ?
+                        // <View><Text>Not Found Data</Text></View>
+                        Alert.alert('Title','No Found Data',
                                 [
                                     {
                                         text: 'OK', onPress: () =>
                                             this.setState({
                                                 allDataShow: true,
-                                                noFound: false
+                                                notMatch: false
                                             })
                                     },
                                 ],
                             )
-                            :
-                            null
+                        :
+                        null
+                    } */}
+
+                    {invoiceData.length > 0 ?
+                        <FlatList
+                            data={invoiceData}
+                            renderItem={this.renderDataItems}
+                            keyExtractor={this._keyExtractor}
+                            numColumns={columsNum}
+                        />
+                        :
+                        invoiceData.length <= 0 ?
+                        <View
+                        style={{justifyContent:'center',alignItems:'center'}}
+                        >
+                            <Text style={{color: '#FF6200', fontFamily: "MontserratMedium"}}>No Found Data</Text>
+                       </View>
+                       :
+                       null
                     }
-
-
-
+                    
 
                     <Modal
                         isVisible={this.state.isVisibleModal}
