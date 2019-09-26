@@ -21,7 +21,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
 import ToastComponent from '../Toasts/nativeToast';
 import OverlayLoader from '../Loader/OverlaySpinner'
-const { height } = Dimensions.get('window');
+const { heightDimension } = Dimensions.get('window');
 
 class BMICalculator extends React.Component {
     static navigationOptions = () => ({
@@ -168,7 +168,8 @@ class BMICalculator extends React.Component {
         
        else if (heightUnit == 'inches' && weightUnit == 'pound') {
             bmiValue = (weight / height / height) * 703
-            let bmiVal = bmiValue.toString();
+            let bmiVal = Math.round(bmiValue.toString());
+            console.log('bmiValue >>>',bmiVal)
             bmiData.bmi = bmiVal;
             this.setState({
                 bmi: bmiVal,
@@ -192,7 +193,8 @@ class BMICalculator extends React.Component {
         
         else if (heightUnit == 'centimeter' && weightUnit == 'kg') {
             bmiValue = (weight / height / height) * 10000
-            let bmiVal = bmiValue.toString();
+            let bmiVal = Math.round(bmiValue.toString());
+            console.log('bmiValue >>>',bmiVal)
             bmiData.bmi = bmiVal;
             this.setState({
                 bmi: bmiVal,
@@ -251,7 +253,7 @@ class BMICalculator extends React.Component {
            } = this.state;
         return (
             // <View style={styles.mainContainer}>
-            <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
+            <ScrollView style={{ flex: 1, backgroundColor: 'white', height: heightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.mainContainer}>
                     <View style={styles.headingContainer}>
                         <Text style={styles.headingStyle}>

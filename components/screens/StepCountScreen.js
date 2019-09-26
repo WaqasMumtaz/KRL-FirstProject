@@ -65,12 +65,35 @@ export default class StepCountScreen extends React.Component {
     }
 
 
+    // googleFitAuthFun=()=>{
+    //     const options = {
+    //         scopes: [
+    //           Scopes.FITNESS_ACTIVITY_READ_WRITE,
+    //           Scopes.FITNESS_BODY_READ_WRITE,
+    //         ],
+    //       }
+    //       GoogleFit.authorize(options)
+    //         .then(authResult => {
+    //           if (authResult.success) {
+    //             // dispatch("AUTH_SUCCESS");
+    //             console.log( authResult.success)
+    //           } else {
+    //             //dispatch("AUTH_DENIED", authResult.message);
+    //             console.log(authResult.message)
+    //           }
+    //         })
+    //         .catch((err) => {
+    //           //dispatch("AUTH_ERROR");
+    //           console.log(err)
+              
+    //         })
+    // }
 
     async componentWillMount() {
         await this.getData()
         this.dateFilter()
 
-        // this._startPedometer
+        //this.googleFitAuthFun()
 
     }
 
@@ -629,7 +652,12 @@ export default class StepCountScreen extends React.Component {
                                 size={90}
                                 width={12}
                                 color={'#FF6200'}
-                                progress={pedometerData == '' ? 0 : pedometerData}
+                                progress={pedometerData > 1 && pedometerData < 250 ? 25 :
+                                    pedometerData > 250 && pedometerData < 500 ? 50 :
+                                    pedometerData > 500 && pedometerData < 750 ? 75 :
+                                    pedometerData > 750 && pedometerData <= 10000 ? 100 
+                                    : 0
+                                }
                                 backgroundColor={'gray'}
                                 animateFromValue={0}
                                 fullColor={'#FF6200'}

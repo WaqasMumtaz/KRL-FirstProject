@@ -101,7 +101,7 @@ const styles=StyleSheet.create({
     // },
     textInputOne:{
           height: 80,
-          width:170,
+          width:150,
           flexWrap:'wrap',
           paddingBottom:28,
           borderTopLeftRadius:5,
@@ -113,7 +113,7 @@ const styles=StyleSheet.create({
     },
     textInputTwo:{
         height: 80,
-          width:180,
+          width:160,
           //backgroundColor:'gray',
           flexWrap:'wrap',
           //marginLeft:10,
@@ -125,7 +125,7 @@ const styles=StyleSheet.create({
     },
     textInputThree:{
         height: 80,
-          width:170,
+          width:150,
          // backgroundColor:'gray',
           flexWrap:'wrap',
           paddingBottom:28,
@@ -136,7 +136,7 @@ const styles=StyleSheet.create({
     },
     textInputFour:{
          height: 80,
-          width:180,
+          width:160,
           //backgroundColor:'gray',
           flexWrap:'wrap',
           //marginLeft:10,

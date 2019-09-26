@@ -80,7 +80,7 @@ class Chatscreen extends React.Component {
       currentDateDataWeights: [],
       loseWeight: '',
       lastWeek: '',
-      cureentWeek: '',
+      cureentWeek: 0,
       gainWeight: '',
       forTrainnerModal: false,
       senderData: '',
@@ -88,16 +88,17 @@ class Chatscreen extends React.Component {
       fileUpLoading: false,
       forVideoModal: false,
       smallVideo: true,
-      largeSizeVideo: false
+      largeSizeVideo: false,
+      showReport: false
     }
 
   }
 
-  handleFullScreenVideo = () => {
-    console.log('video tag fullscreen')
+  // handleFullScreenVideo = () => {
+  //   console.log('video tag fullscreen')
 
 
-  }
+  // }
   // endVideo=()=>{
   //   console.log('End Video success')
 
@@ -119,11 +120,6 @@ class Chatscreen extends React.Component {
     })
 
   }
-  
-
-
-
-
   componentWillMount() {
     const { senderData } = this.props.navigation.state.params;
     console.log(senderData, 'senderData')
@@ -133,6 +129,7 @@ class Chatscreen extends React.Component {
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         dataFromLocalStorage = JSON.parse(value);
+        //console.log('datafromlocalstorage >>>',dataFromLocalStorage)
         db.ref('chatRoom').on("value", snapshot => {
           let data = snapshot.val()
           for (let i in data) {
@@ -159,13 +156,17 @@ class Chatscreen extends React.Component {
   }
 
   uplaodDataOnFirebase = (userMessage, type) => {
+    const { senderData } = this.props.navigation.state.params;
+    console.log(senderData, 'senderData')
     const { date, time } = this.state;
     let mgs = {}
     let data;
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         data = JSON.parse(value);
+        console.log(data, 'data')
         if (data.assignTrainner != undefined && data.trainnerId != undefined) {
+          console.log('if condition true')
           console.log('test')
           mgs.message = userMessage;
           mgs.assignTrainner = data.assignTrainner;
@@ -178,14 +179,15 @@ class Chatscreen extends React.Component {
           db.ref(`chatRoom/`).push(mgs);
         }
         else if (data.assignTrainny != undefined && data.tainnyId != undefined) {
+          console.log('else if condition true')
           mgs.message = userMessage;
-          mgs.assignTrainny = data.assignTrainny;
-          mgs.reciverId = data.tainnyId;
+          mgs.assignTrainny = senderData.name;
+          mgs.reciverId = senderData.userId;
           mgs.name = data.name;
           mgs.senderId = data._id;
           mgs.date = date;
           mgs.time = time;
-          mgs.name = name;
+          // mgs.name = name;
           mgs.type = type;
           db.ref(`chatRoom/`).push(mgs);
         }
@@ -199,34 +201,24 @@ class Chatscreen extends React.Component {
     this.uplaodDataOnFirebase(textMessage, type, 'text')
     this.setState({
       textMessage: '',
-      // messagContainer: true,
+      messagContainer: true,
     })
+    // , () => {
+    //   const { textMessage } = this.state;
+    //   if (textMessage == '') {
+    //     this.setState({
+    //       micIcon: true,
+    //       sendIcon: false
+    //     })
+    //   }
+    //   else {
+    //     this.setState({
+    //       sendIcon: true,
+    //       micIcon: false
+    //     })
+    //   }
+    // })
   }
-
-  // sendMessage = async () => {
-  //   const { textMessage } = this.state;
-  //   let type = 'text';
-  //   //message send on firebase
-  //   this.uplaodDataOnFirebase(textMessage, type, 'text')
-  //   this.setState({
-  //     textMessage: '',
-  //     messagContainer: true,
-  //   }, () => {
-  //     const { textMessage } = this.state;
-  //     if (textMessage == '') {
-  //       this.setState({
-  //         micIcon: true,
-  //         sendIcon: false
-  //       })
-  //     }
-  //     else {
-  //       this.setState({
-  //         sendIcon: true,
-  //         micIcon: false
-  //       })
-  //     }
-  //   })
-  // }
 
 
   choosePhotoFunc = () => {
@@ -286,6 +278,11 @@ class Chatscreen extends React.Component {
         console.log('FilePickerManager Error: ', response.error);
       }
       else {
+        this.setState({
+          isLoading: true,
+          fileUpLoading: true
+        })
+        // console.log(response.path.lastIndexOf(".") + 1)
         let timestamp = (Date.now() / 1000 | 0).toString();
         let api_key = '878178936665133'
         let api_secret = 'U8W4mHcSxhKNRJ2_nT5Oz36T6BI'
@@ -294,23 +291,18 @@ class Chatscreen extends React.Component {
         let signature = CryptoJS.SHA1(hash_string).toString();
         let upload_url = 'https://api.cloudinary.com/v1_1/' + cloud + '/upload'
         let xhr = new XMLHttpRequest();
-        this.setState({
-          isLoading: true,
-          fileUpLoading: true
-        })
         xhr.open('POST', upload_url);
         xhr.onload = () => {
-
           let type = response.path.substring(response.path.lastIndexOf(".") + 1);
           let uploadData = JSON.parse(xhr._response)
+          console.log(uploadData, 'uploadData')
+          this.uplaodDataOnFirebase(uploadData, type)
           if (uploadData) {
             this.setState({
               isLoading: false,
               fileUpLoading: false
             })
           }
-          console.log(uploadData, 'uploadData')
-          this.uplaodDataOnFirebase(uploadData, type)
         };
         let formdata = new FormData();
         formdata.append('file', { uri: response.uri, type: response.type, name: response.fileName });
@@ -318,12 +310,72 @@ class Chatscreen extends React.Component {
         formdata.append('api_key', api_key);
         formdata.append('signature', signature);
         xhr.send(formdata);
+        console.log(formdata, 'formdata')
+        // let timestamp = (Date.now() / 1000 | 0).toString();
+        // let api_key = '878178936665133'
+        // let api_secret = 'U8W4mHcSxhKNRJ2_nT5Oz36T6BI'
+        // let cloud = 'dxk0bmtei'
+        // let hash_string = 'timestamp=' + timestamp + api_secret
+        // let signature = CryptoJS.SHA1(hash_string).toString();
+        // let upload_url = 'https://api.cloudinary.com/v1_1/' + cloud + '/upload'
+        // let xhr = new XMLHttpRequest();
+        // xhr.open('POST', upload_url);
+        // // let timestamp = (Date.now() / 1000 | 0).toString();
+        // // let api_key = '878178936665133'
+        // // let api_secret = 'U8W4mHcSxhKNRJ2_nT5Oz36T6BI'
+        // // let cloud = 'dxk0bmtei'
+        // // let hash_string = 'timestamp=' + timestamp + api_secret
+        // // let signature = CryptoJS.SHA1(hash_string).toString();
+        // // let upload_url = 'https://api.cloudinary.com/v1_1/' + cloud + '/upload'
+        // // let xhr = new XMLHttpRequest();
+        // // console.log(timestamp , 'timestamp')
+        // // console.log(api_key , 'api_key')
+        // // console.log(api_secret , 'api_secret')
+        // // console.log(cloud , 'cloud')
+        // // console.log(hash_string , 'hash_string')
+        // // console.log(signature , 'signature')
+        // // console.log(upload_url , 'upload_url')
+        // // console.log(xhr , 'xhr')
+
+        // // xhr.open('POST', upload_url);
+        // // xhr.onload = () => {
+        // //   let uploadData = JSON.parse(xhr._response)
+        // //   console.log(uploadData , 'uploadData')
+        // //   // this.uplaodDataOnFirebase(uploadData, 'image')
+        // // };
+        // // console.log( xhr.open('POST', upload_url) , ' xhr.open();')
+        // xhr.onload = () => {
+        //   // this.setState({
+        //   //   isLoading: true,
+        //   //   fileUpLoading: true
+        //   // })
+        //   console.log('xhr.onload')
+        //   let type = response.path.substring(response.path.lastIndexOf(".") + 1);
+        //   let uploadData = JSON.parse(xhr._response)
+
+        //   // if (uploadData) {
+        //   //   this.setState({
+        //   //     isLoading: false,
+        //   //     fileUpLoading: false
+        //   //   })
+        //   // }
+        //   console.log(uploadData, 'uploadData')
+        //   this.uplaodDataOnFirebase(uploadData, type)
+        // };
+        // let formdata = new FormData();
+        // formdata.append('file', { uri: response.uri, type: response.type, name: response.fileName });
+        // formdata.append('timestamp', timestamp);
+        // formdata.append('api_key', api_key);
+        // formdata.append('signature', signature);
+        // xhr.send(formdata);
+        // console.log(formdata, 'formdata')
       }
     });
   }
 
   weeklyReport = () => {
     const { weekAgoDateDataWeights, currentDateDataWeights, loseWeight, lastWeek, cureentWeek, gainWeight } = this.state;
+    console.log('weekAgoDate >>>', weekAgoDateDataWeights)
     let weight = {
       weekAgoDateDataWeights: weekAgoDateDataWeights,
       currentDateDataWeights: currentDateDataWeights,
@@ -333,6 +385,7 @@ class Chatscreen extends React.Component {
       gainWeight: gainWeight
     }
     console.log(this.state.weekExcercise, 'test')
+    console.log('weekly weight object', weight)
     let obj = {
       weekExcercise: this.state.weekExcercise,
       weight: weight
@@ -354,7 +407,7 @@ class Chatscreen extends React.Component {
     })
   }
 
-  
+
 
   fileOpner(e, type, g) {
     const FilePath = e; // path of the file
@@ -386,7 +439,7 @@ class Chatscreen extends React.Component {
   //   })
   // }
 
-  
+
 
   grayIconAttachFielFunc = () => {
     this.setState({
@@ -425,17 +478,35 @@ class Chatscreen extends React.Component {
     let weekBefore;
     let cureentWeekData;
     let loseWeight;
+    let userType;
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         let dataFromLocalStorage = JSON.parse(value);
+        // console.log(dataFromLocalStorage)
         userId = dataFromLocalStorage._id;
       }
     });
+    // console.log('User Type >>>',this.state.userType, 'userId >>>', userId)
     //getting api complete data excersice or weight mearsment
     let dataExcersice = await HttpUtils.get('getallexerciselog');
     let data = dataExcersice.content;
+    // console.log('allData exercise data >>>', dataExcersice)
     let dataWeight = await HttpUtils.get('getweightlog');
     let weightData = dataWeight.content;
+    // console.log('allWeight >>>', weightData)
+    // console.log('user Type >>', userType)
+    // console.log('user Data Lenght >>>', data.length);
+    // if(userType == 'trainee' && data.length != 0){
+    //   this.setState({
+    //     showReport:true
+    //   })
+    // }
+    // else {
+    //   this.setState(
+    //     showReport: false
+    //   )
+    // }
+    console.log('get week report')
     //gettibg curent date
     const currentDayOfWeek = new Date().getDay() + 1;
     const currentDate = new Date().getDate();
@@ -470,6 +541,7 @@ class Chatscreen extends React.Component {
     // //get week wise data and show bar chart line 
     for (var i in weightData) {
       let dataApi = weightData[i];
+      console.log(dataApi, 'dataApi')
       if (dataApi.userId == userId) {
         //check week of the month
         let checkWeekDay = (Math.abs(currentDayOfWeek - dataApi.dayOfWeek));
@@ -534,6 +606,8 @@ class Chatscreen extends React.Component {
         }
       }
     }
+
+
     // // availbe current date and week ago ago data then get lose or gain wieght
     if (cureentWeekData != undefined && weekBefore != undefined) {
       let weekAgoWieght = weekBefore.weight.substring(0, weekBefore.weight.length - 2);
@@ -573,6 +647,26 @@ class Chatscreen extends React.Component {
         cureentWeek: 0
       })
     }
+    // weekAgoDateDataWeights, currentDateDataWeights, loseWeight, lastWeek, cureentWeek, gainWeight
+    if (weekBefore && this.state.weekAgoDateDataWeights && (this.state.loseWeight > 0 || this.state.cureentWeek > 0
+      || this.state.gainWeight != '')) {
+      console.log('weekly report availble');
+      this.setState({
+        showReport: true
+      })
+    }
+    else {
+      this.setState({
+        showReport: false
+      })
+      console.log('elese ')
+    }
+    // console.log(weekBefore, 'weekBefore')
+    // console.log(this.state.weekAgoDateDataWeights, 'cureentWeekData')
+    // console.log(this.state.loseWeight, 'loseWeight')
+    // console.log(this.state.cureentWeek, 'cureentWeek')
+    // console.log(this.state.gainWeight, 'gainWeight')
+
   }
 
   render() {
@@ -581,6 +675,7 @@ class Chatscreen extends React.Component {
     console.log(opponnetAvatarSource, 'opponnetAvatarSource')
     const chatMessages = this.state.chatMessages.map((message, key) => (
       <View>
+        {/* {console.log('chat messages >>>',message)} */}
         {/* {this.state.forVideoModal ? 
              <Modal
              isVisible={this.state.forVideoModal}
@@ -715,10 +810,10 @@ class Chatscreen extends React.Component {
                               //videoHeight={this.state.video.height}
                               duration={message.message.duration}
                               video={{ uri: `${message.message.secure_url}` }}
-                              ref={r => this.player = console.log(r)}
+                              ref={r => this.player = r}
                               style={styles.backgroundVideo}
-                              onLoad={this.handleFullScreenVideo}
-                              fullScreen={true}
+                            // onLoad={this.handleFullScreenVideo}
+                            // fullScreen={true}
 
                             />
 
@@ -930,9 +1025,9 @@ class Chatscreen extends React.Component {
                               // videoHeight={this.state.video.height}
                               duration={message.message.duration}
                               video={{ uri: `${message.message.secure_url}` }}
-                              ref={r => this.player = console.log(r)}
+                              ref={r => this.player = r}
                               style={styles.backgroundVideo}
-                              fullScreen={true}
+                            // fullScreen={true}
                             />
                           </View>
                           :
@@ -1070,11 +1165,17 @@ class Chatscreen extends React.Component {
                       style={styles.attachFilesStyle}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={this.weeklyReport}>
-                    <Image source={require('../icons/attach-report.png')}
-                      style={styles.attachFilesStyle}
-                    />
-                  </TouchableOpacity>
+                  {
+                    this.state.showReport ?
+                      <TouchableOpacity onPress={this.weeklyReport}>
+                        <Image source={require('../icons/attach-report.png')}
+                          style={styles.attachFilesStyle}
+                        />
+                      </TouchableOpacity>
+                      :
+                      null
+                  }
+
                 </View>
               </View>}
             </View>
@@ -1134,7 +1235,7 @@ class Chatscreen extends React.Component {
               </TouchableOpacity>} */}
             </View>}
             {/* When user does not assign trainer show this modal*/}
-            
+
 
 
           </View>

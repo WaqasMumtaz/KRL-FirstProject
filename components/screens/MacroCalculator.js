@@ -6,7 +6,7 @@ import InputImgsScreen from '../screens/InputImgs';
 import DatePicker from 'react-native-datepicker';
 import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
-const { height } = Dimensions.get('window');
+const { HeightDimension } = Dimensions.get('window');
 class Macrocalculator extends React.Component {
     static navigationOptions = () => ({
         headerStyle: {
@@ -88,6 +88,7 @@ class Macrocalculator extends React.Component {
     calulateMacro = async () => {
         const { dob, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit,
             activityLevel, tdeeObj, date, time, currentYear, currentDate, currentMonth, userId } = this.state;
+            console.log('tdee Ojbject >>>',tdeeObj )
         let age;
         let macroObj = {
             dob: dob,
@@ -196,10 +197,14 @@ class Macrocalculator extends React.Component {
             })
         }
         if (dob != '') {
-            const dobYear = new Date(dob).getFullYear();
+           // const dobYear = new Date(dob).getFullYear();
+            const dobYear = dob.slice(6,10);
             // const dobMonth = new Date(dob).getMonth() + 1;
             // const dobDate = new Date(dob).getDate();
             age = currentYear - dobYear;
+            console.log(dobYear,'year');
+            console.log(currentYear,'currentyear');
+            console.log(dob,'dooobbb');
             // let month = currentMonth - dobMonth;
             // console.log(month, 'month minus')
             // console.log(currentMonth, 'currentMonth minus')
@@ -227,11 +232,22 @@ class Macrocalculator extends React.Component {
                     let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
                     let carbohydrate = carbohydratesCalries / 4;
                     //convert to string 
-                    let calries = calculteCalries.toString();
-                    let tde = tdee.toString();
-                    let fatVal = fat.toString();
-                    let proteinVal = protein.toString();
-                    let carbohydratesVal = carbohydrate.toString();
+                    let calries = Math.round(calculteCalries.toString());
+                    //let calries = Number(calculteCalries);
+                    //console.log('calries value >>>',calries)
+                    let tde = tdee.toString()
+                    //let tde = Number(tdee);
+                    //console.log('tdee value >>>',tde)
+                    let fatVal = Math.round(fat.toString());
+                    //let fatVal = Number(fat);
+                   // console.log('fatval value >>>',fatVal)
+                     let proteinVal = Math.round(protein.toString());
+                    //let proteinVal = Number(protein);
+                    //console.log('protein value >>>',proteinVal)
+                     let carbohydratesVal = Math.round(carbohydrate.toString());
+                    //let carbohydratesVal = Number(carbohydrate);
+                    //console.log('carbohyrates value >>>', carbohydratesVal)
+
                     //set the state
                     this.setState({
                         calculteCalries: calries,
@@ -269,11 +285,12 @@ class Macrocalculator extends React.Component {
                     let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
                     let carbohydrate = carbohydratesCalries / 4;
                     //convert to string 
-                    let calries = calculteCalries.toString();
+                    let calries = Math.round(calculteCalries.toString());
                     let tde = tdee.toString();
-                    let fatVal = fat.toString();
-                    let proteinVal = protein.toString();
-                    let carbohydratesVal = carbohydrate.toString();
+                    let fatVal = Math.round(fat.toString());
+                    let proteinVal = Math.round(protein.toString());
+                    let carbohydratesVal = Math.round(carbohydrate.toString());
+
                     //set the state
                     this.setState({
                         calculteCalries: calries,
@@ -417,9 +434,16 @@ class Macrocalculator extends React.Component {
     render() {
         const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation,
             currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation, male, female,
-            moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates, dob, date, } = this.state;
+            moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates, dob, date, 
+            currentWeight,goalWeight,height,age
+            } = this.state;
+            console.log('height >>>',height)
+            console.log('age >>>', dob);
+             console.log('current w8 >>>',currentWeight);
+            console.log('goal weight >>>', goalWeight)
+
         return (
-            <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
+            <ScrollView style={{ flex: 1, backgroundColor: 'white', height: HeightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.mainContainer}>
                     <View style={styles.childContainer}>
                         <View style={styles.headingContainer}>
@@ -653,10 +677,10 @@ class Macrocalculator extends React.Component {
                         <Text style={styles.macroTextStyle}>Your Daily Macros*</Text>
                     </View>
                     <View style={styles.inputCaloriesContainer}>
-                        <TextInput placeholder={"1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={calculteCalries + 'Kcal calories'} />
-                        <TextInput placeholder={"149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={fatMass + 'g Carbohyderates'} />
-                        <TextInput placeholder={"107 g\Protein"} style={styles.inputCaloriesStyleThree} value={proteins + 'g Proteins'} />
-                        <TextInput placeholder={"51 g\nFat"} style={styles.inputCaloriesStyleFour} value={carbohydrates + 'g Fat'} />
+                        <TextInput placeholder={"e.g 1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={calculteCalries + ' Kcal calories'} />
+                        <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={fatMass + ' g Carbohyderates'} />
+                        <TextInput placeholder={"e.g 107 g\Protein"} style={styles.inputCaloriesStyleThree} value={proteins + ' g Proteins'} />
+                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={carbohydrates + ' g Fat'} />
                     </View>
                     <View style={styles.lastParaContainer}>
                         <Text style={styles.lastParaStyle}>

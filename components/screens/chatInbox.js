@@ -54,15 +54,15 @@ class ChatInbox extends React.Component {
 //     })
 // }
 
-    // componentWillUnmount() {
-    //     // Remove the event listener
-    //     this.focusListener.remove();
-    // }
+    componentWillUnmount() {
+        // Remove the event listener
+        this.focusListener.remove();
+    }
     checkTrainy =  () => {
         // const { senderData } = this.props.navigation.state.params;
         console.log( 'senderData')
-       // const { navigation } = this.props;
-        // this.focusListener = navigation.addListener('didFocus',  () => {
+       const { navigation } = this.props;
+        this.focusListener = navigation.addListener('didFocus',  () => {
                AsyncStorage.getItem('currentUser').then((value) => {
                 let userData = JSON.parse(value)
                 console.log(userData , 'userData')
@@ -75,7 +75,7 @@ class ChatInbox extends React.Component {
                     })
                 }
                 else if(userData.assignTrainny != undefined ){
-                console.log(userData.assignTrainny , 'userData assignTrainny length')
+                console.log(userData.assignTrainny , 'userData assignTrainny ')
                     this.setState({
                         forTrainnerModal: false
                     })
@@ -93,7 +93,7 @@ class ChatInbox extends React.Component {
                     })
                 }
             })
-        // });
+         });
     }
 
 

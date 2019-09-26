@@ -154,14 +154,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     backgroundVideo: {
-        //position: 'absolute',
+        // position: 'absolute',
         top: 1,
         left: 1,
         bottom: 1,
         right: 1,
         // marginBottom:12,
         // marginLeft: '30%',
-        resizeMode: "contain",
+        resizeMode: "contain"
         
     },
     videoTagMgs: {

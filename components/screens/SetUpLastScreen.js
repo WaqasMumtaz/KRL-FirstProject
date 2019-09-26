@@ -4,7 +4,7 @@ import styles from '../Styling/LastScreenStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn'
 import HttpUtils from '../Services/HttpUtils';
 import OverlayLoader from '../Loader/OverlaySpinner';
-const { height } = Dimensions.get('window');
+const { heightDimension } = Dimensions.get('window');
 
 class LastSetUpScreen extends React.Component {
     static navigationOptions = {
@@ -88,7 +88,8 @@ class LastSetUpScreen extends React.Component {
             userId: userId
         };
         let year = new Date().getFullYear(); //Current Year
-        let ageyear = new Date(this.props.navigation.state.params.dob).getFullYear();
+        //let ageyear = new Date(this.props.navigation.state.params.dob).getFullYear();
+        let ageyear = this.props.navigation.state.params.dob.slice(6,10)
         age = year - ageyear;
         if (gender == 'male') {
             let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age + 5;
@@ -104,11 +105,11 @@ class LastSetUpScreen extends React.Component {
             let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
             let carbohydrate = carbohydratesCalries / 4;
             //convert to string 
-            let calries = calculteCalries.toString();
-            let tde = tdee.toString();
-            let fatVal = fat.toString();
-            let proteinVal = protein.toString();
-            let carbohydratesVal = carbohydrate.toString();
+            let calries = Math.round(calculteCalries.toString());
+            let tde = tdee.toString()
+            let fatVal = Math.round(fat.toString());
+            let proteinVal = Math.round(protein.toString());
+            let carbohydratesVal = Math.round(carbohydrate.toString());
             //set the state
             this.setState({
                 calculteCalries: calries,
@@ -178,7 +179,7 @@ class LastSetUpScreen extends React.Component {
         const { activityLevelValidation, sedentary, lightActivity, active, veryActive,
             calculteCalries, fatMass, proteins, carbohydrates } = this.state;
         return (
-            <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
+            <ScrollView style={{ flex: 1, backgroundColor: 'black', height: heightDimension }} contentContainerStyle={{ flexGrow: 1 }} >
                 <View style={styles.container}>
                     <View style={styles.headingContainer}>
                         <Text style={styles.headingStyle}>Set Up Your App</Text>
