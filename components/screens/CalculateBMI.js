@@ -168,8 +168,8 @@ class BMICalculator extends React.Component {
         
        else if (heightUnit == 'inches' && weightUnit == 'pound') {
             bmiValue = (weight / height / height) * 703
-            let bmiVal = Math.round(bmiValue.toString());
-            console.log('bmiValue >>>',bmiVal)
+            let bmiVal = bmiValue.toString();
+            // console.log('bmiValue >>>',bmiVal)
             bmiData.bmi = bmiVal;
             this.setState({
                 bmi: bmiVal,
@@ -193,7 +193,7 @@ class BMICalculator extends React.Component {
         
         else if (heightUnit == 'centimeter' && weightUnit == 'kg') {
             bmiValue = (weight / height / height) * 10000
-            let bmiVal = Math.round(bmiValue.toString());
+            let bmiVal = bmiValue.toString();
             console.log('bmiValue >>>',bmiVal)
             bmiData.bmi = bmiVal;
             this.setState({

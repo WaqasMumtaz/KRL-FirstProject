@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import AppContainer from './components/navigation/StackNavigation';
+import SplashScreen from 'react-native-splash-screen'
 //import ChartScreen from './components/BarChart/BarChart';
 import config from './Config/ApiKeys';
 //import reactNativePedometer from './components/Pedometer/checkFile'
@@ -22,6 +23,12 @@ class App extends Component {
    
 
   }
+  componentDidMount () {
+    SplashScreen.hide();
+}
+  // componentWillMount(){
+  //   SplashScreen.apply()
+  // }
   
 
  render() {

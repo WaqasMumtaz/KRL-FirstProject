@@ -4,4 +4,6 @@
 target 'GetFit' do
   pod 'Stripe', '~> 14.0.0'
   inherit! :search_paths
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
 end

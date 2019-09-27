@@ -3,6 +3,7 @@ package com.getfit;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.react.ReactNativeHost;
@@ -47,6 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SplashScreenReactPackage(),
             new RNFirebasePackage(),
             //new AsyncStoragePackage()
             new GoogleFitPackage(BuildConfig.APPLICATION_ID),
