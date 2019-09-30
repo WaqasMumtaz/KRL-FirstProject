@@ -663,6 +663,7 @@ export default class StepCountScreen extends React.Component {
                                 fullColor={'#FF6200'}
                             //duration={60000}
                             />
+                          <Text style={styles.tapLoadText}>Tap to load</Text>  
                         </View>
                         <View style={styles.stepCountData}>
                             <View style={{ flexDirection: 'row', marginRight: 50 }}>

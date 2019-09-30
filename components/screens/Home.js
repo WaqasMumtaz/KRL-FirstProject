@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Button, Dimensions, Image, TouchableOpacity,BackHandler } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Button, Dimensions, Image, TouchableOpacity, BackHandler } from 'react-native';
 import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
@@ -17,25 +17,34 @@ class Homescreen extends React.Component {
     this.state = {
       todayData: '',
       yestertdayData: '',
-      pedometerData:'',
+      pedometerData: '',
+      userId: ''
     }
 
   }
 
 
 
-  async componentWillMount() {
-    
+  componentWillMount() {
+    this.getTodayOrYesterdayExcersice()
+
     //getting user id from local storage
-    let userId;
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
-    // console.log(value ,'value')
+        // console.log(value ,'value')
         let dataFromLocalStorage = JSON.parse(value);
+        this.setState({
+          userId: dataFromLocalStorage._id
+        })
         userId = dataFromLocalStorage._id;
       }
     });
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
 
+  getTodayOrYesterdayExcersice = async () => {
+    //console.log('getTodayOrYesterdayExcersice')
+    const { userId } = this.state;
     //get all excersice log data
     let dataUser = await HttpUtils.get('getallexerciselog');
     let data = dataUser.content;
@@ -49,7 +58,6 @@ class Homescreen extends React.Component {
     //looping with data
     for (var i in data) {
       let dataApi = data[i];
-      // console.log(dataApi)
       //check user id with api data and get current user data
       if (dataApi.userId == userId) {
         //get today & yesterday of excersice from database 
@@ -58,19 +66,20 @@ class Homescreen extends React.Component {
         let checkMonth = Number(dataApi.month) - currMonth;
         let checkYear = Number(dataApi.year) - currentYear;
         if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
-          console.log(dataApi , 'dataApi')
+          console.log('today excersice')
           this.setState({
             todayData: dataApi
           })
         }
         else if (checkDate == -1 && checkMonth == 0 && checkYear == 0) {
+          console.log('yestertdayData excersice')
           this.setState({
             yestertdayData: dataApi
           })
         }
       }
     }
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+
   }
   changeRout(e) {
     const { navigate } = this.props.navigation;
@@ -84,34 +93,35 @@ class Homescreen extends React.Component {
 
 
 
-//   componentWillMount() {
-// }
+  //   componentWillMount() {
+  // }
 
-handleBackButton= async ()=>{
+  handleBackButton = async () => {
     console.log('pressed back button')
     const { navigate } = this.props.navigation;
     const getData = await AsyncStorage.getItem("currentUser");
-          // const parsForm = JSON.parse(getData)
-          // console.log('current user data >>>',parsForm)
-          if(getData){
-           navigate('Home')
-          }
-          else {
-            navigate('Login')
-          }
+    this.getTodayOrYesterdayExcersice()
+    // const parsForm = JSON.parse(getData)
+    // console.log('current user data >>>',parsForm)
+    if (getData) {
+      navigate('Home')
+    }
+    else {
+      navigate('Login')
+    }
 
-}
+  }
 
 
 
-componentWillUnmount() {
-  BackHandler.removeEventListener('hardwareBackPress');
-}
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress');
+  }
 
 
 
   render() {
-    const { todayData, yestertdayData,pedometerData } = this.state;
+    const { todayData, yestertdayData, pedometerData } = this.state;
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>

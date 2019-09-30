@@ -155,10 +155,15 @@ class ChatInbox extends React.Component {
                     >
                         <View style={styles.withOutTrainerModal}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 8 }}>
-                                <Text style={styles.textColor}>Contact To App Admin</Text>
+                                <Text style={styles.textColor}>You dont have a trainer</Text>
                                 <TouchableOpacity onPress={this.removeModal} activeOpacity={0.6}>
                                     <Image source={require('../icons/cancel.png')} />
                                 </TouchableOpacity>
+                            </View>
+                            <View style={styles.userInstruction}>
+                            <Text style={styles.userInsTextStyle}>Get premium account to get a coach</Text>
+                            <Text style={styles.userInsTextStyle}>Kindly contact</Text>
+                            <Text style={styles.userInsTextStyle}>0333-5529729</Text>
                             </View>
                         </View>
 

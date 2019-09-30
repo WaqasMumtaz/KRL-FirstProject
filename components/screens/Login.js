@@ -83,19 +83,16 @@ class Login extends React.Component {
       }
       try {
         let dataUser = await HttpUtilsFile.post('signin', userObj)
-        console.log('Assign Trainer >>>', dataUser.assignTrainner)
+        console.log('Login api >>>', dataUser);
         const assignTrainerName = dataUser.assignTrainner;
         let getUserCode = dataUser.code;
         let userWrong = dataUser.Match;
         let userMsg = dataUser.msg;
         if (getUserCode) {
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
-          console.log('dataUser >>>', dataUser);
-          if (dataUser.profile) {
+          if (dataUser.profile.length > 0) {
             let myProfile = dataUser.profile[0];
             myProfile.type = dataUser.type;
-            // console.log(dataUser.type , 'dataUser.type')
-            // console.log(myProfile , 'profile condition')
             AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
           }
           else {
@@ -106,22 +103,35 @@ class Login extends React.Component {
             myProfile.type = dataUser.type;
             AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
           }
-        //const assignTrainerName = dataUser.assignTrainner;
+          const assignTrainerName = dataUser.assignTrainner;
           if (assignTrainerName) {
-            console.log('Assign Trainer Condition Successfully')
             let opponentData = dataUser.trainnerProfileData;
-            opponentData[0].type = "Coach";
-            console.log('opponentData >>>',opponentData)
-            await AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+            if (opponentData.length > 0) {
+              //console.log('Assign Trainer Condition Successfully')
+              opponentData[0].type = "Coach";
+              //console.log('opponentData >>>',opponentData)
+              await AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+            }
+            else {
+              let opponentData = [];
+              let opponentDataObj = {
+                type: "Coach",
+                name: assignTrainerName
+              }
+              opponentData.push(opponentDataObj);
+              console.log(opponentData , 'opponentData')
+              await AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+
+            }
             //console.log(dataUser.trainnerProfileData, 'dataUser.trainnyProfiledata')
           }
           else if (dataUser.assignTrainny) {
-          // else if (dataUser.trainnyProfiledata) {
+            // else if (dataUser.trainnyProfiledata) {
             // let opponentData = dataUser.trainnyProfiledata;
             let traineeName = dataUser.assignTrainny;
             let traineeIds = dataUser.tainnyId;
             let traineeDataArr = [];
-            let finalDataTrainee = [];
+            // let finalDataTrainee = [];
             for (let i = 0; i < traineeName.length; i++) {
               let traineesData = {}
               traineesData["name"] = traineeName[i];
@@ -129,24 +139,15 @@ class Login extends React.Component {
               traineesData['type'] = "Trainee";
               traineeDataArr.push(traineesData)
             }
-            console.log(traineeDataArr, 'traineeDataArr')
             AsyncStorage.setItem('opponentProfile', JSON.stringify(traineeDataArr));
-            // let openentData = []
-            // opponentData.map((opponent, key) => {
-            //   opponent.map((ele, key) => {
-            //     openentData.push(ele)
-            //   })
-            // })
-
-            console.log(finalDataTrainee, 'finalDataTrainee')
-            // }
           }
+          // }
 
           db.ref(`users/`).push(dataUser)
           this.setState({
             isLoading: false
-          }, 
-          () => navigate('BottomTabe')
+          },
+            () => navigate('BottomTabe')
           )
 
         }

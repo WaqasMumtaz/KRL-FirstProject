@@ -122,7 +122,7 @@ class Chatscreen extends React.Component {
   }
   componentWillMount() {
     const { senderData } = this.props.navigation.state.params;
-    console.log(senderData, 'senderData')
+    // console.log(senderData, 'senderData')
 
     let chatArrayTemp = [];
     let dataFromLocalStorage;
@@ -157,17 +157,17 @@ class Chatscreen extends React.Component {
 
   uplaodDataOnFirebase = (userMessage, type) => {
     const { senderData } = this.props.navigation.state.params;
-    console.log(senderData, 'senderData')
+    // console.log(senderData, 'senderData')
     const { date, time } = this.state;
     let mgs = {}
     let data;
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         data = JSON.parse(value);
-        console.log(data, 'data')
+        // console.log(data, 'data')
         if (data.assignTrainner != undefined && data.trainnerId != undefined) {
-          console.log('if condition true')
-          console.log('test')
+          // console.log('if condition true')
+          // console.log('test')
           mgs.message = userMessage;
           mgs.assignTrainner = data.assignTrainner;
           mgs.reciverId = data.trainnerId;
@@ -179,7 +179,7 @@ class Chatscreen extends React.Component {
           db.ref(`chatRoom/`).push(mgs);
         }
         else if (data.assignTrainny != undefined && data.tainnyId != undefined) {
-          console.log('else if condition true')
+          // console.log('else if condition true')
           mgs.message = userMessage;
           mgs.assignTrainny = senderData.name;
           mgs.reciverId = senderData.userId;
@@ -228,13 +228,13 @@ class Chatscreen extends React.Component {
     }
     ImagePicker.showImagePicker(options, async (response) => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        //console.log('User cancelled image picker');
       }
       else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        //console.log('ImagePicker Error: ', response.error);
       }
       else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
+        //console.log('User tapped custom button: ', response.customButton);
       }
       else {
         let timestamp = (Date.now() / 1000 | 0).toString();
@@ -272,10 +272,10 @@ class Chatscreen extends React.Component {
     }
     FilePickerManager.showFilePicker(options, async (response) => {
       if (response.didCancel) {
-        console.log('User cancelled file picker');
+        //console.log('User cancelled file picker');
       }
       else if (response.error) {
-        console.log('FilePickerManager Error: ', response.error);
+        //console.log('FilePickerManager Error: ', response.error);
       }
       else {
         this.setState({
@@ -295,7 +295,7 @@ class Chatscreen extends React.Component {
         xhr.onload = () => {
           let type = response.path.substring(response.path.lastIndexOf(".") + 1);
           let uploadData = JSON.parse(xhr._response)
-          console.log(uploadData, 'uploadData')
+          // console.log(uploadData, 'uploadData')
           this.uplaodDataOnFirebase(uploadData, type)
           if (uploadData) {
             this.setState({
@@ -310,7 +310,7 @@ class Chatscreen extends React.Component {
         formdata.append('api_key', api_key);
         formdata.append('signature', signature);
         xhr.send(formdata);
-        console.log(formdata, 'formdata')
+        // console.log(formdata, 'formdata')
         // let timestamp = (Date.now() / 1000 | 0).toString();
         // let api_key = '878178936665133'
         // let api_secret = 'U8W4mHcSxhKNRJ2_nT5Oz36T6BI'
@@ -375,7 +375,7 @@ class Chatscreen extends React.Component {
 
   weeklyReport = () => {
     const { weekAgoDateDataWeights, currentDateDataWeights, loseWeight, lastWeek, cureentWeek, gainWeight } = this.state;
-    console.log('weekAgoDate >>>', weekAgoDateDataWeights)
+    // console.log('weekAgoDate >>>', weekAgoDateDataWeights)
     let weight = {
       weekAgoDateDataWeights: weekAgoDateDataWeights,
       currentDateDataWeights: currentDateDataWeights,
@@ -384,8 +384,8 @@ class Chatscreen extends React.Component {
       cureentWeek: cureentWeek,
       gainWeight: gainWeight
     }
-    console.log(this.state.weekExcercise, 'test')
-    console.log('weekly weight object', weight)
+    // console.log(this.state.weekExcercise, 'test')
+    // console.log('weekly weight object', weight)
     let obj = {
       weekExcercise: this.state.weekExcercise,
       weight: weight
@@ -457,7 +457,6 @@ class Chatscreen extends React.Component {
   }
   checkProfile = () => {
     const { senderData } = this.props.navigation.state.params;
-    console.log('checkProfile')
     this.props.navigation.navigate('Profile', {
       opponentProfile: true,
       senderData: senderData
@@ -506,7 +505,6 @@ class Chatscreen extends React.Component {
     //     showReport: false
     //   )
     // }
-    console.log('get week report')
     //gettibg curent date
     const currentDayOfWeek = new Date().getDay() + 1;
     const currentDate = new Date().getDate();
@@ -541,7 +539,6 @@ class Chatscreen extends React.Component {
     // //get week wise data and show bar chart line 
     for (var i in weightData) {
       let dataApi = weightData[i];
-      console.log(dataApi, 'dataApi')
       if (dataApi.userId == userId) {
         //check week of the month
         let checkWeekDay = (Math.abs(currentDayOfWeek - dataApi.dayOfWeek));
@@ -650,7 +647,6 @@ class Chatscreen extends React.Component {
     // weekAgoDateDataWeights, currentDateDataWeights, loseWeight, lastWeek, cureentWeek, gainWeight
     if (weekBefore && this.state.weekAgoDateDataWeights && (this.state.loseWeight > 0 || this.state.cureentWeek > 0
       || this.state.gainWeight != '')) {
-      console.log('weekly report availble');
       this.setState({
         showReport: true
       })
@@ -659,7 +655,6 @@ class Chatscreen extends React.Component {
       this.setState({
         showReport: false
       })
-      console.log('elese ')
     }
     // console.log(weekBefore, 'weekBefore')
     // console.log(this.state.weekAgoDateDataWeights, 'cureentWeekData')

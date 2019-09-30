@@ -170,6 +170,13 @@ class Signup extends React.Component {
             try {
                 let dataUser = await HttpUtilsFile.post('signup', userObj)
                 console.log('signup data user >>>',dataUser)
+                let currentUserData =  {
+                    code:dataUser.code,
+                    email:this.state.email,
+                    name:this.state.name,
+                    token:dataUser.token,
+                    _id:dataUser._id
+                }
                 let signupCode = dataUser.code;
                 let getEmails = await HttpUtilsFile.get('getuseremail')
                 console.log('all emails from database >>>',getEmails)
@@ -182,39 +189,49 @@ class Signup extends React.Component {
                     this.setState({
                         isLoading: false
                     })
-                    await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
-                     console.log('dataUser >>>', dataUser);
                     emailContents.map((item, index) => {
-                        //console.log(item)
+                        console.log('items >>>',item)
                         const { email } = this.state;
-                        // console.log('state email >>>',email)
+                         console.log('state email >>>',email)
                         // console.log('user emails >>>',item)
                         if (email == item) {
                             return (
                                 this.setState({
                                     isLoading:false,
-                                    emailNotExist: true
+                                    emailNotExist:true
                                 })
                             )
                         }
-                        else {
+                        // if(email != item) {
+                        //     return(
+                        //         navigate('BottomTabe')
+                        //     )
+                            
+                        // }
                         
-                            return (
-                                //navigate('Setupscreen1')
-                                //navigate('Login')
-                                navigate('Setupscreen1')
-                            )
+                        //  else {
+                        //     
+                        //     return (
+                        //         //navigate('Setupscreen1')
+                        //         //navigate('Login')
+                        //         navigate('BottomTabe')
+                        //     )
 
-                         }
+                        //  }
 
                     })
-                    // if(signupCode) {
-                    //     this.setState({
-                    //         isLoading: false
-                    //     })
-                    //     // const { navigate } = this.props.navigation;
-                    //     // navigate('Setupscreen1');
-                    // }
+                    if(signupCode) {
+                        this.setState({
+                            isLoading: false,
+
+                        },()=>{
+                            AsyncStorage.setItem('currentUser', JSON.stringify(currentUserData))
+                            console.log('dataUser >>>', currentUserData);
+                            const { navigate } = this.props.navigation;
+                            navigate('BottomTabe');
+                        })
+                        
+                    }
                     // if (signupCode) {
                     //     this.setState({
                     //         isLoading: false
@@ -383,7 +400,6 @@ class Signup extends React.Component {
                             placeholderTextColor="#A6A6A6"
                             value={this.state.newPasswrd}
                             style={[styles.inputTexts, !this.state.passwrdValidate ? styles.errorInput : null]}
-                        
                         />
                     </View>
                     {psswrdInstruction && <View style={styles.passwrdInstructionContainer}>

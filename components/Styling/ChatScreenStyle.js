@@ -657,9 +657,9 @@ const styles = StyleSheet.create({
         height: 350
     },
     withOutTrainerModal: {
-        width: 250,
+        width: '100%',
         //justifyContent:'center',
-        height: 120,
+        height: 150,
         borderRadius: 5,
         backgroundColor: '#000000',
         alignSelf: 'center',
@@ -667,7 +667,7 @@ const styles = StyleSheet.create({
 
     },
     textColor: {
-        fontFamily: "MontserratMedium",
+        fontFamily: "MontserratExtraBold",
         fontSize: 14,
         color: 'white',
 
@@ -706,6 +706,17 @@ const styles = StyleSheet.create({
       overLayStyle:{
           color:'white',
           opacity:0.3
+      },
+      userInstruction:{
+          marginTop:5,
+          marginLeft:10,
+          
+      },
+      userInsTextStyle:{
+        color:'white',
+        fontFamily: 'MontserratLight',
+        fontSize: 14,
+        padding:4
       }
 });
 

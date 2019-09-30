@@ -58,6 +58,11 @@ const styles =StyleSheet.create({
        //borderColor:'white',
        backgroundColor:'#000000',
        borderRadius:4
+    },
+    tapLoadText:{
+        color: '#FF6200',
+        fontFamily: 'MontserratLight',
+        marginBottom:15
     }
     
 })
