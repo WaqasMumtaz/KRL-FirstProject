@@ -17,8 +17,6 @@ import com.sensormanager.SensorManagerPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.sha1lib.Sha1Package;
 import com.horcrux.svg.SvgPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.fileopener.FileOpenerPackage;
 //import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
 import com.filepicker.FilePickerPackage;
 import com.rnfs.RNFSPackage;
@@ -57,8 +55,6 @@ public class MainApplication extends Application implements ReactApplication {
             new Sha1Package(),
             new StripeReactPackage(),
             new SvgPackage(),
-            new RNFetchBlobPackage(),
-            new FileOpenerPackage(),
             //new RNFileViewerPackage(),
             new FilePickerPackage(),
             new RNFSPackage(),

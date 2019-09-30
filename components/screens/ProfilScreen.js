@@ -199,6 +199,9 @@ class Profile extends React.Component {
               <Text style={styles.labelStyle}>Gender</Text>
               <Text style={styles.userInsertedValueStyle}>{gender}</Text>
             </View>
+            <View style={{marginBottom:10}}>
+
+            </View>
           </View>
         </ScrollView>
 

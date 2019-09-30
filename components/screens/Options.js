@@ -45,7 +45,7 @@ getPaymentKey = async () =>{
          <View style={styles.container}>
            <View style={styles.childContainer}>
                 <View style={styles.heading}><Text style={styles.headingText}>More Options</Text></View>
-                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('Macrocalculator')}}><Text style={styles.forText}>Calories Limit</Text></TouchableOpacity></View>
+                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('Macrocalculator')}}><Text style={styles.forText}>Calculate Macro</Text></TouchableOpacity></View>
                 <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('BMICalculator')}}><Text style={styles.forText}>BMI Calculator</Text></TouchableOpacity></View>
                 <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('Profile')}}><Text style={styles.forText}>Profile</Text></TouchableOpacity></View>
                 <View style={{flex:0.6,flexDirection:'row'}}>
@@ -62,7 +62,7 @@ getPaymentKey = async () =>{
                   </TouchableOpacity></View>
                 <View style={{flex:0.6,flexDirection:'row'}}>
                   <TouchableOpacity onPress={()=>{navigate('ShowMeasurementsScreen')}}>
-                    <Text style={styles.forText}>Log Measurements</Text>
+                    <Text style={styles.forText}>Measurements Logs</Text>
                   </TouchableOpacity></View>
                 <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('SettingScreen')}}><Text style={styles.forText}>Settings</Text></TouchableOpacity></View>
            </View>

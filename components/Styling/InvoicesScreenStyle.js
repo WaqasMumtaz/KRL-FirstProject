@@ -53,9 +53,10 @@ cardLeft:{
     // borderColor:'black',
     height:255,
     borderRadius:5,
-    width:175,
+    width:172,
     backgroundColor:'black',
     marginTop:15,
+    padding:5
 },
 cardRight:{
     // borderWidth:3,

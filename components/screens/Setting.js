@@ -13,18 +13,18 @@ import styles from '../Styling/SettingScreenStyle'
 import AsyncStorage from '@react-native-community/async-storage';
 
 export default class SettingScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Setting',
-        headerTitleStyle: {
-            fontFamily: "MontserratExtraBold",
-            fontSize:15,
-            color:'#000000',
-            textAlign: 'center',
-            //flexGrow:1,
-            alignSelf:'center',
-        },
-        headerTintColor: '#808080',
-      };
+    // static navigationOptions = {
+    //     title: 'Setting',
+    //     headerTitleStyle: {
+    //         fontFamily: "MontserratExtraBold",
+    //         fontSize:15,
+    //         color:'#000000',
+    //         textAlign: 'center',
+    //         //flexGrow:1,
+    //         alignSelf:'center',
+    //     },
+    //     headerTintColor: '#808080',
+    //   };
     constructor(props) {
         super(props);
 
@@ -45,6 +45,9 @@ export default class SettingScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.childContainer}>
+                    <View style={styles.settingHaider}>
+                        <Text style={styles.settingTextStyle}>Setting</Text>
+                    </View>
                     <View>
                         <TouchableOpacity style={styles.items} onPress={()=>{navigate('ResetpasswordScreen')}}>
                             <Text style={styles.forText}>Reset Password</Text>

@@ -36,6 +36,16 @@ const styles =StyleSheet.create({
       },
       items:{
           marginVertical:15
+      },
+      settingHaider:{
+        height:25
+      },
+      settingTextStyle:{
+        fontFamily: "MontserratExtraBold",
+        fontSize:17,
+        // textAlign: 'center',
+        // margin: 10,
+        color:'#000000'
       }
 }) 
 

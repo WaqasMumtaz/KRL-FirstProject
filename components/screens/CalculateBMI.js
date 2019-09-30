@@ -147,30 +147,35 @@ class BMICalculator extends React.Component {
         bmiData.time = time;
         if(height == 0){
             this.setState({
-                heightValidation:true
+                heightValidation:true,
+                isLoading:false
             })
         }
         if(heightUnit == 0){
             this.setState({
-             heightUnitValidation:true   
+             heightUnitValidation:true ,
+             isLoading:false  
             })
         }
         if(weight == 0){
           this.setState({
-              weightValidation:true
+              weightValidation:true,
+              isLoading:false
           })
         }
         if(weightUnit == 0){
         this.setState({
-            weightUnitValidation:true
+            weightUnitValidation:true,
+            isLoading:false
         })
         }
         
        else if (heightUnit == 'inches' && weightUnit == 'pound') {
             bmiValue = (weight / height / height) * 703
-            let bmiVal = bmiValue.toString();
-            // console.log('bmiValue >>>',bmiVal)
+            let bmiVal = Math.round(bmiValue.toString());
             bmiData.bmi = bmiVal;
+            console.log('bmiValue >>>',bmiVal)
+
             this.setState({
                 bmi: bmiVal,
                 mgs: false,
@@ -193,9 +198,9 @@ class BMICalculator extends React.Component {
         
         else if (heightUnit == 'centimeter' && weightUnit == 'kg') {
             bmiValue = (weight / height / height) * 10000
-            let bmiVal = bmiValue.toString();
-            console.log('bmiValue >>>',bmiVal)
+            let bmiVal = Math.round(bmiValue.toString());
             bmiData.bmi = bmiVal;
+            console.log('bmiValue >>>',bmiVal)
             this.setState({
                 bmi: bmiVal,
                 mgs: false,
@@ -249,8 +254,10 @@ class BMICalculator extends React.Component {
             weightValidation,
             weightUnitValidation,
             isLoading,
-            toast 
+            toast ,
+            bmi
            } = this.state;
+           console.log('state bmi >>>',Number(bmi))
         return (
             // <View style={styles.mainContainer}>
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: heightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -371,16 +378,19 @@ class BMICalculator extends React.Component {
                     </View>
                     <Text style={styles.bmiTextStyle}>BMI</Text>
                     <View style={styles.bmiInputContainer}>
-                        <TextInput placeholder="c.g 22"
+                        {/* <TextInput placeholder="c.g 22"
                             placeholderTextColor="#4f4f4f"
                             style={styles.inputStyle}
                             value={this.state.bmi}
-                        />
+                        /> */}
+                        <Text style={styles.inputStyle}>
+                            {bmi}
+                        </Text>
                     </View>
                     {isLoading ? <OverlayLoader/>: null}
                     <View style={styles.buttonContainer}>
                         {/* {toast ? <ToastComponent pressFunc={this.toastFunction.bind(this, 'Success',this.state.position , DURATION.LENGTH_LONG,true)}/> : null} */}
-                    <CaloriesSetupBtn title="Set Up & Use App"
+                    <CaloriesSetupBtn title="Calculate BMI"
                             onPress={this.calculateBmi}
                             caloriesBtnStyle={styles.caloriesBtnStyle} />
                     </View>

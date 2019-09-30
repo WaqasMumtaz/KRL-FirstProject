@@ -741,14 +741,16 @@ export default class StepCountScreen extends React.Component {
 
 
                         </View>
-                        <View style={{ height: 30, backgroundColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ height: 30, backgroundColor: 'black', flexDirection: 'row', justifyContent: 'space-between',marginBottom:10 }}>
                             <Text style={{ color: '#e5e5e5', fontFamily: 'MontserratLight', }}>08:00</Text>
                             <Text style={{ color: '#e5e5e5', fontFamily: 'MontserratLight', }}>16:00</Text>
                             <Text style={{ color: '#e5e5e5', fontFamily: 'MontserratLight', }}>01:00</Text>
                         </View>
 
                     </View>
+                    <View style={{flex:1,marginBottom:10}}>
 
+                    </View>
                 </ScrollView>
             </View>
             // </View>

@@ -593,7 +593,7 @@ class Payment extends React.Component {
                       <Image source={require('../icons/cancel.png')} />
                     </TouchableOpacity>
                   </View>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
                     <Image source={require('../icons/green-check-mark.gif')} style={styles.forImages} resizeMode='contain' />
                   </View>
                 </View>

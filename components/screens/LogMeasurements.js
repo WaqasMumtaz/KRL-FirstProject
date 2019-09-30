@@ -293,7 +293,7 @@ class LogMeasurementsScreen extends React.Component {
                     {/* <View style={styles.childContainer}> */}
                     <View style={styles.headingContainer}>
                         <Text style={styles.headingStyle}>
-                            Log Measurements
+                             Measurements Log
                             </Text>
                     </View>
 

@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         // flex: 0.10,
-        fontFamily: 'MontserratLight',
+        fontFamily: 'MontserratMedium',
         // marginLeft: 20,
         height: 40,
         borderColor: '#e5e5e5',
@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         //marginRight: 20,
         paddingLeft: 16,
+        paddingVertical:8,
         width: '100%'
 
     },

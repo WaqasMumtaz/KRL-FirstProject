@@ -346,7 +346,7 @@ class Signup extends React.Component {
                                 this.setState({ email: text })
                             }}
                             keyboardType='email-address'
-                            placeholder="waqas@gmail.com"
+                            placeholder="email@gmail.com"
                             placeholderTextColor="#A6A6A6"
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -366,7 +366,7 @@ class Signup extends React.Component {
                     <View style={styles.inputFields}>
                         <TextInput onChangeText={text => { this.checkValidateFunc(text, 'mobile'), this.setState({ mobile: text }) }}
                             keyboardType='phone-pad'
-                            placeholder="+92-333-444444444"
+                            placeholder="number"
                             placeholderTextColor="#A6A6A6"
                             value={mobile}
                             style={[styles.inputTexts, !this.state.mobileValidate ? styles.errorInput : null]}

@@ -689,7 +689,7 @@ class Macrocalculator extends React.Component {
                         </Text>
                     </View>
                     <View style={styles.btnContainer}>
-                        <CaloriesSetupBtn title='Set Up & Use App' caloriesBtnStyle={styles.caloriesBtnStyle} onPress={this.calulateMacro} />
+                        <CaloriesSetupBtn title='Calculate Macro' caloriesBtnStyle={styles.caloriesBtnStyle} onPress={this.calulateMacro} />
                     </View>
                     <View style={{ flex: 2, marginBottom: 30 }}>
                     </View>

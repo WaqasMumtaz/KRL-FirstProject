@@ -154,13 +154,19 @@ class ShowMeasurementsScreen extends React.Component {
                         <Text style={styles.headingStyle}>Log Measurements</Text>
                     </View>
 
-                    {flatListShow &&
+                    {allDataUser.length > 0 ?
                         <FlatList
                             data={allDataUser}
                             renderItem={this.renderDataItems}
                             keyExtractor={this._keyExtractor}
                             numColumns={columsNum}
                         />
+                    :
+                    <View
+                    style={{justifyContent:'center',alignItems:'center'}}
+                    >
+                        <Text style={{color: '#FF6200', fontFamily: "MontserratMedium"}}>No Found Measurements</Text>
+                   </View>
                     }
 
                 </View>

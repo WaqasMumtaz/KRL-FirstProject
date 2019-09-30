@@ -254,7 +254,7 @@ class Login extends React.Component {
                 this.setState({ email: text })
             }}
             keyboardType='email-address'
-            placeholder="waqas@gmail.com"
+            placeholder="email@gmail.com"
             placeholderTextColor="#A6A6A6"
             autoCapitalize="none"
             autoCorrect={false}
