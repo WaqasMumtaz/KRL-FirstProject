@@ -4,7 +4,7 @@ import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
-// import firebase from 'react-native-firebase';
+//import firebase from 'react-native-firebase';
 
 const { height } = Dimensions.get('window');
 
@@ -87,7 +87,7 @@ class Homescreen extends React.Component {
       navigate('Exerciselog')
     }
     else if (e == 'stepcount') {
-      navigate('StepCountScreen')
+      navigate('Setupscreen1')
     }
   }
 
@@ -118,6 +118,45 @@ class Homescreen extends React.Component {
     BackHandler.removeEventListener('hardwareBackPress');
   }
 
+//   async componentDidMount() {
+//     this.checkPermission();
+//   }
+
+//     //1
+//  checkPermission = async () =>{
+//   const enabled = await firebase.messaging().hasPermission();
+//   if (enabled) {
+//       this.getToken();
+//   } else {
+//       this.requestPermission();
+//   }
+// }
+
+//  //3
+//   getToken = async ()=>{
+//   let fcmToken = await AsyncStorage.getItem('fcmToken');
+//   if (!fcmToken) {
+//       fcmToken = await firebase.messaging().getToken();
+
+//       if (fcmToken) {
+//           // user has a device token
+//           console.log('User Device token >>>', fcmToken)
+//           await AsyncStorage.setItem('fcmToken', fcmToken);
+//       }
+//   }
+// }
+
+//   //2
+//  requestPermission= async ()=>{
+//   try {
+//       await firebase.messaging().requestPermission();
+//       // User has authorised
+//       this.getToken();
+//   } catch (error) {
+//       // User has rejected permissions
+//       console.log('permission rejected');
+//   }
+// }
 
 
   render() {

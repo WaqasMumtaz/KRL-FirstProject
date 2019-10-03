@@ -659,7 +659,7 @@ const styles = StyleSheet.create({
     withOutTrainerModal: {
         width: '100%',
         //justifyContent:'center',
-        height: 150,
+        height: 180,
         borderRadius: 5,
         backgroundColor: '#000000',
         alignSelf: 'center',
@@ -717,6 +717,26 @@ const styles = StyleSheet.create({
         fontFamily: 'MontserratLight',
         fontSize: 14,
         padding:4
+      },
+      sendReqContainer:{
+          marginTop:16,
+          flexDirection:'row',
+          justifyContent:'center',
+          borderWidth:2,
+          height:40,
+          borderColor:'white',
+          borderRadius:5,
+          backgroundColor:'white',
+          alignSelf:'center',
+          width:140,
+          alignItems:'center'
+
+      },
+      sendReqText:{
+        color: '#FF6200',
+        fontFamily: "MontserratExtraBold",
+        textAlign:'center',
+
       }
 });
 

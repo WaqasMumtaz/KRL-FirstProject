@@ -105,21 +105,21 @@ const styles = StyleSheet.create({
     maleTouchableOpacity: {
         height: 38,
         width: '90%',
-        color:'yellow',
+        //color:'#7e7e7e',
         justifyContent: 'center',
         backgroundColor: 'white',
         marginTop: 5,
         borderRadius: 3,
-        opacity: 0.4
+        //opacity: 0.4
     },
     maleTextStyle: {
         textAlign: 'center',
         //color: 'black',
-        color: '#A6A6A6',
+        color: '#7e7e7e',
         //fontFamily: 'MontserratLight',
         //fontFamily: 'MontserratMedium',
         fontFamily: "MontserratExtraBold",
-         opacity:0.7
+         //opacity:0.7
 
 
     },

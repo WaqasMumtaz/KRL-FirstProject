@@ -236,15 +236,15 @@ class EditProfileScreen extends React.Component {
         }
         else {
             const userObj = {
+                gender: gender,
+                userId: userId,
+                address: address,
+                image: avatarSource,
                 name: name,
                 email: email,
-                address: address,
                 contactNo: contactNo,
-                gender: gender,
-                image: avatarSource,
-                date: date,
                 time: time,
-                userId: userId,
+                date: date,
                 objectId: objectId,
                 type: type
             }

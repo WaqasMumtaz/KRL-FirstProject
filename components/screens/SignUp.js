@@ -45,8 +45,33 @@ class Signup extends React.Component {
             passNotMatch: false,
             isLoading: false,
             passMatch: false,
+            male: false,
+            female: false,
+            gender:'',
+            date: '',
+            time: '',
+            lastName:'',
+            maleClickedTextStyle:false,
+            femaleClickedTextStyle:false,
+
 
         }
+    }
+    componentDidMount() {
+        const date = new Date().getDate();
+        let month = new Date().getMonth() + 1;
+        const year = new Date().getFullYear();
+        const hours = new Date().getHours();
+        const min = new Date().getMinutes();
+        const sec = new Date().getSeconds();
+        if (month == 1 || month == 2 || month == 3 || month == 4 || month == 5 || month == 6 || month == 7 || month == 8 || month == 9) {
+            month = `0${month}`
+        }
+
+        this.setState({
+            date: date + '-' + month + '-' + year,
+            time: hours + ':' + min + ':' + sec,
+        })
     }
     newPasswrdInputValueHandle = (newPsswrdText) => {
         this.setState({
@@ -140,16 +165,14 @@ class Signup extends React.Component {
                 }
                 )
             }
-
-
         })
     }
 
 
     signUpFunction = async () => {
         const { navigate } = this.props.navigation;
-        const { name, email, mobile, newPasswrd, cnfrmPasswrd, nameValidate, emailValidate, mobileValidate, passwrdValidate, cnfrmPasswrdValidate, isLoading } = this.state;
-        if (name == '' || email == '' || mobile == '' || newPasswrd == '' || cnfrmPasswrd == '') {
+        const { name,lastName, email, mobile, newPasswrd, cnfrmPasswrd, nameValidate, emailValidate, mobileValidate, passwrdValidate, cnfrmPasswrdValidate, isLoading,gender } = this.state;
+        if (name == ''|| lastName == '' || email == '' || mobile == '' || newPasswrd == '' || cnfrmPasswrd == '' || gender == '' ) {
             alert('Please Fill All Fields');
             if (nameValidate != true || emailValidate != true || mobileValidate != true || passwrdValidate != true || cnfrmPasswrdValidate != true) {
                 alert('Please Enter Correct Field');
@@ -163,26 +186,42 @@ class Signup extends React.Component {
                 email: email,
                 mobileNo: mobile,
                 password: newPasswrd,
-                type:'trainee'
+                lastName:lastName,
+                gender:gender,
+                type: 'trainee'
             }
-            console.log(userObj)
+             console.log(userObj)
 
             try {
                 let dataUser = await HttpUtilsFile.post('signup', userObj)
-                console.log('signup data user >>>',dataUser)
-                let currentUserData =  {
-                    code:dataUser.code,
-                    email:this.state.email,
-                    name:this.state.name,
-                    token:dataUser.token,
-                    _id:dataUser._id
+                console.log('signup data user >>>', dataUser)
+                let currentUserData = {
+                    code: dataUser.code,
+                    email: this.state.email,
+                    name: this.state.name,
+                    token: dataUser.token,
+                    _id: dataUser._id
                 }
+                let userObjForProfile = {
+                    name: this.state.name,
+                    email: this.state.email,
+                    contactNo: this.state.mobile,
+                    time: this.state.time,
+                    date: this.state.date,
+                    objectId: '',
+                    type: userObj.type,
+                    userId: dataUser._id
+                }
+                console.log(userObjForProfile, 'userObjForProfile')
+                let userProfile = await HttpUtilsFile.post('profile', userObjForProfile);
+                console.log('new user profile data >>>', userProfile)
+                let profileCode = userProfile.code;
                 let signupCode = dataUser.code;
                 let getEmails = await HttpUtilsFile.get('getuseremail')
-                console.log('all emails from database >>>',getEmails)
+                // console.log('all emails from database >>>', getEmails)
                 let emailCode = getEmails.code;
                 const emailContents = getEmails.content;
-                console.log(emailContents , 'emails');
+                //console.log(emailContents , 'emails');
                 // console.log(getToken);
                 //console.log(getCode)
                 if (emailCode) {
@@ -190,59 +229,52 @@ class Signup extends React.Component {
                         isLoading: false
                     })
                     emailContents.map((item, index) => {
-                        console.log('items >>>',item)
+                        console.log('items >>>', item)
                         const { email } = this.state;
-                         console.log('state email >>>',email)
+                        //console.log('state email >>>',email)
                         // console.log('user emails >>>',item)
                         if (email == item) {
+                            // console.log('email match condition true')
                             return (
                                 this.setState({
-                                    isLoading:false,
-                                    emailNotExist:true
+                                    isLoading: false,
+                                    emailNotExist: true
                                 })
                             )
                         }
-                        // if(email != item) {
-                        //     return(
-                        //         navigate('BottomTabe')
-                        //     )
-                            
-                        // }
-                        
-                        //  else {
-                        //     
-                        //     return (
-                        //         //navigate('Setupscreen1')
-                        //         //navigate('Login')
-                        //         navigate('BottomTabe')
-                        //     )
-
-                        //  }
-
                     })
-                    if(signupCode) {
+                    if (signupCode && profileCode) {
                         this.setState({
                             isLoading: false,
-
-                        },()=>{
+    
+                        }, () => {
                             AsyncStorage.setItem('currentUser', JSON.stringify(currentUserData))
-                            console.log('dataUser >>>', currentUserData);
-                            const { navigate } = this.props.navigation;
-                            navigate('BottomTabe');
+                            AsyncStorage.setItem('myProfile', JSON.stringify(userProfile));
+                            if (signupCode == 200 && profileCode == 200 && emailCode == 200) {
+                                const { navigate } = this.props.navigation;
+                                navigate('BottomTabe');
+                            }
                         })
-                        
                     }
-                    // if (signupCode) {
-                    //     this.setState({
-                    //         isLoading: false
-                    //     })
-                    //     const { navigate } = this.props.navigation;
-                    //     navigate('BottomTabe');
+                    // else {
+                    //     // console.log('signup code not available')
                     // }
-
-
+                    // if () {
+                    //     this.setState({
+                    //         isLoading: false,
+    
+                    //     }, () => {
+                    //         //console.log('user profile localstorage data saved >>>', userProfile);
+    
+                    //     })
+                    // }
+                    // else {
+                    //     // console.log('profile code not available')
+                    // }
+                    
                 }
-                else if (!emailCode || !signupCode) {
+                
+                else if (!emailCode || !signupCode || !profileCode) {
                     this.setState({
                         isLoading: false
                     })
@@ -254,10 +286,12 @@ class Signup extends React.Component {
             }
             this.setState({
                 name: '',
+                lastName:'',
                 email: '',
                 mobile: '',
                 newPasswrd: '',
                 cnfrmPasswrd: '',
+                gender:'',
                 passMatch: false
             })
         }
@@ -265,9 +299,9 @@ class Signup extends React.Component {
     checkValidateFunc = (text, type) => {
         let alpha = /^[a-zA-Z]+$/;
         //let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        let reg =/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         let mobileNum = /^[0-9]+$/;
-        let passwrd=/^[A-Za-z]\w{7,14}$/;
+        let passwrd = /^[A-Za-z]\w{7,14}$/;
         // if (type == 'username') {
         //     if (alpha.test(text)) {
         //         this.setState({
@@ -280,7 +314,7 @@ class Signup extends React.Component {
         //         })
         //     }
         // }
-         if (type == 'email') {
+        if (type == 'email') {
             if (reg.test(text)) {
                 this.setState({
                     emailValidate: true,
@@ -307,6 +341,28 @@ class Signup extends React.Component {
 
 
     }
+    getGender(gender) {
+        if (gender == 'male') {
+            this.setState({
+                male: true,
+                female: false,
+                maleClickedTextStyle:true,
+                femaleClickedTextStyle:false,
+                gender: 'male'
+            })
+        }
+        else if (gender == 'female') {
+            this.setState({
+                male: false,
+                female: true,
+                gender: 'female',
+                maleClickedTextStyle:false,
+                femaleClickedTextStyle:true,
+            })
+        }
+    }
+
+
 
 
 
@@ -320,7 +376,12 @@ class Signup extends React.Component {
             passNotMatch,
             isLoading,
             passMatch,
-            emailNotExist
+            emailNotExist,
+            lastName,
+            male,
+            female,
+            maleClickedTextStyle,
+            femaleClickedTextStyle,
         } = this.state;
         return (
 
@@ -343,28 +404,43 @@ class Signup extends React.Component {
                     </View>
 
                     <View style={{ flexDirection: 'row', marginVertical: 8 }}>
-                        <Text style={styles.textsStyles}>Name</Text>
+                        <Text style={styles.textsStyles}>First Name</Text>
                     </View>
                     <View style={styles.inputFields}>
-                        <TextInput onChangeText={text => { this.checkValidateFunc(text, 'username'),
-                           this.setState({ name: text }) }}
-                            placeholder="Name"
-                            placeholderTextColor="#A6A6A6"
+                        <TextInput onChangeText={text => {
+                            
+                                this.setState({ name: text })
+                        }}
+                            placeholder="First Name"
+                            placeholderTextColor="#7e7e7e"
                             value={name}
                             style={[styles.inputTexts, !this.state.nameValidate ? styles.errorInput : null]} />
                     </View>
-                    <View style={{ flexDirection: 'row', marginVertical: 8 }}>
+                    <View style={{ flexDirection: 'row', marginVertical: 8 ,marginTop:5 }}>
+                        <Text style={styles.textsStyles}>Last Name</Text>
+                    </View>
+                    <View style={styles.inputFields}>
+                        <TextInput onChangeText={text => {
+                            
+                                this.setState({ lastName: text })
+                        }}
+                            placeholder="Last Name"
+                            placeholderTextColor="#7e7e7e"
+                            value={lastName}
+                            style={[styles.inputTexts, !this.state.nameValidate ? styles.errorInput : null]} />
+                    </View>
+                    <View style={{ flexDirection: 'row', marginVertical: 8,marginTop:5  }}>
                         <Text style={styles.textsStyles}>Email</Text>
                     </View>
                     <View style={styles.inputFields}>
                         <TextInput
                             onChangeText={text => {
                                 this.checkValidateFunc(text, 'email'),
-                                this.setState({ email: text })
+                                    this.setState({ email: text })
                             }}
                             keyboardType='email-address'
                             placeholder="email@gmail.com"
-                            placeholderTextColor="#A6A6A6"
+                            placeholderTextColor="#7e7e7e"
                             autoCapitalize="none"
                             autoCorrect={false}
                             value={email}
@@ -377,27 +453,46 @@ class Signup extends React.Component {
                             Email is already exist
                        </Text>
                     </View>}
-                    <View style={{ flexDirection: 'row', marginVertical: 8 }}>
+                    <View style={{ flexDirection: 'row', marginVertical: 8 ,marginTop:5 }}>
                         <Text style={styles.textsStyles}>Mobile</Text>
                     </View>
                     <View style={styles.inputFields}>
                         <TextInput onChangeText={text => { this.checkValidateFunc(text, 'mobile'), this.setState({ mobile: text }) }}
                             keyboardType='phone-pad'
                             placeholder="number"
-                            placeholderTextColor="#A6A6A6"
+                            placeholderTextColor="#7e7e7e"
                             value={mobile}
                             style={[styles.inputTexts, !this.state.mobileValidate ? styles.errorInput : null]}
                         />
                     </View>
+                    <Text style={styles.genderTextStyle}>Gender</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <TouchableOpacity style={male ? styles.clickedMale : styles.maleTouchableOpacity} onPress={this.getGender.bind(this, 'male')}>
+                                <Text style={maleClickedTextStyle ? styles.maleClickedTextStyle : styles.maleTextStyle}>
+                                    Male
+                            </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={female ? styles.clickedFemale : styles.femaleContainer} onPress={this.getGender.bind(this, 'female')}>
+                                <Text style={femaleClickedTextStyle ? styles.femaleClickedTextStyle : styles.maleTextStyle}>
+                                    Female</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {/* <View style={{ height: 30, marginTop: 3 }}>
+                            {genderValidation ?
+                                <Text style={styles.validationInstruction}>
+                                    Please select the gender
+                                </Text>
+                                : null}
+                        </View> */}
                     {/* <View style={{ flex: 0.5 }}></View> */}
-                    <View style={{ flexDirection: 'row', marginVertical: 8 }}>
+                    <View style={{ flexDirection: 'row', marginVertical: 8 ,marginTop:5 }}>
                         <Text style={styles.textsStyles}>New Password</Text>
                     </View>
                     <View style={styles.inputFields}>
                         <TextInput onChangeText={text => this.newPasswrdInputValueHandle(text)}
                             secureTextEntry={true}
                             placeholder="new password"
-                            placeholderTextColor="#A6A6A6"
+                            placeholderTextColor="#7e7e7e"
                             value={this.state.newPasswrd}
                             style={[styles.inputTexts, !this.state.passwrdValidate ? styles.errorInput : null]}
                         />
@@ -407,26 +502,27 @@ class Signup extends React.Component {
                             Password strength is required maximum 9 and greater then 4
                          </Text>
                     </View>}
-                    <View style={{ flexDirection: 'row', marginVertical: 8 }}>
+                    <View style={{ flexDirection: 'row', marginVertical: 8 ,marginTop:5 }}>
                         <Text style={styles.textsStyles}>Confirm New Password</Text>
                     </View>
                     <View style={styles.inputFields}>
                         <TextInput onChangeText={(text) => this.cnfrmPasswrdInputValueHandle(text)}
                             secureTextEntry={true}
                             placeholder="confirm password"
-                            placeholderTextColor="#A6A6A6"
+                            placeholderTextColor="#7e7e7e"
                             value={this.state.cnfrmPasswrd}
                             //onKeyPress={()=>this.cnfrmPasswrdHandle()}
                             style={[styles.inputTexts, !this.state.cnfrmPasswrdValidate ? styles.errorInput : null]}
                         />
                     </View>
-                     <View style={styles.passMatchContainer}>
-                     {passNotMatch &&<Text style={styles.passNotMatchStyle}>
+
+                    <View style={styles.passMatchContainer}>
+                        {passNotMatch && <Text style={styles.passNotMatchStyle}>
                             Password Not Match
                        </Text>}
                     </View>
-                     <View style={styles.passMatchContainer}>
-                     {passMatch &&<Text style={styles.passMatchStyle}>
+                    <View style={styles.passMatchContainer}>
+                        {passMatch && <Text style={styles.passMatchStyle}>
                             Password Match
                        </Text>}
                     </View>

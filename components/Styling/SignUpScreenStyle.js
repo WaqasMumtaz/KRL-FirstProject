@@ -60,16 +60,18 @@ const styles =StyleSheet.create({
       inputTexts: {
         flex: 1,
         fontFamily: 'MontserratLight',
-        color: '#666666',
+       // fontFamily:'MontserratMedium',
+        color: 'black',
         // fontSize: 23,
         //marginLeft: 20,
         height: 40,
         //borderColor: 'gray',
-        backgroundColor: 'white',
+        //backgroundColor: '#1e1e1e',
+        backgroundColor:'white',
         borderRadius: 2,
         //marginRight: 20,
         paddingLeft: 16,
-        opacity:0.3
+        
       },
       errorInput:{
           borderWidth:3,
@@ -154,7 +156,68 @@ const styles =StyleSheet.create({
         fontSize:12,
         fontFamily:'MontserratLight',
         color:'#FF6200'
-      }
+      },
+      clickedMale:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        color: 'white',
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    femaleContainer:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        justifyContent: 'center', 
+        backgroundColor: 'white',
+        //opacity:0.3,
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    clickedFemale:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        color: 'white',
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    maleTouchableOpacity:{
+      height: 38,
+      width: '43%', 
+      justifyContent: 'center', 
+      //backgroundColor: '#1e1e1e',
+      backgroundColor:'white',
+      //opacity:0.3,
+      marginTop: 5, 
+      borderRadius: 3 
+  },
+  maleTextStyle:{
+      textAlign: 'center', 
+      color: 'black',
+      fontFamily: 'MontserratLight'
+  },
+  genderTextStyle:{
+    color: '#A6A6A6',
+    fontFamily: 'MontserratLight',
+    marginTop:8
+},
+maleClickedTextStyle:{
+  color:'white',
+  textAlign: 'center', 
+  fontFamily: 'MontserratLight',
+},
+femaleClickedTextStyle:{
+  color:'white',
+  textAlign: 'center', 
+  fontFamily: 'MontserratLight',
+}
+
 
 
 })

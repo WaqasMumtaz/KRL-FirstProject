@@ -136,6 +136,7 @@ class Setupscreen1 extends React.Component {
                                 date={dob} //initial date from state
                                 mode="date" //The enum of date, datetime and time
                                 placeholder="select date"
+                                placeholderTextColor="#7e7e7e"
                                 format="DD-MM-YYYY"
                                 minDate="01-01-1950"
                                 maxDate={date}
@@ -147,9 +148,9 @@ class Setupscreen1 extends React.Component {
                                         height: 0,
                                     },
                                     dateInput: {
-                                        
                                         backgroundColor:'white',
-                                        opacity:0.4
+                                        //opacity:0.4
+                                        color:'black'
                                     }
                                 }}
                                 onDateChange={(date) => { this.setState({ dob: date }) }}
@@ -197,7 +198,7 @@ class Setupscreen1 extends React.Component {
                         {/* </View> */}
                         <View style={styles.btnContainer}>
                             {/* <Text>For Button</Text> */}
-                            <CaloriesSetupBtn title="Next Step"
+                            <CaloriesSetupBtn title="Next >"
                                 //  onPress={() => { navigate('Setupscreen') }} 
                                 onPress={this.nextStep}
                                 caloriesBtnStyle={styles.caloriesBtnStyle} />

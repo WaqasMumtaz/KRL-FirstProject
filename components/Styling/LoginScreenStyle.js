@@ -55,15 +55,16 @@ const styles =StyleSheet.create({
       inputTexts: {
         flex: 1,
         fontFamily: 'MontserratLight',
-        color: '#666666',
+        color: 'black',
         // fontSize: 23,
         marginLeft: 20,
         height: 40,
+        //backgroundColor: '#1e1e1e',
         backgroundColor: 'white',
         borderRadius: 2,
         marginRight: 20,
         paddingLeft: 16,
-        opacity:0.3
+        
       },
       errorInput:{
         borderWidth:2,

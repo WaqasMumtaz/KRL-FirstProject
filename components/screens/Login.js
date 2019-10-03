@@ -84,72 +84,73 @@ class Login extends React.Component {
       try {
         let dataUser = await HttpUtilsFile.post('signin', userObj)
         console.log('Login api >>>', dataUser);
-        const assignTrainerName = dataUser.assignTrainner;
+        //const assignTrainerName = dataUser.assignTrainner;
         let getUserCode = dataUser.code;
         let userWrong = dataUser.Match;
         let userMsg = dataUser.msg;
         if (getUserCode) {
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
-          if (dataUser.profile.length > 0) {
-            let myProfile = dataUser.profile[0];
-            myProfile.type = dataUser.type;
-            AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
-          }
-          else {
-            let myProfile = {};
-            myProfile.name = dataUser.name;
-            myProfile.email = dataUser.email;
-            myProfile.userId = dataUser._id;
-            myProfile.type = dataUser.type;
-            AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
-          }
-          const assignTrainerName = dataUser.assignTrainner;
-          if (assignTrainerName) {
-            let opponentData = dataUser.trainnerProfileData;
-            if (opponentData.length > 0) {
-              //console.log('Assign Trainer Condition Successfully')
-              opponentData[0].type = "Coach";
-              //console.log('opponentData >>>',opponentData)
-              await AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+          if (dataUser.profile) {
+            if (dataUser.profile.length > 0) {
+              let myProfile = dataUser.profile[0];
+              myProfile.type = dataUser.type;
+              AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
             }
             else {
-              let opponentData = [];
-              let opponentDataObj = {
-                type: "Coach",
-                name: assignTrainerName
+              let myProfile = {};
+              myProfile.name = dataUser.name;
+              myProfile.email = dataUser.email;
+              myProfile.userId = dataUser._id;
+              myProfile.type = dataUser.type;
+              AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
+            }
+            const assignTrainerName = dataUser.assignTrainner;
+            if (assignTrainerName) {
+              let opponentData = dataUser.trainnerProfileData;
+              if (opponentData.length > 0) {
+                //console.log('Assign Trainer Condition Successfully')
+                opponentData[0].type = "Coach";
+                //console.log('opponentData >>>',opponentData)
+                await AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
               }
-              opponentData.push(opponentDataObj);
-              console.log(opponentData , 'opponentData')
-              await AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
+              else {
+                let opponentData = [];
+                let opponentDataObj = {
+                  type: "Coach",
+                  name: assignTrainerName
+                }
+                opponentData.push(opponentDataObj);
+                console.log(opponentData, 'opponentData')
+                await AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
 
+              }
+              //console.log(dataUser.trainnerProfileData, 'dataUser.trainnyProfiledata')
             }
-            //console.log(dataUser.trainnerProfileData, 'dataUser.trainnyProfiledata')
-          }
-          else if (dataUser.assignTrainny) {
-            // else if (dataUser.trainnyProfiledata) {
-            // let opponentData = dataUser.trainnyProfiledata;
-            let traineeName = dataUser.assignTrainny;
-            let traineeIds = dataUser.tainnyId;
-            let traineeDataArr = [];
-            // let finalDataTrainee = [];
-            for (let i = 0; i < traineeName.length; i++) {
-              let traineesData = {}
-              traineesData["name"] = traineeName[i];
-              traineesData['userId'] = traineeIds[i];
-              traineesData['type'] = "Trainee";
-              traineeDataArr.push(traineesData)
+            else if (dataUser.assignTrainny) {
+              // else if (dataUser.trainnyProfiledata) {
+              // let opponentData = dataUser.trainnyProfiledata;
+              let traineeName = dataUser.assignTrainny;
+              let traineeIds = dataUser.tainnyId;
+              let traineeDataArr = [];
+              // let finalDataTrainee = [];
+              for (let i = 0; i < traineeName.length; i++) {
+                let traineesData = {}
+                traineesData["name"] = traineeName[i];
+                traineesData['userId'] = traineeIds[i];
+                traineesData['type'] = "Trainee";
+                traineeDataArr.push(traineesData)
+              }
+              AsyncStorage.setItem('opponentProfile', JSON.stringify(traineeDataArr));
             }
-            AsyncStorage.setItem('opponentProfile', JSON.stringify(traineeDataArr));
+            // }
+
           }
-          // }
-
-          db.ref(`users/`).push(dataUser)
-          this.setState({
-            isLoading: false
-          },
-            () => navigate('BottomTabe')
-          )
-
+            db.ref(`users/`).push(dataUser)
+            this.setState({
+              isLoading: false
+            },
+              () => navigate('BottomTabe')
+            )
         }
         if (userWrong == false) {
           this.setState({
@@ -256,7 +257,7 @@ class Login extends React.Component {
             }}
             keyboardType='email-address'
             placeholder="email@gmail.com"
-            placeholderTextColor="#A6A6A6"
+            placeholderTextColor="#7e7e7e"
             autoCapitalize="none"
             autoCorrect={false}
             value={email}
@@ -272,7 +273,7 @@ class Login extends React.Component {
             onChangeText={(text) => this.passwordHandle(text)}
             secureTextEntry={true}
             placeholder="password"
-            placeholderTextColor="#A6A6A6"
+            placeholderTextColor="#7e7e7e"
             value={password}
             style={[styles.inputTexts, !this.state.passwrdValidate ? styles.errorInput : null]} />
         </View>

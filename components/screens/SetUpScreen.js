@@ -4,7 +4,7 @@ import CaloriesSetupBtn from '../buttons/setUpBtn';
 import styles from '../Styling/SetUpScreenStyle';
 import OverlayLoader from '../Loader/OverlaySpinner';
 const screenWidth = Dimensions.get('window').width;
-const { height } = Dimensions.get('window');
+const { heightDimension } = Dimensions.get('window');
 
 class Setupscreen extends React.Component {
     static navigationOptions = () => ({
@@ -163,7 +163,7 @@ class Setupscreen extends React.Component {
             })
         }
         if (height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' && currentWeightUnit != '' && goalWeightUnit != '') {
-            this.props.navigation.navigate('LastSetUpScreen', {
+            this.props.navigation.navigate('StepCountScreen', {
                 dob: dob,
                 gender: gender,
                 height: height,
@@ -185,7 +185,7 @@ class Setupscreen extends React.Component {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.childContainer}>
-                    <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
+                    <ScrollView style={{ flex: 1, backgroundColor: 'black', height: heightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
                         <View style={styles.heading}>
                             <Text style={styles.headingStyle}>Set Up Your App</Text>
                         </View>
@@ -344,7 +344,7 @@ class Setupscreen extends React.Component {
                                 : null}
                         </View>
                         <View style={styles.buttonContainer}>
-                            <CaloriesSetupBtn title='Last Step'
+                            <CaloriesSetupBtn title='Next >'
                                 onPress={this.lastStep}
                                 // onPress={() => navigate('LastSetUpScreen')} 
                                 caloriesBtnStyle={styles.caloriesBtnStyle} />
