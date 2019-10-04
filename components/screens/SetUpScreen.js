@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TextInput, Picker, Dimensions, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { Text, View, TextInput, Picker, Dimensions, TouchableOpacity, ScrollView, Image } from 'react-native';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import styles from '../Styling/SetUpScreenStyle';
 import OverlayLoader from '../Loader/OverlaySpinner';
@@ -19,8 +19,10 @@ class Setupscreen extends React.Component {
             screenHeight: 0,
             user: '',
             height: '',
+            heightInch: '',
             currentWeight: '',
             goalWeight: '',
+            goalSteps: '',
             heightUnit: '',
             currentWeightUnit: '',
             goalWeightUnit: '',
@@ -30,16 +32,24 @@ class Setupscreen extends React.Component {
             heightUnitValidation: false,
             currentWeightUnitValidation: false,
             goalWeightUnitValidation: false,
+            goalStepsValidation: false
         }
     }
 
     decrementVal(value) {
-        const { height, currentWeight, goalWeight } = this.state;
+        const { height, heightInch, currentWeight, goalWeight } = this.state;
         if (value == 'height') {
             const heightNum = Number(height) - 1
             let heightVal = heightNum.toString()
             this.setState({
                 height: heightVal
+            })
+        }
+        else if (value == 'heightInch') {
+            const heightInches = Number(heightInch) - 1
+            let heightInchVal = heightInches.toString()
+            this.setState({
+                heightInch: heightInchVal
             })
         }
         else if (value == 'currentWeight') {
@@ -59,12 +69,19 @@ class Setupscreen extends React.Component {
     }
 
     increamentVal(value) {
-        const { height, currentWeight, goalWeight } = this.state;
+        const { height, heightInch, currentWeight, goalWeight } = this.state;
         if (value == 'height') {
             const heightNum = Number(height) + 1
             let heightVal = heightNum.toString()
             this.setState({
                 height: heightVal
+            })
+        }
+        else if (value == 'heightInch') {
+            const heightInches = Number(heightInch) + 1
+            let heightInchVal = heightInches.toString()
+            this.setState({
+                heightInch: heightInchVal
             })
         }
         else if (value == 'currentWeight') {
@@ -83,12 +100,12 @@ class Setupscreen extends React.Component {
         }
     }
     updateUnits(e, givenUnit) {
-        if (e == "height Unit") {
-            this.setState({
-                heightUnit: givenUnit
-            })
-        }
-        else if (e == 'current weight Unit') {
+        // if (e == "height Unit") {
+        //     this.setState({
+        //         heightUnit: givenUnit
+        //     })
+        // }
+        if (e == 'current weight Unit') {
             this.setState({
                 currentWeightUnit: givenUnit
             })
@@ -100,8 +117,8 @@ class Setupscreen extends React.Component {
         }
     }
     lastStep = () => {
-        const { height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit } = this.state
-        const { dob, gender, date, time, userId } = this.props.navigation.state.params;
+        const { height, heightInch, goalSteps, currentWeight, goalWeight, currentWeightUnit, goalWeightUnit } = this.state
+        const { dob, date, time, userId } = this.props.navigation.state.params;
         if (height == '') {
             this.setState({
                 heightValidation: true
@@ -110,6 +127,16 @@ class Setupscreen extends React.Component {
         else {
             this.setState({
                 heightValidation: false
+            })
+        }
+        if (heightInch == '') {
+            this.setState({
+                heightUnitValidation: true
+            })
+        }
+        else {
+            this.setState({
+                heightUnitValidation: false
             })
         }
         if (currentWeight == '') {
@@ -132,16 +159,16 @@ class Setupscreen extends React.Component {
                 goalWeightValidation: false
             })
         }
-        if (heightUnit == '' || heightUnit == '0') {
-            this.setState({
-                heightUnitValidation: true
-            })
-        }
-        else {
-            this.setState({
-                heightUnitValidation: false
-            })
-        }
+        // if (heightUnit == '' || heightUnit == '0') {
+        //     this.setState({
+        //         heightUnitValidation: true
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         heightUnitValidation: false
+        //     })
+        // }
         if (currentWeightUnit == '' || currentWeightUnit == '0') {
             this.setState({
                 currentWeightUnitValidation: true
@@ -162,26 +189,44 @@ class Setupscreen extends React.Component {
                 goalWeightUnitValidation: false
             })
         }
-        if (height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' && currentWeightUnit != '' && goalWeightUnit != '') {
+        if (goalSteps == '') {
+            this.setState({
+                goalStepsValidation: true
+            })
+        }
+        else {
+            this.setState({
+                goalStepsValidation: false
+            })
+        }
+        if (height != '' && heightInch != '' && currentWeight != '' && goalWeight != '' && currentWeightUnit != '' && goalWeightUnit != '') {
+            const heightCentimeter = height * 30.48;
+            //console.log('height centi >>>', heightCentimeter)
+            const heightInchCentimeter = heightInch * 2.54;
+            //console.log('height inches centi >>>', heightInchCentimeter);
+            const totalHeightCentimeter = heightCentimeter + heightInchCentimeter;
+            //console.log('total centimeter >>>',totalHeightCentimeter)
             this.props.navigation.navigate('StepCountScreen', {
                 dob: dob,
-                gender: gender,
                 height: height,
+                heightInch:heightInch,
                 currentWeight: currentWeight,
                 goalWeight: goalWeight,
-                heightUnit: heightUnit,
+                //heightUnit: heightUnit,
                 currentWeightUnit: currentWeightUnit,
                 goalWeightUnit: goalWeightUnit,
                 date: date,
                 time: time,
-                userId: userId
+                userId: userId,
+                totalCentimeter: totalHeightCentimeter,
+                goalSteps:goalSteps
             });
         }
     }
 
     render() {
         const { heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation, currentWeightUnitValidation,
-            goalWeightUnitValidation, heightUnit } = this.state;
+            goalWeightUnitValidation, goalSteps, goalStepsValidation } = this.state;
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.childContainer}>
@@ -193,8 +238,8 @@ class Setupscreen extends React.Component {
                             <Text style={styles.paraGraphStyle}>GetFitAthletic needs the following info to help you with your fitness journey</Text>
                         </View>
                         <View style={styles.labelsContainer}>
-                            <Text style={styles.leftInputLabelStyle}>Height</Text>
-                            <Text style={styles.rightInputLabelStyle}>Unit</Text>
+                            <Text style={styles.leftInputLabelStyle}>Height (fit)</Text>
+                            <Text style={styles.rightInputLabelStyle}>Height (Inch)</Text>
                         </View>
                         <View style={styles.inputFieldOne}>
                             <View style={styles.inputFieldOneChild}>
@@ -202,7 +247,7 @@ class Setupscreen extends React.Component {
                                     activeOpacity={0.8}
                                     onPress={this.decrementVal.bind(this, 'height')}
                                 >
-                                <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                    <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                 </TouchableOpacity>
                                 <TextInput keyboardType='numeric' maxLength={3} placeholder='0'
                                     style={styles.inputTextStyle}
@@ -219,13 +264,34 @@ class Setupscreen extends React.Component {
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.pickerContainer}>
-                                <Picker
+                                {/* <Picker
                                     selectedValue={this.state.heightUnit}
                                     onValueChange={this.updateUnits.bind(this, 'height Unit')}
                                     style={styles.pickerStyle} headerTintColor='white'>
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="Centimeter" value="centimeter" />
-                                </Picker>
+                                </Picker> */}
+                                <View style={styles.inputFieldOneChild}>
+                                    <TouchableOpacity style={styles.touchableOpacityOne}
+                                        activeOpacity={0.8}
+                                        onPress={this.decrementVal.bind(this, 'heightInch')}
+                                    >
+                                        <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                    <TextInput keyboardType='numeric' maxLength={3} placeholder='0'
+                                        style={styles.inputTextStyle}
+                                        type="number"
+                                        onChangeText={(height) => this.setState({ heightInch: height })}
+                                        value={this.state.heightInch}
+                                    />
+                                    <TouchableOpacity
+                                        style={styles.touchableOpacityTwo}
+                                        activeOpacity={0.8}
+                                        onPress={this.increamentVal.bind(this, 'heightInch')}
+                                    >
+                                        <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
@@ -239,7 +305,7 @@ class Setupscreen extends React.Component {
                             {heightUnitValidation ?
                                 <View style={{ flexDirection: 'row', marginVertical: 10, }}>
                                     <Text style={styles.validationInstruction}>
-                                        Please select height unit
+                                        Please select height inches
                                      </Text>
                                 </View>
                                 : null}
@@ -253,7 +319,7 @@ class Setupscreen extends React.Component {
                                 <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
                                     onPress={this.decrementVal.bind(this, 'currentWeight')}
                                 >
-                                <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                    <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                 </TouchableOpacity>
                                 <TextInput keyboardType='numeric' maxLength={3} placeholder='0'
                                     style={styles.inputTextStyle}
@@ -343,6 +409,25 @@ class Setupscreen extends React.Component {
                                 </View>
                                 : null}
                         </View>
+                        <View style={{ flexDirection: 'row', marginVertical: 8, marginTop: 5 }}>
+                            <Text style={styles.textsStyles}>Goal Steps</Text>
+                        </View>
+                        <View style={styles.inputFields}>
+                            <TextInput onChangeText={text => { this.setState({ goalSteps: text }) }}
+                                keyboardType='phone-pad'
+                                value={goalSteps}
+                                style={styles.inputTexts}
+                            />
+                        </View>
+                        {
+                            goalStepsValidation ? 
+                            <View style={{ flexDirection: 'row', marginVertical: 10, }}>
+                                    <Text style={styles.validationInstruction}>
+                                        Please select goal steps
+                                    </Text>
+                                </View>
+                         : null       
+                        }
                         <View style={styles.buttonContainer}>
                             <CaloriesSetupBtn title='Next >'
                                 onPress={this.lastStep}

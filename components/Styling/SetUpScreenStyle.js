@@ -85,22 +85,23 @@ const styles = StyleSheet.create({
     },
     touchableOpacityOne:{
         height:40,
-        backgroundColor:'gray',
-        opacity:0.6,
+        backgroundColor:'white',
+        //opacity:0.6,
         paddingLeft:12, 
         paddingTop:5,width:55
     },
 
     inputTextStyle:{
-        backgroundColor:'gray',
-        opacity:0.6,
+        backgroundColor:'white',
+        //opacity:0.6,
+        color:'black',
         textAlign:'center',
         width:40
     },
     touchableOpacityTwo:{
         height:40,
-        backgroundColor:'gray',
-        opacity:0.6, 
+        backgroundColor:'white',
+        //opacity:0.6, 
         paddingTop:5,
         width:55,
         paddingLeft:22
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         color: '#A6A6A6',
         backgroundColor: 'white',
-        opacity: 0.3
+        //opacity: 0.3
 
     },
     
@@ -174,7 +175,35 @@ const styles = StyleSheet.create({
     },
     rightGoalWeight:{
         marginLeft:30
-    }
+    },
+    textsStyles:{
+        color: '#A6A6A6',
+            fontFamily: 'MontserratLight',
+    },
+    inputFields: {
+        flex: 1,
+        //backgroundColor:'gray',
+        flexDirection: 'row',
+        justifyContent: 'center',
+    
+    
+      },
+      inputTexts: {
+        flex: 1,
+        fontFamily: 'MontserratLight',
+       // fontFamily:'MontserratMedium',
+        color: 'black',
+        // fontSize: 23,
+        //marginLeft: 20,
+        height: 40,
+        //borderColor: 'gray',
+        //backgroundColor: '#1e1e1e',
+        backgroundColor:'white',
+        borderRadius: 2,
+        //marginRight: 20,
+        paddingLeft: 16,
+        
+      },
 
 })
 

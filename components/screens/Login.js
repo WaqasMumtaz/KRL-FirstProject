@@ -247,7 +247,7 @@ class Login extends React.Component {
         </View>
         <View style={{ flex: 0.2 }}></View>
         <View style={{ flexDirection: 'row', marginVertical: 8 }}>
-          <Text style={styles.textsStyles}>Email</Text>
+          {/* <Text style={styles.textsStyles}>Email</Text> */}
         </View>
         <View style={styles.inputFields}>
           <TextInput
@@ -266,7 +266,7 @@ class Login extends React.Component {
         </View>
         <View style={{ flex: 0.5 }}></View>
         <View style={{ flexDirection: 'row', marginTop: 15, marginBottom: 10 }}>
-          <Text style={styles.textsStyles}>Password</Text>
+          {/* <Text style={styles.textsStyles}>Password</Text> */}
         </View>
         <View style={styles.inputFields}>
           <TextInput

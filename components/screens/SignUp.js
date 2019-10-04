@@ -13,9 +13,11 @@ import {
 import CaloriesSetupBtn from '../buttons/setUpBtn'
 import styles from '../Styling/SignUpScreenStyle';
 import HttpUtilsFile from '../Services/HttpUtils';
-import { Dialog } from 'react-native-simple-dialogs';
+//import { Dialog } from 'react-native-simple-dialogs';
 import OverlayLoader from '../Loader/OverlaySpinner';
 import AsyncStorage from '@react-native-community/async-storage';
+//import PhoneCode from 'react-phone-code';
+import PhoneInput from 'react-native-phone-input'
 // import * as firebase from 'firebase';
 // import 'firebase/firestore';
 import firebase from 'react-native-firebase';
@@ -47,12 +49,16 @@ class Signup extends React.Component {
             passMatch: false,
             male: false,
             female: false,
-            gender:'',
+            gender: '',
             date: '',
             time: '',
-            lastName:'',
-            maleClickedTextStyle:false,
-            femaleClickedTextStyle:false,
+            lastName: '',
+            maleClickedTextStyle: false,
+            femaleClickedTextStyle: false,
+            pickerData: '',
+            countryCod:'',
+            mobileNo:'',
+           // mobileNoAndCode:countryCod + mobileNo,
 
 
         }
@@ -71,8 +77,24 @@ class Signup extends React.Component {
         this.setState({
             date: date + '-' + month + '-' + year,
             time: hours + ':' + min + ':' + sec,
+            pickerData: this.phone.getPickerData()
         })
+        //console.log(this.phone.getCountryCode())
     }
+
+    selectCountry(country) {
+        console.log('country >>', country)
+        //this.myCountryPicker.open()
+        // const allCountries = this.state.pickerData;
+        // for(let i in allCountries){
+        //     console.log('allCountries >>>',allCountries[i])
+        // }
+        this.phone.selectCountry(country.iso2)
+    }
+    // selectCountry = (country) => {
+    //     this.phone.selectCountry(country.iso2)
+    // }
+
     newPasswrdInputValueHandle = (newPsswrdText) => {
         this.setState({
             newPasswrd: newPsswrdText
@@ -171,8 +193,8 @@ class Signup extends React.Component {
 
     signUpFunction = async () => {
         const { navigate } = this.props.navigation;
-        const { name,lastName, email, mobile, newPasswrd, cnfrmPasswrd, nameValidate, emailValidate, mobileValidate, passwrdValidate, cnfrmPasswrdValidate, isLoading,gender } = this.state;
-        if (name == ''|| lastName == '' || email == '' || mobile == '' || newPasswrd == '' || cnfrmPasswrd == '' || gender == '' ) {
+        const { name, lastName, email, mobileNo, newPasswrd, cnfrmPasswrd, nameValidate, emailValidate, mobileValidate, passwrdValidate, cnfrmPasswrdValidate, isLoading, gender } = this.state;
+        if (name == '' || lastName == '' || email == '' || mobileNo == '' || newPasswrd == '' || cnfrmPasswrd == '' || gender == '') {
             alert('Please Fill All Fields');
             if (nameValidate != true || emailValidate != true || mobileValidate != true || passwrdValidate != true || cnfrmPasswrdValidate != true) {
                 alert('Please Enter Correct Field');
@@ -186,11 +208,12 @@ class Signup extends React.Component {
                 email: email,
                 mobileNo: mobile,
                 password: newPasswrd,
-                lastName:lastName,
-                gender:gender,
+                lastName: lastName,
+                gender: gender,
+                mobileNo:mobileNo,
                 type: 'trainee'
             }
-             console.log(userObj)
+            console.log(userObj)
 
             try {
                 let dataUser = await HttpUtilsFile.post('signup', userObj)
@@ -246,7 +269,7 @@ class Signup extends React.Component {
                     if (signupCode && profileCode) {
                         this.setState({
                             isLoading: false,
-    
+
                         }, () => {
                             AsyncStorage.setItem('currentUser', JSON.stringify(currentUserData))
                             AsyncStorage.setItem('myProfile', JSON.stringify(userProfile));
@@ -262,18 +285,18 @@ class Signup extends React.Component {
                     // if () {
                     //     this.setState({
                     //         isLoading: false,
-    
+
                     //     }, () => {
                     //         //console.log('user profile localstorage data saved >>>', userProfile);
-    
+
                     //     })
                     // }
                     // else {
                     //     // console.log('profile code not available')
                     // }
-                    
+
                 }
-                
+
                 else if (!emailCode || !signupCode || !profileCode) {
                     this.setState({
                         isLoading: false
@@ -286,12 +309,12 @@ class Signup extends React.Component {
             }
             this.setState({
                 name: '',
-                lastName:'',
+                lastName: '',
                 email: '',
                 mobile: '',
                 newPasswrd: '',
                 cnfrmPasswrd: '',
-                gender:'',
+                gender: '',
                 passMatch: false
             })
         }
@@ -346,8 +369,8 @@ class Signup extends React.Component {
             this.setState({
                 male: true,
                 female: false,
-                maleClickedTextStyle:true,
-                femaleClickedTextStyle:false,
+                maleClickedTextStyle: true,
+                femaleClickedTextStyle: false,
                 gender: 'male'
             })
         }
@@ -356,13 +379,16 @@ class Signup extends React.Component {
                 male: false,
                 female: true,
                 gender: 'female',
-                maleClickedTextStyle:false,
-                femaleClickedTextStyle:true,
+                maleClickedTextStyle: false,
+                femaleClickedTextStyle: true,
             })
         }
     }
 
-
+    selectCode(countryTxt) {
+        console.log(countryTxt, 'countryTxt')
+        console.log(this.state.pickerData, 'picker data')
+    }
 
 
 
@@ -404,33 +430,33 @@ class Signup extends React.Component {
                     </View>
 
                     <View style={{ flexDirection: 'row', marginVertical: 8 }}>
-                        <Text style={styles.textsStyles}>First Name</Text>
+                        {/* <Text style={styles.textsStyles}>First Name</Text> */}
                     </View>
                     <View style={styles.inputFields}>
                         <TextInput onChangeText={text => {
-                            
-                                this.setState({ name: text })
+
+                            this.setState({ name: text })
                         }}
                             placeholder="First Name"
                             placeholderTextColor="#7e7e7e"
                             value={name}
                             style={[styles.inputTexts, !this.state.nameValidate ? styles.errorInput : null]} />
                     </View>
-                    <View style={{ flexDirection: 'row', marginVertical: 8 ,marginTop:5 }}>
-                        <Text style={styles.textsStyles}>Last Name</Text>
+                    <View style={{ flexDirection: 'row', marginVertical: 8, marginTop: 5 }}>
+                        {/* <Text style={styles.textsStyles}>Last Name</Text> */}
                     </View>
                     <View style={styles.inputFields}>
                         <TextInput onChangeText={text => {
-                            
-                                this.setState({ lastName: text })
+
+                            this.setState({ lastName: text })
                         }}
                             placeholder="Last Name"
                             placeholderTextColor="#7e7e7e"
                             value={lastName}
                             style={[styles.inputTexts, !this.state.nameValidate ? styles.errorInput : null]} />
                     </View>
-                    <View style={{ flexDirection: 'row', marginVertical: 8,marginTop:5  }}>
-                        <Text style={styles.textsStyles}>Email</Text>
+                    <View style={{ flexDirection: 'row', marginVertical: 8, marginTop: 5 }}>
+                        {/* <Text style={styles.textsStyles}>Email</Text> */}
                     </View>
                     <View style={styles.inputFields}>
                         <TextInput
@@ -453,31 +479,61 @@ class Signup extends React.Component {
                             Email is already exist
                        </Text>
                     </View>}
-                    <View style={{ flexDirection: 'row', marginVertical: 8 ,marginTop:5 }}>
-                        <Text style={styles.textsStyles}>Mobile</Text>
+                    <View style={{ flexDirection: 'row', marginVertical: 8, marginTop: 5 }}>
+                        {/* <Text style={styles.textsStyles}>Mobile</Text> */}
                     </View>
-                    <View style={styles.inputFields}>
-                        <TextInput onChangeText={text => { this.checkValidateFunc(text, 'mobile'), this.setState({ mobile: text }) }}
-                            keyboardType='phone-pad'
-                            placeholder="number"
-                            placeholderTextColor="#7e7e7e"
-                            value={mobile}
-                            style={[styles.inputTexts, !this.state.mobileValidate ? styles.errorInput : null]}
+                    <View style={{ flexDirection: 'row' }}>
+
+                        <PhoneInput
+                            ref={(ref) => { this.phone = ref; }}
+                            //onPressFlag={this.onPressFlag}
+                            //getCountryCode = {(res)=>{console.log(res)}}
+                            onChangePhoneNumber={()=>
+                             this.setState({mobileNo:this.phone.getValue()})
+                        }
+                            onSelectCountry={() =>
+                                //console.log(this.phone.getCountryCode())
+                                this.setState({countryCod: this.phone.getCountryCode()})
+                            }
+                            value={this.state.mobileNo}
+                            //pickerBackgroundColor={'red'}
+                            // getPickerData={(res)=>console.log(res)}
+                            style={{ flex: 1, height: 40, backgroundColor: 'white', borderRadius: 3 }}
+
                         />
+
+                        {/* <ModalPickerImage
+                            ref={(ref) => { this.myCountryPicker = ref; }}
+                            data={this.state.pickerData}s
+                            onChange={(country) => { this.selectCountry(country) }}
+                            cancelText='Cancel'
+                        /> */}
+
+
+                        {/* <View style={styles.inputFields}>
+                            <TextInput onChangeText={text => { this.checkValidateFunc(text, 'mobile'), this.setState({ mobile: text }) }}
+                                keyboardType='phone-pad'
+                                placeholder="number"
+                                placeholderTextColor="#7e7e7e"
+                                value={mobile}
+                                style={[styles.inputTexts, !this.state.mobileValidate ? styles.errorInput : null]}
+                            />
+                        </View> */}
                     </View>
+
                     <Text style={styles.genderTextStyle}>Gender</Text>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <TouchableOpacity style={male ? styles.clickedMale : styles.maleTouchableOpacity} onPress={this.getGender.bind(this, 'male')}>
-                                <Text style={maleClickedTextStyle ? styles.maleClickedTextStyle : styles.maleTextStyle}>
-                                    Male
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <TouchableOpacity style={male ? styles.clickedMale : styles.maleTouchableOpacity} onPress={this.getGender.bind(this, 'male')}>
+                            <Text style={maleClickedTextStyle ? styles.maleClickedTextStyle : styles.maleTextStyle}>
+                                Male
                             </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={female ? styles.clickedFemale : styles.femaleContainer} onPress={this.getGender.bind(this, 'female')}>
-                                <Text style={femaleClickedTextStyle ? styles.femaleClickedTextStyle : styles.maleTextStyle}>
-                                    Female</Text>
-                            </TouchableOpacity>
-                        </View>
-                        {/* <View style={{ height: 30, marginTop: 3 }}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={female ? styles.clickedFemale : styles.femaleContainer} onPress={this.getGender.bind(this, 'female')}>
+                            <Text style={femaleClickedTextStyle ? styles.femaleClickedTextStyle : styles.maleTextStyle}>
+                                Female</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {/* <View style={{ height: 30, marginTop: 3 }}>
                             {genderValidation ?
                                 <Text style={styles.validationInstruction}>
                                     Please select the gender
@@ -485,8 +541,8 @@ class Signup extends React.Component {
                                 : null}
                         </View> */}
                     {/* <View style={{ flex: 0.5 }}></View> */}
-                    <View style={{ flexDirection: 'row', marginVertical: 8 ,marginTop:5 }}>
-                        <Text style={styles.textsStyles}>New Password</Text>
+                    <View style={{ flexDirection: 'row', marginVertical: 8, marginTop: 5 }}>
+                        {/* <Text style={styles.textsStyles}>New Password</Text> */}
                     </View>
                     <View style={styles.inputFields}>
                         <TextInput onChangeText={text => this.newPasswrdInputValueHandle(text)}
@@ -502,8 +558,8 @@ class Signup extends React.Component {
                             Password strength is required maximum 9 and greater then 4
                          </Text>
                     </View>}
-                    <View style={{ flexDirection: 'row', marginVertical: 8 ,marginTop:5 }}>
-                        <Text style={styles.textsStyles}>Confirm New Password</Text>
+                    <View style={{ flexDirection: 'row', marginVertical: 8, marginTop: 5 }}>
+                        {/* <Text style={styles.textsStyles}>Confirm New Password</Text> */}
                     </View>
                     <View style={styles.inputFields}>
                         <TextInput onChangeText={(text) => this.cnfrmPasswrdInputValueHandle(text)}

@@ -58,7 +58,8 @@ export default class StepCountScreen extends React.Component {
             secTime: '',
             firstValue:'',
             secondValue:'',
-            thirdValue:''
+            thirdValue:'',
+            goalSteps:''
 
         }
         
@@ -92,7 +93,14 @@ export default class StepCountScreen extends React.Component {
     async componentWillMount() {
         await this.getData()
         this.dateFilter()
+        
+        const paramsData = this.props.navigation.state.params;
+        console.log('params data >>>', paramsData)
+        this.setState({
+            userCurrentWeight:paramsData.currentWeight,
+            goalSteps:paramsData.goalSteps,
 
+        })
         //this.googleFitAuthFun()
 
     }

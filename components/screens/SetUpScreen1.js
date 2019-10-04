@@ -36,13 +36,14 @@ class Setupscreen1 extends React.Component {
     }
     componentWillMount() {
         let monthNo = new Date().getMonth();
+        console.log('mont No >>>', monthNo)
         const date = new Date().getDate();
         const year = new Date().getFullYear();
         const hours = new Date().getHours();
         const min = new Date().getMinutes();
         const sec = new Date().getSeconds();
         if (monthNo == 1 || monthNo == 2 || monthNo == 3 || monthNo == 4 || monthNo == 5 || monthNo == 6 || monthNo == 7 || monthNo == 8 || monthNo == 9) {
-            month = `0${monthNo + 1}`;
+            month = `${monthNo + 1}`;
         }
         else {
             month = monthNo + 1;
@@ -77,7 +78,7 @@ class Setupscreen1 extends React.Component {
     }
 
     nextStep = () => {
-        const { dob, gender, date, time, userId } = this.state;
+        const { dob, date, time, userId } = this.state;
         const { navigate } = this.props.navigation;
 
         if (dob == '') {
@@ -90,20 +91,19 @@ class Setupscreen1 extends React.Component {
                 dobValidation: false
             })
         }
-        if (gender == '') {
-            this.setState({
-                genderValidation: true
-            })
-        }
-        else {
-            this.setState({
-                genderValidation: false
-            })
-        }
-        if (dob != '' && gender != '' && date != '' && time != '' && userId != '') {
+        // if (gender == '') {
+        //     this.setState({
+        //         genderValidation: true
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         genderValidation: false
+        //     })
+        // }
+        if (dob != '' && date != '' && time != '' && userId != '') {
             navigate('Setupscreen', {
                 dob: dob,
-                gender: gender,
                 date: date,
                 time: time,
                 userId: userId
@@ -114,7 +114,7 @@ class Setupscreen1 extends React.Component {
 
     render() {
         const { dobValidation, genderValidation, male, female, date, dob,isLoading } = this.state;
-        console.log('current date >>>',date)
+        //console.log('current date >>>',date)
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: heightDimension }} contentContainerStyle={{ flexGrow: 1 }} >
                 <View style={styles.mainContainer}>
@@ -165,11 +165,11 @@ class Setupscreen1 extends React.Component {
                             </View>
                             : null}
                         {/* <View> */}
-                        <Text style={styles.textsStyle}>Gender</Text>
+                        {/* <Text style={styles.textsStyle}>Gender</Text>
                         <View style={styles.genderContainer}>
                             {/* <TextInput placeholder="Male" style={styles.genderInputStyleMale} />
                             <TextInput placeholder="Female" style={styles.genderInputStyleFemale} /> */}
-                            <View style={styles.maleContainer}>
+                            {/* <View style={styles.maleContainer}>
                                 <TouchableOpacity
                                     style={male ? styles.clickBtnStyle : styles.maleTouchableOpacity}
                                     onPress={this.getGender.bind(this, 'male')}>
@@ -177,8 +177,8 @@ class Setupscreen1 extends React.Component {
                                         Male
                                         </Text>
                                 </TouchableOpacity>
-                            </View>
-                            <View style={styles.maleContainer}>
+                            </View> */}
+                            {/* <View style={styles.maleContainer}>
                                 <TouchableOpacity
                                     style={female ? styles.clickBtnStyle : styles.maleTouchableOpacity}
                                     onPress={this.getGender.bind(this, 'female')}>
@@ -186,29 +186,29 @@ class Setupscreen1 extends React.Component {
                                         Female
                                         </Text>
                                 </TouchableOpacity>
-                            </View>
+                            </View> */}
                         </View>
-                        {genderValidation ?
+                        {/* {genderValidation ?
                             <View style={{ marginVertical: 3 }}>
                                 <Text style={styles.validationInstruction}>
                                     Please select the gender
                                     </Text>
                             </View>
-                            : null}
+                            : null}  */}
                         {/* </View> */}
                         <View style={styles.btnContainer}>
-                            {/* <Text>For Button</Text> */}
+                            {/* <Text style={{
+                               // backgroundColor:'red'
+                               color:'white'
+                                
+                            }}>For Button</Text> */}
                             <CaloriesSetupBtn title="Next >"
                                 //  onPress={() => { navigate('Setupscreen') }} 
                                 onPress={this.nextStep}
                                 caloriesBtnStyle={styles.caloriesBtnStyle} />
                         </View>
-                    </View>
-                    <View style={styles.reserv}>
-                        {/* <Text>
-                            This Reserve Box
-                      </Text> */}
-                    </View>
+                    {/* </View> */}
+                    <View style={styles.reserv}></View>
 
                 </View>
             </ScrollView>

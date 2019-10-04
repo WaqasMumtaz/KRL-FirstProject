@@ -80,9 +80,15 @@ const styles = StyleSheet.create({
         color: '#A6A6A6',
     },
     btnContainer: {
-        flex: 0.5,
-        //backgroundColor: 'gray'
-        marginTop:12
+        //flex: 0.5,
+        //backgroundColor: 'gray',
+        marginTop:70,
+        //marginLeft:220,
+        marginRight:20,
+        //paddingLeft:200,
+        flexDirection:'row',
+        justifyContent:'flex-end'
+        
     },
     reserv: {
         flex: 2,
@@ -92,12 +98,13 @@ const styles = StyleSheet.create({
 
     },
     caloriesBtnStyle: {
-        flex: 2,
+        flex: 0.7,
         height: 40,
         justifyContent: 'center',
         backgroundColor: '#FF6200',
         alignItems: 'center',
-        borderRadius: 5
+        borderRadius: 5,
+        
     },
     maleContainer: {
         flex: 1
