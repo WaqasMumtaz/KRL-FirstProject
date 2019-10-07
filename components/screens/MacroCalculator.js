@@ -21,6 +21,7 @@ class Macrocalculator extends React.Component {
             age: '',
             gender: '',
             height: '',
+            heightInch:'',
             currentWeight: '',
             goalWeight: '',
             heightUnit: '',
@@ -65,7 +66,7 @@ class Macrocalculator extends React.Component {
         const min = new Date().getMinutes();
         const sec = new Date().getSeconds();
         if (monthNo == 1 || monthNo == 2 || monthNo == 3 || monthNo == 4 || monthNo == 5 || monthNo == 6 || monthNo == 7 || monthNo == 8 || monthNo == 9) {
-            month = `0${monthNo + 1}`;
+            month = `${monthNo + 1}`;
         }
         else {
             month = monthNo + 1;
@@ -86,7 +87,7 @@ class Macrocalculator extends React.Component {
     }
 
     calulateMacro = async () => {
-        const { dob, gender, height, currentWeight, goalWeight, heightUnit, currentWeightUnit, goalWeightUnit,
+        const { dob, gender, height,heightInch, currentWeight, goalWeight, currentWeightUnit, goalWeightUnit,
             activityLevel, tdeeObj, date, time, currentYear, currentDate, currentMonth, userId } = this.state;
             console.log('tdee Ojbject >>>',tdeeObj )
         let age;
@@ -94,7 +95,8 @@ class Macrocalculator extends React.Component {
             dob: dob,
             gender: gender,
             height: height,
-            heightUnit: heightUnit,
+            heightInch:heightInch,
+            // heightUnit: heightUnit,
             currentWeight: currentWeight,
             currentWeightUnit: currentWeightUnit,
             goalWeight: goalWeight,
@@ -131,6 +133,7 @@ class Macrocalculator extends React.Component {
                 heightValidation: true
             })
         }
+        
         else {
             this.setState({
                 heightValidation: false
@@ -156,7 +159,7 @@ class Macrocalculator extends React.Component {
                 goalWeightValidation: false
             })
         }
-        if (heightUnit == '' || heightUnit == '0') {
+        if (heightInch == '') {
             this.setState({
                 heightUnitValidation: true
             })
@@ -216,9 +219,15 @@ class Macrocalculator extends React.Component {
 
         }
         if (gender == 'male') {
-            if (dob != '' && height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' && heightUnit != '0' &&
+            if (dob != '' && height != '' && heightInch != '' && currentWeight != '' && goalWeight != '' &&
                 currentWeightUnit != '' && currentWeightUnit != '0' && goalWeightUnit != '' && goalWeightUnit != '0' && activityLevel != '') {
-                let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age + 5;
+                    const heightCentimeter = height * 30.48;
+                    //console.log('height centi >>>', heightCentimeter)
+                    const heightInchCentimeter = heightInch * 2.54;
+                    //console.log('height inches centi >>>', heightInchCentimeter);
+                    const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
+                    console.log('total centimeter >>>',totalHeightCentimeter)
+                let calculteCalries = 10 * currentWeight + 6.25 * totalHeightCentimeter - 5 * age + 5;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
                     // get tdee value
                     let tdee = calculteCalries * tdeeObj[activityLevel]
@@ -269,9 +278,15 @@ class Macrocalculator extends React.Component {
             }
         }
         else if (gender == 'female') {
-            if (dob != '' && height != '' && currentWeight != '' && goalWeight != '' && heightUnit != '' && heightUnit != '0' &&
+            if (dob != '' && height != ''&& heightInch != '' && currentWeight != '' && goalWeight != '' &&
                 currentWeightUnit != '' && currentWeightUnit != '0' && goalWeightUnit != '' && goalWeightUnit != '0' && activityLevel != '') {
-                let calculteCalries = 10 * currentWeight + 6.25 * height - 5 * age - 161;
+                    const heightCentimeter = height * 30.48;
+            //console.log('height centi >>>', heightCentimeter)
+            const heightInchCentimeter = heightInch * 2.54;
+            //console.log('height inches centi >>>', heightInchCentimeter);
+            const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
+            console.log('total centimeter >>>',totalHeightCentimeter)
+                let calculteCalries = 10 * currentWeight + 6.25 * totalHeightCentimeter - 5 * age - 161;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
                     // get tdee value
                     let tdee = calculteCalries * tdeeObj[activityLevel];
@@ -367,12 +382,19 @@ class Macrocalculator extends React.Component {
         }
     }
     increamentVal(value) {
-        const { height, currentWeight, goalWeight } = this.state;
+        const { height,heightInch, currentWeight, goalWeight } = this.state;
         if (value == 'height') {
             const heightNum = Number(height) + 1
             let heightVal = heightNum.toString()
             this.setState({
                 height: heightVal
+            })
+        }
+        else if (value == 'heightInch') {
+            const heightInches = Number(heightInch) + 1
+            let heightInchVal = heightInches.toString()
+            this.setState({
+                heightInch: heightInchVal
             })
         }
         else if (value == 'currentWeight') {
@@ -391,12 +413,19 @@ class Macrocalculator extends React.Component {
         }
     }
     decrementVal(value) {
-        const { height, currentWeight, goalWeight } = this.state;
+        const { height,heightInch, currentWeight, goalWeight } = this.state;
         if (value == 'height') {
             const heightNum = Number(height) - 1
             let heightVal = heightNum.toString()
             this.setState({
                 height: heightVal
+            })
+        }
+        else if (value == 'heightInch') {
+            const heightInches = Number(heightInch) - 1
+            let heightInchVal = heightInches.toString()
+            this.setState({
+                heightInch: heightInchVal
             })
         }
         else if (value == 'currentWeight') {
@@ -507,7 +536,10 @@ class Macrocalculator extends React.Component {
                                 </Text>
                                 : null}
                         </View>
-                        <Text style={styles.styleForLabel}>Height</Text>
+                        <View style={{flexDirection:'row',marginRight:80,justifyContent:'space-between'}}>
+                        <Text style={styles.styleForLabel}>Height (fit)</Text>
+                        <Text style={styles.styleForLabel}>Height (Inch)</Text>
+                        </View>
                         <View style={styles.heightContainer}>
                             <View style={styles.inputContainer}>
                                 <View style={styles.container}>
@@ -528,25 +560,45 @@ class Macrocalculator extends React.Component {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                            <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
+                            
+                            <View style={styles.inputContainer}>
+                                <View style={styles.container}>
+                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                        onPress={this.decrementVal.bind(this, 'heightInch')}>
+                                        <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                    <View style={styles.textInputContainer}>
+                                        <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                            type="number"
+                                            onChangeText={(height) => this.setState({ heightInch: height })}
+                                            value={this.state.heightInch}
+                                        />
+                                    </View>
+                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                        onPress={this.increamentVal.bind(this, 'heightInch')}>
+                                        <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            {/* <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
                                 <Picker selectedValue={this.state.heightUnit}
                                     onValueChange={this.updateUnits.bind(this, 'height Unit')}
                                     style={styles.pickerStyle}>
                                     <Picker.Item label='Select an option...' value='0' />
                                     <Picker.Item label="Inches" value="inches" />
                                 </Picker>
-                            </View>
+                            </View> */}
                         </View>
                         <View style={styles.showValidationContainer}>
                             {heightValidation ?
                                 <Text style={styles.validationInstruction}>
-                                    Please fill your height
+                                    Please fill your height fit
                                 </Text>
 
                                 : null}
                             {heightUnitValidation ?
                                 <Text style={styles.validationInstruction}>
-                                    Please select height unit
+                                    Please select height inches
                                 </Text>
                                 : null}
                         </View>

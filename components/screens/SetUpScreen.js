@@ -32,9 +32,36 @@ class Setupscreen extends React.Component {
             heightUnitValidation: false,
             currentWeightUnitValidation: false,
             goalWeightUnitValidation: false,
-            goalStepsValidation: false
+            goalStepsValidation: false,
+            maleClickedTextStyle: false,
+            femaleClickedTextStyle: false,
+            fitnessResult:'',
+            lose:false,
+            gain:false
         }
     }
+
+    fitnessFun(result) {
+        if (result == 'lose') {
+            this.setState({
+                lose: true,
+                gain: false,
+                maleClickedTextStyle: true,
+                femaleClickedTextStyle: false,
+                fitnessResult: 'lose'
+            })
+        }
+        else if (result == 'gain') {
+            this.setState({
+                lose: false,
+                gain: true,
+                fitnessResult: 'gain',
+                maleClickedTextStyle: false,
+                femaleClickedTextStyle: true,
+            })
+        }
+    }
+
 
     decrementVal(value) {
         const { height, heightInch, currentWeight, goalWeight } = this.state;
@@ -206,27 +233,39 @@ class Setupscreen extends React.Component {
             //console.log('height inches centi >>>', heightInchCentimeter);
             const totalHeightCentimeter = heightCentimeter + heightInchCentimeter;
             //console.log('total centimeter >>>',totalHeightCentimeter)
-            this.props.navigation.navigate('StepCountScreen', {
-                dob: dob,
-                height: height,
-                heightInch:heightInch,
-                currentWeight: currentWeight,
-                goalWeight: goalWeight,
-                //heightUnit: heightUnit,
-                currentWeightUnit: currentWeightUnit,
-                goalWeightUnit: goalWeightUnit,
-                date: date,
-                time: time,
-                userId: userId,
-                totalCentimeter: totalHeightCentimeter,
-                goalSteps:goalSteps
-            });
+            // this.props.navigation.navigate('StepCountScreen', {
+            //     dob: dob,
+            //     height: height,
+            //     heightInch:heightInch,
+            //     currentWeight: currentWeight,
+            //     goalWeight: goalWeight,
+            //     //heightUnit: heightUnit,
+            //     currentWeightUnit: currentWeightUnit,
+            //     goalWeightUnit: goalWeightUnit,
+            //     date: date,
+            //     time: time,
+            //     userId: userId,
+            //     totalCentimeter: totalHeightCentimeter,
+            //     goalSteps:goalSteps
+            // });
         }
     }
 
     render() {
-        const { heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation, currentWeightUnitValidation,
-            goalWeightUnitValidation, goalSteps, goalStepsValidation } = this.state;
+        const { heightValidation,
+             currentWeightValidation,
+              goalWeightValidation, 
+              heightUnitValidation, 
+              currentWeightUnitValidation,
+              lose,
+              gain,
+              fitnessResult,
+              maleClickedTextStyle,
+              femaleClickedTextStyle,
+             goalWeightUnitValidation,
+             goalSteps, 
+             goalStepsValidation } = this.state;
+             console.log('your fitness result >>>',fitnessResult)
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.childContainer}>
@@ -360,7 +399,20 @@ class Setupscreen extends React.Component {
                                 :
                                 null}
                         </View>
-                        <View style={styles.weightLabelContainer}>
+                        <Text style={styles.genderTextStyle}>Select fitness goal</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <TouchableOpacity style={lose ? styles.clickedMale : styles.maleTouchableOpacity} onPress={this.fitnessFun.bind(this, 'lose')}>
+                            <Text style={maleClickedTextStyle ? styles.maleClickedTextStyle : styles.maleTextStyle}>
+                                Lose
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={gain ? styles.clickedFemale : styles.femaleContainer} onPress={this.fitnessFun.bind(this, 'gain')}>
+                            <Text style={femaleClickedTextStyle ? styles.femaleClickedTextStyle : styles.maleTextStyle}>
+                                Gain</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                        {/* <View style={styles.weightLabelContainer}>
                             <Text style={styles.leftInputLabelStyle}>Goal Weight</Text>
                             <Text style={styles.rightGoalWeightUnitLabel}>Unit</Text>
                         </View>
@@ -418,8 +470,8 @@ class Setupscreen extends React.Component {
                                 value={goalSteps}
                                 style={styles.inputTexts}
                             />
-                        </View>
-                        {
+                        </View> */}
+                        {/* {
                             goalStepsValidation ? 
                             <View style={{ flexDirection: 'row', marginVertical: 10, }}>
                                     <Text style={styles.validationInstruction}>
@@ -427,9 +479,9 @@ class Setupscreen extends React.Component {
                                     </Text>
                                 </View>
                          : null       
-                        }
+                        } */}
                         <View style={styles.buttonContainer}>
-                            <CaloriesSetupBtn title='Next >'
+                            <CaloriesSetupBtn title='Submit'
                                 onPress={this.lastStep}
                                 // onPress={() => navigate('LastSetUpScreen')} 
                                 caloriesBtnStyle={styles.caloriesBtnStyle} />

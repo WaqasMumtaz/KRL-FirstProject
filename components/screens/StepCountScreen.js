@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Button, Dimensions, Image, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, Button, Dimensions, Image, TouchableOpacity, Platform } from 'react-native';
 import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/StepCountScreenStyle';
 import DatePicker from 'react-native-datepicker';
@@ -15,15 +15,11 @@ import { NativeAppEventEmitter } from 'react-native';
 import { SensorManager } from 'NativeModules';
 import GoogleFit, { Scopes } from 'react-native-google-fit'
 import { NativeModules } from 'react-native';
+//import { TextInput } from 'react-native-gesture-handler';
 const rnHealthKit = NativeModules.RNHealthKit;
 
-const { height } = Dimensions.get('window');
+const { heightDimension } = Dimensions.get('window');
 const date = new Date().getDate();
-
-
-
-
-
 
 
 
@@ -56,15 +52,17 @@ export default class StepCountScreen extends React.Component {
             currentCalories: '',
             currentSteps: '',
             secTime: '',
-            firstValue:'',
-            secondValue:'',
-            thirdValue:'',
-            goalSteps:''
+            firstValue: '',
+            secondValue: '',
+            thirdValue: '',
+            goalSteps: '',
+
 
         }
-        
+
     }
 
+    
 
     // googleFitAuthFun=()=>{
     //     const options = {
@@ -86,19 +84,20 @@ export default class StepCountScreen extends React.Component {
     //         .catch((err) => {
     //           //dispatch("AUTH_ERROR");
     //           console.log(err)
-              
+
     //         })
     // }
 
     async componentWillMount() {
         await this.getData()
         this.dateFilter()
+
         
         const paramsData = this.props.navigation.state.params;
         console.log('params data >>>', paramsData)
         this.setState({
-            userCurrentWeight:paramsData.currentWeight,
-            goalSteps:paramsData.goalSteps,
+            userCurrentWeight: paramsData.currentWeight,
+            goalSteps: paramsData.goalSteps,
 
         })
         //this.googleFitAuthFun()
@@ -210,70 +209,54 @@ export default class StepCountScreen extends React.Component {
             weightNoUnit: userWeight
         })
 
-        // if (Platform.OS === 'android') {
-        //             const options = {
-        //                 scopes: [
-        //                     Scopes.FITNESS_ACTIVITY_READ_WRITE,
-        //                     Scopes.FITNESS_BODY_READ_WRITE,
-        //                 ],
-        //             }
-        //             GoogleFit.authorize(options)
-        //                 .then((res) => {
-        //                      console.log('authorized >>>', res)
-        //                      alert(`${res.message}`)
-        //                     GoogleFit.observeSteps((res) => {
-        //                         console.log('google fit steps',res)
-        //                         this.setState({ pedometerData: res.steps }, () => {
-        //                             if (res.steps > Number(1)) {
-        //                                 // this.countStepTime()
-        //                                 this.setState({
-        //                                     firstValue:res.steps
-        //                                 })
-        //                             }
-                                    
-        //                         })
-        //                     })
-        
-        //                 })
-        
-        //                 .catch((err) => {
-        //                     console.log('err >>> ', err)
-        //                 })
-        
-        
-        //         } else if (Platform.OS === 'ios') {
-        //             const options = {
-        //                 scopes: [
-        //                     Scopes.FITNESS_ACTIVITY_READ_WRITE,
-        //                     Scopes.FITNESS_BODY_READ_WRITE,
-        //                 ],
-        //             }
-        
-        //             rnHealthKit.authorize(options)
-        //                 .then((res) => {
-        //                      console.log('authorized >>>', res)
-        //                     rnHealthKit.observeSteps((res) => {
-        //                         // console.log(res)
-        //                         this.setState({ pedometerData: res.steps },()=>{
-        //                             if (res.steps > Number(1)) {
-        //                                 //this.countStepTime()
-        //                                 this.setState({
-        //                                     firstValue:res.steps
-        //                                 })
-        //                             }
-                                    
-        //                         })
-        //                     })
-        
-        
-        //                 })
-        //                 .catch((err) => {
-        //                     console.log('err >>> ', err)
-        //                 })
-        
-        //         }
-                
-        
+        if (Platform.OS === 'android') {
+                    const options = {
+                        scopes: [
+                            Scopes.FITNESS_ACTIVITY_READ_WRITE,
+                            Scopes.FITNESS_BODY_READ_WRITE,
+                        ],
+                    }
+                    GoogleFit.authorize(options)
+                        .then((res) => {
+                             console.log('authorized >>>', res)
+                             alert(`${res.message}`)
+                            GoogleFit.observeSteps((res) => {
+                                console.log('google fit steps',res)
+                                this.setState({ pedometerData: res.steps })
+                            })
+
+                        })
+
+                        .catch((err) => {
+                            console.log('err >>> ', err)
+                        })
+
+
+                } else if (Platform.OS === 'ios') {
+                    const options = {
+                        scopes: [
+                            Scopes.FITNESS_ACTIVITY_READ_WRITE,
+                            Scopes.FITNESS_BODY_READ_WRITE,
+                        ],
+                    }
+
+                    rnHealthKit.authorize(options)
+                        .then((res) => {
+                             console.log('authorized >>>', res)
+                            rnHealthKit.observeSteps((res) => {
+                                // console.log(res)
+                                this.setState({ pedometerData: res.steps })
+                            })
+
+
+                        })
+                        .catch((err) => {
+                            console.log('err >>> ', err)
+                        })
+
+                }
+
+
 
     }
 
@@ -289,7 +272,7 @@ export default class StepCountScreen extends React.Component {
             const eightTime = '8' + ':' + '0' + ':' + '0';
             const time16 = '16' + ':' + '0' + ':' + '0';
             const time23 = '23' + ':' + '59' + ':' + '59';
-            const time1= '1' + ':' + '0' + ':' + '0'
+            const time1 = '1' + ':' + '0' + ':' + '0'
             //console.log('wanted time >>>', resetTime)
             if (currentTime == resetTime) {
                 // console.log('Success!! condition match');
@@ -308,7 +291,7 @@ export default class StepCountScreen extends React.Component {
 
 
             }
-           else if (currentTime < time16 || currentTime >= eightTime) {
+            else if (currentTime < time16 || currentTime >= eightTime) {
                 console.log('8 to 16 Condition Successfully run')
                 // const currentSteps = this.state.pedometerData;
                 // this.setState({
@@ -325,22 +308,22 @@ export default class StepCountScreen extends React.Component {
                     console.log('sensor manager data -->>', data)
                     this.setState({ pedometerData: data.steps }, () => {
                         if (data.steps > Number(1)) {
-                                //this.countStepTime()
-                                this.setState({
-                                    firstValue:data.steps
-                                })
-                            
+                            //this.countStepTime()
+                            this.setState({
+                                firstValue: data.steps
+                            })
+
                         }
-                        
+
                     })
                     // console.log('user steps -->', data.steps)
 
 
                 });
-                
 
-                
-        
+
+
+
             }
             // else {
             //     SensorManager.stopStepCounter();
@@ -372,7 +355,7 @@ export default class StepCountScreen extends React.Component {
                             })
 
                         }
-                        
+
                     })
                     // console.log('user steps -->', data.steps)
 
@@ -385,7 +368,7 @@ export default class StepCountScreen extends React.Component {
                 //             Scopes.FITNESS_BODY_READ_WRITE,
                 //         ],
                 //     }
-        
+
                 //     GoogleFit.authorize(options)
                 //         .then((res) => {
                 //             // console.log('authorized >>>', res)
@@ -398,17 +381,17 @@ export default class StepCountScreen extends React.Component {
                 //                             secondValue: res.steps
                 //                         })
                 //                     }
-                                    
+
                 //                 })
                 //             })
-        
+
                 //         })
-        
+
                 //         .catch((err) => {
                 //             console.log('err >>> ', err)
                 //         })
-        
-        
+
+
                 // } else if (Platform.OS === 'ios') {
                 //     const options = {
                 //         scopes: [
@@ -416,7 +399,7 @@ export default class StepCountScreen extends React.Component {
                 //             Scopes.FITNESS_BODY_READ_WRITE,
                 //         ],
                 //     }
-        
+
                 //     rnHealthKit.authorize(options)
                 //         .then((res) => {
                 //             // console.log('authorized >>>', res)
@@ -429,16 +412,16 @@ export default class StepCountScreen extends React.Component {
                 //                             secondValue: res.steps
                 //                         })
                 //                     }
-                                    
+
                 //                 })
                 //             })
-        
-        
+
+
                 //         })
-        
+
                 // }
             }
-            else if((currentTime == time1 || currentTime < eightTime)){
+            else if ((currentTime == time1 || currentTime < eightTime)) {
                 console.log('1 to 8 Condition Successfully run')
                 // console.log('user string weight >>>', this.state.userCurrentWeight.slice(0, 3))
                 const userWeight = this.state.userCurrentWeight.slice(0, 3)
@@ -458,7 +441,7 @@ export default class StepCountScreen extends React.Component {
                             })
 
                         }
-                        
+
                     })
                     // console.log('user steps -->', data.steps)
 
@@ -471,7 +454,7 @@ export default class StepCountScreen extends React.Component {
                 //             Scopes.FITNESS_BODY_READ_WRITE,
                 //         ],
                 //     }
-        
+
                 //     GoogleFit.authorize(options)
                 //         .then((res) => {
                 //             // console.log('authorized >>>', res)
@@ -484,17 +467,17 @@ export default class StepCountScreen extends React.Component {
                 //                             thirdValue: res.steps
                 //                         })
                 //                     }
-                                    
+
                 //                 })
                 //             })
-        
+
                 //         })
-        
+
                 //         .catch((err) => {
                 //             console.log('err >>> ', err)
                 //         })
-        
-        
+
+
                 // } else if (Platform.OS === 'ios') {
                 //     const options = {
                 //         scopes: [
@@ -502,7 +485,7 @@ export default class StepCountScreen extends React.Component {
                 //             Scopes.FITNESS_BODY_READ_WRITE,
                 //         ],
                 //     }
-        
+
                 //     rnHealthKit.authorize(options)
                 //         .then((res) => {
                 //             // console.log('authorized >>>', res)
@@ -515,17 +498,17 @@ export default class StepCountScreen extends React.Component {
                 //                             thirdValue: res.steps
                 //                         })
                 //                     }
-                                    
+
                 //                 })
                 //             })
-        
-        
+
+
                 //         })
-        
+
                 // }
-               
+
             }
-            
+
 
         }, 1000)
         this.setState({ matchTimer })
@@ -617,9 +600,17 @@ export default class StepCountScreen extends React.Component {
             secTime,
             firstValue,
             secondValue,
-            thirdValue
+            thirdValue,
+            goalSteps
         } = this.state;
         console.log('pedometer data in number form ', Number(pedometerData))
+        const { params } = this.props.navigation.state;
+        const dataObj = {
+            pedometerData:pedometerData,
+            goalSteps:goalSteps
+        }
+        params.pedometerFun(dataObj)
+        //console.log(params)
         // console.log('minutes >>>', minutes_Counter)
         // console.log('login user weight >>>', userCurrentWeight)
         // console.log('seconds >>>', seconds_Counter)
@@ -634,135 +625,156 @@ export default class StepCountScreen extends React.Component {
         // const data2 = [0, 0, currentSteps, 0, 0,]
         // const data3 = [0, 0, currentSteps, 0, 0,]
         return (
-            // <View style={styles.mainContainer}>
-            <View style={styles.childContainer}>
-                <View style={styles.headingContainer}>
-                    <Text style={styles.headingStyle}>Today's Step Count</Text>
+            <ScrollView style={{ backgroundColor: '#FFFFFF', height: heightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
+
+                <View style={{ flex: 2, backgroundColor: 'black', marginHorizontal: 20 }}>
+                    <Text style={{ color: 'white', }}>Today Goal Steps</Text>
+                    <TextInput
+                        onChangeText={(text) => this.setState({ goalSteps:text })}                        
+                        placeholder='Set today goal steps...'
+                        placeholderTextColor='#7e7e7e'
+                        type="number"
+                        keyboardType={'numeric'}
+                        style={styles.inputTexts}
+                    />
                 </View>
-                <View style={styles.dateContainer}>
-                    <Text>{date}</Text>
-                    
-                </View>
-                {achieve && <View style={styles.achieveText}>
+                <View style={styles.mainContainer}>
+
+                    <View style={styles.childContainer}>
+                        <View style={styles.headingContainer}>
+                            <Text style={styles.headingStyle}>Today's Step Count</Text>
+                        </View>
+                        <View style={styles.dateContainer}>
+                            <Text>{date}</Text>
+
+                        </View>
+
+
+                        {/* {achieve && <View style={styles.achieveText}>
                     <Text style={styles.textStyle}>Achieve a day target steps</Text>
                 </View>
-                }
-                <ScrollView style={{ backgroundColor: '#FFFFFF', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
-                    <TouchableOpacity
-                        style={styles.stepCountContainer}
-                        activeOpacity={0.7}
-                        onPress={this._startPedometer.bind(this)}
-                        //onPress={this.countStepTime}
-                        disabled={this.state.startDisable}
-                    >
-                        <View style={styles.progressWhelContainer} >
-                            <Wheelspiner
-                                size={90}
-                                width={12}
-                                color={'#FF6200'}
-                                progress={pedometerData > 1 && pedometerData < 250 ? 25 :
-                                    pedometerData > 250 && pedometerData < 500 ? 50 :
-                                    pedometerData > 500 && pedometerData < 750 ? 75 :
-                                    pedometerData > 750 && pedometerData <= 10000 ? 100 
-                                    : 0
-                                }
-                                backgroundColor={'gray'}
-                                animateFromValue={0}
-                                fullColor={'#FF6200'}
-                            //duration={60000}
-                            />
-                          <Text style={styles.tapLoadText}>Tap to load</Text>  
-                        </View>
-                        <View style={styles.stepCountData}>
-                            <View style={{ flexDirection: 'row', marginRight: 50 }}>
-                                <Text style={{
-                                    color: '#FF6200',
-                                    fontFamily: 'MontserratLight',
-                                    fontSize: 11
-                                }}>{pedometerData == '' ? 0 : pedometerData}</Text>
+                } */}
+
+                        <TouchableOpacity
+                            style={styles.stepCountContainer}
+                            activeOpacity={0.7}
+                            onPress={this._startPedometer.bind(this)}
+                            //onPress={this.countStepTime}
+                            disabled={this.state.startDisable}
+                        >
+                            <View style={styles.progressWhelContainer} >
+                                <Wheelspiner
+                                    size={90}
+                                    width={12}
+                                    color={'#FF6200'}
+                                    progress={pedometerData > 1 && pedometerData < 250 ? 25 :
+                                        pedometerData > 250 && pedometerData < 500 ? 50 :
+                                            pedometerData > 500 && pedometerData < 750 ? 75 :
+                                                pedometerData > 750 && pedometerData <= 10000 ? 100
+                                                    : 0
+                                    }
+                                    backgroundColor={'gray'}
+                                    animateFromValue={0}
+                                    fullColor={'#FF6200'}
+                                //duration={60000}
+                                />
+                                <Text style={styles.tapLoadText}>Tap to load</Text>
+                            </View>
+                            <View style={styles.stepCountData}>
+                                <View style={{ flexDirection: 'row', marginRight: 50 }}>
+                                    <Text style={{
+                                        color: '#FF6200',
+                                        fontFamily: 'MontserratLight',
+                                        fontSize: 11
+                                    }}>{pedometerData == '' ? 0 : pedometerData}</Text>
+                                    <Text style={{
+                                        color: '#a6a6a6',
+                                        fontFamily: 'MontserratLight',
+                                        fontSize: 11
+                                    }}> / {goalSteps == '' || goalSteps == undefined ? 0 : goalSteps}</Text>
+                                </View>
                                 <Text style={{
                                     color: '#a6a6a6',
                                     fontFamily: 'MontserratLight',
-                                    fontSize: 11
-                                }}>/10,000</Text>
+                                    fontSize: 11,
+                                    marginTop: 4,
+                                    marginRight: 50
+                                }}>Steps</Text>
+                                <Text style={{ borderBottomWidth: 0.5, borderColor: '#FFFFFF', opacity: 0.3, marginRight: 15 }}></Text>
+                                <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', fontSize: 11, marginTop: 10, marginRight: 50 }}>{hour_Counter}h  {minutes_Counter}m</Text>
+                                <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', fontSize: 11, marginTop: 4, marginRight: 50 }}>
+                                    {this.state.startDisable == false ? 'No Active' : 'Active me'}
+                                </Text>
+                                <Text style={{ marginTop: 4, borderBottomWidth: 0.5, borderColor: '#FFFFFF', opacity: 0.3, marginRight: 15 }}></Text>
+                                <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', fontSize: 11, marginTop: 5, marginRight: 50 }}>{currentCalories == '' ? 0 : Number(currentCalories)}</Text>
+                                <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', fontSize: 11, marginTop: 4, marginRight: 30, marginBottom: 5, paddingBottom: 5 }}>calories</Text>
                             </View>
-                            <Text style={{
-                                color: '#a6a6a6',
-                                fontFamily: 'MontserratLight',
-                                fontSize: 11,
-                                marginTop: 4,
-                                marginRight: 50
-                            }}>Steps</Text>
-                            <Text style={{ borderBottomWidth: 0.5, borderColor: '#FFFFFF', opacity: 0.3, marginRight: 15 }}></Text>
-                            <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', fontSize: 11, marginTop: 10, marginRight: 50 }}>{hour_Counter}h  {minutes_Counter}m</Text>
-                            <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', fontSize: 11, marginTop: 4, marginRight: 50 }}>
-                                {this.state.startDisable == false ? 'No Active' : 'Active me'}
-                            </Text>
-                            <Text style={{ marginTop: 4, borderBottomWidth: 0.5, borderColor: '#FFFFFF', opacity: 0.3, marginRight: 15 }}></Text>
-                            <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', fontSize: 11, marginTop: 5, marginRight: 50 }}>{currentCalories == '' ? 0 : Number(currentCalories)}</Text>
-                            <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', fontSize: 11, marginTop: 4, marginRight: 30, marginBottom: 5, paddingBottom: 5 }}>calories</Text>
-                        </View>
 
-                    </TouchableOpacity>
+                        </TouchableOpacity>
 
-                    {/* <View style={styles.graphContainer}>
+                        {/* <View style={styles.graphContainer}>
                         <Text style={{ color: 'white' }}>Graph Stepcount</Text>
                     </View> */}
-                    {/* <Linechart/> */}
-                    <View style={{
-                        borderWidth: 2,
-                        borderColor: 'black', height: 220
-                        , marginHorizontal: 30, marginTop: 30,
-                        backgroundColor: 'black'
-                    }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ height: 220, width: 100, padding: 20 }}>
-                                <BarChart
-                                    style={{ flex: 1 }}
-                                    data={data1}
-                                    gridMin={0}
-                                    svg={{ fill: '#FF6200' }}
-                                    spacingInner={0.3}
-                                    gridMax={10000}
-                                />
+                        {/* <Linechart/> */}
+                        <View style={{
+                            borderWidth: 2,
+                            borderColor: 'black', height: 220
+                            , marginHorizontal: 30, marginTop: 30,
+                            backgroundColor: 'black'
+                        }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ height: 220, width: 100, padding: 20 }}>
+                                    <BarChart
+                                        style={{ flex: 1 }}
+                                        data={data1}
+                                        gridMin={0}
+                                        svg={{ fill: '#FF6200' }}
+                                        spacingInner={0.3}
+                                        gridMax={10000}
+                                    />
+
+                                </View>
+                                <View style={{ height: 220, width: 100, padding: 20 }}>
+                                    <BarChart
+                                        style={{ flex: 1 }}
+                                        data={data2}
+                                        gridMin={0}
+                                        svg={{ fill: '#FF6200' }}
+                                        spacingInner={0.3}
+                                        gridMax={10000}
+                                    />
+                                </View>
+                                <View style={{ height: 220, width: 100, padding: 20 }}>
+                                    <BarChart
+                                        style={{ flex: 1 }}
+                                        data={data3}
+                                        gridMin={0}
+                                        svg={{ fill: '#FF6200' }}
+                                        spacingInner={0.3}
+                                        gridMax={10000}
+                                    />
+                                </View>
+
 
                             </View>
-                            <View style={{ height: 220, width: 100, padding: 20 }}>
-                                <BarChart
-                                    style={{ flex: 1 }}
-                                    data={data2}
-                                    gridMin={0}
-                                    svg={{ fill: '#FF6200' }}
-                                    spacingInner={0.3}
-                                    gridMax={10000}
-                                />
+                            <View style={{ backgroundColor: 'black', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={{ color: '#e5e5e5', fontFamily: 'MontserratLight', }}>08:00</Text>
+                                <Text style={{ color: '#e5e5e5', fontFamily: 'MontserratLight', }}>16:00</Text>
+                                <Text style={{ color: '#e5e5e5', fontFamily: 'MontserratLight', }}>01:00</Text>
                             </View>
-                            <View style={{ height: 220, width: 100, padding: 20 }}>
-                                <BarChart
-                                    style={{ flex: 1 }}
-                                    data={data3}
-                                    gridMin={0}
-                                    svg={{ fill: '#FF6200' }}
-                                    spacingInner={0.3}
-                                    gridMax={10000}
-                                />
-                            </View>
-
+                            
 
                         </View>
-                        <View style={{ height: 30, backgroundColor: 'black', flexDirection: 'row', justifyContent: 'space-between',marginBottom:10 }}>
-                            <Text style={{ color: '#e5e5e5', fontFamily: 'MontserratLight', }}>08:00</Text>
-                            <Text style={{ color: '#e5e5e5', fontFamily: 'MontserratLight', }}>16:00</Text>
-                            <Text style={{ color: '#e5e5e5', fontFamily: 'MontserratLight', }}>01:00</Text>
-                        </View>
+                        <View style={{flex:1,width:'100%',height:30,marginTop:80}}>
+                                {/* <Text>Last Para</Text> */}
+                            </View>
 
                     </View>
-                    <View style={{flex:1,marginBottom:10}}>
 
-                    </View>
-                </ScrollView>
-            </View>
-            // </View>
+                </View>
+                <View style={{ marginBottom: 20 }}></View>
+
+            </ScrollView>
         )
     }
 }

@@ -204,6 +204,67 @@ const styles = StyleSheet.create({
         paddingLeft: 16,
         
       },
+      genderTextStyle:{
+        color: '#A6A6A6',
+        fontFamily: 'MontserratLight',
+        marginTop:8
+    },
+    clickedMale:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        color: 'white',
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    maleTouchableOpacity:{
+        height: 38,
+        width: '43%', 
+        justifyContent: 'center', 
+        //backgroundColor: '#1e1e1e',
+        backgroundColor:'white',
+        //opacity:0.3,
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    maleClickedTextStyle:{
+        color:'white',
+        textAlign: 'center', 
+        fontFamily: 'MontserratLight',
+      },
+      maleTextStyle:{
+        textAlign: 'center', 
+        color: 'black',
+        fontFamily: 'MontserratLight'
+    },
+    clickedFemale:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        color: 'white',
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    femaleContainer:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        justifyContent: 'center', 
+        backgroundColor: 'white',
+        //opacity:0.3,
+        marginTop: 5, 
+        borderRadius: 3 
+    },  
+    femaleClickedTextStyle:{
+        color:'white',
+        textAlign: 'center', 
+        fontFamily: 'MontserratLight',
+      }
+          
 
 })
 

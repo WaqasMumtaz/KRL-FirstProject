@@ -206,7 +206,6 @@ class Signup extends React.Component {
             const userObj = {
                 name: name,
                 email: email,
-                mobileNo: mobile,
                 password: newPasswrd,
                 lastName: lastName,
                 gender: gender,
@@ -252,7 +251,7 @@ class Signup extends React.Component {
                         isLoading: false
                     })
                     emailContents.map((item, index) => {
-                        console.log('items >>>', item)
+                       // console.log('items >>>', item)
                         const { email } = this.state;
                         //console.log('state email >>>',email)
                         // console.log('user emails >>>',item)
@@ -487,7 +486,7 @@ class Signup extends React.Component {
                         <PhoneInput
                             ref={(ref) => { this.phone = ref; }}
                             //onPressFlag={this.onPressFlag}
-                            //getCountryCode = {(res)=>{console.log(res)}}
+                            allowZeroAfterCountryCode={false}
                             onChangePhoneNumber={()=>
                              this.setState({mobileNo:this.phone.getValue()})
                         }
