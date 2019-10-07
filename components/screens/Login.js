@@ -145,7 +145,7 @@ class Login extends React.Component {
             // }
 
           }
-            db.ref(`users/`).push(dataUser)
+            db.ref(`users/${dataUser._id}`).update(dataUser)
             this.setState({
               isLoading: false
             },

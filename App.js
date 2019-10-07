@@ -6,7 +6,7 @@ import SplashScreen from 'react-native-splash-screen'
 //import ChartScreen from './components/BarChart/BarChart';
 import config from './Config/ApiKeys';
 //import reactNativePedometer from './components/Pedometer/checkFile'
-import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase';
 
 
@@ -26,9 +26,15 @@ class App extends Component {
   componentDidMount () {
     SplashScreen.hide();
 }
-  // componentWillMount(){
-  //   SplashScreen.apply()
-  // }
+  componentWillMount(){
+    // SplashScreen.apply()
+    console.log("start")
+    // Lifecycle.Event.ON_START
+  }
+  componentWillUnmount(){
+    console.log("end")
+
+  }
   
 
  render() {

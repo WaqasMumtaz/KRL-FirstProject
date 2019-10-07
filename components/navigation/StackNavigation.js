@@ -50,13 +50,13 @@ const MainNavigator = createStackNavigator({
   // Profile:{screen:Profile},
   // Linechart: { screen: Linechart },
   //StepCountScreen:{screen:StepCountScreen},
-  // Login: { screen: Login },
+  Login: { screen: Login },
    Signup: { screen: Signup },
-   Setupscreen1: { screen: Setupscreen1 },
-  Setupscreen: { screen: Setupscreen },
-  LastSetUpScreen: { screen: LastSetUpScreen },
-  ResetpasswordScreen: { screen: ResetpasswordScreen },
-  ConfirmResetPassword: { screen: ConfirmResetPassword },
+  //  Setupscreen1: { screen: Setupscreen1 },
+  // Setupscreen: { screen: Setupscreen },
+  // LastSetUpScreen: { screen: LastSetUpScreen },
+  // ResetpasswordScreen: { screen: ResetpasswordScreen },
+  // ConfirmResetPassword: { screen: ConfirmResetPassword },
 
   // Login: {
   //   screen: Login
