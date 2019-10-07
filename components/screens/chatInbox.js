@@ -15,7 +15,8 @@ console.disableYellowBox = true;
 YellowBox.ignoreWarnings([
     'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
 ]);
-
+import firebase from '../../Config/Firebase';
+import 'firebase/firestore';
 
 class ChatInbox extends React.Component {
 
@@ -33,49 +34,74 @@ class ChatInbox extends React.Component {
         //this.getData()
         this.checkTrainy()
     }
-     async componentWillMount() {
-         await AsyncStorage.getItem('opponentProfile').then((value) => {
-           let userData = JSON.parse(value);
-           console.log('opponent data chatbox >>>',userData)
+    async componentWillMount() {
+        await AsyncStorage.getItem('opponentProfile').then((value) => {
+            let userData = JSON.parse(value);
+            console.log('opponent data chatbox >>>', userData)
 
-           this.setState({
-               messageUser: userData
-           })
-       })
-        
+            this.setState({
+                messageUser: userData
+            })
+        })
+
+        // let onlineRef = firebase.database().reference(withPath= "users/LjtJZ0F9clW8F9Kzlnb")
+        // console.log(onlineRef , 'onlineRef')
+        // const userListRef = firebase.database().ref("USERS_ONLINE");
+        // const myUserRef = userListRef.push();
+
+        // firebase.database().ref(".info/connected")
+        //     .on(
+        //         "value", function (snap) {
+        //             if (snap.val()) {
+        //                 // if we lose network then remove this user from the list
+        //                 myUserRef.onDisconnect()
+        //                     .remove();
+        //                 // set user's online status
+        //                 console.log('online')
+        //                 // setUserStatus("online");
+        //             } else {
+        //                 // client has lost network
+        //                 // setUserStatus("offline");
+        //                 console.log('offline')
+
+        //             }
+        //         }
+        //     );
+
+
     }
-// getData= async ()=>{
-//     await AsyncStorage.getItem('opponentProfile').then((value) => {
-//         let userData = JSON.parse(value);
-//         console.log('opponent data chatbox >>>',userData)
-//         this.setState({
-//             messageUser: userData
-//         })
-//     })
-// }
+    // getData= async ()=>{
+    //     await AsyncStorage.getItem('opponentProfile').then((value) => {
+    //         let userData = JSON.parse(value);
+    //         console.log('opponent data chatbox >>>',userData)
+    //         this.setState({
+    //             messageUser: userData
+    //         })
+    //     })
+    // }
 
     componentWillUnmount() {
         // Remove the event listener
         this.focusListener.remove();
     }
-    checkTrainy =  () => {
+    checkTrainy = () => {
         // const { senderData } = this.props.navigation.state.params;
-        console.log( 'senderData')
-       const { navigation } = this.props;
-        this.focusListener = navigation.addListener('didFocus',  () => {
-               AsyncStorage.getItem('currentUser').then((value) => {
+        // console.log( 'senderData')
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener('didFocus', () => {
+            AsyncStorage.getItem('currentUser').then((value) => {
                 let userData = JSON.parse(value)
-                console.log(userData , 'userData')
-                console.log(userData.assignTrainner  , 'userData assignTrainner ')
-                  
+                // console.log(userData , 'userData')
+                // console.log(userData.assignTrainner  , 'userData assignTrainner ')
+
                 if (userData.assignTrainner != undefined) {
-                console.log(userData.assignTrainny  , 'userData.assignTrainny ')
+                    // console.log(userData.assignTrainny  , 'userData.assignTrainny ')
                     this.setState({
                         forTrainnerModal: false
                     })
                 }
-                else if(userData.assignTrainny != undefined ){
-                console.log(userData.assignTrainny , 'userData assignTrainny ')
+                else if (userData.assignTrainny != undefined) {
+                    // console.log(userData.assignTrainny , 'userData assignTrainny ')
                     this.setState({
                         forTrainnerModal: false
                     })
@@ -87,13 +113,13 @@ class ChatInbox extends React.Component {
                 //     })
                 // }
                 else {
-                    console.log('else')
+                    // console.log('else')
                     this.setState({
                         forTrainnerModal: true
                     })
                 }
             })
-         });
+        });
     }
 
 
@@ -105,7 +131,7 @@ class ChatInbox extends React.Component {
 
     }
 
-   
+
     sendOppentUserData(userData) {
         const { navigate } = this.props.navigation;
         navigate('ChatBox', {
@@ -113,12 +139,13 @@ class ChatInbox extends React.Component {
         });
     }
 
-    
+
 
     render() {
-        const { messageUser , forTrainnerModal} = this.state;
-        console.log('user message >>>',messageUser)
-        const senderName = messageUser && messageUser.map((elem, key) => {     
+        const { messageUser, forTrainnerModal } = this.state;
+        // console.log('user message >>>', messageUser)
+        const senderName = messageUser && messageUser.map((elem, key) => {
+            console.log(elem, 'elem')
             return (
                 <View style={styles.nameContainer}>
                     <TouchableOpacity style={styles.nameOpacity} onPress={this.sendOppentUserData.bind(this, elem)}>
@@ -143,7 +170,7 @@ class ChatInbox extends React.Component {
                         {/* <Text>Hello World</Text> */}
 
                     </ScrollView>
-                      <Modal
+                    <Modal
                         isVisible={this.state.forTrainnerModal}
                         animationIn='zoomIn'
                         //animationOut='zoomOutDown'
@@ -161,17 +188,17 @@ class ChatInbox extends React.Component {
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.userInstruction}>
-                            <Text style={styles.userInsTextStyle}>Get premium account to get a coach</Text>
-                            <Text style={styles.userInsTextStyle}>Kindly contact </Text>
-                            <TouchableOpacity style={styles.sendReqContainer} activeOpacity={0.7}>
-                            <Text style={styles.sendReqText}>Send Request</Text>
-                            </TouchableOpacity>
+                                <Text style={styles.userInsTextStyle}>Get premium account to get a coach</Text>
+                                <Text style={styles.userInsTextStyle}>Kindly contact </Text>
+                                <TouchableOpacity style={styles.sendReqContainer} activeOpacity={0.7}>
+                                    <Text style={styles.sendReqText}>Send Request</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
 
                     </Modal>
-                     
-                     {/* {forTrainnerModal ? 
+
+                    {/* {forTrainnerModal ? 
                       <View><Text>Contact App Admin</Text></View>
                       :
                       null
