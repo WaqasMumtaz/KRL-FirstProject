@@ -17,103 +17,61 @@ YellowBox.ignoreWarnings([
 ]);
 import firebase from '../../Config/Firebase';
 import 'firebase/firestore';
+const db = firebase.database();
 
 class ChatInbox extends React.Component {
-
-    // static navigationOptions = ({ navigation }) => {
-    //     return {
-    //         header: () => null
-    //     }
-    // };
     constructor(props) {
         super(props);
         this.state = {
-            messageUser: '',
+            messageUser: [],
             forTrainnerModal: false
         }
-        //this.getData()
         this.checkTrainy()
     }
     async componentWillMount() {
         await AsyncStorage.getItem('opponentProfile').then((value) => {
             let userData = JSON.parse(value);
+            let userNamesData = []
             console.log('opponent data chatbox >>>', userData)
-
+            db.ref('users').on("value", snapshot => {
+                let data = snapshot.val();
+                for (var i in userData) {
+                    for (var j in data) {
+                        if (userData[i].userId == data[j]._id) {
+                            userData[i].status = data[j].status
+                            userNamesData.push(userData[i])
+                            console.log(userNamesData, 'data')
+                        }
+                    }
+                }
+            });
             this.setState({
-                messageUser: userData
+                messageUser: userNamesData
             })
+
         })
-
-        // let onlineRef = firebase.database().reference(withPath= "users/LjtJZ0F9clW8F9Kzlnb")
-        // console.log(onlineRef , 'onlineRef')
-        // const userListRef = firebase.database().ref("USERS_ONLINE");
-        // const myUserRef = userListRef.push();
-
-        // firebase.database().ref(".info/connected")
-        //     .on(
-        //         "value", function (snap) {
-        //             if (snap.val()) {
-        //                 // if we lose network then remove this user from the list
-        //                 myUserRef.onDisconnect()
-        //                     .remove();
-        //                 // set user's online status
-        //                 console.log('online')
-        //                 // setUserStatus("online");
-        //             } else {
-        //                 // client has lost network
-        //                 // setUserStatus("offline");
-        //                 console.log('offline')
-
-        //             }
-        //         }
-        //     );
-
-
     }
-    // getData= async ()=>{
-    //     await AsyncStorage.getItem('opponentProfile').then((value) => {
-    //         let userData = JSON.parse(value);
-    //         console.log('opponent data chatbox >>>',userData)
-    //         this.setState({
-    //             messageUser: userData
-    //         })
-    //     })
-    // }
 
     componentWillUnmount() {
         // Remove the event listener
         this.focusListener.remove();
     }
     checkTrainy = () => {
-        // const { senderData } = this.props.navigation.state.params;
-        // console.log( 'senderData')
         const { navigation } = this.props;
         this.focusListener = navigation.addListener('didFocus', () => {
             AsyncStorage.getItem('currentUser').then((value) => {
                 let userData = JSON.parse(value)
-                // console.log(userData , 'userData')
-                // console.log(userData.assignTrainner  , 'userData assignTrainner ')
-
                 if (userData.assignTrainner != undefined) {
-                    // console.log(userData.assignTrainny  , 'userData.assignTrainny ')
                     this.setState({
                         forTrainnerModal: false
                     })
                 }
                 else if (userData.assignTrainny != undefined) {
-                    // console.log(userData.assignTrainny , 'userData assignTrainny ')
                     this.setState({
                         forTrainnerModal: false
                     })
                 }
-                // else if(userData.assignTrainner != undefined && userData.assignTrainny.length != 0){
-                //     // console.log(userData.assignTrainny.length  , 'userData assignTrainny length')
-                //     this.setState({
-                //         forTrainnerModal: false
-                //     })
-                // }
                 else {
-                    // console.log('else')
                     this.setState({
                         forTrainnerModal: true
                     })
@@ -143,14 +101,31 @@ class ChatInbox extends React.Component {
 
     render() {
         const { messageUser, forTrainnerModal } = this.state;
-        // console.log('user message >>>', messageUser)
+        console.log('user message >>>', messageUser)
         const senderName = messageUser && messageUser.map((elem, key) => {
-            console.log(elem, 'elem')
+            // console.log(elem, 'elem')
             return (
                 <View style={styles.nameContainer}>
+                    {elem.image != undefined ?
+                        <Image source={{ uri: `${elem.image}` }} style={styles.profilPicInInboxStyle} />
+                        :
+                        <Image source={require('../icons/profile.png')} style={styles.profilPicInInboxStyle} />
+                    }
                     <TouchableOpacity style={styles.nameOpacity} onPress={this.sendOppentUserData.bind(this, elem)}>
                         <Text style={styles.name}>{elem.name}</Text>
                     </TouchableOpacity>
+
+                    {elem.status == 'Online' ?
+                        <View style={styles.userIconView}>
+                            <Image source={require('../icons/onnlineIcon.png')} style={styles.userIcon} />
+                        </View>
+                        :
+                        elem.status == 'Offline' ?
+                            <View style={styles.userIconView}>
+                                <Image source={require('../icons/offlineIcon.png')} style={styles.userIcon} />
+                            </View>
+                            : null
+                    }
                 </View>
             )
         })
@@ -165,10 +140,7 @@ class ChatInbox extends React.Component {
                         onContentSizeChange={(contentWidth, contentHeight) => {
                             this.scrollView.scrollToEnd({ animated: true });
                         }}>
-
                         {senderName != '' && senderName}
-                        {/* <Text>Hello World</Text> */}
-
                     </ScrollView>
                     <Modal
                         isVisible={this.state.forTrainnerModal}
@@ -195,14 +167,7 @@ class ChatInbox extends React.Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
-
                     </Modal>
-
-                    {/* {forTrainnerModal ? 
-                      <View><Text>Contact App Admin</Text></View>
-                      :
-                      null
-                    } */}
                 </View>
             </View>
         );

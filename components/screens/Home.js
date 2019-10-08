@@ -1,17 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Button, Dimensions, Image, TouchableOpacity, BackHandler } from 'react-native';
+import { Text, View, ScrollView, Dimensions, Image, TouchableOpacity, BackHandler } from 'react-native';
 import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
-//import firebase from 'react-native-firebase';
 
 const { height } = Dimensions.get('window');
 
 class Homescreen extends React.Component {
-  // static navigationOptions = ({ navigation }) => {
-  //   console.log(navigation)
-  // };
   constructor(props) {
     super(props);
     this.state = {
@@ -20,23 +16,20 @@ class Homescreen extends React.Component {
       pedometerData: '',
       userId: ''
     }
-
   }
-
-
 
   componentWillMount() {
     this.getTodayOrYesterdayExcersice()
-
     //getting user id from local storage
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
-        // console.log(value ,'value')
         let dataFromLocalStorage = JSON.parse(value);
+        // dataFromLocalStorage.status = 'Online'
+        // console.log(dataFromLocalStorage ,'dataFromLocalStorage')
+        // db.ref(`users/${dataUser._id}`).update(userDataForOnlineOff)
         this.setState({
           userId: dataFromLocalStorage._id
         })
-        userId = dataFromLocalStorage._id;
       }
     });
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
@@ -118,45 +111,45 @@ class Homescreen extends React.Component {
     BackHandler.removeEventListener('hardwareBackPress');
   }
 
-//   async componentDidMount() {
-//     this.checkPermission();
-//   }
+  //   async componentDidMount() {
+  //     this.checkPermission();
+  //   }
 
-//     //1
-//  checkPermission = async () =>{
-//   const enabled = await firebase.messaging().hasPermission();
-//   if (enabled) {
-//       this.getToken();
-//   } else {
-//       this.requestPermission();
-//   }
-// }
+  //     //1
+  //  checkPermission = async () =>{
+  //   const enabled = await firebase.messaging().hasPermission();
+  //   if (enabled) {
+  //       this.getToken();
+  //   } else {
+  //       this.requestPermission();
+  //   }
+  // }
 
-//  //3
-//   getToken = async ()=>{
-//   let fcmToken = await AsyncStorage.getItem('fcmToken');
-//   if (!fcmToken) {
-//       fcmToken = await firebase.messaging().getToken();
+  //  //3
+  //   getToken = async ()=>{
+  //   let fcmToken = await AsyncStorage.getItem('fcmToken');
+  //   if (!fcmToken) {
+  //       fcmToken = await firebase.messaging().getToken();
 
-//       if (fcmToken) {
-//           // user has a device token
-//           console.log('User Device token >>>', fcmToken)
-//           await AsyncStorage.setItem('fcmToken', fcmToken);
-//       }
-//   }
-// }
+  //       if (fcmToken) {
+  //           // user has a device token
+  //           console.log('User Device token >>>', fcmToken)
+  //           await AsyncStorage.setItem('fcmToken', fcmToken);
+  //       }
+  //   }
+  // }
 
-//   //2
-//  requestPermission= async ()=>{
-//   try {
-//       await firebase.messaging().requestPermission();
-//       // User has authorised
-//       this.getToken();
-//   } catch (error) {
-//       // User has rejected permissions
-//       console.log('permission rejected');
-//   }
-// }
+  //   //2
+  //  requestPermission= async ()=>{
+  //   try {
+  //       await firebase.messaging().requestPermission();
+  //       // User has authorised
+  //       this.getToken();
+  //   } catch (error) {
+  //       // User has rejected permissions
+  //       console.log('permission rejected');
+  //   }
+  // }
 
 
   render() {

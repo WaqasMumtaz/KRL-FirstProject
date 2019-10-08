@@ -89,6 +89,8 @@ class Login extends React.Component {
         let userWrong = dataUser.Match;
         let userMsg = dataUser.msg;
         if (getUserCode) {
+          let userDataForOnlineOff = dataUser;
+          userDataForOnlineOff.status = 'Online';
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
           if (dataUser.profile) {
             if (dataUser.profile.length > 0) {
@@ -110,7 +112,6 @@ class Login extends React.Component {
               if (opponentData.length > 0) {
                 //console.log('Assign Trainer Condition Successfully')
                 opponentData[0].type = "Coach";
-                //console.log('opponentData >>>',opponentData)
                 await AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
               }
               else {
@@ -120,37 +121,27 @@ class Login extends React.Component {
                   name: assignTrainerName
                 }
                 opponentData.push(opponentDataObj);
-                console.log(opponentData, 'opponentData')
                 await AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
-
               }
-              //console.log(dataUser.trainnerProfileData, 'dataUser.trainnyProfiledata')
             }
             else if (dataUser.assignTrainny) {
-              // else if (dataUser.trainnyProfiledata) {
-              // let opponentData = dataUser.trainnyProfiledata;
-              let traineeName = dataUser.assignTrainny;
-              let traineeIds = dataUser.tainnyId;
-              let traineeDataArr = [];
-              // let finalDataTrainee = [];
-              for (let i = 0; i < traineeName.length; i++) {
-                let traineesData = {}
-                traineesData["name"] = traineeName[i];
-                traineesData['userId'] = traineeIds[i];
-                traineesData['type'] = "Trainee";
-                traineeDataArr.push(traineesData)
+              if (dataUser.assignTrainny.length > 0) {
+                let trainyData = dataUser.assignTrainny;
+                let traineeDataArr = [];
+                for (var i in trainyData) {
+                  trainyData[i].type = 'Trainee'
+                  traineeDataArr.push(trainyData[i])
+                }
+                AsyncStorage.setItem('opponentProfile', JSON.stringify(traineeDataArr));
               }
-              AsyncStorage.setItem('opponentProfile', JSON.stringify(traineeDataArr));
             }
-            // }
-
           }
-            db.ref(`users/${dataUser._id}`).update(dataUser)
-            this.setState({
-              isLoading: false
-            },
-              () => navigate('BottomTabe')
-            )
+          db.ref(`users/${dataUser._id}`).update(userDataForOnlineOff)
+          this.setState({
+            isLoading: false
+          },
+            () => navigate('BottomTabe')
+          )
         }
         if (userWrong == false) {
           this.setState({
