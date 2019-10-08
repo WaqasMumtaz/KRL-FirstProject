@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, TextInput, Button, Dimensions, Imag
 import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/StepCountScreenStyle';
 import DatePicker from 'react-native-datepicker';
-import HttpUtils from '../Services/HttpUtils';
+import HttpUtilsFile from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
 import { BarChart, Grid, YAxis, XAxis } from 'react-native-svg-charts'
 // import moment from 'moment';
@@ -56,13 +56,15 @@ export default class StepCountScreen extends React.Component {
             secondValue: '',
             thirdValue: '',
             goalSteps: '',
+            stepTime: '',
+            currentUserId: ''
 
 
         }
 
     }
 
-    
+
 
     // googleFitAuthFun=()=>{
     //     const options = {
@@ -92,82 +94,100 @@ export default class StepCountScreen extends React.Component {
         await this.getData()
         this.dateFilter()
 
-        
-        const paramsData = this.props.navigation.state.params;
-        console.log('params data >>>', paramsData)
-        this.setState({
-            userCurrentWeight: paramsData.currentWeight,
-            goalSteps: paramsData.goalSteps,
 
-        })
+        // const paramsData = this.props.navigation.state.params;
+        // console.log('params data >>>', paramsData)
+        // this.setState({
+        //     userCurrentWeight: paramsData.currentWeight,
+        //     goalSteps: paramsData.goalSteps,
+
+        // })
         //this.googleFitAuthFun()
 
     }
 
+
+    async shouldComponentUpdate(nextProps, nextState) {
+        const stepData = nextState.pedometerData;
+        const dailySteps = this.state.goalSteps;
+        console.log('will update >>>', dailySteps)
+        if (stepData > 0 && Number(dailySteps) > 0) {
+            if (stepData == dailySteps) {
+                console.log('step equal true condition work')
+                const dataPost = {
+                    userId: this.state.currentUserId,
+                    time: this.state.curTime,
+                    date: this.state.date,
+                    stepCount: stepData,
+                    dailGoal: dailySteps
+                }
+                try {
+                    let postedData = await HttpUtilsFile.post('pedometer', dataPost)
+                    console.log('posted data >>>', postedData)
+
+                }
+                catch (err) {
+                    console.log(err)
+                }
+            }
+        }
+    }
 
     //get data from database
     getData = async () => {
         const date = new Date().getDate();
         let month = new Date().getMonth() + 1;
         const year = new Date().getFullYear();
+        const hours = new Date().getHours(); //Current Hours
+        const min = new Date().getMinutes(); //Current Minutes
+        const sec = new Date().getSeconds(); //Current Seconds
+        const currentTime = hours + ':' + min + ':' + sec;
+        //console.log('current time >>>', currentTime)
         if (month == 1 || month == 2 || month == 3 || month == 4 || month == 5 || month == 6 || month == 7 || month == 8 || month == 9) {
             month = `0${month}`
         }
         //let dataUser = await HttpUtils.get('getallexerciselog')
-        let dataUser = await HttpUtils.get('getweightlog')
         try {
-            console.log(dataUser, 'dataUser');
-            let code = dataUser.code;
-            if (code == 200) {
-                let getUserData = await AsyncStorage.getItem('currentUser');
-                //console.log('currentUser Id >>>',getUserData)
-                let dataArr = [];
-                let parseUserData = JSON.parse(getUserData);
-                // console.log('parse data >>>',parseUserData);
-                // console.log('parse data user id >>>',parseUserData._id);
-                let loginUserId = parseUserData._id;
-                //console.log('login user id >>>',loginUserId)
-                // console.log(dataUser.content)
-                let checkId = dataUser.content;
-                for (const i in checkId) {
-                    //console.log(checkId[i])
-                    let data = checkId[i];
-                    //console.log('total id >>>',data._id)
-                    if (data.userId == loginUserId) {
-                        dataArr = [...dataArr, data]
-                        //console.log('Data array >>>',dataArr)
-                        this.setState({
-                            allDataUser: dataArr
-                        }, () => {
-                            const userData = this.state.allDataUser;
-                            // console.log('userData >>>', userData)
-                            for (let i in userData) {
-                                // console.log(userData[i])
-                                let userWeight = userData[i].weight;
-                                this.setState({
-                                    userCurrentWeight: userWeight
-                                })
-                            }
-                        })
-
-                    }
+            await AsyncStorage.getItem('currentUser').then((value) => {
+                if (value) {
+                    let dataUser = JSON.parse(value);
+                    console.log(dataUser)
+                    this.setState({
+                        currentUserId: dataUser._id
+                    })
                 }
 
-            }
-            else {
-                // console.log('User Not Login')
-            }
+            })
+
 
 
         }
         catch (error) {
             console.log(error)
         }
-        await this.setState({
+        this.setState({
             date: date + '-' + month + '-' + year,
-            data: dataUser.content
+            curTime: currentTime
+            //data: dataUser.content
         })
     }
+
+    // dataPost = async () => {
+    //     const dataPost = {
+    //         userId: this.state.currentUserId,
+    //         time: this.state.curTime,
+    //         date: this.state.date,
+    //         stepCount: 120,
+    //         dailGoal: 300
+    //     }
+    //     try {
+    //         let postedData = await HttpUtilsFile.post('pedometer', dataPost)
+    //         console.log('posted data >>>', postedData)
+    //     }
+    //     catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
     //filtration with date
     dateFilter = (e) => {
@@ -198,63 +218,64 @@ export default class StepCountScreen extends React.Component {
 
     _startPedometer() {
         console.log('Pedometer Function')
+
         this.updateTime()
         //console.log('all data of user >>>',this.state.allDataUser)
         this.matchTime()
         this.countStepTime()
 
-        const userWeight = this.state.userCurrentWeight.slice(0, 3)
-        // console.log('number weight >>>', userWeight)
-        this.setState({
-            weightNoUnit: userWeight
-        })
+        // const userWeight = this.state.userCurrentWeight.slice(0, 3)
+        // // console.log('number weight >>>', userWeight)
+        // this.setState({
+        //     weightNoUnit: userWeight
+        // })
+        //this.dataPost()
+        // if (Platform.OS === 'android') {
+        //     const options = {
+        //         scopes: [
+        //             Scopes.FITNESS_ACTIVITY_READ_WRITE,
+        //             Scopes.FITNESS_BODY_READ_WRITE,
+        //         ],
+        //     }
+        //     GoogleFit.authorize(options)
+        //         .then((res) => {
+        //             console.log('authorized >>>', res)
+        //             //alert(`${res.message}`)
+        //             GoogleFit.observeSteps((res) => {
+        //                 console.log('google fit steps', res)
+        //                 this.setState({ pedometerData: res.steps })
+        //             })
 
-        if (Platform.OS === 'android') {
-                    const options = {
-                        scopes: [
-                            Scopes.FITNESS_ACTIVITY_READ_WRITE,
-                            Scopes.FITNESS_BODY_READ_WRITE,
-                        ],
-                    }
-                    GoogleFit.authorize(options)
-                        .then((res) => {
-                             console.log('authorized >>>', res)
-                             alert(`${res.message}`)
-                            GoogleFit.observeSteps((res) => {
-                                console.log('google fit steps',res)
-                                this.setState({ pedometerData: res.steps })
-                            })
+        //         })
 
-                        })
-
-                        .catch((err) => {
-                            console.log('err >>> ', err)
-                        })
-
-
-                } else if (Platform.OS === 'ios') {
-                    const options = {
-                        scopes: [
-                            Scopes.FITNESS_ACTIVITY_READ_WRITE,
-                            Scopes.FITNESS_BODY_READ_WRITE,
-                        ],
-                    }
-
-                    rnHealthKit.authorize(options)
-                        .then((res) => {
-                             console.log('authorized >>>', res)
-                            rnHealthKit.observeSteps((res) => {
-                                // console.log(res)
-                                this.setState({ pedometerData: res.steps })
-                            })
+        //         .catch((err) => {
+        //             console.log('err >>> ', err)
+        //         })
 
 
-                        })
-                        .catch((err) => {
-                            console.log('err >>> ', err)
-                        })
+        // } else if (Platform.OS === 'ios') {
+        //     const options = {
+        //         scopes: [
+        //             Scopes.FITNESS_ACTIVITY_READ_WRITE,
+        //             Scopes.FITNESS_BODY_READ_WRITE,
+        //         ],
+        //     }
 
-                }
+        //     rnHealthKit.authorize(options)
+        //         .then((res) => {
+        //             console.log('authorized >>>', res)
+        //             rnHealthKit.observeSteps((res) => {
+        //                 // console.log(res)
+        //                 this.setState({ pedometerData: res.steps })
+        //             })
+
+
+        //         })
+        //         .catch((err) => {
+        //             console.log('err >>> ', err)
+        //         })
+
+        // }
 
 
 
@@ -274,6 +295,7 @@ export default class StepCountScreen extends React.Component {
             const time23 = '23' + ':' + '59' + ':' + '59';
             const time1 = '1' + ':' + '0' + ':' + '0'
             //console.log('wanted time >>>', resetTime)
+
             if (currentTime == resetTime) {
                 // console.log('Success!! condition match');
 
@@ -298,11 +320,11 @@ export default class StepCountScreen extends React.Component {
                 //     currentSteps: currentSteps
                 // })
                 // console.log('user string weight >>>', this.state.userCurrentWeight.slice(0, 3))
-                const userWeight = this.state.userCurrentWeight.slice(0, 3)
-                // console.log('number weight >>>', userWeight)
-                this.setState({
-                    weightNoUnit: userWeight
-                })
+                // const userWeight = this.state.userCurrentWeight.slice(0, 3)
+                // // console.log('number weight >>>', userWeight)
+                // this.setState({
+                //     weightNoUnit: userWeight
+                // })
                 SensorManager.startStepCounter(1000);
                 DeviceEventEmitter.addListener('StepCounter', (data) => {
                     console.log('sensor manager data -->>', data)
@@ -552,7 +574,8 @@ export default class StepCountScreen extends React.Component {
             this.setState({
                 hour_Counter: hour.length == 1 ? hour : hour,
                 minutes_Counter: count.length == 1 ? '0' + count : count,
-                seconds_Counter: num.length == 1 ? '0' + num : num
+                seconds_Counter: num.length == 1 ? '0' + num : num,
+                //stepTime:hour_Counter + ': ' + minutes_Counter + ': ' + seconds_Counter
             });
         }, 1000);
         this.setState({ timer });
@@ -601,17 +624,18 @@ export default class StepCountScreen extends React.Component {
             firstValue,
             secondValue,
             thirdValue,
-            goalSteps
+            goalSteps,
+            curTime
         } = this.state;
         console.log('pedometer data in number form ', Number(pedometerData))
         const { params } = this.props.navigation.state;
         const dataObj = {
-            pedometerData:pedometerData,
-            goalSteps:goalSteps
+            pedometerData: pedometerData,
+            goalSteps: goalSteps
         }
         params.pedometerFun(dataObj)
         //console.log(params)
-        // console.log('minutes >>>', minutes_Counter)
+        console.log('curnt time and data >>>', curTime, date)
         // console.log('login user weight >>>', userCurrentWeight)
         // console.log('seconds >>>', seconds_Counter)
         // console.log('Current Calories >>>', Number(currentCalories))
@@ -630,7 +654,7 @@ export default class StepCountScreen extends React.Component {
                 <View style={{ flex: 2, backgroundColor: 'black', marginHorizontal: 20 }}>
                     <Text style={{ color: 'white', }}>Today Goal Steps</Text>
                     <TextInput
-                        onChangeText={(text) => this.setState({ goalSteps:text })}                        
+                        onChangeText={(text) => this.setState({ goalSteps: text })}
                         placeholder='Set today goal steps...'
                         placeholderTextColor='#7e7e7e'
                         type="number"
@@ -646,7 +670,6 @@ export default class StepCountScreen extends React.Component {
                         </View>
                         <View style={styles.dateContainer}>
                             <Text>{date}</Text>
-
                         </View>
 
 
@@ -762,12 +785,12 @@ export default class StepCountScreen extends React.Component {
                                 <Text style={{ color: '#e5e5e5', fontFamily: 'MontserratLight', }}>16:00</Text>
                                 <Text style={{ color: '#e5e5e5', fontFamily: 'MontserratLight', }}>01:00</Text>
                             </View>
-                            
+
 
                         </View>
-                        <View style={{flex:1,width:'100%',height:30,marginTop:80}}>
-                                {/* <Text>Last Para</Text> */}
-                            </View>
+                        <View style={{ flex: 1, width: '100%', height: 30, marginTop: 80 }}>
+                            {/* <Text>Last Para</Text> */}
+                        </View>
 
                     </View>
 

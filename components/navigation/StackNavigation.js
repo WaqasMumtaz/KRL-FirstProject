@@ -51,7 +51,7 @@ const MainNavigator = createStackNavigator({
   // Linechart: { screen: Linechart },
   //StepCountScreen:{screen:StepCountScreen},
 
-  Setupscreen: { screen: Setupscreen },
+  //Setupscreen: { screen: Setupscreen },
   Login: { screen: Login },
    Signup: { screen: Signup },
   ResetpasswordScreen: { screen: ResetpasswordScreen },

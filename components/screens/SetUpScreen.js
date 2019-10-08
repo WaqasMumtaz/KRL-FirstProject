@@ -2,7 +2,9 @@ import React from 'react';
 import { Text, View, TextInput, Picker, Dimensions, TouchableOpacity, ScrollView, Image } from 'react-native';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import styles from '../Styling/SetUpScreenStyle';
+import HttpUtilsFile from '../Services/HttpUtils';
 import OverlayLoader from '../Loader/OverlaySpinner';
+import flags from 'react-native-phone-input/lib/resources/flags';
 const screenWidth = Dimensions.get('window').width;
 const { heightDimension } = Dimensions.get('window');
 
@@ -35,9 +37,11 @@ class Setupscreen extends React.Component {
             goalStepsValidation: false,
             maleClickedTextStyle: false,
             femaleClickedTextStyle: false,
-            fitnessResult:'',
-            lose:false,
-            gain:false
+            fitnessResult: '',
+            lose: false,
+            gain: false,
+            fitnessValidation: false,
+            isLoading: false
         }
     }
 
@@ -48,14 +52,14 @@ class Setupscreen extends React.Component {
                 gain: false,
                 maleClickedTextStyle: true,
                 femaleClickedTextStyle: false,
-                fitnessResult: 'lose'
+                fitnessResult: 'lose weight'
             })
         }
         else if (result == 'gain') {
             this.setState({
                 lose: false,
                 gain: true,
-                fitnessResult: 'gain',
+                fitnessResult: 'gain weight',
                 maleClickedTextStyle: false,
                 femaleClickedTextStyle: true,
             })
@@ -143,8 +147,8 @@ class Setupscreen extends React.Component {
             })
         }
     }
-    lastStep = () => {
-        const { height, heightInch, goalSteps, currentWeight, goalWeight, currentWeightUnit, goalWeightUnit } = this.state
+    lastStep = async () => {
+        const { height, heightInch, currentWeight, currentWeightUnit, fitnessResult } = this.state
         const { dob, date, time, userId } = this.props.navigation.state.params;
         if (height == '') {
             this.setState({
@@ -176,16 +180,26 @@ class Setupscreen extends React.Component {
                 currentWeightValidation: false
             })
         }
-        if (goalWeight == '') {
+        if (fitnessResult == '') {
             this.setState({
-                goalWeightValidation: true
+                fitnessValidation: true
             })
         }
         else {
             this.setState({
-                goalWeightValidation: false
+                fitnessValidation: false
             })
         }
+        // if (goalWeight == '') {
+        //     this.setState({
+        //         goalWeightValidation: true
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         goalWeightValidation: false
+        //     })
+        // }
         // if (heightUnit == '' || heightUnit == '0') {
         //     this.setState({
         //         heightUnitValidation: true
@@ -206,33 +220,67 @@ class Setupscreen extends React.Component {
                 currentWeightUnitValidation: false
             })
         }
-        if (goalWeightUnit == '' || goalWeightUnit == '0') {
+        // if (goalWeightUnit == '' || goalWeightUnit == '0') {
+        //     this.setState({
+        //         goalWeightUnitValidation: true
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         goalWeightUnitValidation: false
+        //     })
+        // }
+        // if (goalSteps == '') {
+        //     this.setState({
+        //         goalStepsValidation: true
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         goalStepsValidation: false
+        //     })
+        //}
+        if (height != '' && heightInch != '' && currentWeight != '' && fitnessResult != '' && currentWeightUnit != '') {
             this.setState({
-                goalWeightUnitValidation: true
+                isLoading: true
             })
-        }
-        else {
-            this.setState({
-                goalWeightUnitValidation: false
-            })
-        }
-        if (goalSteps == '') {
-            this.setState({
-                goalStepsValidation: true
-            })
-        }
-        else {
-            this.setState({
-                goalStepsValidation: false
-            })
-        }
-        if (height != '' && heightInch != '' && currentWeight != '' && goalWeight != '' && currentWeightUnit != '' && goalWeightUnit != '') {
             const heightCentimeter = height * 30.48;
             //console.log('height centi >>>', heightCentimeter)
             const heightInchCentimeter = heightInch * 2.54;
             //console.log('height inches centi >>>', heightInchCentimeter);
             const totalHeightCentimeter = heightCentimeter + heightInchCentimeter;
             //console.log('total centimeter >>>',totalHeightCentimeter)
+            const userData = {
+                dob: dob,
+                heightFit: height,
+                heightInch: heightInch,
+                currentWeight: currentWeight,
+                date: date,
+                time: time,
+                userId: userId,
+                heightCentimeter: totalHeightCentimeter,
+                lose: fitnessResult,
+                gain: fitnessResult
+            }
+            console.log('send user data >>>',userData)
+            try {
+                let sendData = await HttpUtilsFile.post('postgoal', userData);
+                console.log('data send >>>', sendData)
+                if (sendData.code == 200) {
+                    this.setState({
+                        isLoading: false
+                    })
+                    height == '' && heightInch == '' &&
+                        currentWeight == '' && fitnessResult == '' && currentWeightUnit == '' &&
+                        this.state.clickedFemale == false && this.state.clickedMale == false
+                }
+            }
+            catch(err){
+                console.log(err)
+            }
+
+
+
             // this.props.navigation.navigate('StepCountScreen', {
             //     dob: dob,
             //     height: height,
@@ -253,19 +301,20 @@ class Setupscreen extends React.Component {
 
     render() {
         const { heightValidation,
-             currentWeightValidation,
-              goalWeightValidation, 
-              heightUnitValidation, 
-              currentWeightUnitValidation,
-              lose,
-              gain,
-              fitnessResult,
-              maleClickedTextStyle,
-              femaleClickedTextStyle,
-             goalWeightUnitValidation,
-             goalSteps, 
-             goalStepsValidation } = this.state;
-             console.log('your fitness result >>>',fitnessResult)
+            currentWeightValidation,
+            goalWeightValidation,
+            heightUnitValidation,
+            currentWeightUnitValidation,
+            lose,
+            gain,
+            fitnessResult,
+            maleClickedTextStyle,
+            femaleClickedTextStyle,
+            fitnessValidation,
+            goalWeightUnitValidation,
+            goalSteps,
+            goalStepsValidation } = this.state;
+        console.log('your fitness result >>>', fitnessResult)
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.childContainer}>
@@ -400,18 +449,30 @@ class Setupscreen extends React.Component {
                                 null}
                         </View>
                         <Text style={styles.genderTextStyle}>Select fitness goal</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <TouchableOpacity style={lose ? styles.clickedMale : styles.maleTouchableOpacity} onPress={this.fitnessFun.bind(this, 'lose')}>
-                            <Text style={maleClickedTextStyle ? styles.maleClickedTextStyle : styles.maleTextStyle}>
-                                Lose
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <TouchableOpacity style={lose ? styles.clickedMale : styles.maleTouchableOpacity} onPress={this.fitnessFun.bind(this, 'lose')}>
+                                <Text style={maleClickedTextStyle ? styles.maleClickedTextStyle : styles.maleTextStyle}>
+                                    Lose
                             </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={gain ? styles.clickedFemale : styles.femaleContainer} onPress={this.fitnessFun.bind(this, 'gain')}>
-                            <Text style={femaleClickedTextStyle ? styles.femaleClickedTextStyle : styles.maleTextStyle}>
-                                Gain</Text>
-                        </TouchableOpacity>
-                    </View>
-
+                            </TouchableOpacity>
+                            <TouchableOpacity style={gain ? styles.clickedFemale : styles.femaleContainer} onPress={this.fitnessFun.bind(this, 'gain')}>
+                                <Text style={femaleClickedTextStyle ? styles.femaleClickedTextStyle : styles.maleTextStyle}>
+                                    Gain</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {fitnessValidation ?
+                            <View style={{ flexDirection: 'row', marginVertical: 10, }}>
+                                <Text style={styles.validationInstruction}>
+                                    Please select fitness goal
+                                    </Text>
+                            </View>
+                            :
+                            null}
+                        {
+                            this.state.isLoading ?
+                                <OverlayLoader /> :
+                                null
+                        }
                         {/* <View style={styles.weightLabelContainer}>
                             <Text style={styles.leftInputLabelStyle}>Goal Weight</Text>
                             <Text style={styles.rightGoalWeightUnitLabel}>Unit</Text>

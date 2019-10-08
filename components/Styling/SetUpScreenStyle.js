@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
         //backgroundColor: '#794044',
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop:20
+        marginTop:40
     },
     buttonContainerStyle: {
         flex: 1,
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
       genderTextStyle:{
         color: '#A6A6A6',
         fontFamily: 'MontserratLight',
-        marginTop:8
+        marginTop:12
     },
     clickedMale:{
         height: 38, 

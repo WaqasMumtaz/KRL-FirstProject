@@ -29,13 +29,14 @@ class Homescreen extends React.Component {
 
 
   componentWillMount() {
-    this.getTodayOrYesterdayExcersice()
-    this.pedometerFun()
+    this.getTodayOrYesterdayExcersice();
+    this.pedometerFun();
+    this.getUserData();
     //getting user id from local storage
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
-        // console.log(value ,'value')
         let dataFromLocalStorage = JSON.parse(value);
+         console.log(dataFromLocalStorage ,'value')
         this.setState({
           userId: dataFromLocalStorage._id
         })
@@ -85,10 +86,20 @@ class Homescreen extends React.Component {
 
   }
 
+  getUserData= async ()=>{
+    try{
+      let retrieveData = await HttpUtils.get('getgoal');
+      console.log('retrieve data >>>',retrieveData)
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
   pedometerFun=(data)=>{
     console.log('data from child component >>>',data)
     if(data != undefined){
-this.setState({
+     this.setState({
       pedometerData:data.pedometerData,
       goalSteps:data.goalSteps
     })

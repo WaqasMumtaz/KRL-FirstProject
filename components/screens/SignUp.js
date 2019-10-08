@@ -56,9 +56,9 @@ class Signup extends React.Component {
             maleClickedTextStyle: false,
             femaleClickedTextStyle: false,
             pickerData: '',
-            countryCod:'',
-            mobileNo:'',
-           // mobileNoAndCode:countryCod + mobileNo,
+            countryCod: '',
+            mobileNo: '',
+            // mobileNoAndCode:countryCod + mobileNo,
 
 
         }
@@ -193,7 +193,7 @@ class Signup extends React.Component {
 
     signUpFunction = async () => {
         const { navigate } = this.props.navigation;
-        const { name, lastName, email, mobileNo, newPasswrd, cnfrmPasswrd, nameValidate, emailValidate, mobileValidate, passwrdValidate, cnfrmPasswrdValidate, isLoading, gender } = this.state;
+        const { name, lastName, email, mobileNo, newPasswrd, cnfrmPasswrd, nameValidate, emailValidate, mobileValidate, passwrdValidate, cnfrmPasswrdValidate, isLoading, gender , emailNotExist} = this.state;
         if (name == '' || lastName == '' || email == '' || mobileNo == '' || newPasswrd == '' || cnfrmPasswrd == '' || gender == '') {
             alert('Please Fill All Fields');
             if (nameValidate != true || emailValidate != true || mobileValidate != true || passwrdValidate != true || cnfrmPasswrdValidate != true) {
@@ -209,100 +209,113 @@ class Signup extends React.Component {
                 password: newPasswrd,
                 lastName: lastName,
                 gender: gender,
-                mobileNo:mobileNo,
+                mobileNo: mobileNo,
                 type: 'trainee'
             }
             console.log(userObj)
 
             try {
-                let dataUser = await HttpUtilsFile.post('signup', userObj)
-                console.log('signup data user >>>', dataUser)
-                let currentUserData = {
-                    code: dataUser.code,
-                    email: this.state.email,
-                    name: this.state.name,
-                    token: dataUser.token,
-                    _id: dataUser._id
-                }
-                let userObjForProfile = {
-                    name: this.state.name,
-                    email: this.state.email,
-                    contactNo: this.state.mobile,
-                    time: this.state.time,
-                    date: this.state.date,
-                    objectId: '',
-                    type: userObj.type,
-                    userId: dataUser._id
-                }
-                console.log(userObjForProfile, 'userObjForProfile')
-                let userProfile = await HttpUtilsFile.post('profile', userObjForProfile);
-                console.log('new user profile data >>>', userProfile)
-                let profileCode = userProfile.code;
-                let signupCode = dataUser.code;
                 let getEmails = await HttpUtilsFile.get('getuseremail')
                 // console.log('all emails from database >>>', getEmails)
                 let emailCode = getEmails.code;
+                let signupCode;
+                let profileCode;
                 const emailContents = getEmails.content;
-                //console.log(emailContents , 'emails');
-                // console.log(getToken);
-                //console.log(getCode)
-                if (emailCode) {
-                    this.setState({
-                        isLoading: false
-                    })
+                if (emailCode == 200) {
                     emailContents.map((item, index) => {
-                       // console.log('items >>>', item)
+                        // console.log('items >>>', item)
                         const { email } = this.state;
-                        //console.log('state email >>>',email)
-                        // console.log('user emails >>>',item)
+                        // console.log('state email >>>', email)
+                        // console.log('user emails >>>', item == email)
                         if (email == item) {
-                            // console.log('email match condition true')
-                            return (
-                                this.setState({
-                                    isLoading: false,
-                                    emailNotExist: true
-                                })
-                            )
+                           // console.log('email match condition true')
+                            // return (
+                            this.setState({
+                                isLoading: false,
+                                emailNotExist: true
+                            })
                         }
                     })
-                    if (signupCode && profileCode) {
+                }
+                if (!emailNotExist) {
+                    let dataUser = await HttpUtilsFile.post('signup', userObj)
+                    console.log('signup data user >>>', dataUser)
+                    let currentUserData = {
+                        code: dataUser.code,
+                        email: this.state.email,
+                        name: this.state.name,
+                        lastName: this.state.lastName,
+                        token: dataUser.token,
+                        mobileNo: mobileNo,
+                        _id: dataUser._id
+                    }
+                    let userObjForProfile = {
+                        name: this.state.name,
+                        email: this.state.email,
+                        lastName: this.state.lastName,
+                        mobileNo: mobileNo,
+                        time: this.state.time,
+                        date: this.state.date,
+                        objectId: '',
+                        type: userObj.type,
+                        userId: dataUser._id
+                    }
+                    console.log(userObjForProfile, 'userObjForProfile')
+                    let userProfile = await HttpUtilsFile.post('profile', userObjForProfile);
+                    console.log('new user profile data >>>', userProfile)
+                    profileCode = userProfile.code;
+                    signupCode = dataUser.code;
+                    if (signupCode == 200 && profileCode == 200 && emailCode == 200) {
                         this.setState({
                             isLoading: false,
 
                         }, () => {
+                            console.log('currentUserData >>>', currentUserData);
+                            console.log('myProfile data >>>>', userProfile)
                             AsyncStorage.setItem('currentUser', JSON.stringify(currentUserData))
                             AsyncStorage.setItem('myProfile', JSON.stringify(userProfile));
-                            if (signupCode == 200 && profileCode == 200 && emailCode == 200) {
-                                const { navigate } = this.props.navigation;
-                                navigate('BottomTabe');
-                            }
+                            const { navigate } = this.props.navigation;
+                            navigate('BottomTabe');
+                            
                         })
                     }
-                    // else {
-                    //     // console.log('signup code not available')
-                    // }
-                    // if () {
-                    //     this.setState({
-                    //         isLoading: false,
-
-                    //     }, () => {
-                    //         //console.log('user profile localstorage data saved >>>', userProfile);
-
-                    //     })
-                    // }
-                    // else {
-                    //     // console.log('profile code not available')
-                    // }
-
                 }
-
-                else if (!emailCode || !signupCode || !profileCode) {
+                if (emailCode != 200 || signupCode != 200 || profileCode != 200) {
                     this.setState({
                         isLoading: false
                     })
                     Alert.alert('Something Went Wrong')
 
                 }
+
+                // console.log(emailContents , 'emails');
+                // console.log(getToken);
+                //console.log(getCode)
+                // if (emailCode) {
+                // this.setState({
+                //     isLoading: false
+                // })
+
+
+                // else {
+                //     // console.log('signup code not available')
+                // }
+                // if () {
+                //     this.setState({
+                //         isLoading: false,
+
+                //     }, () => {
+                //         //console.log('user profile localstorage data saved >>>', userProfile);
+
+                //     })
+                // }
+                // else {
+                //     // console.log('profile code not available')
+                // }
+
+                // }
+
+
             } catch (error) {
                 console.log(error);
             }
@@ -408,6 +421,7 @@ class Signup extends React.Component {
             maleClickedTextStyle,
             femaleClickedTextStyle,
         } = this.state;
+        console.log(emailNotExist, 'emailNotExist')
         return (
 
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
@@ -473,11 +487,12 @@ class Signup extends React.Component {
                             style={[styles.inputTexts, !this.state.emailValidate ? styles.errorInput : null]}
                         />
                     </View>
-                    {emailNotExist && <View style={styles.emailExistContainer}>
+                    {emailNotExist == true ? <View style={styles.emailExistContainer}>
                         <Text style={styles.emailNotExistStyle}>
                             Email is already exist
                        </Text>
-                    </View>}
+                    </View>
+                        : null}
                     <View style={{ flexDirection: 'row', marginVertical: 8, marginTop: 5 }}>
                         {/* <Text style={styles.textsStyles}>Mobile</Text> */}
                     </View>
@@ -487,12 +502,12 @@ class Signup extends React.Component {
                             ref={(ref) => { this.phone = ref; }}
                             //onPressFlag={this.onPressFlag}
                             allowZeroAfterCountryCode={false}
-                            onChangePhoneNumber={()=>
-                             this.setState({mobileNo:this.phone.getValue()})
-                        }
+                            onChangePhoneNumber={() =>
+                                this.setState({ mobileNo: this.phone.getValue() })
+                            }
                             onSelectCountry={() =>
                                 //console.log(this.phone.getCountryCode())
-                                this.setState({countryCod: this.phone.getCountryCode()})
+                                this.setState({ countryCod: this.phone.getCountryCode() })
                             }
                             value={this.state.mobileNo}
                             //pickerBackgroundColor={'red'}

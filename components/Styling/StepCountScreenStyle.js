@@ -28,7 +28,8 @@ const styles =StyleSheet.create({
     },
     dateContainer:{
         height:20,
-        alignItems:'center'
+        alignItems:'center',
+        //backgroundColor:'green'
     },
     stepCountContainer:{
          height:220,
