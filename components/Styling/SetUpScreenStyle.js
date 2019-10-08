@@ -38,9 +38,13 @@ const styles = StyleSheet.create({
     paraGraphStyle: {
         color: '#A6A6A6',
         fontFamily: 'MontserratLight',
+
     },
     labelsContainer:{
-        flexDirection:'row'
+        flexDirection:'row',
+        //backgroundColor:'green',
+        marginRight:23,
+        justifyContent:'space-between'
     },
     leftInputLabelStyle:{
         color: '#A6A6A6',
@@ -55,7 +59,10 @@ const styles = StyleSheet.create({
     },
     weightLabelContainer:{
         flexDirection:'row',
-        marginTop:12
+        marginTop:12,
+        //backgroundColor:'green',
+        marginRight:23,
+        justifyContent:'space-between'
     },
     rightWeightUnitLabelInput:{
         color: '#A6A6A6',

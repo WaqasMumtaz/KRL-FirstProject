@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 //import firebase from 'react-native-firebase';
 
 const { height } = Dimensions.get('window');
+let userId = {};
 
 class Homescreen extends React.Component {
   // static navigationOptions = ({ navigation }) => {
@@ -20,8 +21,10 @@ class Homescreen extends React.Component {
       yestertdayData: '',
       pedometerData: '',
       userId: '',
-      pedometerData:'',
-      goalSteps:''
+      pedometerData: '',
+      goalSteps: '',
+      userAllData:[],
+      userCurrentWeight:''
     }
 
   }
@@ -31,18 +34,22 @@ class Homescreen extends React.Component {
   componentWillMount() {
     this.getTodayOrYesterdayExcersice();
     this.pedometerFun();
-    this.getUserData();
+    
     //getting user id from local storage
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         let dataFromLocalStorage = JSON.parse(value);
-         console.log(dataFromLocalStorage ,'value')
+        //console.log(dataFromLocalStorage, 'value')
         this.setState({
           userId: dataFromLocalStorage._id
+        }, () => {
+          //console.log('state userId >>>', this.state.userId)
+          this.getUserData();
         })
         userId = dataFromLocalStorage._id;
       }
     });
+
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
 
@@ -70,13 +77,13 @@ class Homescreen extends React.Component {
         let checkMonth = Number(dataApi.month) - currMonth;
         let checkYear = Number(dataApi.year) - currentYear;
         if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
-          console.log('today excersice')
+          //console.log('today excersice')
           this.setState({
             todayData: dataApi
           })
         }
         else if (checkDate == -1 && checkMonth == 0 && checkYear == 0) {
-          console.log('yestertdayData excersice')
+          //console.log('yestertdayData excersice')
           this.setState({
             yestertdayData: dataApi
           })
@@ -86,34 +93,50 @@ class Homescreen extends React.Component {
 
   }
 
-  getUserData= async ()=>{
-    try{
-      let retrieveData = await HttpUtils.get('getgoal');
-      console.log('retrieve data >>>',retrieveData)
+  getUserData = async () => {
+    let obj = {
+      userId:this.state.userId
     }
-    catch(err){
-      console.log(err)
-    }
+    console.log(obj)
+    let retrieveData = await HttpUtils.post('getgoal', obj);
+     //console.log('retrieve data >>>', retrieveData)
+     if(retrieveData.code == 200){
+      this.setState({
+        userAllData:retrieveData.content
+      },()=>{
+        //console.log(this.state.userAllData)
+        const userData = this.state.userAllData;
+        for(var i in userData){
+          //console.log(userData[i].currentWeight)
+          this.setState({
+            userCurrentWeight:userData[i].currentWeight
+          })
+        }
+      })
+     }
+     
+    
   }
 
-  pedometerFun=(data)=>{
-    console.log('data from child component >>>',data)
-    if(data != undefined){
-     this.setState({
-      pedometerData:data.pedometerData,
-      goalSteps:data.goalSteps
-    })
+  pedometerFun = (data) => {
+    //console.log('data from child component >>>', data)
+    if (data != undefined) {
+      this.setState({
+        pedometerData: data.pedometerData,
+        goalSteps: data.goalSteps
+      })
     }
-    
- }
+
+  }
   changeRout(e) {
     const { navigate } = this.props.navigation;
     if (e == 'logexercise') {
       navigate('Exerciselog')
     }
     else if (e == 'stepcount') {
-      navigate('StepCountScreen',{
-        'pedometerFun':(data)=>this.pedometerFun(data)
+      navigate('StepCountScreen', {
+        'pedometerFun': (data) => this.pedometerFun(data),
+         currentWeight:this.state.userCurrentWeight
       })
     }
   }
@@ -143,50 +166,51 @@ class Homescreen extends React.Component {
     BackHandler.removeEventListener('hardwareBackPress');
   }
 
-//   async componentDidMount() {
-//     this.checkPermission();
-//   }
+  //   async componentDidMount() {
+  //     this.checkPermission();
+  //   }
 
-//     //1
-//  checkPermission = async () =>{
-//   const enabled = await firebase.messaging().hasPermission();
-//   if (enabled) {
-//       this.getToken();
-//   } else {
-//       this.requestPermission();
-//   }
-// }
+  //     //1
+  //  checkPermission = async () =>{
+  //   const enabled = await firebase.messaging().hasPermission();
+  //   if (enabled) {
+  //       this.getToken();
+  //   } else {
+  //       this.requestPermission();
+  //   }
+  // }
 
-//  //3
-//   getToken = async ()=>{
-//   let fcmToken = await AsyncStorage.getItem('fcmToken');
-//   if (!fcmToken) {
-//       fcmToken = await firebase.messaging().getToken();
+  //  //3
+  //   getToken = async ()=>{
+  //   let fcmToken = await AsyncStorage.getItem('fcmToken');
+  //   if (!fcmToken) {
+  //       fcmToken = await firebase.messaging().getToken();
 
-//       if (fcmToken) {
-//           // user has a device token
-//           console.log('User Device token >>>', fcmToken)
-//           await AsyncStorage.setItem('fcmToken', fcmToken);
-//       }
-//   }
-// }
+  //       if (fcmToken) {
+  //           // user has a device token
+  //           console.log('User Device token >>>', fcmToken)
+  //           await AsyncStorage.setItem('fcmToken', fcmToken);
+  //       }
+  //   }
+  // }
 
-//   //2
-//  requestPermission= async ()=>{
-//   try {
-//       await firebase.messaging().requestPermission();
-//       // User has authorised
-//       this.getToken();
-//   } catch (error) {
-//       // User has rejected permissions
-//       console.log('permission rejected');
-//   }
-// }
+  //   //2
+  //  requestPermission= async ()=>{
+  //   try {
+  //       await firebase.messaging().requestPermission();
+  //       // User has authorised
+  //       this.getToken();
+  //   } catch (error) {
+  //       // User has rejected permissions
+  //       console.log('permission rejected');
+  //   }
+  // }
 
 
   render() {
-    const { todayData, yestertdayData, pedometerData,goalSteps } = this.state;
+    const { todayData, yestertdayData, pedometerData, goalSteps ,userCurrentWeight} = this.state;
     const { navigate } = this.props.navigation;
+    console.log('current weight >>',userCurrentWeight)
     return (
       <View style={styles.container}>
         <View style={styles.headingContainer}>
@@ -201,8 +225,8 @@ class Homescreen extends React.Component {
         <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
           <View style={styles.cardsContainer}>
             <View style={styles.childContainerOne}>
-            <TouchableOpacity style={styles.goalSetCard} TouchableOpacity={0.6} onPress={()=>navigate('Setupscreen1')}>
-                <Text style={{color:'white',fontSize:15,fontFamily:'MontserratExtraBold'}}>Set Goal</Text>
+              <TouchableOpacity style={styles.goalSetCard} TouchableOpacity={0.6} onPress={() => navigate('Setupscreen1')}>
+                <Text style={{ color: 'white', fontSize: 15, fontFamily: 'MontserratExtraBold' }}>Set Goal</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.cardOne} onPress={() => { navigate('AddExercise') }}>
                 <Image source={require('../icons/log-exer.png')} style={styles.imgsStyle} />
@@ -213,7 +237,7 @@ class Homescreen extends React.Component {
               <TouchableOpacity style={styles.cardFive} onPress={() => navigate('Macrocalculator')}>
                 <Image source={require('../icons/calc-macros.png')} style={styles.imgsStyle} />
               </TouchableOpacity>
-              
+
             </View>
             <View style={styles.childContainerTwo}>
               <TouchableOpacity style={styles.cardTwo} activeOpacity={0.7}

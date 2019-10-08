@@ -269,10 +269,18 @@ class Setupscreen extends React.Component {
                 if (sendData.code == 200) {
                     this.setState({
                         isLoading: false
+                    },()=>{
+                        height == '',
+                        heightInch == '',
+                        currentWeight == '', 
+                        fitnessResult == '', 
+                        currentWeightUnit == '',
+                        this.state.clickedFemale == false,
+                        this.state.clickedMale == false
+                        const { navigate } = this.props.navigation;
+                        navigate('BottomTabe');
                     })
-                    height == '' && heightInch == '' &&
-                        currentWeight == '' && fitnessResult == '' && currentWeightUnit == '' &&
-                        this.state.clickedFemale == false && this.state.clickedMale == false
+                   
                 }
             }
             catch(err){
@@ -449,15 +457,15 @@ class Setupscreen extends React.Component {
                                 null}
                         </View>
                         <Text style={styles.genderTextStyle}>Select fitness goal</Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between',marginTop:8 }}>
                             <TouchableOpacity style={lose ? styles.clickedMale : styles.maleTouchableOpacity} onPress={this.fitnessFun.bind(this, 'lose')}>
                                 <Text style={maleClickedTextStyle ? styles.maleClickedTextStyle : styles.maleTextStyle}>
-                                    Lose
+                                    Lose Weight
                             </Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={gain ? styles.clickedFemale : styles.femaleContainer} onPress={this.fitnessFun.bind(this, 'gain')}>
                                 <Text style={femaleClickedTextStyle ? styles.femaleClickedTextStyle : styles.maleTextStyle}>
-                                    Gain</Text>
+                                    Gain Weight</Text>
                             </TouchableOpacity>
                         </View>
                         {fitnessValidation ?

@@ -125,7 +125,7 @@ class Profile extends React.Component {
           })
         }
         else {
-          console.log('user profile else condition')
+          console.log('user profile else condition',userData)
           this.setState({
             name: userData.name,
             email: userData.email,
