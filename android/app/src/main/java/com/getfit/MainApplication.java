@@ -28,8 +28,8 @@ import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 // import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 
 import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
-import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
-import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
+// import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
+// import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -59,12 +59,12 @@ public class MainApplication extends Application implements ReactApplication {
             new FilePickerPackage(),
             new RNFSPackage(),
             new RNSoundRecorderPackage(),
-            new RNFirebaseAdMobPackage(),
+            // new RNFirebaseAdMobPackage(),
              //new RNFirebasePackage(),
             new AsyncStoragePackage(),
             new ImagePickerPackage(),
-            new RNFirebaseAnalyticsPackage(),
-              new RNFirebaseCrashlyticsPackage(),
+            // new RNFirebaseAnalyticsPackage(),
+              // new RNFirebaseCrashlyticsPackage(),
             // new MPAndroidChartPackage(),
             // new MPAndroidChartPackage(),
             // new VectorIconsPackage(),

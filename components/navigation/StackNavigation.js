@@ -44,6 +44,14 @@ const MainNavigator = createStackNavigator({
   // Profile:{screen:Profile},
   // Linechart: { screen: Linechart },
   //StepCountScreen:{screen:StepCountScreen},
+
+  //Setupscreen: { screen: Setupscreen },
+  Login: { screen: Login },
+   Signup: { screen: Signup },
+  ResetpasswordScreen: { screen: ResetpasswordScreen },
+  ConfirmResetPassword: { screen: ConfirmResetPassword },
+  //LastSetUpScreen: { screen: LastSetUpScreen },
+
   Login: { screen: Login },
    Signup: { screen: Signup },
   //  Setupscreen1: { screen: Setupscreen1 },
@@ -59,6 +67,9 @@ const MainNavigator = createStackNavigator({
   //       elevation: 0,
   //     }
   //   }
+
+  // Login: {
+  //   screen: Login
   // },
 
 
@@ -70,6 +81,10 @@ const MainNavigator = createStackNavigator({
   },
 
   // Homescreen: { screen: Homescreen },
+  // Setupscreen1: { screen: Setupscreen1 },
+  // Setupscreen: { screen: Setupscreen },
+  // Homescreen: { screen: Homescreen },
+
 
   Homescreen:{
     screen:Homescreen

@@ -55,6 +55,7 @@ childContainerTwo:{
 cardOne:{
     height:140,
     width:155,
+    marginTop:12
     // borderWidth:2,
     // borderColor:'black',
     // borderRadius:3,
@@ -107,6 +108,16 @@ cardFive:{
     // borderColor:'black',
     // borderRadius:3,
     marginTop:12
+},
+goalSetCard:{
+    height:140,
+    width:152,
+    // borderWidth:2,
+    // borderColor:'black',
+    borderRadius:3,
+    //marginTop:12,
+    backgroundColor:'black',
+    padding:15
 },
 imgsStyle:{
     flex: 1,

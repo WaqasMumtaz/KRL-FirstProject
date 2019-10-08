@@ -49,6 +49,7 @@ class Setupscreen1 extends React.Component {
             month = monthNo + 1;
         }
         AsyncStorage.getItem("currentUser").then(value => {
+           // console.log('user data >>>',value)
             if (value) {
                 let dataFromLocalStorage = JSON.parse(value);
                 this.setState({
@@ -114,7 +115,7 @@ class Setupscreen1 extends React.Component {
 
     render() {
         const { dobValidation, genderValidation, male, female, date, dob,isLoading } = this.state;
-        //console.log('current date >>>',date)
+        console.log('current date >>>',date)
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: heightDimension }} contentContainerStyle={{ flexGrow: 1 }} >
                 <View style={styles.mainContainer}>

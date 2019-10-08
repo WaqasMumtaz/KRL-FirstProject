@@ -5,6 +5,8 @@ import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
 
+//import firebase from 'react-native-firebase';
+
 const { height } = Dimensions.get('window');
 
 class Homescreen extends React.Component {
@@ -14,12 +16,18 @@ class Homescreen extends React.Component {
       todayData: '',
       yestertdayData: '',
       pedometerData: '',
-      userId: ''
+      userId: '',
+      pedometerData:'',
+      goalSteps:''
     }
   }
 
   componentWillMount() {
     this.getTodayOrYesterdayExcersice()
+
+    this.getTodayOrYesterdayExcersice();
+    this.pedometerFun();
+    this.getUserData();
     //getting user id from local storage
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
@@ -27,6 +35,7 @@ class Homescreen extends React.Component {
         // dataFromLocalStorage.status = 'Online'
         // console.log(dataFromLocalStorage ,'dataFromLocalStorage')
         // db.ref(`users/${dataUser._id}`).update(userDataForOnlineOff)
+         console.log(dataFromLocalStorage ,'value')
         this.setState({
           userId: dataFromLocalStorage._id
         })
@@ -74,20 +83,41 @@ class Homescreen extends React.Component {
     }
 
   }
+
+  getUserData= async ()=>{
+    try{
+      let retrieveData = await HttpUtils.get('getgoal');
+      console.log('retrieve data >>>',retrieveData)
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+  pedometerFun=(data)=>{
+    console.log('data from child component >>>',data)
+    if(data != undefined){
+     this.setState({
+      pedometerData:data.pedometerData,
+      goalSteps:data.goalSteps
+    })
+    }
+    
+ }
   changeRout(e) {
     const { navigate } = this.props.navigation;
     if (e == 'logexercise') {
       navigate('Exerciselog')
     }
     else if (e == 'stepcount') {
-      navigate('Setupscreen1')
+      navigate('StepCountScreen',{
+        'pedometerFun':(data)=>this.pedometerFun(data)
+      })
     }
   }
 
 
 
-  //   componentWillMount() {
-  // }
 
   handleBackButton = async () => {
     console.log('pressed back button')
@@ -153,7 +183,7 @@ class Homescreen extends React.Component {
 
 
   render() {
-    const { todayData, yestertdayData, pedometerData } = this.state;
+    const { todayData, yestertdayData, pedometerData,goalSteps } = this.state;
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
@@ -169,6 +199,9 @@ class Homescreen extends React.Component {
         <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
           <View style={styles.cardsContainer}>
             <View style={styles.childContainerOne}>
+            <TouchableOpacity style={styles.goalSetCard} TouchableOpacity={0.6} onPress={()=>navigate('Setupscreen1')}>
+                <Text style={{color:'white',fontSize:15,fontFamily:'MontserratExtraBold'}}>Set Goal</Text>
+              </TouchableOpacity>
               <TouchableOpacity style={styles.cardOne} onPress={() => { navigate('AddExercise') }}>
                 <Image source={require('../icons/log-exer.png')} style={styles.imgsStyle} />
               </TouchableOpacity>
@@ -178,6 +211,7 @@ class Homescreen extends React.Component {
               <TouchableOpacity style={styles.cardFive} onPress={() => navigate('Macrocalculator')}>
                 <Image source={require('../icons/calc-macros.png')} style={styles.imgsStyle} />
               </TouchableOpacity>
+              
             </View>
             <View style={styles.childContainerTwo}>
               <TouchableOpacity style={styles.cardTwo} activeOpacity={0.7}
@@ -189,7 +223,7 @@ class Homescreen extends React.Component {
                     size={65}
                     width={10}
                     color={'#FF6200'}
-                    progress={pedometerData == '' ? 0 : pedometerData}
+                    progress={pedometerData == '' || pedometerData == undefined ? 0 : pedometerData}
                     backgroundColor={'gray'}
                     animateFromValue={0}
                     fullColor={'#FF6200'}
@@ -197,7 +231,7 @@ class Homescreen extends React.Component {
                 </View>
                 <View style={styles.resultContainer}>
                   <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight' }}>{pedometerData == '' ? 0 : pedometerData}</Text>
-                  <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight' }}>/10,000</Text>
+                  <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight' }}> / {goalSteps == '' || goalSteps == undefined ? 0 : goalSteps}</Text>
                 </View>
                 <Text style={{ color: '#a6a6a6', marginLeft: 14, fontFamily: 'MontserratLight' }}>steps</Text>
                 <View style={styles.detailReport}>
