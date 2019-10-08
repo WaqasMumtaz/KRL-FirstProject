@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     },
     textInputContainer: {
         flexDirection: 'row',
-        marginBottom:20
+        marginBottom: 20
     },
     inputStyle: {
         flex: 1,
@@ -71,6 +71,14 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#e5e5e5',
         marginBottom: 30
+    },
+    dateView: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingVertical: 8
+    },
+    dateTxt: {
+        fontFamily: 'MontserratExtraBold',
     },
     msgsTextStyle: {
         padding: 10,
@@ -162,7 +170,7 @@ const styles = StyleSheet.create({
         // marginBottom:12,
         // marginLeft: '30%',
         resizeMode: "contain"
-        
+
     },
     videoTagMgs: {
         // width: 150,
@@ -171,10 +179,10 @@ const styles = StyleSheet.create({
         marginLeft: '30%',
         // backgroundColor:"#e5e5e5"
     },
-    largeVideoSize:{
+    largeVideoSize: {
         height: 150,
         marginBottom: 12,
-       
+
     },
     //week excersice
     cardRight: {
@@ -617,7 +625,6 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 40 / 2,
         marginVertical: 8
-
     },
     profilPicContainer: {
         flex: 1,
@@ -633,7 +640,6 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
 
     },
-
     showPhotoContainer: {
         marginLeft: '45%',
         marginBottom: 20
@@ -663,8 +669,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#000000',
         alignSelf: 'center',
-
-
     },
     textColor: {
         fontFamily: "MontserratExtraBold",
@@ -674,70 +678,93 @@ const styles = StyleSheet.create({
     },
     nameContainer: {
         // flex: 1,
-        justifyContent: 'flex-start',
-        padding:10
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 10
     },
     name: {
         fontFamily: "MontserratExtraBold",
-        fontSize: 14,
+        fontSize: 16,
         color: 'black',
-        marginLeft: 8,
-        // marginVertical: 5
+        marginRight: 25,
+        marginVertical: 7
     },
-    nameOpacity:{
+    userIcon: {
+        width: 12,
+        height: 12,
+        borderRadius: 40 / 2,
+        marginTop: 25,
+        marginLeft: 70,
+        // marginVertical: 8
+    },
+    userIconView: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        // backgroundColor: 'black',
+        // width:'60%'
+
+    },
+    profilPicInInboxStyle: {
+        width: 45,
+        height: 45,
+        borderRadius: 45 / 2,
+        marginVertical: 8,
+        // marginLeft: 10,
+    },
+    nameOpacity: {
         marginTop: 10
     },
     activaterContainer: {
         flex: 1,
         justifyContent: 'center'
-      },
-      horizontal: {
+    },
+    horizontal: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         padding: 10
-      },
-      spinnerContainer:{
+    },
+    spinnerContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-      },
-      spinnerTextStyle:{
+    },
+    spinnerTextStyle: {
         color: '#FF6200',
-      },
-      overLayStyle:{
-          color:'white',
-          opacity:0.3
-      },
-      userInstruction:{
-          marginTop:5,
-          marginLeft:10,
-          
-      },
-      userInsTextStyle:{
-        color:'white',
+    },
+    overLayStyle: {
+        color: 'white',
+        opacity: 0.3
+    },
+    userInstruction: {
+        marginTop: 5,
+        marginLeft: 10,
+
+    },
+    userInsTextStyle: {
+        color: 'white',
         fontFamily: 'MontserratLight',
         fontSize: 14,
-        padding:4
-      },
-      sendReqContainer:{
-          marginTop:16,
-          flexDirection:'row',
-          justifyContent:'center',
-          borderWidth:2,
-          height:40,
-          borderColor:'white',
-          borderRadius:5,
-          backgroundColor:'white',
-          alignSelf:'center',
-          width:140,
-          alignItems:'center'
+        padding: 4
+    },
+    sendReqContainer: {
+        marginTop: 16,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        borderWidth: 2,
+        height: 40,
+        borderColor: 'white',
+        borderRadius: 5,
+        backgroundColor: 'white',
+        alignSelf: 'center',
+        width: 140,
+        alignItems: 'center'
 
-      },
-      sendReqText:{
+    },
+    sendReqText: {
         color: '#FF6200',
         fontFamily: "MontserratExtraBold",
-        textAlign:'center',
+        textAlign: 'center',
 
-      }
+    }
 });
 
 export default styles;

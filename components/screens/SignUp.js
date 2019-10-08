@@ -146,25 +146,20 @@ class Signup extends React.Component {
             cnfrmPasswrd: cnfrmPasswrdText
         }, () => {
             const { newPasswrd, cnfrmPasswrd } = this.state;
-            //console.log(newPasswrd, cnfrmPasswrd)
             if (cnfrmPasswrd.length < 4) {
                 this.setState({
                     cnfrmPasswrdValidate: false,
-
-                    // psswrdInstruction:true
                 })
             }
             if (cnfrmPasswrd.length >= 4) {
                 this.setState({
                     cnfrmPasswrdValidate: true,
-                    //    psswrdInstruction:false
                 })
             }
 
             if (cnfrmPasswrd.length > 9) {
                 this.setState({
                     cnfrmPasswrdValidate: false,
-                    //    psswrdInstruction:true
                 })
             }
             if (cnfrmPasswrd != newPasswrd) {
@@ -177,7 +172,8 @@ class Signup extends React.Component {
                 this.setState({
                     passNotMatch: false,
                     passMatch: true
-                }, () => {
+                }, 
+                () => {
                     setTimeout(() => {
                         this.setState({
                             passMatch: false
@@ -212,15 +208,48 @@ class Signup extends React.Component {
                 mobileNo: mobileNo,
                 type: 'trainee'
             }
-            console.log(userObj)
-
             try {
+                let dataUser = await HttpUtilsFile.post('signup', userObj)
+                let currentUserData = {
+                    code: dataUser.code,
+                    email: this.state.email,
+                    name: this.state.name,
+                    token: dataUser.token,
+                    _id: dataUser._id
+                }
+                let userObjForProfile = {
+                    name: this.state.name,
+                    email: this.state.email,
+                    contactNo: this.state.mobile,
+                    time: this.state.time,
+                    date: this.state.date,
+                    objectId: '',
+                    type: userObj.type,
+                    userId: dataUser._id
+                }
+                let userProfile = await HttpUtilsFile.post('profile', userObjForProfile);
+                let profileCode = userProfile.code;
+                let signupCode = dataUser.code;
+
                 let getEmails = await HttpUtilsFile.get('getuseremail')
-                // console.log('all emails from database >>>', getEmails)
                 let emailCode = getEmails.code;
                 let signupCode;
                 let profileCode;
                 const emailContents = getEmails.content;
+                if (emailCode) {
+                    this.setState({
+                        isLoading: false
+                    })
+                    // emailContents.map((item, index) => {
+                    //     const { email } = this.state;
+                    //     if (email == item) {
+                    //         return (
+                    //             this.setState({
+                    //                 isLoading: false,
+                    //                 emailNotExist: true
+                    //             })
+                    //         )
+
                 if (emailCode == 200) {
                     emailContents.map((item, index) => {
                         // console.log('items >>>', item)
@@ -237,6 +266,7 @@ class Signup extends React.Component {
                         }
                     })
                 }
+
                 if (!emailNotExist) {
                     let dataUser = await HttpUtilsFile.post('signup', userObj)
                     console.log('signup data user >>>', dataUser)
@@ -278,6 +308,8 @@ class Signup extends React.Component {
                             navigate('BottomTabe');
                             
                         })
+                    }     
+
                     }
                 }
                 if (emailCode != 200 || signupCode != 200 || profileCode != 200) {
@@ -337,18 +369,6 @@ class Signup extends React.Component {
         let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         let mobileNum = /^[0-9]+$/;
         let passwrd = /^[A-Za-z]\w{7,14}$/;
-        // if (type == 'username') {
-        //     if (alpha.test(text)) {
-        //         this.setState({
-        //             nameValidate: true,
-        //         })
-        //     }
-        //     else {
-        //         this.setState({
-        //             nameValidate: false
-        //         })
-        //     }
-        // }
         if (type == 'email') {
             if (reg.test(text)) {
                 this.setState({
@@ -515,24 +535,6 @@ class Signup extends React.Component {
                             style={{ flex: 1, height: 40, backgroundColor: 'white', borderRadius: 3 }}
 
                         />
-
-                        {/* <ModalPickerImage
-                            ref={(ref) => { this.myCountryPicker = ref; }}
-                            data={this.state.pickerData}s
-                            onChange={(country) => { this.selectCountry(country) }}
-                            cancelText='Cancel'
-                        /> */}
-
-
-                        {/* <View style={styles.inputFields}>
-                            <TextInput onChangeText={text => { this.checkValidateFunc(text, 'mobile'), this.setState({ mobile: text }) }}
-                                keyboardType='phone-pad'
-                                placeholder="number"
-                                placeholderTextColor="#7e7e7e"
-                                value={mobile}
-                                style={[styles.inputTexts, !this.state.mobileValidate ? styles.errorInput : null]}
-                            />
-                        </View> */}
                     </View>
 
                     <Text style={styles.genderTextStyle}>Gender</Text>
@@ -547,16 +549,7 @@ class Signup extends React.Component {
                                 Female</Text>
                         </TouchableOpacity>
                     </View>
-                    {/* <View style={{ height: 30, marginTop: 3 }}>
-                            {genderValidation ?
-                                <Text style={styles.validationInstruction}>
-                                    Please select the gender
-                                </Text>
-                                : null}
-                        </View> */}
-                    {/* <View style={{ flex: 0.5 }}></View> */}
                     <View style={{ flexDirection: 'row', marginVertical: 8, marginTop: 5 }}>
-                        {/* <Text style={styles.textsStyles}>New Password</Text> */}
                     </View>
                     <View style={styles.inputFields}>
                         <TextInput onChangeText={text => this.newPasswrdInputValueHandle(text)}
@@ -614,10 +607,8 @@ class Signup extends React.Component {
                         {/* </View> */}
                     </View>
                     <View style={{ flex: 3 }}></View>
-
                 </View>
             </ScrollView>
-
         )
     }
 }

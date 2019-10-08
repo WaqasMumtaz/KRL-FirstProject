@@ -200,7 +200,8 @@ class ConfirmResetPassword extends React.Component {
         this.setState({
             passNotMatch: false,
             passMatch: true
-        }, () => {
+        }
+        , () => {
             setTimeout(() => {
                 this.setState({
                     passMatch: false

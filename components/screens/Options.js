@@ -24,7 +24,6 @@ componentWillMount(){
 
 getPaymentKey = async () =>{
     let res = await HttpUtils.get('keys');
-    console.log(res , 'keys')
     this.setState({
       publicKeys:res.keys
     })

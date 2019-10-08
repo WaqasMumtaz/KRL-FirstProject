@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Button, Dimensions, Image, TouchableOpacity, BackHandler } from 'react-native';
+import { Text, View, ScrollView, Dimensions, Image, TouchableOpacity, BackHandler } from 'react-native';
 import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
@@ -11,9 +11,6 @@ const { height } = Dimensions.get('window');
 let userId = {};
 
 class Homescreen extends React.Component {
-  // static navigationOptions = ({ navigation }) => {
-  //   console.log(navigation)
-  // };
   constructor(props) {
     super(props);
     this.state = {
@@ -26,12 +23,11 @@ class Homescreen extends React.Component {
       userAllData:[],
       userCurrentWeight:''
     }
-
   }
 
-
-
   componentWillMount() {
+    this.getTodayOrYesterdayExcersice()
+
     this.getTodayOrYesterdayExcersice();
     this.pedometerFun();
     
@@ -39,14 +35,20 @@ class Homescreen extends React.Component {
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         let dataFromLocalStorage = JSON.parse(value);
+
         //console.log(dataFromLocalStorage, 'value')
+
+        // dataFromLocalStorage.status = 'Online'
+        // console.log(dataFromLocalStorage ,'dataFromLocalStorage')
+        // db.ref(`users/${dataUser._id}`).update(userDataForOnlineOff)
+         console.log(dataFromLocalStorage ,'value')
+
         this.setState({
           userId: dataFromLocalStorage._id
         }, () => {
           //console.log('state userId >>>', this.state.userId)
           this.getUserData();
         })
-        userId = dataFromLocalStorage._id;
       }
     });
 

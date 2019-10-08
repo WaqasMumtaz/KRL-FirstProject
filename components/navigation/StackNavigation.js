@@ -1,52 +1,46 @@
 import * as React from 'react';
-// import { Text, View, StyleSheet, Button, Alert } from 'react-native';
 import { Easing, Animated } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import Resetpassword from '../screens/ResetPasswrd';
 import Login from '../screens/Login';
 import Signup from '../screens/SignUp';
-//import TextInputs from '../textInputs/TextInputs';
-//import PickerInput from '../../Picker/PickerInput';
-import BottomTabe from '../navigation/tabNav';
+import Resetpassword from '../screens/ResetPasswrd';
+import ResetpasswordScreen from '../screens/ResetPasswrd';
+import ConfirmResetPassword from '../screens/CheckResetPasswrd';
 import Setupscreen1 from '../screens/SetUpScreen1';
 import Setupscreen from '../screens/SetUpScreen';
 import LastSetUpScreen from '../screens/SetUpLastScreen';
+import BottomTabe from '../navigation/tabNav';
 import AddExercise from '../screens/AddExercise';
-import BriskScreen from '../screens/BriskScreen';
 import Exerciselog from '../screens/ExerciseLog';
+import BriskScreen from '../screens/BriskScreen';
 import LogMeasurementsScreen from '../screens/LogMeasurements';
+import ShowMeasurementsScreen from '../screens/ShowMeasurements';
 import Macrocalculator from '../screens/MacroCalculator';
 import BMICalculator from '../screens/CalculateBMI';
 import Profile from '../screens/ProfilScreen';
 import EditProfileScreen from '../screens/EditableProfileScreen';
-//import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
-import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
-import ResetpasswordScreen from '../screens/ResetPasswrd';
-import ConfirmResetPassword from '../screens/CheckResetPasswrd';
-// import ChartScreen from '../BarChart/BarChart';
-import Wheelspiner from '../Progress Wheel/Progress';
-//import CaloriesSetupBtn from '../buttons/setUpBtn'
-// import Resetpassword from '../screens/ResetPasswrd';
-// import Dashboard from '../screens/Dashboard';
-import ToastComponent from '../Toasts/nativeToast';
-import OverlayLoader from '../Loader/OverlaySpinner';
 import SettingScreen from '../screens/Setting';
-import ShowMeasurementsScreen from '../screens/ShowMeasurements';
 import StepCountScreen from '../screens/StepCountScreen';
 import Payment from '../screens/PaymentScreen';
 import Invoices from '../screens/InvoicesScreen';
 import Homescreen from '../screens/Home';
-import Linechart from '../chartKit/lineChart';
-//import ChartScreen from '../BarChart/BarChart'
-
-
 import Chatscreen from '../screens/Chat';
-
+import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
+import Wheelspiner from '../Progress Wheel/Progress';
+import ToastComponent from '../Toasts/nativeToast';
+import OverlayLoader from '../Loader/OverlaySpinner';
+import Linechart from '../chartKit/lineChart';
+//import TextInputs from '../textInputs/TextInputs';
+//import PickerInput from '../../Picker/PickerInput';
+//import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
+// import ChartScreen from '../BarChart/BarChart';
+//import CaloriesSetupBtn from '../buttons/setUpBtn';
+// import Resetpassword from '../screens/ResetPasswrd';
+// import Dashboard from '../screens/Dashboard';
+//import ChartScreen from '../BarChart/BarChart';
 
 
 const MainNavigator = createStackNavigator({
-
-
   // Profile:{screen:Profile},
   // Linechart: { screen: Linechart },
   //StepCountScreen:{screen:StepCountScreen},
@@ -66,12 +60,19 @@ const MainNavigator = createStackNavigator({
   // ResetpasswordScreen: { screen: ResetpasswordScreen },
   // ConfirmResetPassword: { screen: ConfirmResetPassword },
 
+  // ChatBox:{
+  //   screen:Chatscreen,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
+  //   }
 
   // Login: {
   //   screen: Login
   // },
 
-  
+
   BottomTabe: {
     screen: BottomTabe,
     navigationOptions: {
@@ -79,9 +80,10 @@ const MainNavigator = createStackNavigator({
     }
   },
 
-  Setupscreen1: { screen: Setupscreen1 },
-  Setupscreen: { screen: Setupscreen },
-  Homescreen: { screen: Homescreen },
+  // Homescreen: { screen: Homescreen },
+  // Setupscreen1: { screen: Setupscreen1 },
+  // Setupscreen: { screen: Setupscreen },
+  // Homescreen: { screen: Homescreen },
 
 
   Homescreen:{
@@ -205,7 +207,6 @@ const MainNavigator = createStackNavigator({
   }
 },
   {
-
     transitionConfig: () => ({
       transitionSpec: {
         duration: 750,
@@ -232,8 +233,6 @@ const MainNavigator = createStackNavigator({
       },
     }),
   }
-
-
 );
 
 const AppContainer = createAppContainer(MainNavigator);

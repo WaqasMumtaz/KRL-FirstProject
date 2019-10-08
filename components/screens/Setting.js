@@ -2,42 +2,30 @@ import React from 'react';
 import {
     Text,
     View,
-    ScrollView,
-    Image,
-    Dimensions,
-    TextInput,
     TouchableOpacity,
-    Picker
+    AsyncStorage
 } from 'react-native';
-import styles from '../Styling/SettingScreenStyle'
-import AsyncStorage from '@react-native-community/async-storage';
+import firebase from '../../Config/Firebase'
+import styles from '../Styling/SettingScreenStyle';
+
+const db = firebase.database();
 
 export default class SettingScreen extends React.Component {
-    // static navigationOptions = {
-    //     title: 'Setting',
-    //     headerTitleStyle: {
-    //         fontFamily: "MontserratExtraBold",
-    //         fontSize:15,
-    //         color:'#000000',
-    //         textAlign: 'center',
-    //         //flexGrow:1,
-    //         alignSelf:'center',
-    //     },
-    //     headerTintColor: '#808080',
-    //   };
     constructor(props) {
         super(props);
-
-        this.state = {
-
-        }
     }
 
-    logout=()=>{
+    logout = () => {
         const { navigate } = this.props.navigation;
+        AsyncStorage.getItem("currentUser").then(value => {
+            if (value) {
+                let userData = JSON.parse(value);
+                userData.status = 'Offline'
+                db.ref(`users/${userData._id}`).update(userData);
+            }
+        })
         AsyncStorage.clear();
         navigate('Login')
-
     }
 
     render() {
@@ -49,19 +37,15 @@ export default class SettingScreen extends React.Component {
                         <Text style={styles.settingTextStyle}>Setting</Text>
                     </View>
                     <View>
-                        <TouchableOpacity style={styles.items} onPress={()=>{navigate('ResetpasswordScreen')}}>
+                        <TouchableOpacity style={styles.items} onPress={() => { navigate('ResetpasswordScreen') }}>
                             <Text style={styles.forText}>Reset Password</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.items}
-                        onPress={this.logout}
+                            onPress={this.logout}
                         >
                             <Text style={styles.forText}>Logout</Text>
                         </TouchableOpacity>
                     </View>
-                    {/* <View style={{ flex: 0.6, flexDirection: 'row' }}>
-                        
-                    </View> */}
-
                 </View>
             </View>
         )
