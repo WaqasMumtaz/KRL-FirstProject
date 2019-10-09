@@ -32,6 +32,20 @@ const { height } = Dimensions.get('window');
 
 const columsNum = 2;
 class ShowMeasurementsScreen extends React.Component {
+    static navigationOptions = (navigation) => {
+        const { params = {} } = navigation.navigation.state;
+        console.log(params);
+        let headerRight = <TouchableOpacity style={styles.headerIconContainer}
+            onPress={
+                params.addMeasurements
+            }>
+            <Image source={require('../icons/plus-gray.png')} style={styles.headerIcon} />
+        </TouchableOpacity>
+        return {
+            headerRight,
+        }
+    }        
+
     constructor(props) {
         super(props);
 
@@ -45,6 +59,16 @@ class ShowMeasurementsScreen extends React.Component {
             isVisibleModal: false,
             modalVisible: false
         }
+    }
+
+    componentDidMount(){
+        this.props.navigation.setParams({
+            addMeasurements: this.addMeasurements,
+            
+        })
+    }
+    addMeasurements=()=>{
+        this.props.navigation.navigate('LogMeasurementsScreen')
     }
 
     async componentWillMount() {

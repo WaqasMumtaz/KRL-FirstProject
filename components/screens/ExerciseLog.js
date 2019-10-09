@@ -10,6 +10,23 @@ const { height } = Dimensions.get('window');
 const columsNum = 2;
 
 class Exerciselog extends React.Component {
+    static navigationOptions = (navigation) => {
+        const { params = {} } = navigation.navigation.state;
+        console.log(params);
+        let headerRight = <TouchableOpacity 
+        style={styles.headerIconContainer}
+            onPress={
+                params.addExercise
+            }
+            >
+            <Image source={require('../icons/plus-gray.png')} 
+            style={styles.headerIcon} 
+            />
+        </TouchableOpacity>
+        return {
+            headerRight,
+        }
+    }        
     constructor(props) {
         super(props);
         this.state = {
@@ -19,6 +36,17 @@ class Exerciselog extends React.Component {
             filterData: [],
             userId: ''
         }
+    }
+
+    componentDidMount(){
+        this.props.navigation.setParams({
+            addExercise: this.addExercise,
+            //showIcon:this.state.iconShow
+        })
+    }
+
+    addExercise=()=>{
+        this.props.navigation.navigate('AddExercise')
     }
 
     async componentWillMount() {

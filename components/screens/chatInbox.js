@@ -9,6 +9,7 @@ import {
 import styles from '../Styling/ChatScreenStyle';
 import AsyncStorage from '@react-native-community/async-storage';
 import Modal from "react-native-modal";
+import HttpUtilsFile from '../Services/HttpUtils';
 console.ignoredYellowBox = ['Remote debugger'];
 import { YellowBox, PermissionsAndroid } from 'react-native';
 console.disableYellowBox = true;
@@ -24,7 +25,10 @@ class ChatInbox extends React.Component {
         super(props);
         this.state = {
             messageUser: [],
-            forTrainnerModal: false
+            forTrainnerModal: false,
+            currentName:'',
+            userEmail:'',
+            userNumber:''
         }
         this.checkTrainy()
     }
@@ -61,6 +65,8 @@ class ChatInbox extends React.Component {
         this.focusListener = navigation.addListener('didFocus', () => {
             AsyncStorage.getItem('currentUser').then((value) => {
                 let userData = JSON.parse(value)
+                console.log('user data >>>',userData)
+                let userName = userData.name + ' ' + userData.lastName;
                 if (userData.assignTrainner != undefined) {
                     this.setState({
                         forTrainnerModal: false
@@ -73,7 +79,10 @@ class ChatInbox extends React.Component {
                 }
                 else {
                     this.setState({
-                        forTrainnerModal: true
+                        forTrainnerModal: true,
+                        currentName:userName,
+                        userEmail:userData.email,
+                        userNumber:userData.mobileNo
                     })
                 }
             })
@@ -97,11 +106,29 @@ class ChatInbox extends React.Component {
         });
     }
 
+    sendRequestAdmin = async ()=>{
+      let userObj = {
+          name : this.state.currentName,
+          email : this.state.userEmail,
+          number : this.state.userNumber
+      }
+      console.log('user send data >>>',userObj)
+      try {
+        let requestData = await HttpUtilsFile.post('email', userObj)
+        console.log('user request data >>>', requestData)
+      }
+      catch(err){
+          console.log(err)
+      }
+      
+    }
+
 
 
     render() {
-        const { messageUser, forTrainnerModal } = this.state;
+        const { messageUser, forTrainnerModal,email,name,number } = this.state;
         console.log('user message >>>', messageUser)
+        console.log('email >',email , 'name >',name , 'number',number)
         const senderName = messageUser && messageUser.map((elem, key) => {
             // console.log(elem, 'elem')
             return (
@@ -117,12 +144,12 @@ class ChatInbox extends React.Component {
 
                     {elem.status == 'Online' ?
                         <View style={styles.userIconView}>
-                            <Image source={require('../icons/onnlineIcon.png')} style={styles.userIcon} />
+                            <Image source={require('../icons/iconfinder_Circle_Green_34211.png')} style={styles.userIcon} />
                         </View>
                         :
                         elem.status == 'Offline' ?
                             <View style={styles.userIconView}>
-                                <Image source={require('../icons/offlineIcon.png')} style={styles.userIcon} />
+                                <Image source={require('../icons/iconfinder_Circle_Red_34214.png')} style={styles.userIcon} />
                             </View>
                             : null
                     }
@@ -162,7 +189,11 @@ class ChatInbox extends React.Component {
                             <View style={styles.userInstruction}>
                                 <Text style={styles.userInsTextStyle}>Get premium account to get a coach</Text>
                                 <Text style={styles.userInsTextStyle}>Kindly contact </Text>
-                                <TouchableOpacity style={styles.sendReqContainer} activeOpacity={0.7}>
+                                <TouchableOpacity 
+                                style={styles.sendReqContainer} 
+                                activeOpacity={0.7}
+                                onPress={this.sendRequestAdmin}
+                                >
                                     <Text style={styles.sendReqText}>Send Request</Text>
                                 </TouchableOpacity>
                             </View>

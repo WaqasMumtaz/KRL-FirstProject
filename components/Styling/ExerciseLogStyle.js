@@ -93,7 +93,14 @@ const styles =StyleSheet.create({
         color:'#a6a6a6',
         fontFamily:'MontserratLight'
     },
-    
+    headerIconContainer:{
+        marginRight:25,
+        marginBottom:8
+    },
+    headerIcon:{
+        height:18,
+        width:18
+    }
 })
 
 export default styles;

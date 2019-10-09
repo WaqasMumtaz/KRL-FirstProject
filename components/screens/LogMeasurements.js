@@ -12,6 +12,7 @@ import OverlayLoader from '../Loader/OverlaySpinner'
 const { height } = Dimensions.get('window');
 
 class LogMeasurementsScreen extends React.Component {
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -44,6 +45,8 @@ class LogMeasurementsScreen extends React.Component {
             weekDay: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
         }
     }
+
+    
     componentWillMount() {
         const { dayOfMonth } = this.state;
         let monthNo = new Date().getMonth() + 1;
@@ -223,6 +226,7 @@ class LogMeasurementsScreen extends React.Component {
                     isLoading: false
                 }, () => {
                     this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true)
+                    this.props.navigation.navigate('ShowMeasurementsScreen')
                 })
             }
             else if (!dataUser.code) {

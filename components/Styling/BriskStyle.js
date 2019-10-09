@@ -14,10 +14,12 @@ const styles =StyleSheet.create({
         //flex:,
         // borderWidth:5,
         backgroundColor:'black',
+        paddingBottom:10
+        //marginBottom:8
         //borderBottomWidth:0,
         //borderColor:'yellow',
         //borderRadius:3,
-        height:40,
+        //height:60,
         //marginHorizontal:18
         //width:'100%'
     },
@@ -61,14 +63,17 @@ const styles =StyleSheet.create({
     pickerStyle:{
         width:140,
         height:40,
-         color:'white',
+        // color:'white',
           //backgroundColor:'',
-          opacity:0.9,
+          //opacity:0.9,
          marginLeft:5 
     },
     labelTextContainer:{
         flexDirection:'row',
         backgroundColor:'black',
+        paddingBottom:8,
+        justifyContent:'space-between',
+        paddingRight:80
         //marginHorizontal:18
     },
     labelTextAmountStyle:{
@@ -85,7 +90,7 @@ const styles =StyleSheet.create({
     },
     cardChildTwoSiblingContainer:{
         backgroundColor:'white',
-        opacity:0.3,
+        //opacity:0.3,
          height: '80%', 
          width: '43%',
           marginTop: 3, 
@@ -104,7 +109,7 @@ const styles =StyleSheet.create({
         height: 40,
         width: '47%', 
         textAlign: 'center',
-        color:'white'
+        color:'black'
     },
     plusImgStyle:{
         height: 40, 
@@ -114,7 +119,7 @@ const styles =StyleSheet.create({
     },
     pickerContainer:{
         backgroundColor:'white',
-        opacity:0.3, 
+        //opacity:0.3, 
         height: '80%', 
         width: '43%', 
         marginTop: 3,

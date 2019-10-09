@@ -83,7 +83,7 @@ class Signup extends React.Component {
     }
 
     selectCountry(country) {
-        console.log('country >>', country)
+        //console.log('country >>', country)
         //this.myCountryPicker.open()
         // const allCountries = this.state.pickerData;
         // for(let i in allCountries){
@@ -209,32 +209,33 @@ class Signup extends React.Component {
                 type: 'trainee'
             }
             try {
-                let dataUser = await HttpUtilsFile.post('signup', userObj)
-                let currentUserData = {
-                    code: dataUser.code,
-                    email: this.state.email,
-                    name: this.state.name,
-                    token: dataUser.token,
-                    _id: dataUser._id
-                }
-                let userObjForProfile = {
-                    name: this.state.name,
-                    email: this.state.email,
-                    contactNo: this.state.mobile,
-                    time: this.state.time,
-                    date: this.state.date,
-                    objectId: '',
-                    type: userObj.type,
-                    userId: dataUser._id
-                }
-                let userProfile = await HttpUtilsFile.post('profile', userObjForProfile);
-                let profileCode = userProfile.code;
-                let signupCode = dataUser.code;
-
+                // let dataUser = await HttpUtilsFile.post('signup', userObj)
+                // let signupCode = dataUser.code;
+                // let currentUserData = {
+                //     code: dataUser.code,
+                //     email: this.state.email,
+                //     name: this.state.name,
+                //     token: dataUser.token,
+                //     _id: dataUser._id
+                // }
+                // let userObjForProfile = {
+                //     name: this.state.name,
+                //     email: this.state.email,
+                //     contactNo: this.state.mobile,
+                //     time: this.state.time,
+                //     date: this.state.date,
+                //     objectId: '',
+                //     type: userObj.type,
+                //     userId: dataUser._id
+                // }
+                // let userProfile = await HttpUtilsFile.post('profile', userObjForProfile);
+                // let profileCode = userProfile.code;
+                
                 let getEmails = await HttpUtilsFile.get('getuseremail')
                 let emailCode = getEmails.code;
-                let signupCode;
+                //let signupCode;
                 let profileCode;
+                let signupCode;
                 const emailContents = getEmails.content;
                 if (emailCode) {
                     this.setState({
@@ -269,6 +270,7 @@ class Signup extends React.Component {
 
                 if (!emailNotExist) {
                     let dataUser = await HttpUtilsFile.post('signup', userObj)
+                     signupCode = dataUser.code;
                     console.log('signup data user >>>', dataUser)
                     let currentUserData = {
                         code: dataUser.code,
@@ -281,9 +283,10 @@ class Signup extends React.Component {
                     }
                     let userObjForProfile = {
                         name: this.state.name,
+                        gender:this.state.gender,
                         email: this.state.email,
-                        lastName: this.state.lastName,
-                        mobileNo: mobileNo,
+                        lastName:this.state.lastName,
+                        contactNo: mobileNo,
                         time: this.state.time,
                         date: this.state.date,
                         objectId: '',
@@ -294,16 +297,34 @@ class Signup extends React.Component {
                     let userProfile = await HttpUtilsFile.post('profile', userObjForProfile);
                     console.log('new user profile data >>>', userProfile)
                     profileCode = userProfile.code;
-                    signupCode = dataUser.code;
+                    if(profileCode == 200){
+                        let obj = {
+                            address: userProfile.content.address,
+                            contactNo: userProfile.content.contactNo,
+                            date: userProfile.content.date,
+                            email: userProfile.content.email,
+                            gender: userProfile.content.gender,
+                            image: userProfile.content.image,
+                            name: userProfile.content.name,
+                            lastName:userProfile.content.lastName,
+                            _id: userProfile.content._id,
+                            time: userProfile.content.time,
+                            userId: userProfile.content.userId,
+                            type: userProfile.type
+                        }
+                        //console.log('myProfile data >>>>', obj)
+                        AsyncStorage.setItem('myProfile', JSON.stringify(obj));
+                    }
+                    
                     if (signupCode == 200 && profileCode == 200 && emailCode == 200) {
                         this.setState({
                             isLoading: false,
 
                         }, () => {
-                            console.log('currentUserData >>>', currentUserData);
-                            console.log('myProfile data >>>>', userProfile)
+                            //console.log('currentUserData >>>', currentUserData);
+                            
                             AsyncStorage.setItem('currentUser', JSON.stringify(currentUserData))
-                            AsyncStorage.setItem('myProfile', JSON.stringify(userProfile));
+                            
                             const { navigate } = this.props.navigation;
                             navigate('BottomTabe');
                             
@@ -441,7 +462,7 @@ class Signup extends React.Component {
             maleClickedTextStyle,
             femaleClickedTextStyle,
         } = this.state;
-        console.log(emailNotExist, 'emailNotExist')
+        //console.log(emailNotExist, 'emailNotExist')
         return (
 
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >

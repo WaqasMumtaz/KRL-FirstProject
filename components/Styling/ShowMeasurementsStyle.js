@@ -160,7 +160,14 @@ const showMeasureStyles =StyleSheet.create({
         bottom: 50,
         backgroundColor: 'transparent'
       },
-      
+      headerIconContainer:{
+        marginRight:25,
+        marginBottom:8
+    },
+    headerIcon:{
+        height:18,
+        width:18
+    }
 })
 
 export default showMeasureStyles;

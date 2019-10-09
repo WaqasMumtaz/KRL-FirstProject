@@ -13,6 +13,8 @@ import HttpUtils from '../Services/HttpUtils';
 const { height } = Dimensions.get('window');
 let exercise;
 
+let exerciseArry = [];
+
 class AddExercise extends React.Component {
     static navigationOptions = (navigation) => {
         const { params = {} } = navigation.navigation.state;
@@ -56,6 +58,7 @@ class AddExercise extends React.Component {
             year: '',
             date: '',
             time: '',
+            allExerciseName: '',
             exerciseArr: ['Brisk Walk', 'High paced jogging', 'Push ups', 'Bicep curls', 'Side Crunch', 'Reverse Crunches',
                 'Vertical Leg Crunch', 'Bicycle Exercise', 'Rolling Plank Exercise', 'Walking', 'Running', 'Jogging'],
         }
@@ -230,6 +233,17 @@ class AddExercise extends React.Component {
         })
     }
 
+    selectExercise(data) {
+        console.log(data, 'data')
+        // this.setState({
+        //     allExerciseName: data
+        // })
+        //  ,()=>{
+        //      exerciseArry.push(this.state.allExerciseName);
+        //      console.log(exerciseArry)
+        //  })
+    }
+
     render() {
         const {
             show,
@@ -248,7 +262,10 @@ class AddExercise extends React.Component {
             walking,
             running,
             joggingEx,
+            //allExerciseName
         } = this.state;
+        //console.log('array >>>',exerciseArry)
+        //console.log('exercise name >>',allExerciseName)
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.childContainer}>
@@ -257,18 +274,47 @@ class AddExercise extends React.Component {
                             Add Exercise
                         </Text>
                     </View>
-                    {/* <View style={styles.arrowContainer}>
-                        <TouchableOpacity style={{ marginRight: 20 }}>
-                            <Image source={require('../icons/left.png')} style={styles.forImgs} />
-                        </TouchableOpacity>
-                        <Text>Today</Text>
-                        <TouchableOpacity style={{ marginLeft: 20 }}>
-                            <Image source={require('../icons/right.png')} style={styles.forImgs} />
-                        </TouchableOpacity>
-                    </View> */}
-                    {/* <View style={styles.bodyContainer}>
-                        <TextInput placeholder="Search exercise" placeholderTextColor="black" style={styles.inputFieldStyle} />
-                    </View> */}
+                    <View style={{ height: 50, borderWidth: 2, borderColor: '#e5e5e5', borderRadius: 3 }}>
+                        <Picker
+                            selectedValue={this.state.allExerciseName}
+                            style={{ height: 50, width: '100%', }}
+                            onValueChange={this.selectExercise.bind(this)}
+                            // onValueChange={(itemValue, itemIndex) =>
+                            //      //this.setState({ allExerciseName: itemValue }),
+                            //      this.selectExercise(itemValue)
+
+                            // }
+                        >
+                            <Picker.Item label='Select an options...' value='0' />
+                            <Picker.Item label="Brisk Walk" value="Brisk Walk" />
+                            <Picker.Item label="High paced jogging" value="High paced jogging" />
+                            <Picker.Item label="Push ups" value="Push ups" />
+                            <Picker.Item label="Bicep curls" value="Bicep curls" />
+                            <Picker.Item label="Side Crunch" value="Side Crunch" />
+                            <Picker.Item label="Reverse Crunches" value="Reverse Crunches" />
+                            <Picker.Item label="Vertical Leg Crunch" value="Vertical Leg Crunch" />
+                            <Picker.Item label="Bicycle Exercise" value="Bicycle Exercise" />
+                            <Picker.Item label="Rolling Plank Exercise" value="Rolling Plank Exercise" />
+                            <Picker.Item label="Walking" value="Walking" />
+                            <Picker.Item label="Running" value="Running" />
+                            <Picker.Item label="Jogging" value="Jogging" />
+                        </Picker>
+                    </View>
+                    {/* {
+                       this.state.allExerciseName != null ?
+                       <BriskScreen title={this.state.allExerciseName}
+                            // label="Minutes" value="minutes" 
+                            increamentVal={this.increamentVal}
+                            decrementVal={this.decrementVal}
+                            backFunc={this.backToHome.bind(this, 'Brisk Walk')}
+                            setAmount={this.setAmount}
+                            amount={exerciseAmount}
+                            updateUnit={this.updateUnit}
+                            unit={exerciseUnit} />
+                    :null
+                   } */}
+
+
                     {show && <View style={styles.listsContainer}>
                         <TouchableOpacity
                             onPress={this.showFields.bind(this, 'Brisk Walk')}

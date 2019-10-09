@@ -30,6 +30,7 @@ import Wheelspiner from '../Progress Wheel/Progress';
 import ToastComponent from '../Toasts/nativeToast';
 import OverlayLoader from '../Loader/OverlaySpinner';
 import Linechart from '../chartKit/lineChart';
+import PackagesScreen from '../screens/Packages';
 //import TextInputs from '../textInputs/TextInputs';
 //import PickerInput from '../../Picker/PickerInput';
 //import ActivateSpinner from '../Loading Spinner/ActivateIndicator';
@@ -42,19 +43,19 @@ import Linechart from '../chartKit/lineChart';
 
 const MainNavigator = createStackNavigator({
   // Profile:{screen:Profile},
-  // Linechart: { screen: Linechart },
+  // Linechart: { screen: Linechart },  
   //StepCountScreen:{screen:StepCountScreen},
-
-  //Setupscreen: { screen: Setupscreen },
+  PackagesScreen:{screen:PackagesScreen},
   Login: { screen: Login },
-   Signup: { screen: Signup },
+  Signup: { screen: Signup },
+  Setupscreen1: { screen: Setupscreen1 },
+  Setupscreen: { screen: Setupscreen },
   ResetpasswordScreen: { screen: ResetpasswordScreen },
   ConfirmResetPassword: { screen: ConfirmResetPassword },
   //LastSetUpScreen: { screen: LastSetUpScreen },
 
   Login: { screen: Login },
    Signup: { screen: Signup },
-  //  Setupscreen1: { screen: Setupscreen1 },
   // Setupscreen: { screen: Setupscreen },
   // LastSetUpScreen: { screen: LastSetUpScreen },
   // ResetpasswordScreen: { screen: ResetpasswordScreen },
@@ -199,6 +200,14 @@ const MainNavigator = createStackNavigator({
   },
   SettingScreen: {
     screen: SettingScreen,
+    navigationOptions: {
+      headerStyle: {
+        elevation: 0,
+      }
+    }
+  },
+  PackagesScreen:{
+    screen:PackagesScreen,
     navigationOptions: {
       headerStyle: {
         elevation: 0,

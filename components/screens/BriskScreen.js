@@ -42,7 +42,7 @@ class BriskScreen extends React.Component {
                         <TouchableOpacity style={styles.minusImgContainer} onPress={this.props.decrementVal}>
                             <Image source={require('../icons/minus-gray.png')} style={styles.imgsIcon} />
                         </TouchableOpacity>
-                        <TextInput placeholder="0" placeholderTextColor="white"
+                        <TextInput placeholder="0" placeholderTextColor="black"
                             onChangeText={this.props.setAmount}
                             value={this.props.amount}
                             maxLength={3} keyboardType="numeric" style={styles.inputFieldStyle} />

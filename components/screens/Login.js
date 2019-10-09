@@ -105,6 +105,7 @@ class Login extends React.Component {
               myProfile.userId = dataUser._id;
               myProfile.type = dataUser.type;
               AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
+              console.log('profile data >>>',myProfile)
             }
             const assignTrainerName = dataUser.assignTrainner;
             if (assignTrainerName) {
