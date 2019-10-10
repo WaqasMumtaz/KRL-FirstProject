@@ -14,6 +14,7 @@ const { height } = Dimensions.get('window');
 let exercise;
 
 let exerciseArry = [];
+let exerciseAmountArr = [];
 
 class AddExercise extends React.Component {
     static navigationOptions = (navigation) => {
@@ -51,7 +52,7 @@ class AddExercise extends React.Component {
             running: false,
             joggingEx: false,
             exerciseName: '',
-            exerciseAmount: '',
+            exerciseAmount: [],
             exerciseUnit: '',
             dayOfMonth: '',
             month: '',
@@ -59,8 +60,11 @@ class AddExercise extends React.Component {
             date: '',
             time: '',
             allExerciseName: '',
-            exerciseArr: ['Brisk Walk', 'High paced jogging', 'Push ups', 'Bicep curls', 'Side Crunch', 'Reverse Crunches',
-                'Vertical Leg Crunch', 'Bicycle Exercise', 'Rolling Plank Exercise', 'Walking', 'Running', 'Jogging'],
+            briskExerciseAmount: '',
+            exerciseArr: [], 
+            inputs:{},
+            amountExcercise:'',
+            indexNumber:{}
         }
     }
     componentDidMount() {
@@ -126,98 +130,128 @@ class AddExercise extends React.Component {
         this.setState({ show: false, logExercise: true })
     }
 
-    showFields(e, val) {
-        if (e == 'Brisk Walk') {
-            this.setState({ show: false, showCard: true, iconShow: true, exerciseName: e })
-        }
-        else if (e == 'High paced jogging') {
-            this.setState({ show: false, jogging: true, iconShow: true, exerciseName: e })
-        }
-        else if (e == 'Push ups') {
-            this.setState({ show: false, pushups: true, iconShow: true, exerciseName: e })
+    // showFields(e, val) {
+    //     if (e == 'Brisk Walk') {
+    //         this.setState({ show: false, showCard: true, iconShow: true, exerciseName: e })
+    //     }
+    //     else if (e == 'High paced jogging') {
+    //         this.setState({ show: false, jogging: true, iconShow: true, exerciseName: e })
+    //     }
+    //     else if (e == 'Push ups') {
+    //         this.setState({ show: false, pushups: true, iconShow: true, exerciseName: e })
 
-        }
-        else if (e == 'Bicep curls') {
-            this.setState({ show: false, bicep: true, iconShow: true, exerciseName: e })
-        }
-        else if (e == 'Side Crunch') {
-            this.setState({ show: false, crunch: true, iconShow: true, exerciseName: e })
-        }
-        else if (e == 'Reverse Crunches') {
-            this.setState({ show: false, reverseCrunch: true, iconShow: true, exerciseName: e })
-        }
-        else if (e == 'Vertical Leg Crunch') {
-            this.setState({ show: false, verticalLegCrunch: true, iconShow: true, exerciseName: e })
-        }
-        else if (e == 'Bicycle Exercise') {
-            this.setState({ show: false, bicycleEx: true, iconShow: true, exerciseName: e })
-        }
-        else if (e == 'Rolling Plank Exercise') {
-            this.setState({ show: false, rollingEx: true, iconShow: true, exerciseName: e })
-        }
-        else if (e == 'Walking') {
-            this.setState({ show: false, walking: true, iconShow: true, exerciseName: e })
-        }
-        else if (e == 'Running') {
-            this.setState({ show: false, running: true, iconShow: true, exerciseName: e })
-        }
-        else if (e == 'Jogging') {
-            this.setState({ show: false, joggingEx: true, iconShow: true, exerciseName: e })
-        }
-    }
+    //     }
+    //     else if (e == 'Bicep curls') {
+    //         this.setState({ show: false, bicep: true, iconShow: true, exerciseName: e })
+    //     }
+    //     else if (e == 'Side Crunch') {
+    //         this.setState({ show: false, crunch: true, iconShow: true, exerciseName: e })
+    //     }
+    //     else if (e == 'Reverse Crunches') {
+    //         this.setState({ show: false, reverseCrunch: true, iconShow: true, exerciseName: e })
+    //     }
+    //     else if (e == 'Vertical Leg Crunch') {
+    //         this.setState({ show: false, verticalLegCrunch: true, iconShow: true, exerciseName: e })
+    //     }
+    //     else if (e == 'Bicycle Exercise') {
+    //         this.setState({ show: false, bicycleEx: true, iconShow: true, exerciseName: e })
+    //     }
+    //     else if (e == 'Rolling Plank Exercise') {
+    //         this.setState({ show: false, rollingEx: true, iconShow: true, exerciseName: e })
+    //     }
+    //     else if (e == 'Walking') {
+    //         this.setState({ show: false, walking: true, iconShow: true, exerciseName: e })
+    //     }
+    //     else if (e == 'Running') {
+    //         this.setState({ show: false, running: true, iconShow: true, exerciseName: e })
+    //     }
+    //     else if (e == 'Jogging') {
+    //         this.setState({ show: false, joggingEx: true, iconShow: true, exerciseName: e })
+    //     }
+    // }
 
     backToHome(e, val) {
-        if (e == 'Brisk Walk') {
-            this.setState({ show: true, showCard: false, iconShow: false })
-        }
-        else if (e == 'High paced jogging') {
-            this.setState({ show: true, jogging: false, iconShow: false })
-        }
-        else if (e == 'Push ups') {
-            this.setState({ show: true, pushups: false, iconShow: false })
-        }
-        else if (e == 'Bicep curls') {
-            this.setState({ show: true, bicep: false, iconShow: false })
-        }
-        else if (e == 'Side Crunch') {
-            this.setState({ show: true, crunch: false, iconShow: false })
-        }
-        else if (e == 'Reverse Crunches') {
-            this.setState({ show: true, reverseCrunch: false, iconShow: false })
-        }
-        else if (e == 'Vertical Leg Crunch') {
-            this.setState({ show: true, verticalLegCrunch: false, iconShow: false })
-        }
-        else if (e == 'Bicycle Exercise') {
-            this.setState({ show: true, bicycleEx: false, iconShow: false })
-        }
-        else if (e == 'Rolling Plank Exercise') {
-            this.setState({ show: true, rollingEx: false, iconShow: false })
-        }
-        else if (e == 'Walking') {
-            this.setState({ show: true, walking: false, iconShow: false })
-        }
-        else if (e == 'Running') {
-            this.setState({ show: true, running: false, iconShow: false })
-        }
-        else if (e == 'Jogging') {
-            this.setState({ show: true, joggingEx: false, iconShow: false })
-        }
+        console.log('remove item >>', e)
+        //if (e == 'Brisk Walk') {
+        //this.setState({ show: true, showCard: false, iconShow: false })
+        exerciseArry = exerciseArry.filter(function (item) {
+            return item !== e
+        })
+        // exerciseArry.filter((item) => {
+        //     return (item !== e)
+
+        // })
+        this.setState({
+            exerciseArr: exerciseArry
+        })
+        //console.log('remove array >>>', exerciseArry)
+        //}
+        // else if (e == 'High paced jogging') {
+        //     this.setState({ show: true, jogging: false, iconShow: false })
+        // }
+        // else if (e == 'Push ups') {
+        //     this.setState({ show: true, pushups: false, iconShow: false })
+        // }
+        // else if (e == 'Bicep curls') {
+        //     this.setState({ show: true, bicep: false, iconShow: false })
+        // }
+        // else if (e == 'Side Crunch') {
+        //     this.setState({ show: true, crunch: false, iconShow: false })
+        // }
+        // else if (e == 'Reverse Crunches') {
+        //     this.setState({ show: true, reverseCrunch: false, iconShow: false })
+        // }
+        // else if (e == 'Vertical Leg Crunch') {
+        //     this.setState({ show: true, verticalLegCrunch: false, iconShow: false })
+        // }
+        // else if (e == 'Bicycle Exercise') {
+        //     this.setState({ show: true, bicycleEx: false, iconShow: false })
+        // }
+        // else if (e == 'Rolling Plank Exercise') {
+        //     this.setState({ show: true, rollingEx: false, iconShow: false })
+        // }
+        // else if (e == 'Walking') {
+        //     this.setState({ show: true, walking: false, iconShow: false })
+        // }
+        // else if (e == 'Running') {
+        //     this.setState({ show: true, running: false, iconShow: false })
+        // }
+        // else if (e == 'Jogging') {
+        //     this.setState({ show: true, joggingEx: false, iconShow: false })
+        // }
     }
 
 
-    setAmount = (e) => {
-        this.setState({
-            exerciseAmount: e
-        })
+    setAmount = (index, e) => {
+        console.log('value >',e , 'index >', index);
+            // this.setState({
+            //     indexNumber:index
+            // },()=>{
+            //     console.log(this.state.indexNumber)
+            // })
+            
+        
+       
+        
+        // this.setState({
+        //     inputs: index,
+        // })
+       
     }
-    increamentVal = () => {
-        const { exerciseAmount } = this.state;
-        const amount = Number(exerciseAmount) + 1
-        let amountVal = amount.toString()
-        this.setState({
-            exerciseAmount: amountVal
-        })
+    increamentVal(data) {
+        // console.log('inc value >>',data === 'Brisk Walk', 'index >>',index == 0)
+        if (data == 0) {
+            console.log('exercise amount >>', this.state.exerciseAmount)
+            console.log('amount', this.state)
+            // const { exerciseAmount } = this.state;
+            // const amount = Number(exerciseAmount) + 1
+            // let amountVal = amount.toString()
+            // this.setState({
+            //     exerciseAmount: amountVal
+            // })
+        }
+        // else if( )
+
     }
     decrementVal = () => {
         const { exerciseAmount } = this.state;
@@ -234,7 +268,17 @@ class AddExercise extends React.Component {
     }
 
     selectExercise(data) {
-        console.log(data, 'data')
+        if (data !== "0") {
+
+            console.log('data >>>', data )
+            exerciseArry.push(data);
+            this.setState({
+                allExerciseName: data,
+                exerciseArr: exerciseArry
+            })
+            console.log('array >>', exerciseArry)
+        }
+
         // this.setState({
         //     allExerciseName: data
         // })
@@ -262,10 +306,19 @@ class AddExercise extends React.Component {
             walking,
             running,
             joggingEx,
+            exerciseArr,
+            amountExcercise,
+            indexNumber
             //allExerciseName
         } = this.state;
+        //console.log(this.state.indexNumber)
         //console.log('array >>>',exerciseArry)
         //console.log('exercise name >>',allExerciseName)
+        // if(exerciseArry != []){
+            
+            
+
+        // }
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.childContainer}>
@@ -279,11 +332,12 @@ class AddExercise extends React.Component {
                             selectedValue={this.state.allExerciseName}
                             style={{ height: 50, width: '100%', }}
                             onValueChange={this.selectExercise.bind(this)}
-                            // onValueChange={(itemValue, itemIndex) =>
-                            //      //this.setState({ allExerciseName: itemValue }),
-                            //      this.selectExercise(itemValue)
+                            
+                        // onValueChange={(itemValue, itemIndex) =>
+                        //      //this.setState({ allExerciseName: itemValue }),
+                        //      this.selectExercise(itemValue)
 
-                            // }
+                        // }
                         >
                             <Picker.Item label='Select an options...' value='0' />
                             <Picker.Item label="Brisk Walk" value="Brisk Walk" />
@@ -300,6 +354,33 @@ class AddExercise extends React.Component {
                             <Picker.Item label="Jogging" value="Jogging" />
                         </Picker>
                     </View>
+                    {
+                        exerciseArr != [] ?
+                            exerciseArr.map((item, index) => {
+                                return (
+                                    // console.log('array items >>>', item)
+                                    <View style={{ marginTop: 20 }} key={index}>
+                                        <BriskScreen title={item}
+                                            // label="Minutes" value="minutes" 
+                                            backFunc={this.backToHome.bind(this, item)}
+                                            setAmount={this.setAmount.bind(this, index)}
+                                            amount={amountExcercise}
+                                            increamentVal={this.increamentVal.bind(this, index)}
+                                            decrementVal={this.decrementVal}
+                                            updateUnit={this.updateUnit}
+                                            indexNumber={indexNumber}
+                                            unit={exerciseUnit} />
+                                    </View>
+
+
+                                )
+                            })
+                            :
+                            null
+                    }
+                    <View style={{ flex: 2 }}>
+
+                    </View>
                     {/* {
                        this.state.allExerciseName != null ?
                        <BriskScreen title={this.state.allExerciseName}
@@ -315,7 +396,7 @@ class AddExercise extends React.Component {
                    } */}
 
 
-                    {show && <View style={styles.listsContainer}>
+                    {/* {show && <View style={styles.listsContainer}>
                         <TouchableOpacity
                             onPress={this.showFields.bind(this, 'Brisk Walk')}
                         >
@@ -542,7 +623,7 @@ class AddExercise extends React.Component {
                             unit={exerciseUnit}
                         // backFunc={this.bicepToHome}
                         />
-                    </View>}
+                    </View>} */}
                     {/* {logExercise && <View style={styles.cardContainer} >
                         <Bicepcurls />
                     </View>} */}

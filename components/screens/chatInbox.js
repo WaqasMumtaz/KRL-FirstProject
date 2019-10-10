@@ -9,7 +9,6 @@ import {
 import styles from '../Styling/ChatScreenStyle';
 import AsyncStorage from '@react-native-community/async-storage';
 import Modal from "react-native-modal";
-import HttpUtilsFile from '../Services/HttpUtils';
 console.ignoredYellowBox = ['Remote debugger'];
 import { YellowBox, PermissionsAndroid } from 'react-native';
 console.disableYellowBox = true;
@@ -60,7 +59,7 @@ class ChatInbox extends React.Component {
         // Remove the event listener
         this.focusListener.remove();
     }
-    checkTrainy = () => {
+    checkTrainy =  () => {
         const { navigation } = this.props;
         this.focusListener = navigation.addListener('didFocus', () => {
             AsyncStorage.getItem('currentUser').then((value) => {
@@ -106,29 +105,27 @@ class ChatInbox extends React.Component {
         });
     }
 
-    sendRequestAdmin = async ()=>{
-      let userObj = {
-          name : this.state.currentName,
-          email : this.state.userEmail,
-          number : this.state.userNumber
-      }
-      console.log('user send data >>>',userObj)
-      try {
-        let requestData = await HttpUtilsFile.post('email', userObj)
-        console.log('user request data >>>', requestData)
-      }
-      catch(err){
-          console.log(err)
-      }
-      
+    
+    showPackage=()=>{
+        const { navigate } = this.props.navigation;
+        this.setState({
+            forTrainnerModal:false
+        },()=>{
+            navigate('PackagesScreen',{
+                currentName:this.state.currentName,
+                userEmail:this.state.userEmail,
+                userNumber:this.state.userNumber
+
+            })
+        })
     }
 
 
 
     render() {
-        const { messageUser, forTrainnerModal,email,name,number } = this.state;
+        const { messageUser, forTrainnerModal,userEmail,currentName,userNumber } = this.state;
         console.log('user message >>>', messageUser)
-        console.log('email >',email , 'name >',name , 'number',number)
+        console.log('email >',userEmail , 'name >',currentName , 'number',userNumber)
         const senderName = messageUser && messageUser.map((elem, key) => {
             // console.log(elem, 'elem')
             return (
@@ -192,9 +189,10 @@ class ChatInbox extends React.Component {
                                 <TouchableOpacity 
                                 style={styles.sendReqContainer} 
                                 activeOpacity={0.7}
-                                onPress={this.sendRequestAdmin}
+                                //onPress={this.sendRequestAdmin}
+                                onPress={this.showPackage}
                                 >
-                                    <Text style={styles.sendReqText}>Send Request</Text>
+                                    <Text style={styles.sendReqText}>Show Packages</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

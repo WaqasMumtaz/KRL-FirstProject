@@ -19,6 +19,7 @@ class BriskScreen extends React.Component {
 
     render() {
         const { brisk } = this.state;
+        console.log(this.props.amount, 'props amount')
         return (
             <View style={styles.mainContainer}>
                 {/* <ScrollView style={{ flex: 1, backgroundColor: 'white',
@@ -43,8 +44,9 @@ class BriskScreen extends React.Component {
                             <Image source={require('../icons/minus-gray.png')} style={styles.imgsIcon} />
                         </TouchableOpacity>
                         <TextInput placeholder="0" placeholderTextColor="black"
-                            onChangeText={this.props.setAmount}
+                            onChangeText={this.props.setAmount} 
                             value={this.props.amount}
+                            key={this.props.indexNumber}
                             maxLength={3} keyboardType="numeric" style={styles.inputFieldStyle} />
                         <TouchableOpacity style={styles.plusImgStyle} onPress={this.props.increamentVal}>
                             <Image source={require('../icons/plus-gray.png')} style={styles.imgsIcon} />

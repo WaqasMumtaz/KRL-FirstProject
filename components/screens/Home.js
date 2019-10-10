@@ -25,10 +25,17 @@ class Homescreen extends React.Component {
     }
   }
 
-  componentWillMount() {
-    this.getTodayOrYesterdayExcersice()
+  
+  componentWillUnmount() {
+    // Remove the event listener
+    this.focusListener.remove();
+}
 
-    this.getTodayOrYesterdayExcersice();
+  componentWillMount() {
+    // this.getTodayOrYesterdayExcersice()
+
+    // this.getTodayOrYesterdayExcersice();
+    this.getDaysData();
     this.pedometerFun();
     
     //getting user id from local storage
@@ -144,13 +151,18 @@ class Homescreen extends React.Component {
   }
 
 
-
+getDaysData=()=>{
+  const { navigation } = this.props;
+        this.focusListener = navigation.addListener('didFocus', () => {
+          this.getTodayOrYesterdayExcersice()
+        });
+}
 
   handleBackButton = async () => {
     console.log('pressed back button')
     const { navigate } = this.props.navigation;
     const getData = await AsyncStorage.getItem("currentUser");
-    this.getTodayOrYesterdayExcersice()
+    
     // const parsForm = JSON.parse(getData)
     // console.log('current user data >>>',parsForm)
     if (getData) {
@@ -228,7 +240,8 @@ class Homescreen extends React.Component {
           <View style={styles.cardsContainer}>
             <View style={styles.childContainerOne}>
               <TouchableOpacity style={styles.goalSetCard} TouchableOpacity={0.6} onPress={() => navigate('Setupscreen1')}>
-                <Text style={{ color: 'white', fontSize: 15, fontFamily: 'MontserratExtraBold' }}>Set Goal</Text>
+                {/* <Text style={{ color: 'white', fontSize: 15, fontFamily: 'MontserratExtraBold' }}>Set Goal</Text> */}
+                <Image source={require('../icons/setgoal.png')} style={styles.imgsStyle} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.cardOne} onPress={() => { navigate('AddExercise') }}>
                 <Image source={require('../icons/log-exer.png')} style={styles.imgsStyle} />

@@ -116,8 +116,8 @@ goalSetCard:{
     // borderColor:'black',
     borderRadius:3,
     //marginTop:12,
-    backgroundColor:'black',
-    padding:15
+    //backgroundColor:'black',
+    //padding:15
 },
 imgsStyle:{
     flex: 1,

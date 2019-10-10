@@ -13,7 +13,8 @@ import {
 
 import styles from '../Styling/PackagesScreenStyle';
 import AsyncStorage from '@react-native-community/async-storage';
-import HttpUtils from '../Services/HttpUtils';
+ import HttpUtils from '../Services/HttpUtils';
+
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 const { heightDimension } = Dimensions.get('window').height;;
 
@@ -23,36 +24,92 @@ class PackagesScreen extends React.Component {
 
         this.state = {
             shortPrice: true,
-            medical:true,
-            transformation:true,
-            partum:true
+            medical: true,
+            transformation: true,
+            partum: true,
+            name: '',
+            email: '',
+            number: ''
         }
     }
+
+    componentWillMount() {
+        const { currentName, userEmail, userNumber } = this.props.navigation.state.params;
+        console.log('user data >>>', currentName)
+        this.setState({
+            name: currentName,
+            email: userEmail,
+            number: userNumber
+        })
+    }
+
+    sendRequestAdmin =  async () => {
+        const {name , email , number }= this.state;
+        let userObj = {
+            name: name,
+            email: email,
+            number: number
+        }
+        console.log('user send data >>>', userObj)
+          let requestData = await HttpUtils.post('email', userObj)
+           console.log('user request data >>>', requestData)
+
+    //  let data = await fetch('https://getfit-server.herokuapp.com/email')
+    //  console.log(data)
+    // await fetch("https://getfit-server.herokuapp.com/email", {
+    //     method: 'POST',
+    //     headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //         userObj
+    //     })
+    //     //console.log()
+    // }).then((response) => console.log(response.json()))
+    //     .then((responseData) => {
+    //         console.log(
+    //             "Response Body -> " + JSON.stringify(responseData)
+    //         )
+    //     })
+
+        // let requestData = await HttpUtils.post('email', userObj)
+       // let requestData = await HttpUtils.post('email', userObj);
+
+       
+        // }
+        // catch(err){
+        //     console.log(err)
+        // }
+
+    }
+
     toggleDetail = () => {
         this.setState({
             shortPrice: !this.state.shortPrice,
-            
+
         })
 
     }
-    medicalToggel=()=>{
+    medicalToggel = () => {
         this.setState({
             medical: !this.state.medical,
         })
     }
-    transformationToggel=()=>{
+    transformationToggel = () => {
         this.setState({
             transformation: !this.state.transformation,
         })
     }
-    partumToggel=()=>{
+    partumToggel = () => {
         this.setState({
             partum: !this.state.partum
         })
     }
 
+
     render() {
-        const { shortPrice ,medical,transformation , partum } = this.state;
+        const { shortPrice, medical, transformation, partum } = this.state;
         return (
             <ScrollView style={{ flex: 1, height: heightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.container}>
@@ -64,8 +121,8 @@ class PackagesScreen extends React.Component {
                             <Text style={styles.monthlyText}>Monthly Plan</Text>
                             {
                                 shortPrice ?
-                                    <View style={{flexDirection:'row',}}>
-                                        <Text style={{ color: '#7e7e7e',marginRight:5}}>Details</Text>
+                                    <View style={{ flexDirection: 'row', }}>
+                                        <Text style={{ color: '#7e7e7e', marginRight: 5 }}>Details</Text>
                                         <TouchableOpacity onPress={this.toggleDetail}>
                                             <Image source={require('../icons/dropdown-arrow.png')}
                                                 style={styles.iconStyle}
@@ -74,10 +131,10 @@ class PackagesScreen extends React.Component {
                                     </View>
                                     :
                                     <TouchableOpacity onPress={this.toggleDetail}>
-                                            <Image source={require('../icons/uparrow.png')}
-                                                style={styles.iconStyle}
-                                            />
-                                        </TouchableOpacity>
+                                        <Image source={require('../icons/uparrow.png')}
+                                            style={styles.iconStyle}
+                                        />
+                                    </TouchableOpacity>
                             }
 
                         </View>
@@ -95,11 +152,11 @@ class PackagesScreen extends React.Component {
 
                                     <CaloriesSetupBtn title='Request This Package'
                                         caloriesBtnStyle={styles.caloriesBtnStyle}
-                                    //onPress={this.calulateMacro}
+                                        onPress={this.sendRequestAdmin}
                                     />
                                 </View>
 
-                            
+
 
                         }
                     </View>
@@ -111,8 +168,8 @@ class PackagesScreen extends React.Component {
                             <Text style={styles.monthlyText}>Medical Condition Plan</Text>
                             {
                                 medical ?
-                                    <View style={{flexDirection:'row',}}>
-                                        <Text style={{ color: '#7e7e7e',marginRight:5}}>Details</Text>
+                                    <View style={{ flexDirection: 'row', }}>
+                                        <Text style={{ color: '#7e7e7e', marginRight: 5 }}>Details</Text>
                                         <TouchableOpacity onPress={this.medicalToggel}>
                                             <Image source={require('../icons/dropdown-arrow.png')}
                                                 style={styles.iconStyle}
@@ -121,10 +178,10 @@ class PackagesScreen extends React.Component {
                                     </View>
                                     :
                                     <TouchableOpacity onPress={this.medicalToggel}>
-                                            <Image source={require('../icons/uparrow.png')}
-                                                style={styles.iconStyle}
-                                            />
-                                        </TouchableOpacity>
+                                        <Image source={require('../icons/uparrow.png')}
+                                            style={styles.iconStyle}
+                                        />
+                                    </TouchableOpacity>
                             }
 
                         </View>
@@ -135,7 +192,7 @@ class PackagesScreen extends React.Component {
                                 <View>
                                     <Text style={styles.detailPrice}>For Pakistanis : PKR 8000{"\n"}For Overseas : $80</Text>
                                     <View style={styles.instructionDetail}>
-                                    <Text style={styles.instText}>- Exclusively for PCOs, Diabetes,Thyroid</Text>
+                                        <Text style={styles.instText}>- Exclusively for PCOs, Diabetes,Thyroid</Text>
                                         <Text style={styles.instText}>- Customized meal plans</Text>
                                         <Text style={styles.instText}>- Home-based workouts</Text>
                                         <Text style={styles.instText}>- Medical assistance</Text>
@@ -148,7 +205,7 @@ class PackagesScreen extends React.Component {
                                     />
                                 </View>
 
-                            
+
 
                         }
                     </View>
@@ -160,8 +217,8 @@ class PackagesScreen extends React.Component {
                             <Text style={styles.monthlyText}>The Transformation Plan</Text>
                             {
                                 transformation ?
-                                    <View style={{flexDirection:'row',}}>
-                                        <Text style={{ color: '#7e7e7e',marginRight:5}}>Details</Text>
+                                    <View style={{ flexDirection: 'row', }}>
+                                        <Text style={{ color: '#7e7e7e', marginRight: 5 }}>Details</Text>
                                         <TouchableOpacity onPress={this.transformationToggel}>
                                             <Image source={require('../icons/dropdown-arrow.png')}
                                                 style={styles.iconStyle}
@@ -170,10 +227,10 @@ class PackagesScreen extends React.Component {
                                     </View>
                                     :
                                     <TouchableOpacity onPress={this.transformationToggel}>
-                                            <Image source={require('../icons/uparrow.png')}
-                                                style={styles.iconStyle}
-                                            />
-                                        </TouchableOpacity>
+                                        <Image source={require('../icons/uparrow.png')}
+                                            style={styles.iconStyle}
+                                        />
+                                    </TouchableOpacity>
                             }
 
                         </View>
@@ -184,7 +241,7 @@ class PackagesScreen extends React.Component {
                                 <View>
                                     <Text style={styles.detailPrice}>For Pakistanis : PKR 15000{"\n"}For Overseas : $150</Text>
                                     <View style={styles.instructionDetail}>
-                                         <Text style={{color:'#7e7e7e',fontFamily:'MontserratMedium',}}>Duration 3 Month</Text>
+                                        <Text style={{ color: '#7e7e7e', fontFamily: 'MontserratMedium', }}>Duration 3 Month</Text>
                                         <Text style={styles.instText}>- Customized meal plans</Text>
                                         <Text style={styles.instText}>- Home-based workouts</Text>
                                         <Text style={styles.instText}>- Coach support</Text>
@@ -196,7 +253,7 @@ class PackagesScreen extends React.Component {
                                     />
                                 </View>
 
-                            
+
 
                         }
                     </View>
@@ -208,8 +265,8 @@ class PackagesScreen extends React.Component {
                             <Text style={styles.monthlyText}>Post Partum Plan</Text>
                             {
                                 partum ?
-                                    <View style={{flexDirection:'row',}}>
-                                        <Text style={{ color: '#7e7e7e',marginRight:5}}>Details</Text>
+                                    <View style={{ flexDirection: 'row', }}>
+                                        <Text style={{ color: '#7e7e7e', marginRight: 5 }}>Details</Text>
                                         <TouchableOpacity onPress={this.partumToggel}>
                                             <Image source={require('../icons/dropdown-arrow.png')}
                                                 style={styles.iconStyle}
@@ -218,10 +275,10 @@ class PackagesScreen extends React.Component {
                                     </View>
                                     :
                                     <TouchableOpacity onPress={this.partumToggel}>
-                                            <Image source={require('../icons/uparrow.png')}
-                                                style={styles.iconStyle}
-                                            />
-                                        </TouchableOpacity>
+                                        <Image source={require('../icons/uparrow.png')}
+                                            style={styles.iconStyle}
+                                        />
+                                    </TouchableOpacity>
                             }
 
                         </View>
@@ -232,7 +289,7 @@ class PackagesScreen extends React.Component {
                                 <View>
                                     <Text style={styles.detailPrice}>For Pakistanis : PKR 10000{"\n"}For Overseas : $100</Text>
                                     <View style={styles.instructionDetail}>
-                                    <Text style={styles.instText}>- Exclusively for post partum{"\n"}(post pregnancy) women.</Text>
+                                        <Text style={styles.instText}>- Exclusively for post partum{"\n"}(post pregnancy) women.</Text>
                                         <Text style={styles.instText}>- Customized meal plans</Text>
                                         <Text style={styles.instText}>- Home-based workouts</Text>
                                         <Text style={styles.instText}>- Medical assistance</Text>
@@ -245,13 +302,13 @@ class PackagesScreen extends React.Component {
                                     />
                                 </View>
 
-                            
+
 
                         }
                     </View>
 
                 </View>
-                <View style={{marginBottom:15}}>
+                <View style={{ marginBottom: 15 }}>
 
                 </View>
             </ScrollView>
