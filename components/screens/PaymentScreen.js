@@ -446,7 +446,7 @@ class Payment extends React.Component {
               Payment
             </Text>
           </View>
-          <View style={styles.toggelBtnContainer}>
+          {/* <View style={styles.toggelBtnContainer}>
             <TouchableOpacity style={[creditScreen == true &&
               buttonActive == true
               ? styles.payScreenOneBtn : styles.unActiveBtnStyle]}
@@ -468,8 +468,11 @@ class Payment extends React.Component {
                   ?
                   styles.unActiveTextStyle : styles.textStyleOne]}>Others</Text>
             </TouchableOpacity>
-          </View>
-          {creditScreen ? <View>
+          </View> */}
+          
+          
+        {/* {
+          creditScreen ? <View>
             <View style={styles.paraTextContainer}>
               <Text style={styles.inputLabelsStyle}>Enter your credit/debit card details below to pay for your subscription.</Text>
             </View>
@@ -564,7 +567,7 @@ class Payment extends React.Component {
                 : null}
             </View>
             {/* <View style={styles.cardContainer}> */}
-            <View style={{ marginTop: 15 }}></View>
+            {/* <View style={{ marginTop: 15 }}></View>
             <CreditCardInput
               onChange={this.cardDetail}
               allowScroll={true}
@@ -573,9 +576,9 @@ class Payment extends React.Component {
             {/* </View> */}
 
             {/* loader show */}
-            {isLoading ? <OverlayLoader /> : null}
+            {/* {isLoading ? <OverlayLoader /> : null} */}
             {/* payment succesfully show modal */}
-            {dataSubmit ?
+            {/* {dataSubmit ?
               <Modal
                 isVisible={this.state.isVisibleModal}
                 animationIn='zoomIn'
@@ -600,9 +603,9 @@ class Payment extends React.Component {
               </Modal>
               :
               null
-            }
+            } */}
             {/* in case error of payment stripe the show toast */}
-            <Toast ref="toastWithStyle"
+            {/* <Toast ref="toastWithStyle"
               style={{ backgroundColor: '#FF6200' }}
               position={this.state.position}
               positionValue={50}
@@ -611,8 +614,10 @@ class Payment extends React.Component {
               opacity={0.8}
               textStyle={{ color: 'white', fontFamily: 'MontserratLight', }}
             />
-          </View>
-            :
+          </View>  */}
+
+            {/* :  */}
+
             <View>
               <View style={styles.paraTextContainer}>
                 <Text style={styles.inputLabelsStyle}>Enter your transaction details below to complete your payment.</Text>
@@ -799,7 +804,7 @@ class Payment extends React.Component {
                 textStyle={{ color: 'white', fontFamily: 'MontserratLight', }}
               />
             </View>
-          }
+          {/* } */}
           <View style={styles.btnContainer}>
             <CaloriesSetupBtn title='Confirm And Pay'
               btnDisable={btnDisable}

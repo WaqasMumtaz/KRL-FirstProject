@@ -9,12 +9,15 @@ import BriskScreen from '../screens/BriskScreen';
 // import ReverseCrunches from '../screens/cardScreens/ReverseCrunches';
 import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
+import Toast, { DURATION } from 'react-native-easy-toast'
+import { isEmptyStatement } from '@babel/types';
 
 const { height } = Dimensions.get('window');
 let exercise;
 
 let exerciseArry = [];
 let exerciseAmountArr = [];
+let allObjArr = [];
 
 class AddExercise extends React.Component {
     static navigationOptions = (navigation) => {
@@ -61,10 +64,14 @@ class AddExercise extends React.Component {
             time: '',
             allExerciseName: '',
             briskExerciseAmount: '',
-            exerciseArr: [], 
-            inputs:{},
-            amountExcercise:'',
-            indexNumber:{}
+            exerciseArr: [],
+            inputs: {},
+            amountExcercise: '',
+            indexNumber: {},
+            units: {},
+            incInputValue:'',
+            position : 'top',
+
         }
     }
     componentDidMount() {
@@ -106,23 +113,54 @@ class AddExercise extends React.Component {
         console.log(exercise, 'exercise')
     }
 
-    addExercise = async () => {
-        const { exerciseName, exerciseAmount, exerciseUnit, date, time, userId, dayOfMonth, month, year } = this.state;
-        let excersiceObj = {};
-        if (exerciseName != '' && exerciseAmount != '' && exerciseUnit != '') {
-            excersiceObj.exerciseName = exerciseName;
-            excersiceObj.exerciseAmount = exerciseAmount;
-            excersiceObj.exerciseUnit = exerciseUnit;
-            excersiceObj.date = date;
-            excersiceObj.time = time;
-            excersiceObj.dayOfMonth = dayOfMonth;
-            excersiceObj.month = month;
-            excersiceObj.year = year;
-            excersiceObj.userId = userId;
+    toastFunction = (text, position, duration, withStyle) => {
+        this.setState({
+            position: position,
+        })
+        if (withStyle) {
+            this.refs.toastWithStyle.show(text, duration);
+        } else {
+            this.refs.toast.show(text, duration);
+        }
+    }
 
-            let dataUser = await HttpUtils.post('postexerciselog', excersiceObj)
-            console.log(dataUser, 'dataUser')
-            this.props.navigation.navigate('Exerciselog')
+    addExercise = async () => {
+        //const { exerciseName, exerciseAmount, exerciseUnit, date, time, userId, dayOfMonth, month, year } = this.state;
+        const { exerciseArr, inputs, units, date, time, userId, dayOfMonth, month, year } = this.state;
+        console.log('array of exercise >',exerciseArr, 'inputs >',inputs ,'units >', units)
+        const {navigate} = this.props.navigation;
+        let excersiceObj = {};
+         if (exerciseArr.length > 0 ) {
+           console.log('array of exercise >',exerciseArr)
+          let exerciseName = exerciseArr.map((item,index)=>{
+            return {item}
+            })
+          console.log('exc name >', exerciseName)
+             excersiceObj.exerciseName = exerciseName;
+             excersiceObj.exerciseAmount = inputs;
+             excersiceObj.exerciseUnit = units;
+             excersiceObj.date = date;
+             excersiceObj.time = time;
+             excersiceObj.dayOfMonth = dayOfMonth;
+             excersiceObj.month = month;
+             excersiceObj.year = year;
+             excersiceObj.userId = userId;
+             console.log('aaaa >>',excersiceObj)     
+             let dataUser = await HttpUtils.post('postexerciselog', excersiceObj);
+             let userMsg = dataUser.msg;
+             console.log(dataUser, 'dataUser')
+             if(dataUser.code == 200){
+                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+                 navigate('Exerciselog')
+             }
+             else {
+                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true)
+                //navigate('Exerciselog')
+             }
+            // this.props.navigation.navigate('Exerciselog')
+        }
+        else {
+            alert('Please Add Exercise')
         }
     }
 
@@ -217,42 +255,122 @@ class AddExercise extends React.Component {
         //     this.setState({ show: true, running: false, iconShow: false })
         // }
         // else if (e == 'Jogging') {
-        //     this.setState({ show: true, joggingEx: false, iconShow: false })
+        //     this.setState({ sho w: true, joggingEx: false, iconShow: false })
         // }
     }
 
 
-    setAmount = (index, e) => {
-        console.log('value >',e , 'index >', index);
-            // this.setState({
-            //     indexNumber:index
-            // },()=>{
-            //     console.log(this.state.indexNumber)
-            // })
-            
-        
-       
-        
+
+    setAmount = (index, text) => {
+        const { inputs } = this.state;
+        console.log('input value', index)
+        console.log(inputs , 'inputs')
+        //console.log(inputs.index , 'key valu')
+        // setAmount = (index, e) => {
+        // console.log('value >', e, 'index >', index);
+        // this.setState({
+        //     indexNumber: index
+        // })
+        this.setState({
+            inputs: {
+                ...this.state.inputs,
+                [index]: text,
+
+            }
+        })
+
+
+
         // this.setState({
         //     inputs: index,
         // })
-       
-    }
-    increamentVal(data) {
-        // console.log('inc value >>',data === 'Brisk Walk', 'index >>',index == 0)
-        if (data == 0) {
-            console.log('exercise amount >>', this.state.exerciseAmount)
-            console.log('amount', this.state)
-            // const { exerciseAmount } = this.state;
-            // const amount = Number(exerciseAmount) + 1
-            // let amountVal = amount.toString()
-            // this.setState({
-            //     exerciseAmount: amountVal
-            // })
-        }
-        // else if( )
+
 
     }
+    increamentVal(data , item){
+        let emptyArr={}
+        console.log('inc data >',Number(data))
+        console.log('item value >', item)
+        const inputValue = Number(data)+1;
+        const incValue = inputValue.toString();
+        console.log(incValue);
+        // const a=this.state.inputs;
+        // this.setState({
+        //     incInputValue:incValue
+        // })
+        // for(var i in this.state.inputs){
+        //    console.log(this.state.inputs[i])
+        //    const a =this.state.inputs[i];
+        //    this.setState({
+        //        inputs:incValue
+        //    })
+        // }
+        // console.log([item]);
+         //console.log('increment value',incValue)
+        //const a =this.state.inputs(...)
+        // this.setState({
+        //     inputs:{
+        //         [item]:incValue
+
+        //     }
+        // })
+        // if(data == 'Brisk Walk'){
+        //     for(var i in this.state.inputs){
+        //             console.log(this.state.inputs[i])
+        //           const inputValue =  this.state.inputs[i]
+        //           const a= Number(inputValue)+ 1;
+        //           const amountVal = a.toString()
+        //           console.log(a)
+        //           this.setState({
+        //               inputs:{
+        //                   [data]:amountVal
+        //               }
+        //           })
+        //         //     if(data == this.state.inputs[i]){
+        //         //         console.log('true')
+        //         //     }
+        //      }
+
+        }
+
+    //     else if (data == 'High paced jogging') {
+    //         for(var i in this.state.inputs){
+    //             console.log(this.state.inputs[i])
+    //           const inputValue =  this.state.inputs[i]
+    //           const a= Number(inputValue)+ 1;
+    //           const amountVal = a.toString()
+    //           console.log(a)
+    //           this.setState({
+    //               inputs:{
+    //                   [data]:amountVal
+    //               }
+    //           })
+    //         //     if(data == this.state.inputs[i]){
+    //         //         console.log('true')
+    //         //     }
+    //      }
+
+    //  }
+    //     //  allObjArr.push(...this.state.inputs);
+    //  console.log('all objects >', allObjArr)
+    // console.log('state value >>', this.state.inputs ,'data >', data)
+    // 
+
+
+    // console.log('inc value >>',data === 'Brisk Walk', 'index >>',index == 0)
+    // if (data == 0) {
+    //     console.log('exercise amount >>', this.state.exerciseAmount)
+    //     console.log('amount', this.state)
+    // const { exerciseAmount } = this.state;
+    // const amount = Number(exerciseAmount) + 1
+    // let amountVal = amount.toString()
+    // this.setState({
+    //     exerciseAmount: amountVal
+    // })
+    //}
+    // else if( )
+
+    //}
     decrementVal = () => {
         const { exerciseAmount } = this.state;
         const amount = Number(exerciseAmount) - 1
@@ -261,20 +379,36 @@ class AddExercise extends React.Component {
             exerciseAmount: amountVal
         })
     }
-    updateUnit = (e) => {
+    updateUnit = (data, text) => {
+        // this.setState({
+        //     exerciseUnit: e
+        // })
+        console.log('data >', data, 'text >', text)
         this.setState({
-            exerciseUnit: e
+            units: {
+                ...this.state.units,
+                [data]: text
+            }
         })
     }
 
     selectExercise(data) {
         if (data !== "0") {
 
-            console.log('data >>>', data )
+            console.log('data >>>', data)
             exerciseArry.push(data);
             this.setState({
                 allExerciseName: data,
-                exerciseArr: exerciseArry
+                exerciseArr: exerciseArry,
+                inputs: {
+                    ...this.state.inputs,
+                    [data]: '',
+
+                },
+                units: {
+                    ...this.state.units,
+                    [data]: ''
+                }
             })
             console.log('array >>', exerciseArry)
         }
@@ -311,12 +445,14 @@ class AddExercise extends React.Component {
             indexNumber
             //allExerciseName
         } = this.state;
-        //console.log(this.state.indexNumber)
+        // console.log('inputs ', this.state.inputs, 'units >', this.state.units);
+        // console.log('array state >>',this.state.exerciseArr)
+        //console.log('aaaa >>',this.state.incInputValue)
         //console.log('array >>>',exerciseArry)
         //console.log('exercise name >>',allExerciseName)
         // if(exerciseArry != []){
-            
-            
+
+
 
         // }
         return (
@@ -332,7 +468,7 @@ class AddExercise extends React.Component {
                             selectedValue={this.state.allExerciseName}
                             style={{ height: 50, width: '100%', }}
                             onValueChange={this.selectExercise.bind(this)}
-                            
+
                         // onValueChange={(itemValue, itemIndex) =>
                         //      //this.setState({ allExerciseName: itemValue }),
                         //      this.selectExercise(itemValue)
@@ -361,15 +497,17 @@ class AddExercise extends React.Component {
                                     // console.log('array items >>>', item)
                                     <View style={{ marginTop: 20 }} key={index}>
                                         <BriskScreen title={item}
+
                                             // label="Minutes" value="minutes" 
                                             backFunc={this.backToHome.bind(this, item)}
-                                            setAmount={this.setAmount.bind(this, index)}
-                                            amount={amountExcercise}
-                                            increamentVal={this.increamentVal.bind(this, index)}
-                                            decrementVal={this.decrementVal}
-                                            updateUnit={this.updateUnit}
+                                            setAmount={(text) => this.setAmount(item, text)}
+                                            //amount={amountExcercise}
+                                            value={this.state.inputs[item]}
+                                            increamentVal={this.increamentVal.bind(this, this.state.inputs[item], item)}
+                                            //decrementVal={this.decrementVal}
+                                            updateUnit={(text) => this.updateUnit(item, text)}
                                             indexNumber={indexNumber}
-                                            unit={exerciseUnit} />
+                                            unit={this.state.units[item]} />
                                     </View>
 
 
@@ -378,6 +516,16 @@ class AddExercise extends React.Component {
                             :
                             null
                     }
+                    <Toast ref="toastWithStyle"
+                        style={{ backgroundColor: '#FF6200' }}
+                        position={this.state.position}
+                        positionValue={50}
+                        fadeInDuration={750}
+                        fadeOutDuration={1000}
+                        opacity={0.8}
+                        textStyle={{ color: 'white', fontFamily: 'MontserratLight', }}
+                    />
+
                     <View style={{ flex: 2 }}>
 
                     </View>

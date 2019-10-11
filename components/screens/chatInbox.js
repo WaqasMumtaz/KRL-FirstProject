@@ -9,6 +9,7 @@ import {
 import styles from '../Styling/ChatScreenStyle';
 import AsyncStorage from '@react-native-community/async-storage';
 import Modal from "react-native-modal";
+import HttpUtils from '../Services/HttpUtils';
 console.ignoredYellowBox = ['Remote debugger'];
 import { YellowBox, PermissionsAndroid } from 'react-native';
 console.disableYellowBox = true;
@@ -62,6 +63,8 @@ class ChatInbox extends React.Component {
     checkTrainy =  () => {
         const { navigation } = this.props;
         this.focusListener = navigation.addListener('didFocus', () => {
+            // console.log('trainer api get >',a)
+            // let a = await HttpUtils.get('gettrainner');
             AsyncStorage.getItem('currentUser').then((value) => {
                 let userData = JSON.parse(value)
                 console.log('user data >>>',userData)

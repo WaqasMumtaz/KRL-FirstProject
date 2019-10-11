@@ -55,7 +55,7 @@ class EditProfileScreen extends React.Component {
             objectId: '',
             male: false,
             female: false,
-            position: 'top',
+            position : 'top',
             profile: '',
             type: ''
         }
@@ -154,23 +154,25 @@ class EditProfileScreen extends React.Component {
         }
     }
     addressValueHandle = (text) => {
-        const { address } = this.state;
+        //const { address } = this.state;
         this.setState({
             address: text
-        }, () => {
-            if (address.length < 8) {
+        }
+        , () => {
+            if (this.state.address.length < 8) {
                 this.setState({
                     addressValidate: false,
                     addressInstruction: true
                 })
             }
-            if (address.length > 8) {
+            if (this.state.address.length > 8) {
                 this.setState({
                     addressValidate: true,
                     addressInstruction: false
                 })
             }
-        })
+        }
+        )
     }
     chooseProfilePhoto = () => {
         const options = {

@@ -13,7 +13,7 @@ import {
 
 import styles from '../Styling/PackagesScreenStyle';
 import AsyncStorage from '@react-native-community/async-storage';
- import HttpUtils from '../Services/HttpUtils';
+ import HttpUtilsFile from '../Services/HttpUtils';
 
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 const { heightDimension } = Dimensions.get('window').height;;
@@ -51,7 +51,7 @@ class PackagesScreen extends React.Component {
             number: number
         }
         console.log('user send data >>>', userObj)
-          let requestData = await HttpUtils.post('email', userObj)
+          let requestData = await HttpUtilsFile.post('email', userObj)
            console.log('user request data >>>', requestData)
 
     //  let data = await fetch('https://getfit-server.herokuapp.com/email')

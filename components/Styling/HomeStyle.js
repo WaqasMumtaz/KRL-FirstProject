@@ -114,7 +114,9 @@ goalSetCard:{
     width:152,
     // borderWidth:2,
     // borderColor:'black',
-    borderRadius:3,
+    //borderRadius:3,
+    borderTopLeftRadius:3,
+    borderTopRightRadius:3
     //marginTop:12,
     //backgroundColor:'black',
     //padding:15
@@ -155,6 +157,26 @@ lastArrow:{
     width:23,
     marginTop:22,
     marginLeft:14
+},
+waitContainer:{
+    //height:60,
+    width:152,
+    // borderWidth:2,
+    // borderColor:'black',
+    borderBottomLeftRadius:3,
+    borderBottomRightRadius:3,
+    //marginTop:12,
+    backgroundColor:'#000000',
+    padding:12
+    
+},
+waitText:{
+    color: '#FF6200',
+    fontFamily: 'MontserratMedium',
+},
+weightLabel:{
+    color:'#7e7e7e',
+    fontFamily: 'MontserratLight',
 }
 
 })

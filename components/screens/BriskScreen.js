@@ -19,7 +19,7 @@ class BriskScreen extends React.Component {
 
     render() {
         const { brisk } = this.state;
-        console.log(this.props.amount, 'props amount')
+        //console.log(this.props.amount, 'props amount')
         return (
             <View style={styles.mainContainer}>
                 {/* <ScrollView style={{ flex: 1, backgroundColor: 'white',
@@ -37,23 +37,23 @@ class BriskScreen extends React.Component {
                     <Text style={styles.labelTextAmountStyle}>Amount</Text>
                     <Text style={styles.labelUnitStyle}>Unit</Text>
                 </View>
-               
                 <View style={styles.cardChildTwo}>
                     <View style={styles.cardChildTwoSiblingContainer}>
-                        <TouchableOpacity style={styles.minusImgContainer} onPress={this.props.decrementVal}>
+                        {/* <TouchableOpacity style={styles.minusImgContainer} onPress={this.props.decrementVal}>
                             <Image source={require('../icons/minus-gray.png')} style={styles.imgsIcon} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TextInput placeholder="0" placeholderTextColor="black"
-                            onChangeText={this.props.setAmount} 
-                            value={this.props.amount}
+                        
+                            onChangeText={(text)=>this.props.setAmount(text)} 
+                            value={this.props.value}
                             key={this.props.indexNumber}
                             maxLength={3} keyboardType="numeric" style={styles.inputFieldStyle} />
-                        <TouchableOpacity style={styles.plusImgStyle} onPress={this.props.increamentVal}>
+                        {/* <TouchableOpacity style={styles.plusImgStyle} onPress={this.props.increamentVal}>
                             <Image source={require('../icons/plus-gray.png')} style={styles.imgsIcon} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     <View style={styles.pickerContainer}>
-                        <Picker selectedValue={this.props.unit} onValueChange={this.props.updateUnit} style={styles.pickerStyle} mode="dropdown">
+                        <Picker selectedValue={this.props.unit} onValueChange={(text)=>this.props.updateUnit(text)} style={styles.pickerStyle} mode="dropdown">
                             <Picker.Item label='Select an option...' value='0' />
                             <Picker.Item label="Hours" value="hours" />
                             <Picker.Item label="Minutes" value="minutes" />

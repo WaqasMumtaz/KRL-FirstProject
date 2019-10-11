@@ -242,7 +242,12 @@ getDaysData=()=>{
               <TouchableOpacity style={styles.goalSetCard} TouchableOpacity={0.6} onPress={() => navigate('Setupscreen1')}>
                 {/* <Text style={{ color: 'white', fontSize: 15, fontFamily: 'MontserratExtraBold' }}>Set Goal</Text> */}
                 <Image source={require('../icons/setgoal.png')} style={styles.imgsStyle} />
+
               </TouchableOpacity>
+              <View style={styles.waitContainer}>
+                    <Text style={styles.waitText}>{userCurrentWeight == '' ? 0 : userCurrentWeight} KG</Text>
+                    <Text style={styles.weightLabel}>current weight</Text>
+              </View>
               <TouchableOpacity style={styles.cardOne} onPress={() => { navigate('AddExercise') }}>
                 <Image source={require('../icons/log-exer.png')} style={styles.imgsStyle} />
               </TouchableOpacity>
