@@ -597,6 +597,8 @@ class Chatscreen extends React.Component {
           {message.senderId == userId && message.type == 'text' ?
             <Text key={key} style={styles.msgsTextStyle}>
               {message.message}
+              {'\n'}
+              <Text style={styles.timeText}>{message.time}</Text>
             </Text>
             :
             message.senderId == userId && message.type == 'image' ?
@@ -788,8 +790,10 @@ class Chatscreen extends React.Component {
 
           {message.senderId == opponentId && message.type == 'text' ?
             <Text key={key} style={styles.replyMessagesStyle}>
-              {message.message}
+              {message.message}{'\n'}
+              <Text style={styles.timeTextReply}>{message.time}</Text>
             </Text>
+            
             :
             message.senderId == opponentId && message.type == 'image' ?
               <TouchableOpacity activeOpacity={0.5}

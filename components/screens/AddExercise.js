@@ -18,6 +18,7 @@ let exercise;
 let exerciseArry = [];
 let exerciseAmountArr = [];
 let allObjArr = [];
+let uniqeArray;
 
 class AddExercise extends React.Component {
     static navigationOptions = (navigation) => {
@@ -126,38 +127,44 @@ class AddExercise extends React.Component {
 
     addExercise = async () => {
         //const { exerciseName, exerciseAmount, exerciseUnit, date, time, userId, dayOfMonth, month, year } = this.state;
-        const { exerciseArr, inputs, units, date, time, userId, dayOfMonth, month, year } = this.state;
-        console.log('array of exercise >',exerciseArr, 'inputs >',inputs ,'units >', units)
+        const {inputs, units, date, time, userId, dayOfMonth, month, year } = this.state;
         const {navigate} = this.props.navigation;
-        let excersiceObj = {};
-         if (exerciseArr.length > 0 ) {
-           console.log('array of exercise >',exerciseArr)
-          let exerciseName = exerciseArr.map((item,index)=>{
-            return {item}
-            })
-          console.log('exc name >', exerciseName)
-             excersiceObj.exerciseName = exerciseName;
-             excersiceObj.exerciseAmount = inputs;
-             excersiceObj.exerciseUnit = units;
-             excersiceObj.date = date;
-             excersiceObj.time = time;
-             excersiceObj.dayOfMonth = dayOfMonth;
-             excersiceObj.month = month;
-             excersiceObj.year = year;
-             excersiceObj.userId = userId;
-             console.log('aaaa >>',excersiceObj)     
-             let dataUser = await HttpUtils.post('postexerciselog', excersiceObj);
-             let userMsg = dataUser.msg;
-             console.log(dataUser, 'dataUser')
-             if(dataUser.code == 200){
-                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+        console.log('array of exercise >',uniqeArray, 'inputs >',inputs ,'units >', units);
+        let dataArr =[];
+        for(let i in uniqeArray){
+            console.log(uniqeArray[i]);
+            const exerciseObj = {};
+            exerciseObj.date = date;
+            exerciseObj.time = time;
+            exerciseObj.dayOfMonth = dayOfMonth;
+            exerciseObj.month = month;
+            exerciseObj.year = year;
+            exerciseObj.userId = userId;
+            exerciseObj['exerciseName'] = uniqeArray[i];
+            exerciseObj['exerciseAmount'] = inputs[uniqeArray[i]];
+            exerciseObj['exerciseUnit'] = units[uniqeArray[i]];
+
+            // console.log(inputs , 'inputs')
+            // console.log(uniqeArray[i] , 'keys')
+
+            // console.log(inputs[uniqeArray[i]])
+            // console.log('aaaa >>',exerciseObj)
+             dataArr.push(exerciseObj)
+        }
+        console.log('data array >>', dataArr)
+         if (dataArr.length >= 0 ) {
+             AsyncStorage.setItem('logExercises', JSON.stringify(dataArr))
+             //let dataUser = await HttpUtils.post('postexerciselog', dataArr);
+              //console.log(dataUser, 'dataUser')
+             //let userMsg = dataUser.msg;
+            //  if(dataUser.code == 200){
+                this.toastFunction('Data Save Successfully', this.state.position, DURATION.LENGTH_LONG, true);
                  navigate('Exerciselog')
-             }
-             else {
-                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true)
+             //}
+            //  else {
+            //     this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true)
                 //navigate('Exerciselog')
-             }
-            // this.props.navigation.navigate('Exerciselog')
+             //}
         }
         else {
             alert('Please Add Exercise')
@@ -379,7 +386,7 @@ class AddExercise extends React.Component {
             exerciseAmount: amountVal
         })
     }
-    updateUnit = (data, text) => {
+    updateUnit=(data, text)=>{
         // this.setState({
         //     exerciseUnit: e
         // })
@@ -392,9 +399,13 @@ class AddExercise extends React.Component {
         })
     }
 
-    selectExercise(data) {
-        if (data !== "0") {
+ 
+   
 
+
+    selectExercise=(data)=>{
+        console.log('dropdown func data >>',data)
+        if (data !== "0") {
             console.log('data >>>', data)
             exerciseArry.push(data);
             this.setState({
@@ -455,6 +466,15 @@ class AddExercise extends React.Component {
 
 
         // }
+       function onlyUnique(value, index, self){ 
+            return self.indexOf(value) === index;
+        }
+
+        uniqeArray = exerciseArry.filter(onlyUnique);
+        console.log('uniqe array >>',uniqeArray);
+        
+        
+
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.childContainer}>
@@ -467,8 +487,15 @@ class AddExercise extends React.Component {
                         <Picker
                             selectedValue={this.state.allExerciseName}
                             style={{ height: 50, width: '100%', }}
-                            onValueChange={this.selectExercise.bind(this)}
+                            onValueChange={this.selectExercise}
+                            // onValueChange={(itemValue)=>this.selectExercise.bind(this,itemValue)}
+                        //     onValueChange={(itemValue)=>this.setState({
+                        //         allExerciseName:itemValue
+                        //     }),
+                        //     this.selectExercise.bind(this)
 
+                        // }
+                            
                         // onValueChange={(itemValue, itemIndex) =>
                         //      //this.setState({ allExerciseName: itemValue }),
                         //      this.selectExercise(itemValue)
@@ -491,8 +518,8 @@ class AddExercise extends React.Component {
                         </Picker>
                     </View>
                     {
-                        exerciseArr != [] ?
-                            exerciseArr.map((item, index) => {
+                        uniqeArray.length >=0 ?
+                        uniqeArray.map((item, index) => {
                                 return (
                                     // console.log('array items >>>', item)
                                     <View style={{ marginTop: 20 }} key={index}>
@@ -513,6 +540,7 @@ class AddExercise extends React.Component {
 
                                 )
                             })
+                            
                             :
                             null
                     }

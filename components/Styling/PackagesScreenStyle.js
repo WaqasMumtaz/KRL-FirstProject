@@ -17,7 +17,8 @@ const styles =StyleSheet.create({
     monthlyPlan:{
         backgroundColor:'black',
         marginTop:20,
-        padding:15
+        padding:15,
+        borderRadius:3
 
     },
 

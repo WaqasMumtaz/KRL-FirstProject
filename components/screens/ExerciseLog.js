@@ -74,13 +74,22 @@ class Exerciselog extends React.Component {
             month = `0${month}`
         }
         //get data from database
-        let dataUser = await HttpUtils.get('getallexerciselog')
-        //set date , max date and data ikn the state
-        await this.setState({
-            maxDate: date + '-' + month + '-' + year,
-            date: date + '-' + month + '-' + year,
-            data: dataUser.content
+        //let dataUser = await HttpUtils.get('getallexerciselog')
+       await AsyncStorage.getItem('logExercises').then((value)=>{
+            let dataFromLocalStorage = JSON.parse(value);
+            console.log('log exercises data >>',dataFromLocalStorage);
+            this.setState({
+                    maxDate: date + '-' + month + '-' + year,
+                    date: date + '-' + month + '-' + year,
+                    data: dataFromLocalStorage
+                })
         })
+        //set date , max date and data ikn the state
+        // await this.setState({
+        //     maxDate: date + '-' + month + '-' + year,
+        //     date: date + '-' + month + '-' + year,
+        //     //data: dataUser.content
+        // })
     }
     //filtration with date
     dateFilter = (e) => {
@@ -94,6 +103,7 @@ class Exerciselog extends React.Component {
         //start loop in data
         for (var i in data) {
             let dataFilter = data[i];
+            //console.log('data content >>', dataFilter)
             //check current user data
             if (dataFilter.userId == userId) {
                 //get data of current date
@@ -126,15 +136,18 @@ class Exerciselog extends React.Component {
 
     //rendering excersice data in flate list
     renderDataItems = ({ item }) => {
+        console.log('flate list data >>', item);
+       
         return (
             <View style={styles.bodyChildOne}>
                 <TouchableOpacity style={styles.resultCardLeft} id={item.id}>
                     <Text style={styles.resultText}>
                         {item.exerciseName}
+                        
                     </Text>
-                    <Text style={styles.resultTextAmount}>
+                     <Text style={styles.resultTextAmount}>
                         {item.exerciseAmount}
-                    </Text>
+                    </Text> 
                     <Text style={styles.resultTextUnit}>
                         {item.exerciseUnit}
                     </Text>
@@ -144,7 +157,9 @@ class Exerciselog extends React.Component {
     }
 
     render() {
-        const { date, filterData, maxDate } = this.state;
+        const { date, filterData, maxDate,data } = this.state;
+         console.log('data user >>', data);
+         console.log('state filter data >>', filterData)
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.childContainer}>
@@ -183,8 +198,8 @@ class Exerciselog extends React.Component {
                     <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
                         <FlatList
                             data={filterData}
-                            renderItem={this.renderDataItems}
-                            keyExtractor={this._keyExtractor}
+                             renderItem={this.renderDataItems}
+                             keyExtractor={this._keyExtractor}
                             numColumns={columsNum}
                         />
                     </ScrollView>

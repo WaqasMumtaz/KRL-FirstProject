@@ -24,12 +24,18 @@ class Reportscreen extends React.Component {
       loseWeight: '',
       gainWeight: '',
       lastWeek: '',
-      cureentWeek: ''
+      cureentWeek: '',
+      userID:'',
+      stepCountData:''
     }
   }
   async componentWillMount() {
-    await this.getData()
+    await this.getData();
+    
   }
+
+  
+
 
   //get data from database
   getData = async () => {
@@ -50,6 +56,31 @@ class Reportscreen extends React.Component {
     //getting api complete data excersice or weight mearsment
     let dataExcersice = await HttpUtils.get('getallexerciselog');
     let dataWeight = await HttpUtils.get('getweightlog');
+    let userObj = {
+      userId:userId
+    };
+    let userPedometerData = await HttpUtils.post('getpedometerbyid',userObj);
+    console.log('user pedometer data >>',userPedometerData.content);
+
+    if(userPedometerData.code == 200){
+        const userContent =  userPedometerData.content;
+        for(let i in userContent){
+          console.log(userContent[i])
+          const userSteps = userContent[i].stepCount;
+          console.log(userSteps)
+          this.setState({
+            stepCountData:userSteps
+          })
+        }       
+    }
+    // for(let i in userPedometerData){
+    //   const dataUser = userPedometerData[i].stepCount;
+    //   console.log(dataUser);
+    //   // console.log('step counts >>',dataUser.stepCount)
+    //   // this.setState({
+    //   //   stepCountData:dataUser.stepCount
+    //   // })
+    // }
     let data = dataExcersice.content;
     let weightData = dataWeight.content;
     //gettibg curent date
@@ -193,7 +224,15 @@ class Reportscreen extends React.Component {
     }
   }
   render() {
-    const { dataExcersices, currentDateDataWeights, weekAgoDateDataWeights, loseWeight, gainWeight, lastWeek, cureentWeek } = this.state
+    const { dataExcersices, 
+      currentDateDataWeights, 
+      weekAgoDateDataWeights, 
+      loseWeight, 
+      gainWeight, 
+      lastWeek, 
+      cureentWeek,
+      stepCountData
+        } = this.state
     console.log(loseWeight , 'loseWeight')
     let weeklyExcersice = dataExcersices && dataExcersices.map((elem, key) => {
       return (
@@ -245,14 +284,19 @@ class Reportscreen extends React.Component {
                   size={65}
                   width={10}
                   color={'#FF6200'}
-                  progress={60}
+                  progress={stepCountData > 1 && stepCountData < 250 ? 25 :
+                    stepCountData > 250 && stepCountData < 500 ? 50 :
+                    stepCountData > 500 && stepCountData < 750 ? 75 :
+                    stepCountData > 750 && stepCountData <= 10000 ? 100
+                                : 0
+                }
                   backgroundColor={'gray'}
                   animateFromValue={0}
                   fullColor={'#FF6200'}
                   />
                 </View>
                 <View style={styles.resultContainer}>
-                  <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight' }}>60482</Text>
+                  <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight' }}>{stepCountData == '' ? 0 : stepCountData}</Text>
                   <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight' }}>/70,000</Text>
                 </View>
                 <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', marginLeft: 14 }}>steps</Text>

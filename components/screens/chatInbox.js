@@ -26,9 +26,9 @@ class ChatInbox extends React.Component {
         this.state = {
             messageUser: [],
             forTrainnerModal: false,
-            currentName:'',
-            userEmail:'',
-            userNumber:''
+            currentName: '',
+            userEmail: '',
+            userNumber: ''
         }
         this.checkTrainy()
     }
@@ -36,7 +36,7 @@ class ChatInbox extends React.Component {
         await AsyncStorage.getItem('opponentProfile').then((value) => {
             let userData = JSON.parse(value);
             let userNamesData = []
-            console.log('opponent data chatbox >>>', userData)
+            // console.log('opponent data chatbox >>>', userData)
             db.ref('users').on("value", snapshot => {
                 let data = snapshot.val();
                 for (var i in userData) {
@@ -48,10 +48,10 @@ class ChatInbox extends React.Component {
                         }
                     }
                 }
+                this.setState({
+                    messageUser: userNamesData
+                })
             });
-            this.setState({
-                messageUser: userNamesData
-            })
 
         })
     }
@@ -60,14 +60,14 @@ class ChatInbox extends React.Component {
         // Remove the event listener
         this.focusListener.remove();
     }
-    checkTrainy =  () => {
+    checkTrainy = () => {
         const { navigation } = this.props;
         this.focusListener = navigation.addListener('didFocus', () => {
             // console.log('trainer api get >',a)
             // let a = await HttpUtils.get('gettrainner');
             AsyncStorage.getItem('currentUser').then((value) => {
                 let userData = JSON.parse(value)
-                console.log('user data >>>',userData)
+                console.log('user data >>>', userData)
                 let userName = userData.name + ' ' + userData.lastName;
                 if (userData.assignTrainner != undefined) {
                     this.setState({
@@ -82,9 +82,9 @@ class ChatInbox extends React.Component {
                 else {
                     this.setState({
                         forTrainnerModal: true,
-                        currentName:userName,
-                        userEmail:userData.email,
-                        userNumber:userData.mobileNo
+                        currentName: userName,
+                        userEmail: userData.email,
+                        userNumber: userData.mobileNo
                     })
                 }
             })
@@ -108,16 +108,16 @@ class ChatInbox extends React.Component {
         });
     }
 
-    
-    showPackage=()=>{
+
+    showPackage = () => {
         const { navigate } = this.props.navigation;
         this.setState({
-            forTrainnerModal:false
-        },()=>{
-            navigate('PackagesScreen',{
-                currentName:this.state.currentName,
-                userEmail:this.state.userEmail,
-                userNumber:this.state.userNumber
+            forTrainnerModal: false
+        }, () => {
+            navigate('PackagesScreen', {
+                currentName: this.state.currentName,
+                userEmail: this.state.userEmail,
+                userNumber: this.state.userNumber
 
             })
         })
@@ -126,9 +126,9 @@ class ChatInbox extends React.Component {
 
 
     render() {
-        const { messageUser, forTrainnerModal,userEmail,currentName,userNumber } = this.state;
+        const { messageUser, forTrainnerModal, userEmail, currentName, userNumber } = this.state;
         console.log('user message >>>', messageUser)
-        console.log('email >',userEmail , 'name >',currentName , 'number',userNumber)
+        console.log('email >', userEmail, 'name >', currentName, 'number', userNumber)
         const senderName = messageUser && messageUser.map((elem, key) => {
             // console.log(elem, 'elem')
             return (
@@ -189,11 +189,11 @@ class ChatInbox extends React.Component {
                             <View style={styles.userInstruction}>
                                 <Text style={styles.userInsTextStyle}>Get premium account to get a coach</Text>
                                 <Text style={styles.userInsTextStyle}>Kindly contact </Text>
-                                <TouchableOpacity 
-                                style={styles.sendReqContainer} 
-                                activeOpacity={0.7}
-                                //onPress={this.sendRequestAdmin}
-                                onPress={this.showPackage}
+                                <TouchableOpacity
+                                    style={styles.sendReqContainer}
+                                    activeOpacity={0.7}
+                                    //onPress={this.sendRequestAdmin}
+                                    onPress={this.showPackage}
                                 >
                                     <Text style={styles.sendReqText}>Show Packages</Text>
                                 </TouchableOpacity>

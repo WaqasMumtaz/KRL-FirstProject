@@ -64,7 +64,8 @@ const styles =StyleSheet.create({
       borderRadius:3,
       backgroundColor:'black',
       height:125,
-      width:140
+      width:140,
+      flexWrap:'wrap'
     },
     resultCardRight:{
         //  borderWidth:5,

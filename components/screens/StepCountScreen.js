@@ -231,6 +231,8 @@ export default class StepCountScreen extends React.Component {
                     userId: this.state.currentUserId,
                     time: this.state.curTime,
                     date: this.state.date,
+                    // stepCount: '55',
+                    // dailGoal: '55'
                     stepCount: this.state.pedometerData,
                     dailGoal: this.state.goalSteps
                 }
@@ -261,63 +263,63 @@ export default class StepCountScreen extends React.Component {
         this.matchTime()
         this.countStepTime()
 
-        if(this.state.pedometerData == this.state.goalSteps){
-            this.setState({
-                showButton:true
-            })
-        }
+        // if(this.state.pedometerData == this.state.goalSteps){
+        //     this.setState({
+        //         showButton:true
+        //     })
+        // }
         // const userWeight = this.state.userCurrentWeight.slice(0, 3)
         // // console.log('number weight >>>', userWeight)
         // this.setState({
         //     weightNoUnit: userWeight
         // })
         //this.dataPost()
-        //if (Platform.OS === 'android') {
-            // const options = {
-            //     scopes: [
-            //         Scopes.FITNESS_ACTIVITY_READ_WRITE,
-            //         Scopes.FITNESS_BODY_READ_WRITE,
-            //     ],
-            // }
-            // GoogleFit.authorize(options)
-            //     .then((res) => {
-            //         console.log('authorized >>>', res)
-            //         //alert(`${res.message}`)
-            //         GoogleFit.observeSteps((res) => {
-            //             console.log('google fit steps', res)
-            //             this.setState({ pedometerData: res.steps })
-            //         })
+        if (Platform.OS === 'android') {
+            const options = {
+                scopes: [
+                    Scopes.FITNESS_ACTIVITY_READ_WRITE,
+                    Scopes.FITNESS_BODY_READ_WRITE,
+                ],
+            }
+            GoogleFit.authorize(options)
+                .then((res) => {
+                    console.log('authorized >>>', res)
+                    //alert(`${res.message}`)
+                    GoogleFit.observeSteps((res) => {
+                        console.log('google fit steps', res)
+                        this.setState({ pedometerData: res.steps })
+                    })
 
-            //     })
+                })
 
-            //     .catch((err) => {
-            //         console.log('err >>> ', err)
-            //     })
-
-
-        // } else if (Platform.OS === 'ios') {
-        //     const options = {
-        //         scopes: [
-        //             Scopes.FITNESS_ACTIVITY_READ_WRITE,
-        //             Scopes.FITNESS_BODY_READ_WRITE,
-        //         ],
-        //     }
-
-        //     rnHealthKit.authorize(options)
-        //         .then((res) => {
-        //             console.log('authorized >>>', res)
-        //             rnHealthKit.observeSteps((res) => {
-        //                 // console.log(res)
-        //                 this.setState({ pedometerData: res.steps })
-        //             })
+                .catch((err) => {
+                    console.log('err >>> ', err)
+                })
 
 
-        //         })
-        //         .catch((err) => {
-        //             console.log('err >>> ', err)
-        //         })
+        } else if (Platform.OS === 'ios') {
+            const options = {
+                scopes: [
+                    Scopes.FITNESS_ACTIVITY_READ_WRITE,
+                    Scopes.FITNESS_BODY_READ_WRITE,
+                ],
+            }
 
-        // }
+            rnHealthKit.authorize(options)
+                .then((res) => {
+                    console.log('authorized >>>', res)
+                    rnHealthKit.observeSteps((res) => {
+                        // console.log(res)
+                        this.setState({ pedometerData: res.steps })
+                    })
+
+
+                })
+                .catch((err) => {
+                    console.log('err >>> ', err)
+                })
+
+        }
 
 
 
@@ -865,8 +867,8 @@ export default class StepCountScreen extends React.Component {
                                <Text style={{color:'white',alignSelf:'center',fontFamily:'MontserratMedium',}}>Submit</Text>
                             </TouchableOpacity>
                             </View>
-                            :null
-                            }
+                             :null
+                             } 
                             
                         </View>
 

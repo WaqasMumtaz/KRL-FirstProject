@@ -21,7 +21,8 @@ class Homescreen extends React.Component {
       pedometerData: '',
       goalSteps: '',
       userAllData:[],
-      userCurrentWeight:''
+      userCurrentWeight:'',
+      excerciseArry:[]
     }
   }
 
@@ -32,7 +33,7 @@ class Homescreen extends React.Component {
 }
 
   componentWillMount() {
-    // this.getTodayOrYesterdayExcersice()
+     this.getTodayOrYesterdayExcersice()
 
     // this.getTodayOrYesterdayExcersice();
     this.getDaysData();
@@ -48,7 +49,7 @@ class Homescreen extends React.Component {
         // dataFromLocalStorage.status = 'Online'
         // console.log(dataFromLocalStorage ,'dataFromLocalStorage')
         // db.ref(`users/${dataUser._id}`).update(userDataForOnlineOff)
-         console.log(dataFromLocalStorage ,'value')
+         //console.log(dataFromLocalStorage ,'value')
 
         this.setState({
           userId: dataFromLocalStorage._id
@@ -66,8 +67,17 @@ class Homescreen extends React.Component {
     //console.log('getTodayOrYesterdayExcersice')
     const { userId } = this.state;
     //get all excersice log data
-    let dataUser = await HttpUtils.get('getallexerciselog');
-    let data = dataUser.content;
+    //let dataUser = await HttpUtils.get('getallexerciselog');
+    await AsyncStorage.getItem('logExercises').then((value)=>{
+      let dataFromLocalStorage = JSON.parse(value);
+      console.log('log exercises data >>',dataFromLocalStorage);
+      this.setState({
+        excerciseArry:dataFromLocalStorage
+      })
+  })
+    console.log('exercis data >>',this.state.excerciseArry);
+    let data = this.state.excerciseArry;
+    //let data = dataUser.content;
     //get current date 
     const currentDate = new Date().getDate();
     let currentMonth = new Date().getMonth() + 1;
@@ -78,7 +88,8 @@ class Homescreen extends React.Component {
     //looping with data
     for (var i in data) {
       let dataApi = data[i];
-      //check user id with api data and get current user data
+     // console.log('exer array ',dataApi)
+    //   //check user id with api data and get current user data
       if (dataApi.userId == userId) {
         //get today & yesterday of excersice from database 
         let currMonth = Number(currentMonth)

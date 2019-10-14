@@ -764,6 +764,18 @@ const styles = StyleSheet.create({
         fontFamily: "MontserratExtraBold",
         textAlign: 'center',
 
+    },
+    timeText:{
+        color: '#A6A6A6',
+        fontFamily: 'MontserratLight',
+        paddingTop:5,
+       
+    },
+    timeTextReply:{
+        color: '#4f4f4f',
+        fontFamily: 'MontserratLight',
+        marginTop:5,
+        paddingTop:5,
     }
 });
 

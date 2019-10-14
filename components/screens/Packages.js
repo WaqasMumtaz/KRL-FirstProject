@@ -14,6 +14,7 @@ import {
 import styles from '../Styling/PackagesScreenStyle';
 import AsyncStorage from '@react-native-community/async-storage';
  import HttpUtilsFile from '../Services/HttpUtils';
+ import Toast, { DURATION } from 'react-native-easy-toast';
 
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 const { heightDimension } = Dimensions.get('window').height;;
@@ -29,7 +30,8 @@ class PackagesScreen extends React.Component {
             partum: true,
             name: '',
             email: '',
-            number: ''
+            number: '',
+            position : 'top',
         }
     }
 
@@ -43,16 +45,92 @@ class PackagesScreen extends React.Component {
         })
     }
 
-    sendRequestAdmin =  async () => {
-        const {name , email , number }= this.state;
-        let userObj = {
-            name: name,
-            email: email,
-            number: number
+    toastFunction = (text, position, duration, withStyle) => {
+        this.setState({
+            position: position,
+        })
+        if (withStyle) {
+            this.refs.toastWithStyle.show(text, duration);
+        } else {
+            this.refs.toast.show(text, duration);
         }
-        console.log('user send data >>>', userObj)
-          let requestData = await HttpUtilsFile.post('email', userObj)
-           console.log('user request data >>>', requestData)
+    }
+
+    async sendRequestAdmin(data){
+        const {name , email , number }= this.state;
+        
+        if(data == 'Monthly Plan'){
+            const userObj = {
+                name: name,
+                email: email,
+                number: number,
+                packageName:'Monthly Plan'
+            }
+            console.log('user send data >>>', userObj)
+            let requestData = await HttpUtilsFile.post('email', userObj);
+            let userMsg = requestData.msg;
+             console.log('user request data >>>', requestData);
+            if(requestData.code == 200){
+                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+            }
+            else {
+                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+            }
+        }
+        else if(data == 'Medical Condition Plan'){
+            const userObj = {
+                name: name,
+                email: email,
+                number: number,
+                packageName:'Medical Condition Plan'
+            }
+            console.log('user send data >>>', userObj)
+            let requestData = await HttpUtilsFile.post('email', userObj);
+            let userMsg = requestData.msg;
+             console.log('user request data >>>', requestData);
+            if(requestData.code == 200){
+                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+            }
+            else {
+                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+            }
+        }
+         else if(data == 'The Transformation Plan'){
+            const userObj = {
+                name: name,
+                email: email,
+                number: number,
+                packageName:'The Transformation Plan'
+            }
+            console.log('user send data >>>', userObj)
+            let requestData = await HttpUtilsFile.post('email', userObj);
+            let userMsg = requestData.msg;
+             console.log('user request data >>>', requestData);
+            if(requestData.code == 200){
+                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+            }
+            else {
+                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+            }
+        }
+        else if(data == 'Post Partum Plan'){
+            const userObj = {
+                name: name,
+                email: email,
+                number: number,
+                packageName:'Post Partum Plan'
+            }
+            console.log('user send data >>>', userObj)
+            let requestData = await HttpUtilsFile.post('email', userObj);
+            let userMsg = requestData.msg;
+             console.log('user request data >>>', requestData);
+            if(requestData.code == 200){
+                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+            }
+            else {
+                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+            }
+        }
 
     //  let data = await fetch('https://getfit-server.herokuapp.com/email')
     //  console.log(data)
@@ -152,7 +230,7 @@ class PackagesScreen extends React.Component {
 
                                     <CaloriesSetupBtn title='Request This Package'
                                         caloriesBtnStyle={styles.caloriesBtnStyle}
-                                        onPress={this.sendRequestAdmin}
+                                        onPress={this.sendRequestAdmin.bind(this, 'Monthly Plan')}
                                     />
                                 </View>
 
@@ -201,7 +279,7 @@ class PackagesScreen extends React.Component {
 
                                     <CaloriesSetupBtn title='Request This Package'
                                         caloriesBtnStyle={styles.caloriesBtnStyle}
-                                    //onPress={this.calulateMacro}
+                                        onPress={this.sendRequestAdmin.bind(this, 'Medical Condition Plan')}
                                     />
                                 </View>
 
@@ -249,7 +327,7 @@ class PackagesScreen extends React.Component {
 
                                     <CaloriesSetupBtn title='Request This Package'
                                         caloriesBtnStyle={styles.caloriesBtnStyle}
-                                    //onPress={this.calulateMacro}
+                                        onPress={this.sendRequestAdmin.bind(this, 'The Transformation Plan')}
                                     />
                                 </View>
 
@@ -298,7 +376,7 @@ class PackagesScreen extends React.Component {
 
                                     <CaloriesSetupBtn title='Request This Package'
                                         caloriesBtnStyle={styles.caloriesBtnStyle}
-                                    //onPress={this.calulateMacro}
+                                        onPress={this.sendRequestAdmin.bind(this, 'Post Partum Plan')}
                                     />
                                 </View>
 
@@ -308,6 +386,15 @@ class PackagesScreen extends React.Component {
                     </View>
 
                 </View>
+                <Toast ref="toastWithStyle"
+                        style={{ backgroundColor: '#FF6200' }}
+                        position={this.state.position}
+                        positionValue={50}
+                        fadeInDuration={750}
+                        fadeOutDuration={1000}
+                        opacity={0.8}
+                        textStyle={{ color: 'white', fontFamily: 'MontserratLight', }}
+                    />
                 <View style={{ marginBottom: 15 }}>
 
                 </View>
