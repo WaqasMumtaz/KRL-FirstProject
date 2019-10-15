@@ -557,7 +557,7 @@ class Chatscreen extends React.Component {
     const chatMessages = this.state.chatMessages.map((message, key) => {
       if (dateNum == undefined) {
         showDate = `${chatDates[key]}-${monthName[chatMonths[key]]}-${chatYear[key]}`
-        // console.log(showDate , 'showDate')
+         console.log(showDate , 'showDate')
       }
       else {
         if (dateNum == message.date.slice(3, 5) && month == message.date.slice(0, 2)

@@ -21,7 +21,7 @@ class Macrocalculator extends React.Component {
             age: '',
             gender: '',
             height: '',
-            heightInch:'',
+            heightInch: '',
             currentWeight: '',
             goalWeight: '',
             heightUnit: '',
@@ -54,7 +54,12 @@ class Macrocalculator extends React.Component {
             moderate: false,
             sedentary: false,
             light: false,
-            extreme: false
+            extreme: false,
+            currentCalories: '',
+            currentCarbohy: '',
+            currentProteins: '',
+            currentMass: '',
+            showCurrentMacro: false
         }
     }
 
@@ -84,18 +89,19 @@ class Macrocalculator extends React.Component {
                 })
             }
         });
+        this.getMacro();
     }
 
     calulateMacro = async () => {
-        const { dob, gender, height,heightInch, currentWeight, goalWeight, currentWeightUnit, goalWeightUnit,
+        const { dob, gender, height, heightInch, currentWeight, goalWeight, currentWeightUnit, goalWeightUnit,
             activityLevel, tdeeObj, date, time, currentYear, currentDate, currentMonth, userId } = this.state;
-            console.log('tdee Ojbject >>>',tdeeObj )
+        console.log('tdee Ojbject >>>', tdeeObj)
         let age;
         let macroObj = {
             dob: dob,
             gender: gender,
             height: height,
-            heightInch:heightInch,
+            heightInch: heightInch,
             // heightUnit: heightUnit,
             currentWeight: currentWeight,
             currentWeightUnit: currentWeightUnit,
@@ -133,7 +139,7 @@ class Macrocalculator extends React.Component {
                 heightValidation: true
             })
         }
-        
+
         else {
             this.setState({
                 heightValidation: false
@@ -200,14 +206,14 @@ class Macrocalculator extends React.Component {
             })
         }
         if (dob != '') {
-           // const dobYear = new Date(dob).getFullYear();
-            const dobYear = dob.slice(6,10);
+            // const dobYear = new Date(dob).getFullYear();
+            const dobYear = dob.slice(6, 10);
             // const dobMonth = new Date(dob).getMonth() + 1;
             // const dobDate = new Date(dob).getDate();
             age = currentYear - dobYear;
-            console.log(dobYear,'year');
-            console.log(currentYear,'currentyear');
-            console.log(dob,'dooobbb');
+            console.log(dobYear, 'year');
+            console.log(currentYear, 'currentyear');
+            console.log(dob, 'dooobbb');
             // let month = currentMonth - dobMonth;
             // console.log(month, 'month minus')
             // console.log(currentMonth, 'currentMonth minus')
@@ -221,12 +227,12 @@ class Macrocalculator extends React.Component {
         if (gender == 'male') {
             if (dob != '' && height != '' && heightInch != '' && currentWeight != '' && goalWeight != '' &&
                 currentWeightUnit != '' && currentWeightUnit != '0' && goalWeightUnit != '' && goalWeightUnit != '0' && activityLevel != '') {
-                    const heightCentimeter = height * 30.48;
-                    //console.log('height centi >>>', heightCentimeter)
-                    const heightInchCentimeter = heightInch * 2.54;
-                    //console.log('height inches centi >>>', heightInchCentimeter);
-                    const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
-                    console.log('total centimeter >>>',totalHeightCentimeter)
+                const heightCentimeter = height * 30.48;
+                //console.log('height centi >>>', heightCentimeter)
+                const heightInchCentimeter = heightInch * 2.54;
+                //console.log('height inches centi >>>', heightInchCentimeter);
+                const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
+                console.log('total centimeter >>>', totalHeightCentimeter)
                 let calculteCalries = 10 * currentWeight + 6.25 * totalHeightCentimeter - 5 * age + 5;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
                     // get tdee value
@@ -249,11 +255,11 @@ class Macrocalculator extends React.Component {
                     //console.log('tdee value >>>',tde)
                     let fatVal = Math.round(fat.toString());
                     //let fatVal = Number(fat);
-                   // console.log('fatval value >>>',fatVal)
-                     let proteinVal = Math.round(protein.toString());
+                    // console.log('fatval value >>>',fatVal)
+                    let proteinVal = Math.round(protein.toString());
                     //let proteinVal = Number(protein);
                     //console.log('protein value >>>',proteinVal)
-                     let carbohydratesVal = Math.round(carbohydrate.toString());
+                    let carbohydratesVal = Math.round(carbohydrate.toString());
                     //let carbohydratesVal = Number(carbohydrate);
                     //console.log('carbohyrates value >>>', carbohydratesVal)
 
@@ -272,20 +278,21 @@ class Macrocalculator extends React.Component {
                     macroObj.calculteCalries = calries;
                     macroObj.proteins = proteinVal;
                     macroObj.carbohydrates = carbohydratesVal;
+                    AsyncStorage.setItem('currentMacro', JSON.stringify(macroObj))
                     let dataUser = await HttpUtils.post('macrodata', macroObj)
                     console.log(dataUser, 'dataUser')
                 }
             }
         }
         else if (gender == 'female') {
-            if (dob != '' && height != ''&& heightInch != '' && currentWeight != '' && goalWeight != '' &&
+            if (dob != '' && height != '' && heightInch != '' && currentWeight != '' && goalWeight != '' &&
                 currentWeightUnit != '' && currentWeightUnit != '0' && goalWeightUnit != '' && goalWeightUnit != '0' && activityLevel != '') {
-                    const heightCentimeter = height * 30.48;
-            //console.log('height centi >>>', heightCentimeter)
-            const heightInchCentimeter = heightInch * 2.54;
-            //console.log('height inches centi >>>', heightInchCentimeter);
-            const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
-            console.log('total centimeter >>>',totalHeightCentimeter)
+                const heightCentimeter = height * 30.48;
+                //console.log('height centi >>>', heightCentimeter)
+                const heightInchCentimeter = heightInch * 2.54;
+                //console.log('height inches centi >>>', heightInchCentimeter);
+                const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
+                console.log('total centimeter >>>', totalHeightCentimeter)
                 let calculteCalries = 10 * currentWeight + 6.25 * totalHeightCentimeter - 5 * age - 161;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
                     // get tdee value
@@ -321,6 +328,7 @@ class Macrocalculator extends React.Component {
                     macroObj.calculteCalries = calries;
                     macroObj.proteins = proteinVal;
                     macroObj.carbohydrates = carbohydratesVal;
+                    AsyncStorage.setItem('currentMacro', JSON.stringify(macroObj))
                     let dataUser = await HttpUtils.post('macrodata', macroObj)
                     console.log(dataUser, 'dataUser')
                 }
@@ -382,7 +390,7 @@ class Macrocalculator extends React.Component {
         }
     }
     increamentVal(value) {
-        const { height,heightInch, currentWeight, goalWeight } = this.state;
+        const { height, heightInch, currentWeight, goalWeight } = this.state;
         if (value == 'height') {
             const heightNum = Number(height) + 1
             let heightVal = heightNum.toString()
@@ -413,7 +421,7 @@ class Macrocalculator extends React.Component {
         }
     }
     decrementVal(value) {
-        const { height,heightInch, currentWeight, goalWeight } = this.state;
+        const { height, heightInch, currentWeight, goalWeight } = this.state;
         if (value == 'height') {
             const heightNum = Number(height) - 1
             let heightVal = heightNum.toString()
@@ -460,16 +468,50 @@ class Macrocalculator extends React.Component {
             })
         }
     }
+
+    componentWillUnmount() {
+        // Remove the event listener
+        this.focusListener.remove();
+    }
+
+    getMacro = () => {
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener('didFocus', () => {
+            // console.log('trainer api get >',a)
+            // let a = await HttpUtils.get('gettrainner');
+            AsyncStorage.getItem('currentMacro').then((value) => {
+                if (value) {
+                    let userData = JSON.parse(value)
+                    console.log('user current macro data >>>', userData)
+                    this.setState({
+                        showCurrentMacro: true,
+                        currentCalories: userData.calculteCalries,
+                        currentCarbohy: userData.carbohydrates,
+                        currentProteins: userData.proteins,
+                        currentMass: userData.fatMass
+                    })
+                }
+
+
+            })
+        });
+    }
+
     render() {
         const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation,
             currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation, male, female,
-            moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates, dob, date, 
-            currentWeight,goalWeight,height,age
-            } = this.state;
-            console.log('height >>>',height)
-            console.log('age >>>', dob);
-             console.log('current w8 >>>',currentWeight);
-            console.log('goal weight >>>', goalWeight)
+            moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates, dob, date,
+            currentWeight, goalWeight, height, age,
+            currentCalories,
+            currentCarbohy,
+            currentProteins,
+            currentMass,
+            showCurrentMacro
+        } = this.state;
+        console.log('height >>>', height)
+        console.log('age >>>', dob);
+        console.log('current w8 >>>', currentWeight);
+        console.log('goal weight >>>', goalWeight)
 
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: HeightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -484,6 +526,21 @@ class Macrocalculator extends React.Component {
                             <Text style={styles.textStyle}>Enter your height and weight below to re-calculate
                         your daily macro limit </Text>
                         </View>
+                        {
+                            showCurrentMacro ?
+                                <View>
+                                    <Text style={styles.currentMacroText}>Your Current Macro *</Text>
+                                    <View style={styles.inputCaloriesContainer}>
+                                        <TextInput placeholder={"e.g 1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={currentCalories + ' Kcal calories'} />
+                                        <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={currentMass + ' g Carbohyderates'} />
+                                        <TextInput placeholder={"e.g 107 g\Protein"} style={styles.inputCaloriesStyleThree} value={currentProteins + ' g Proteins'} />
+                                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={currentCarbohy + ' g Fat'} />
+                                    </View>
+                                </View>
+                                :
+                                null
+                        }
+
                         <View style={styles.dateBirth}>
                             <Text style={styles.textStyle}>Date Of Birth</Text>
                         </View>
@@ -503,8 +560,8 @@ class Macrocalculator extends React.Component {
                                         width: 0,
                                         height: 0,
                                     },
-                                    backgroundColor:'white',
-                                    opacity:0.3
+                                    backgroundColor: 'white',
+                                    opacity: 0.3
                                 }}
                                 onDateChange={(date) => { this.setState({ dob: date }) }}
                             />
@@ -536,9 +593,9 @@ class Macrocalculator extends React.Component {
                                 </Text>
                                 : null}
                         </View>
-                        <View style={{flexDirection:'row',marginRight:80,justifyContent:'space-between'}}>
-                        <Text style={styles.styleForLabel}>Height (fit)</Text>
-                        <Text style={styles.styleForLabel}>Height (Inch)</Text>
+                        <View style={{ flexDirection: 'row', marginRight: 80, justifyContent: 'space-between' }}>
+                            <Text style={styles.styleForLabel}>Height (fit)</Text>
+                            <Text style={styles.styleForLabel}>Height (Inch)</Text>
                         </View>
                         <View style={styles.heightContainer}>
                             <View style={styles.inputContainer}>
@@ -560,7 +617,7 @@ class Macrocalculator extends React.Component {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                            
+
                             <View style={styles.inputContainer}>
                                 <View style={styles.container}>
                                     <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
@@ -741,7 +798,10 @@ class Macrocalculator extends React.Component {
                         </Text>
                     </View>
                     <View style={styles.btnContainer}>
-                        <CaloriesSetupBtn title='Calculate Macro' caloriesBtnStyle={styles.caloriesBtnStyle} onPress={this.calulateMacro} />
+                        <CaloriesSetupBtn title='Calculate Macro'
+                            caloriesBtnStyle={styles.caloriesBtnStyle}
+                            onPress={this.calulateMacro}
+                        />
                     </View>
                     <View style={{ flex: 2, marginBottom: 30 }}>
                     </View>

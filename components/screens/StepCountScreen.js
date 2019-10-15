@@ -60,8 +60,10 @@ export default class StepCountScreen extends React.Component {
             goalSteps: '',
             stepTime: '',
             currentUserId: '',
-            showButton:false,
-            isLoading:false
+            showButton: false,
+            isLoading: false,
+            userId: '',
+            stepGoalCountData: ''
 
 
         }
@@ -94,10 +96,27 @@ export default class StepCountScreen extends React.Component {
     //         })
     // }
 
-     async componentWillMount() {
+    getGoalStepData = () => {
+        console.log('run function get goal steps')
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener('didFocus', () => {
+            //    this.getData()
+            AsyncStorage.getItem('goalSteps').then((value) => {
+                if (value) {
+                    const goalStepsValue = JSON.parse(value);
+                    console.log('user steps >>', goalStepsValue);
+                    this.setState({
+                        goalSteps: goalStepsValue
+                    })
+                }
+            })
+        });
+
+    }
+    async componentWillMount() {
         await this.getData()
         this.dateFilter()
-
+        this.getGoalStepData();
 
         // const paramsData = this.props.navigation.state.params;
         // console.log('params data >>>', paramsData)
@@ -138,11 +157,11 @@ export default class StepCountScreen extends React.Component {
     //         }
     //     }
 
-        
+
     // }
 
     //get data from database
-    getData =  () => {
+    getData = () => {
         const date = new Date().getDate();
         let month = new Date().getMonth() + 1;
         const year = new Date().getFullYear();
@@ -156,16 +175,19 @@ export default class StepCountScreen extends React.Component {
         }
         //let dataUser = await HttpUtils.get('getallexerciselog')
         //try {
-             AsyncStorage.getItem('currentUser').then((value) => {
-                if (value) {
-                    let dataUser = JSON.parse(value);
-                    console.log(dataUser)
-                    this.setState({
-                        currentUserId: dataUser._id
-                    })
-                }
+        AsyncStorage.getItem('currentUser').then((value) => {
+            if (value) {
+                let dataUser = JSON.parse(value);
+                console.log(dataUser)
+                this.setState({
+                    currentUserId: dataUser._id
+                })
+            }
 
-            })
+
+        })
+
+
 
 
 
@@ -223,35 +245,35 @@ export default class StepCountScreen extends React.Component {
         }
     }
 
-    sendDataPedometer = async ()=>{
+    sendDataPedometer = async () => {
         this.setState({
-            isLoading:true
+            isLoading: true
         })
         const dataPost = {
-                    userId: this.state.currentUserId,
-                    time: this.state.curTime,
-                    date: this.state.date,
-                    // stepCount: '55',
-                    // dailGoal: '55'
-                    stepCount: this.state.pedometerData,
-                    dailGoal: this.state.goalSteps
-                }
-                try {
-                    let postedData = await HttpUtilsFile.post('pedometer', dataPost)
-                    console.log('posted data >>>', postedData)
-                    if(postedData.code == 200){
-                        this.setState({
-                            isLoading:false
-                        },()=>{
-                            const { navigate } = this.props.navigation;
-                            navigate('BottomTabe');
-                        })
-                        
-                    }
-                }
-                catch (err) {
-                    console.log(err)
-                }
+            userId: this.state.currentUserId,
+            time: this.state.curTime,
+            date: this.state.date,
+            // stepCount: '55',
+            // dailGoal: '55'
+            stepCount: this.state.pedometerData,
+            dailGoal: this.state.goalSteps
+        }
+        try {
+            let postedData = await HttpUtilsFile.post('pedometer', dataPost)
+            console.log('posted data >>>', postedData)
+            if (postedData.code == 200) {
+                this.setState({
+                    isLoading: false
+                }, () => {
+                    const { navigate } = this.props.navigation;
+                    navigate('BottomTabe');
+                })
+
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
     }
 
 
@@ -380,10 +402,10 @@ export default class StepCountScreen extends React.Component {
                             })
 
                         }
-                        if(data.steps == Number(this.state.goalSteps)){
-                        this.setState({
-                            showButton:true
-                        })
+                        if (data.steps == Number(this.state.goalSteps)) {
+                            this.setState({
+                                showButton: true
+                            })
                         }
 
                     })
@@ -426,11 +448,11 @@ export default class StepCountScreen extends React.Component {
                             })
 
                         }
-                        if(data.steps == Number(this.state.goalSteps)){
+                        if (data.steps == Number(this.state.goalSteps)) {
                             this.setState({
-                                showButton:true
+                                showButton: true
                             })
-                            }
+                        }
 
                     })
                     // console.log('user steps -->', data.steps)
@@ -517,11 +539,11 @@ export default class StepCountScreen extends React.Component {
                             })
 
                         }
-                        if(data.steps == Number(this.state.goalSteps)){
+                        if (data.steps == Number(this.state.goalSteps)) {
                             this.setState({
-                                showButton:true
+                                showButton: true
                             })
-                            }
+                        }
 
                     })
                     // console.log('user steps -->', data.steps)
@@ -662,11 +684,39 @@ export default class StepCountScreen extends React.Component {
         })
     }
 
+    getDataForPedometer = async () => {
+        AsyncStorage.getItem("currentUser").then(value => {
+            let dataFromLocalStorage = JSON.parse(value);
+            let userId = dataFromLocalStorage._id;
+            this.setState({
+                userId: userId
+            })
+        });
+        const userObj = {
+            userId: this.state.userId
+        }
+        let userPedometerData = await HttpUtilsFile.post('getpedometerbyid', userObj);
+        console.log('userId >>', userPedometerData);
+        if (userPedometerData.code == 200) {
+            const userContent = userPedometerData.content;
+            for (let i in userContent) {
+                //console.log(userContent[i])
+                const userGoalSteps = userContent[i].dailGoal;
+                //console.log(userGoalSteps)
+                this.setState({
+                    stepGoalCountData: userGoalSteps
+                })
+            }
+
+        }
 
 
-
-
-
+    }
+    saveGoalSteps=(e)=> {
+        //const { goalSteps }=this.state;
+        console.log('goal steps >>', e)
+        AsyncStorage.setItem('goalSteps', JSON.stringify(e));
+    }
     render() {
         const {
             date,
@@ -687,10 +737,12 @@ export default class StepCountScreen extends React.Component {
             thirdValue,
             goalSteps,
             curTime,
+            stepGoalCountData
             //currentUserId
         } = this.state;
-         //console.log(currentUserId)
+        //console.log(currentUserId)
         console.log('pedometer data in number form ', Number(pedometerData))
+        //console.log('goal steps database >>',stepGoalCountData)
         const { params } = this.props.navigation.state;
         const dataObj = {
             pedometerData: pedometerData,
@@ -717,7 +769,7 @@ export default class StepCountScreen extends React.Component {
                 <View style={{ flex: 2, backgroundColor: 'black', marginHorizontal: 20 }}>
                     <Text style={{ color: 'white', }}>Today Goal Steps</Text>
                     <TextInput
-                        onChangeText={(text) => this.setState({ goalSteps: text })}
+                        onChangeText={text => { this.saveGoalSteps(text), this.setState({ goalSteps: text }) }}
                         placeholder='Set today goal steps...'
                         placeholderTextColor='#7e7e7e'
                         type="number"
@@ -777,7 +829,7 @@ export default class StepCountScreen extends React.Component {
                                         color: '#a6a6a6',
                                         fontFamily: 'MontserratLight',
                                         fontSize: 11
-                                    }}> / {goalSteps == '' || goalSteps == undefined ? 0 : goalSteps}</Text>
+                                    }}> / {goalSteps}</Text>
                                 </View>
                                 <Text style={{
                                     color: '#a6a6a6',
@@ -859,17 +911,18 @@ export default class StepCountScreen extends React.Component {
                         <View style={{ flex: 1, width: '100%', height: 30, marginTop: 80 }}>
                             {
                                 this.state.showButton ?
-                                <View style={{flexDirection:'row',alignSelf:'center'}}>
-                            <TouchableOpacity style={{width:100,height:35,backgroundColor:'#FF6200',
-                             borderRadius:3,justifyContent:'center'
+                                    <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                                        <TouchableOpacity style={{
+                                            width: 100, height: 35, backgroundColor: '#FF6200',
+                                            borderRadius: 3, justifyContent: 'center'
 
-                              }} onPress={this.sendDataPedometer}>
-                               <Text style={{color:'white',alignSelf:'center',fontFamily:'MontserratMedium',}}>Submit</Text>
-                            </TouchableOpacity>
-                            </View>
-                             :null
-                             } 
-                            
+                                        }} onPress={this.sendDataPedometer}>
+                                            <Text style={{ color: 'white', alignSelf: 'center', fontFamily: 'MontserratMedium', }}>Submit</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    : null
+                            }
+
                         </View>
 
                     </View>

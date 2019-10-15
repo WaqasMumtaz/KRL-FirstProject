@@ -54,8 +54,8 @@ const MainNavigator = createStackNavigator({
   ConfirmResetPassword: { screen: ConfirmResetPassword },
   //LastSetUpScreen: { screen: LastSetUpScreen },
 
-  Login: { screen: Login },
-   Signup: { screen: Signup },
+  // Login: { screen: Login },
+  //  Signup: { screen: Signup },
   // Setupscreen: { screen: Setupscreen },
   // LastSetUpScreen: { screen: LastSetUpScreen },
   // ResetpasswordScreen: { screen: ResetpasswordScreen },

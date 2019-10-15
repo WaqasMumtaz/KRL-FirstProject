@@ -415,6 +415,11 @@ const styles =StyleSheet.create({
         //backgroundColor:'blue'
          justifyContent:'center',
          marginTop:10
+    },
+    currentMacroText:{
+        color:'#000000',
+        marginTop:10,
+        
     }
 })
 

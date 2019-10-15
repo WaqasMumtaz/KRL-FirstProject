@@ -53,9 +53,6 @@ class Homescreen extends React.Component {
 
         this.setState({
           userId: dataFromLocalStorage._id
-        }, () => {
-          //console.log('state userId >>>', this.state.userId)
-          this.getUserData();
         })
       }
     });
@@ -165,7 +162,8 @@ class Homescreen extends React.Component {
 getDaysData=()=>{
   const { navigation } = this.props;
         this.focusListener = navigation.addListener('didFocus', () => {
-          this.getTodayOrYesterdayExcersice()
+          this.getUserData();
+          this.getTodayOrYesterdayExcersice();
         });
 }
 

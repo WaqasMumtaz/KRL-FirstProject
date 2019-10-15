@@ -382,7 +382,7 @@ class Setupscreen extends React.Component {
                                     />
                                     <TouchableOpacity
                                         style={styles.touchableOpacityTwo}
-                                        activeOpacity={0.8}
+                                        //activeOpacity={0.8}
                                         onPress={this.increamentVal.bind(this, 'heightInch')}
                                     >
                                         <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />

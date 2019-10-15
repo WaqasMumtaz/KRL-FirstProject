@@ -231,16 +231,16 @@ class Signup extends React.Component {
                 // let userProfile = await HttpUtilsFile.post('profile', userObjForProfile);
                 // let profileCode = userProfile.code;
                 
-                let getEmails = await HttpUtilsFile.get('getuseremail')
-                let emailCode = getEmails.code;
+                // let getEmails = await HttpUtilsFile.get('getuseremail')
+                // let emailCode = getEmails.code;
                 //let signupCode;
                 let profileCode;
                 let signupCode;
-                const emailContents = getEmails.content;
-                if (emailCode) {
-                    this.setState({
-                        isLoading: false
-                    })
+                // const emailContents = getEmails.content;
+                // if (emailCode) {
+                //     this.setState({
+                //         isLoading: false
+                //     })
                     // emailContents.map((item, index) => {
                     //     const { email } = this.state;
                     //     if (email == item) {
@@ -251,22 +251,22 @@ class Signup extends React.Component {
                     //             })
                     //         )
 
-                if (emailCode == 200) {
-                    emailContents.map((item, index) => {
-                        // console.log('items >>>', item)
-                        const { email } = this.state;
-                        // console.log('state email >>>', email)
-                        // console.log('user emails >>>', item == email)
-                        if (email == item) {
-                           // console.log('email match condition true')
-                            // return (
-                            this.setState({
-                                isLoading: false,
-                                emailNotExist: true
-                            })
-                        }
-                    })
-                }
+                // if (emailCode == 200) {
+                //     emailContents.map((item, index) => {
+                //         // console.log('items >>>', item)
+                //         const { email } = this.state;
+                //         // console.log('state email >>>', email)
+                //         // console.log('user emails >>>', item == email)
+                //         if (email == item) {
+                //            // console.log('email match condition true')
+                //             // return (
+                //             this.setState({
+                //                 isLoading: false,
+                //                 emailNotExist: true
+                //             })
+                //         }
+                //     })
+               // }
 
                 if (!emailNotExist) {
                     let dataUser = await HttpUtilsFile.post('signup', userObj)
@@ -316,7 +316,7 @@ class Signup extends React.Component {
                         AsyncStorage.setItem('myProfile', JSON.stringify(obj));
                     }
                     
-                    if (signupCode == 200 && profileCode == 200 && emailCode == 200) {
+                    if (signupCode == 200 && profileCode == 200) {
                         this.setState({
                             isLoading: false,
 
@@ -332,8 +332,8 @@ class Signup extends React.Component {
                     }     
 
                     }
-                }
-                if (emailCode != 200 || signupCode != 200 || profileCode != 200) {
+                //}
+                if (emailNotExist == true || signupCode != 200 || profileCode != 200) {
                     this.setState({
                         isLoading: false
                     })
@@ -376,15 +376,42 @@ class Signup extends React.Component {
                 name: '',
                 lastName: '',
                 email: '',
-                mobile: '',
+                mobileNo: '',
                 newPasswrd: '',
                 cnfrmPasswrd: '',
                 gender: '',
-                passMatch: false
+                passMatch: false,
+                emailNotExist:false
             })
         }
     }
-    checkValidateFunc = (text, type) => {
+
+    getEmailsFunc= async (e)=>{
+        console.log('user email >>',e)
+        let getEmails = await HttpUtilsFile.get('getuseremail');
+        console.log('get emails >',getEmails);
+        let emailCode = getEmails.code;
+        const emailContents = getEmails.content;
+        if (emailCode == 200) {
+            emailContents.map((item, index) => {
+                // console.log('items >>>', item)
+                //const { email } = this.state;
+                // console.log('state email >>>', email)
+                // console.log('user emails >>>', item == email)
+                if (e == item) {
+                   // console.log('email match condition true')
+                    // return (
+                    this.setState({
+                        emailNotExist: true
+                    })
+                }
+            })
+        }
+
+    }
+
+    checkValidateFunc = async (text, type) => {
+        
         let alpha = /^[a-zA-Z]+$/;
         //let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -394,6 +421,10 @@ class Signup extends React.Component {
             if (reg.test(text)) {
                 this.setState({
                     emailValidate: true,
+                }, ()=>{
+                    //console.log('run here email check api')
+                    const userEmail = this.state.email;
+                    this.getEmailsFunc(userEmail)
                 })
             }
             else {
