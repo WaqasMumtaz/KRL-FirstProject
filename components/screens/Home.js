@@ -233,7 +233,7 @@ getDaysData=()=>{
   render() {
     const { todayData, yestertdayData, pedometerData, goalSteps ,userCurrentWeight} = this.state;
     const { navigate } = this.props.navigation;
-    console.log('current weight >>',userCurrentWeight)
+    //console.log('current weight >>',userCurrentWeight)
     return (
       <View style={styles.container}>
         <View style={styles.headingContainer}>
