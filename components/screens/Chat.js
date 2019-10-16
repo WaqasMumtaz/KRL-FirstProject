@@ -595,11 +595,12 @@ class Chatscreen extends React.Component {
             : null
           }
           {message.senderId == userId && message.type == 'text' ?
+           <View style={styles.messagesContainer}>
             <Text key={key} style={styles.msgsTextStyle}>
               {message.message}
-              {'\n'}
-              <Text style={styles.timeText}>{message.time}</Text>
             </Text>
+              <Text style={styles.timeText}>{message.time.slice(0 , 5)}</Text>
+            </View>
             :
             message.senderId == userId && message.type == 'image' ?
               <TouchableOpacity activeOpacity={0.5}
@@ -789,11 +790,12 @@ class Chatscreen extends React.Component {
 
 
           {message.senderId == opponentId && message.type == 'text' ?
+           <View style={styles.replyMessageContainer}>
             <Text key={key} style={styles.replyMessagesStyle}>
-              {message.message}{'\n'}
-              <Text style={styles.timeTextReply}>{message.time}</Text>
+              {message.message}
             </Text>
-            
+              <Text style={styles.timeTextReply}>{message.time.slice(0 , 5)}</Text>
+            </View>
             :
             message.senderId == opponentId && message.type == 'image' ?
               <TouchableOpacity activeOpacity={0.5}

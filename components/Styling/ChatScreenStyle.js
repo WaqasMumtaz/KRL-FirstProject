@@ -80,26 +80,32 @@ const styles = StyleSheet.create({
     dateTxt: {
         fontFamily: 'MontserratExtraBold',
     },
-    msgsTextStyle: {
-        padding: 10,
-        color: '#A6A6A6',
-        fontFamily: 'MontserratLight',
+    messagesContainer:{
         marginBottom: 10,
         marginLeft: '50%',
         backgroundColor: 'black',
         borderRadius: 10
     },
+    msgsTextStyle: {
+        padding: 5,
+        color: '#A6A6A6',
+        fontFamily: 'MontserratLight',
+       
+    },
     replyMessagesStyle: {
-        padding: 10,
+        padding: 5,
         color: '#4f4f4f',
         fontFamily: 'MontserratLight',
+        
+    },
+    replyMessageContainer:{
         marginBottom: 10,
         marginRight: '45%',
         backgroundColor: '#e5e5e5',
         borderRadius: 10
     },
     mgsImges: {
-        padding: 10,
+        padding: 5,
         color: '#A6A6A6',
         marginBottom: 20,
         borderRadius: 5,
@@ -768,15 +774,19 @@ const styles = StyleSheet.create({
     timeText:{
         color: '#A6A6A6',
         fontFamily: 'MontserratLight',
-        paddingTop:5,
+        padding:5,
+        flexDirection:'row',
+        alignSelf:'flex-end'
        
     },
     timeTextReply:{
         color: '#4f4f4f',
         fontFamily: 'MontserratLight',
-        marginTop:5,
-        paddingTop:5,
-    }
+        padding:5,
+        flexDirection:'row',
+        alignSelf:'flex-end'
+    },
+    
 });
 
 export default styles;
