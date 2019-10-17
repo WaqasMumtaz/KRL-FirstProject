@@ -153,6 +153,9 @@ android {
 dependencies {
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-firebase')
+//     implementation(project(':react-native-firebase')) {
+//     transitive = false
+// }
     
     implementation project(':@react-native-community_async-storage')
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -173,21 +176,30 @@ dependencies {
     implementation project(':react-native-sound-recorder')
 
     implementation project(':react-native-image-picker')
+
     //old version dependencies firebase
-    implementation "com.google.android.gms:play-services-base:16.1.0"
-    implementation "com.google.firebase:firebase-core:16.0.9"
-    //implementation "com.google.firebase:firebase-ads:15.0.1"
-    implementation "com.google.firebase:firebase-analytics:16.0.4"
-    implementation "com.google.firebase:firebase-database:17.0.0"
-    implementation 'com.google.firebase:firebase-messaging:18.0.0'
-    implementation ("com.google.firebase:firebase-auth:17.0.0")
+    // implementation "com.google.android.gms:play-services-base:16.1.0"
+    // implementation "com.google.firebase:firebase-core:16.0.9"
+    // implementation "com.google.firebase:firebase-ads:15.0.1"
+    // implementation "com.google.firebase:firebase-analytics:16.0.4"
+    // implementation "com.google.firebase:firebase-database:17.0.0"
+    // implementation 'com.google.firebase:firebase-messaging:18.0.0'
+    // implementation ("com.google.firebase:firebase-auth:17.0.0")
+
+    //Latest firebase
+    implementation "com.google.android.gms:play-services-base:17.0.0"
+    implementation "com.google.firebase:firebase-core:17.0.1"
+    implementation "com.google.firebase:firebase-messaging:19.0.0"
+    implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
+
+    //Last dependencies
     // implementation "com.google.android.gms:play-services-base:16.0.1"
     // implementation "com.google.firebase:firebase-core:16.0.6"
     // implementation "com.google.firebase:firebase-ads:15.0.1"
     // implementation "com.google.firebase:firebase-analytics:16.0.4"
     // implementation "com.google.firebase:firebase-database:16.0.6"
 
-    compile (project(':tipsi-stripe')) {
+    implementation (project(':tipsi-stripe')) {
         exclude group: 'com.google.android.gms'
         exclude group: 'com.google.firebase'
     }
@@ -242,5 +254,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
-// apply plugin: 'com.google.gms.google-services'
+ apply plugin: 'com.google.gms.google-services'
 

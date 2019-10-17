@@ -24,8 +24,8 @@ import com.kevinresol.react_native_sound_recorder.RNSoundRecorderPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 
-// import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;  
-// import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;  
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 
 import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 // import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
@@ -60,7 +60,6 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFSPackage(),
             new RNSoundRecorderPackage(),
             // new RNFirebaseAdMobPackage(),
-             //new RNFirebasePackage(),
             new AsyncStoragePackage(),
             new ImagePickerPackage(),
             // new RNFirebaseAnalyticsPackage(),
@@ -68,9 +67,9 @@ public class MainApplication extends Application implements ReactApplication {
             // new MPAndroidChartPackage(),
             // new MPAndroidChartPackage(),
             // new VectorIconsPackage(),
-            new RNGestureHandlerPackage()
-            // new RNFirebaseMessagingPackage(),
-            // new RNFirebaseNotificationsPackage()
+            new RNGestureHandlerPackage(),
+            new RNFirebaseMessagingPackage(),
+            new RNFirebaseNotificationsPackage()
             // new MainReactPackage(),
             // new MPAndroidChartPackage()
             //new RNCWebViewPackage() 

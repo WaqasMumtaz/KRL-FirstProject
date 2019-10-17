@@ -1,11 +1,10 @@
 import React from 'react';
-import { Text, View, ScrollView, Dimensions, Image, TouchableOpacity, BackHandler } from 'react-native';
+import { Alert ,Text, View, ScrollView, Dimensions, Image, TouchableOpacity, BackHandler } from 'react-native';
 import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
-
-//import firebase from 'react-native-firebase';
+import firebase from 'react-native-firebase';
 
 const { height } = Dimensions.get('window');
 let userId = {};
@@ -30,6 +29,9 @@ class Homescreen extends React.Component {
   componentWillUnmount() {
     // Remove the event listener
     this.focusListener.remove();
+    BackHandler.removeEventListener('hardwareBackPress');
+    this.notificationListener();
+    this.notificationOpenedListener();
 }
 
   componentWillMount() {
@@ -185,49 +187,102 @@ getDaysData=()=>{
 
 
 
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress');
+  // componentWillUnmount() {
+  //   BackHandler.removeEventListener('hardwareBackPress');
+  // }
+
+     componentDidMount() {
+      this.checkPermission();
+      this.createNotificationListeners();
+    }
+
+      //1
+   checkPermission = async () =>{
+    const enabled = await firebase.messaging().hasPermission();
+    if (enabled) {
+        this.getToken();
+    } else {
+        this.requestPermission();
+    }
   }
 
-  //   async componentDidMount() {
-  //     this.checkPermission();
-  //   }
+   //3
+    getToken = async ()=>{
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    if (!fcmToken) {
+        fcmToken = await firebase.messaging().getToken();
 
-  //     //1
-  //  checkPermission = async () =>{
-  //   const enabled = await firebase.messaging().hasPermission();
-  //   if (enabled) {
-  //       this.getToken();
-  //   } else {
-  //       this.requestPermission();
-  //   }
-  // }
+        if (fcmToken) {
+            // user has a device token
+            console.log('User Device token >>>', fcmToken)
+            await AsyncStorage.setItem('fcmToken', fcmToken);
+        }
+    }
+  }
 
-  //  //3
-  //   getToken = async ()=>{
-  //   let fcmToken = await AsyncStorage.getItem('fcmToken');
-  //   if (!fcmToken) {
-  //       fcmToken = await firebase.messaging().getToken();
+    //2
+   requestPermission= async ()=>{
+    try {
+        await firebase.messaging().requestPermission();
+        // User has authorised
+        this.getToken();
+    } catch (error) {
+        // User has rejected permissions
+        console.log('permission rejected');
+    }
+  }
+   createNotificationListeners = async () => {
+     console.log('Create Notification Listeners run ')
+    /*
+    * Triggered when a particular notification has been received in foreground
+    * */
+    this.notificationListener = firebase.notifications().onNotification((notification) => {
+        const { title, body } = notification;
+        this.showAlert(title, body);
+    });
 
-  //       if (fcmToken) {
-  //           // user has a device token
-  //           console.log('User Device token >>>', fcmToken)
-  //           await AsyncStorage.setItem('fcmToken', fcmToken);
-  //       }
-  //   }
-  // }
+    /*
+  * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
+  * */
+  this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+    const { title, body } = notificationOpen.notification;
+    this.showAlert(title, body);
+});
 
-  //   //2
-  //  requestPermission= async ()=>{
-  //   try {
-  //       await firebase.messaging().requestPermission();
-  //       // User has authorised
-  //       this.getToken();
-  //   } catch (error) {
-  //       // User has rejected permissions
-  //       console.log('permission rejected');
-  //   }
-  // }
+
+/*
+  * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+  * */
+ const notificationOpen = await firebase.notifications().getInitialNotification();
+ if (notificationOpen) {
+     const { title, body } = notificationOpen.notification;
+     this.showAlert(title, body);
+ }
+
+
+ /*
+  * Triggered for data only payload in foreground
+  * */
+ this.messageListener = firebase.messaging().onMessage((message) => {
+  //process data message
+  console.log(JSON.stringify(message));
+});
+
+
+  }  
+
+  showAlert(title, body) {
+    Alert.alert(
+      title, body,
+      [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ],
+      { cancelable: false },
+    );
+  }
+  
+
+
 
 
   render() {
