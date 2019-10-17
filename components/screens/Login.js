@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import styles from '../Styling/LoginScreenStyle';
 import HttpUtilsFile from '../Services/HttpUtils';
 import firebase from '../../Config/Firebase';
+import firebasePushNotification from 'react-native-firebase';
 import OverlayLoader from '../Loader/OverlaySpinner';
 import 'firebase/firestore';
 const db = firebase.database();
@@ -34,11 +35,56 @@ class Login extends React.Component {
       isLoading: false,
       passwordNotMatch: '',
       psswrdNotMatchShow: false,
-      emailAndPasswrd: false
+      emailAndPasswrd: false,
+      deviceToken:''
 
     }
     this.checkUserLogin()
   }
+
+  // Start here firebase push notification
+componentDidMount() {
+  this.checkPermission();
+}
+   //1
+   checkPermission = async () =>{
+    const enabled = await firebasePushNotification.messaging().hasPermission();
+    if (enabled) {
+        this.getToken();
+    } else {
+        this.requestPermission();
+    }
+  }
+
+   //3
+    getToken = async ()=>{
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    if (!fcmToken) {
+        fcmToken = await firebasePushNotification.messaging().getToken();
+
+        if (fcmToken) {
+            // user has a device token
+            console.log('User Device token >>>', fcmToken)
+            this.setState({
+              deviceToken:fcmToken
+            })
+            await AsyncStorage.setItem('fcmToken', fcmToken);
+        }
+    }
+  }
+
+    //2
+   requestPermission= async ()=>{
+    try {
+        await firebasePushNotification.messaging().requestPermission();
+        // User has authorised
+        this.getToken();
+    } catch (error) {
+        // User has rejected permissions
+        console.log('permission rejected');
+    }
+  }
+
 
   checkUserLogin = async () => {
     const { navigate } = this.props.navigation;
@@ -65,7 +111,7 @@ class Login extends React.Component {
 
   loginFunc = async () => {
     const { navigate } = this.props.navigation;
-    const { email, password, emailValidate, passwrdValidate } = this.state;
+    const { email, password, emailValidate, passwrdValidate ,deviceToken} = this.state;
     if (email == '' || password == '') {
       Alert.alert('Please Fill All Fields')
       if (emailValidate !== true || passwrdValidate !== true) {
@@ -79,6 +125,7 @@ class Login extends React.Component {
       const userObj = {
         email: email,
         password: password,
+        //deviceToken:deviceToken
         // type:'trainny'
       }
       try {
@@ -218,6 +265,9 @@ class Login extends React.Component {
 
     })
   }
+
+  
+
   render() {
     const { navigate } = this.props.navigation;
     const { email, password, psswrdInstruction, isLoading, passwordNotMatch, psswrdNotMatchShow, emailAndPasswrd } = this.state;

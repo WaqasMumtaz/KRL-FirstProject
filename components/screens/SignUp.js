@@ -82,6 +82,15 @@ class Signup extends React.Component {
         //console.log(this.phone.getCountryCode())
     }
 
+    componentWillMount(){
+        AsyncStorage.getItem('fcmToken').then((res)=>{
+            const deviceToken = res;
+             console.log('This is device token >>>',deviceToken )
+            // if(res){
+            // }
+        })
+    }
+
     selectCountry(country) {
         //console.log('country >>', country)
         //this.myCountryPicker.open()

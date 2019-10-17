@@ -187,50 +187,11 @@ getDaysData=()=>{
 
 
 
-  // componentWillUnmount() {
-  //   BackHandler.removeEventListener('hardwareBackPress');
-  // }
-
      componentDidMount() {
-      this.checkPermission();
       this.createNotificationListeners();
     }
 
-      //1
-   checkPermission = async () =>{
-    const enabled = await firebase.messaging().hasPermission();
-    if (enabled) {
-        this.getToken();
-    } else {
-        this.requestPermission();
-    }
-  }
-
-   //3
-    getToken = async ()=>{
-    let fcmToken = await AsyncStorage.getItem('fcmToken');
-    if (!fcmToken) {
-        fcmToken = await firebase.messaging().getToken();
-
-        if (fcmToken) {
-            // user has a device token
-            console.log('User Device token >>>', fcmToken)
-            await AsyncStorage.setItem('fcmToken', fcmToken);
-        }
-    }
-  }
-
-    //2
-   requestPermission= async ()=>{
-    try {
-        await firebase.messaging().requestPermission();
-        // User has authorised
-        this.getToken();
-    } catch (error) {
-        // User has rejected permissions
-        console.log('permission rejected');
-    }
-  }
+      
    createNotificationListeners = async () => {
      console.log('Create Notification Listeners run ')
     /*
