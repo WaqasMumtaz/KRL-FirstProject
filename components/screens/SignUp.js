@@ -58,6 +58,7 @@ class Signup extends React.Component {
             pickerData: '',
             countryCod: '',
             mobileNo: '',
+            deviceToken:''
             // mobileNoAndCode:countryCod + mobileNo,
 
 
@@ -86,8 +87,9 @@ class Signup extends React.Component {
         AsyncStorage.getItem('fcmToken').then((res)=>{
             const deviceToken = res;
              console.log('This is device token >>>',deviceToken )
-            // if(res){
-            // }
+             this.setState({
+                 deviceToken:deviceToken
+             })
         })
     }
 
@@ -198,7 +200,23 @@ class Signup extends React.Component {
 
     signUpFunction = async () => {
         const { navigate } = this.props.navigation;
-        const { name, lastName, email, mobileNo, newPasswrd, cnfrmPasswrd, nameValidate, emailValidate, mobileValidate, passwrdValidate, cnfrmPasswrdValidate, isLoading, gender , emailNotExist} = this.state;
+        const { 
+            name, 
+            lastName, 
+            email, 
+            mobileNo, 
+            newPasswrd, 
+            cnfrmPasswrd, 
+            nameValidate, 
+            emailValidate, 
+            mobileValidate, 
+            passwrdValidate, 
+            cnfrmPasswrdValidate, 
+            isLoading, 
+            gender , 
+            emailNotExist,
+            deviceToken
+        } = this.state;
         if (name == '' || lastName == '' || email == '' || mobileNo == '' || newPasswrd == '' || cnfrmPasswrd == '' || gender == '') {
             alert('Please Fill All Fields');
             if (nameValidate != true || emailValidate != true || mobileValidate != true || passwrdValidate != true || cnfrmPasswrdValidate != true) {
