@@ -21,7 +21,8 @@ class Homescreen extends React.Component {
       goalSteps: '',
       userAllData:[],
       userCurrentWeight:'',
-      excerciseArry:[]
+      excerciseArry:[],
+      bmiData:''
     }
   }
 
@@ -58,6 +59,7 @@ class Homescreen extends React.Component {
         })
       }
     });
+    
 
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
@@ -160,12 +162,24 @@ class Homescreen extends React.Component {
     }
   }
 
+getBmiData =()=>{
+  AsyncStorage.getItem("bmiData").then((value)=>{
+    if(value){
+      console.log('bmi result >>',JSON.parse(value))
+      this.setState({
+        bmiData:value
+      })
+    }
+  })
+}
+
 
 getDaysData=()=>{
   const { navigation } = this.props;
         this.focusListener = navigation.addListener('didFocus', () => {
           this.getUserData();
           this.getTodayOrYesterdayExcersice();
+          this.getBmiData();
         });
 }
 
@@ -247,7 +261,7 @@ getDaysData=()=>{
 
 
   render() {
-    const { todayData, yestertdayData, pedometerData, goalSteps ,userCurrentWeight} = this.state;
+    const { todayData, yestertdayData, pedometerData, goalSteps ,userCurrentWeight,bmiData} = this.state;
     const { navigate } = this.props.navigation;
     //console.log('current weight >>',userCurrentWeight)
     return (
@@ -272,6 +286,8 @@ getDaysData=()=>{
               <View style={styles.waitContainer}>
                     <Text style={styles.waitText}>{userCurrentWeight == '' ? 0 : userCurrentWeight} KG</Text>
                     <Text style={styles.weightLabel}>current weight</Text>
+                    <Text style={styles.bmiText}>{bmiData == '' ? 0 : bmiData}</Text>
+                    <Text style={styles.weightLabel}>current BMI</Text>
               </View>
               <TouchableOpacity style={styles.cardOne} onPress={() => { navigate('AddExercise') }}>
                 <Image source={require('../icons/log-exer.png')} style={styles.imgsStyle} />

@@ -177,6 +177,11 @@ waitText:{
 weightLabel:{
     color:'#7e7e7e',
     fontFamily: 'MontserratLight',
+},
+bmiText:{
+    color: '#FF6200',
+    fontFamily: 'MontserratMedium',
+    marginTop:5
 }
 
 })

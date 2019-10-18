@@ -136,7 +136,7 @@ const styles =StyleSheet.create({
     inputCaloriesStyleTwo:{
         height:65,
         //borderWidth:2,
-        width:'40%',
+        width:'50%',
         marginLeft:12,
         borderBottomWidth:1,
         marginLeft:20,

@@ -37,11 +37,14 @@ class Setupscreen extends React.Component {
             goalStepsValidation: false,
             maleClickedTextStyle: false,
             femaleClickedTextStyle: false,
+            maintainClicked: false,
             fitnessResult: '',
             lose: false,
             gain: false,
+            maintain: false,
             fitnessValidation: false,
-            isLoading: false
+            isLoading: false,
+            clickedMaintainTextStyle: false
         }
     }
 
@@ -50,8 +53,11 @@ class Setupscreen extends React.Component {
             this.setState({
                 lose: true,
                 gain: false,
+                maintain: false,
                 maleClickedTextStyle: true,
                 femaleClickedTextStyle: false,
+                clickedMaintainTextStyle: false,
+                maintainClicked: false,
                 fitnessResult: 'lose weight'
             })
         }
@@ -59,9 +65,26 @@ class Setupscreen extends React.Component {
             this.setState({
                 lose: false,
                 gain: true,
+                maintain: false,
                 fitnessResult: 'gain weight',
                 maleClickedTextStyle: false,
                 femaleClickedTextStyle: true,
+                clickedMaintainTextStyle: false,
+                maintainClicked: false
+            })
+        }
+        else if (result == 'maintain') {
+            this.setState({
+                lose: false,
+                gain: false,
+                maintain: true,
+                fitnessResult: 'maintain weight',
+                maintainClicked: true,
+                maleClickedTextStyle: false,
+                femaleClickedTextStyle: false,
+                clickedMaintainTextStyle: true,
+
+
             })
         }
     }
@@ -148,7 +171,7 @@ class Setupscreen extends React.Component {
         }
     }
     lastStep = async () => {
-        const { height, heightInch, currentWeight, currentWeightUnit, fitnessResult } = this.state
+        const { height, heightInch, currentWeight, currentWeightUnit, fitnessResult, goalSteps } = this.state
         const { dob, date, time, userId } = this.props.navigation.state.params;
         if (height == '') {
             this.setState({
@@ -188,6 +211,16 @@ class Setupscreen extends React.Component {
         else {
             this.setState({
                 fitnessValidation: false
+            })
+        }
+        if (goalSteps == '') {
+            this.setState({
+                goalStepsValidation: true
+            })
+        }
+        else {
+            this.setState({
+                goalStepsValidation: false
             })
         }
         // if (goalWeight == '') {
@@ -240,7 +273,7 @@ class Setupscreen extends React.Component {
         //         goalStepsValidation: false
         //     })
         //}
-        if (height != '' && heightInch != '' && currentWeight != '' && fitnessResult != '' && currentWeightUnit != '') {
+        if (height != '' && heightInch != '' && currentWeight != '' && fitnessResult != '' && currentWeightUnit != '' && goalSteps != '') {
             this.setState({
                 isLoading: true
             })
@@ -260,30 +293,31 @@ class Setupscreen extends React.Component {
                 userId: userId,
                 heightCentimeter: totalHeightCentimeter,
                 lose: fitnessResult,
-                gain: fitnessResult
+                gain: fitnessResult,
+                //goalSteps:goalSteps
             }
-            console.log('send user data >>>',userData)
+            console.log('send user data >>>', userData)
             try {
                 let sendData = await HttpUtilsFile.post('postgoal', userData);
                 console.log('data send >>>', sendData)
                 if (sendData.code == 200) {
                     this.setState({
                         isLoading: false
-                    },()=>{
+                    }, () => {
                         height == '',
-                        heightInch == '',
-                        currentWeight == '', 
-                        fitnessResult == '', 
-                        currentWeightUnit == '',
-                        this.state.clickedFemale == false,
-                        this.state.clickedMale == false
+                            heightInch == '',
+                            currentWeight == '',
+                            fitnessResult == '',
+                            currentWeightUnit == '',
+                            this.state.clickedFemale == false,
+                            this.state.clickedMale == false
                         const { navigate } = this.props.navigation;
                         navigate('BottomTabe');
                     })
-                   
+
                 }
             }
-            catch(err){
+            catch (err) {
                 console.log(err)
             }
 
@@ -318,10 +352,14 @@ class Setupscreen extends React.Component {
             fitnessResult,
             maleClickedTextStyle,
             femaleClickedTextStyle,
+            clickedMaintainTextStyle,
             fitnessValidation,
             goalWeightUnitValidation,
             goalSteps,
-            goalStepsValidation } = this.state;
+            goalStepsValidation,
+            maintain,
+            maintainClicked
+        } = this.state;
         console.log('your fitness result >>>', fitnessResult)
         return (
             <View style={styles.mainContainer}>
@@ -382,7 +420,7 @@ class Setupscreen extends React.Component {
                                     />
                                     <TouchableOpacity
                                         style={styles.touchableOpacityTwo}
-                                        //activeOpacity={0.8}
+                                        activeOpacity={0.8}
                                         onPress={this.increamentVal.bind(this, 'heightInch')}
                                     >
                                         <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
@@ -457,7 +495,7 @@ class Setupscreen extends React.Component {
                                 null}
                         </View>
                         <Text style={styles.genderTextStyle}>Select fitness goal</Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between',marginTop:8 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
                             <TouchableOpacity style={lose ? styles.clickedMale : styles.maleTouchableOpacity} onPress={this.fitnessFun.bind(this, 'lose')}>
                                 <Text style={maleClickedTextStyle ? styles.maleClickedTextStyle : styles.maleTextStyle}>
                                     Lose Weight
@@ -467,6 +505,10 @@ class Setupscreen extends React.Component {
                                 <Text style={femaleClickedTextStyle ? styles.femaleClickedTextStyle : styles.maleTextStyle}>
                                     Gain Weight</Text>
                             </TouchableOpacity>
+                            <TouchableOpacity style={maintain ? styles.maintainClicked : styles.maintainContainer} onPress={this.fitnessFun.bind(this, 'maintain')}>
+                                <Text style={clickedMaintainTextStyle ? styles.clickedMaintainTextStyle : styles.maintainTextStyle}>
+                                    Maintain Weight</Text>
+                            </TouchableOpacity>
                         </View>
                         {fitnessValidation ?
                             <View style={{ flexDirection: 'row', marginVertical: 10, }}>
@@ -475,7 +517,33 @@ class Setupscreen extends React.Component {
                                     </Text>
                             </View>
                             :
-                            null}
+                            null
+                        }
+                        <View style={styles.goalStepsContainer}>
+                            <Text style={styles.goalStepsText}>Select Goal Steps</Text>
+                            </View>
+                        <View style={styles.inputFields}>
+                            <TextInput onChangeText={text => {
+
+                                this.setState({ goalSteps: text })
+                            }}
+                                placeholder="Goal steps..."
+                                placeholderTextColor="#7e7e7e"
+                                value={goalSteps}
+                                style={styles.inputTexts} />
+                        </View>
+
+                        {goalStepsValidation ?
+                            <View style={{ flexDirection: 'row', marginVertical: 10, }}>
+                                <Text style={styles.validationInstruction}>
+                                    Please enter goal steps
+                                    </Text>
+                            </View>
+                            :
+                            null
+                        }
+
+
                         {
                             this.state.isLoading ?
                                 <OverlayLoader /> :

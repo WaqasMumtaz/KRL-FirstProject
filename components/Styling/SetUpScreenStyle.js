@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
         //backgroundColor:'gray',
         flexDirection: 'row',
         justifyContent: 'center',
-    
+        
     
       },
       inputTexts: {
@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
         //marginRight: 20,
         paddingLeft: 16,
         
+        
       },
       genderTextStyle:{
         color: '#A6A6A6',
@@ -217,8 +218,8 @@ const styles = StyleSheet.create({
         marginTop:12
     },
     clickedMale:{
-        height: 38, 
-        width: '43%', 
+        height: 40, 
+        width: '30%', 
         //marginLeft: 16, 
         color: 'white',
         justifyContent: 'center', 
@@ -227,8 +228,8 @@ const styles = StyleSheet.create({
         borderRadius: 3 
     },
     maleTouchableOpacity:{
-        height: 38,
-        width: '43%', 
+        height: 40,
+        width: '30%', 
         justifyContent: 'center', 
         //backgroundColor: '#1e1e1e',
         backgroundColor:'white',
@@ -247,8 +248,8 @@ const styles = StyleSheet.create({
         fontFamily: 'MontserratLight'
     },
     clickedFemale:{
-        height: 38, 
-        width: '43%', 
+        height: 40, 
+        width: '30%', 
         //marginLeft: 16, 
         color: 'white',
         justifyContent: 'center', 
@@ -256,9 +257,29 @@ const styles = StyleSheet.create({
         marginTop: 5, 
         borderRadius: 3 
     },
+    maintainClicked:{
+        height: 40, 
+        width: '30%', 
+        //marginLeft: 16, 
+        color: 'white',
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    maintainContainer:{
+        height: 40, 
+        width: '30%', 
+        //marginLeft: 16, 
+        justifyContent: 'center', 
+        backgroundColor: 'white',
+        //opacity:0.3,
+        marginTop: 5, 
+        borderRadius: 3 
+    },
     femaleContainer:{
-        height: 38, 
-        width: '43%', 
+        height: 40, 
+        width: '30%', 
         //marginLeft: 16, 
         justifyContent: 'center', 
         backgroundColor: 'white',
@@ -270,8 +291,49 @@ const styles = StyleSheet.create({
         color:'white',
         textAlign: 'center', 
         fontFamily: 'MontserratLight',
-      }
-          
+      },
+      clickedMaintainTextStyle:{
+        color:'white',
+        textAlign: 'center', 
+        fontFamily: 'MontserratLight',
+      },
+      maintainTextStyle:{
+          textAlign: 'center', 
+        color: 'black',
+        fontFamily: 'MontserratLight'
+      },
+       inputFields: {
+        flex: 1,
+        //backgroundColor:'gray',
+        flexDirection: 'row',
+        justifyContent: 'center',
+    
+    
+      },
+       inputTexts: {
+        flex: 1,
+        fontFamily: 'MontserratLight',
+       // fontFamily:'MontserratMedium',
+        color: 'black',
+        // fontSize: 23,
+        //marginLeft: 20,
+        height: 40,
+        //borderColor: 'gray',
+        //backgroundColor: '#1e1e1e',
+        backgroundColor:'white',
+        borderRadius: 2,
+        //marginRight: 20,
+        paddingLeft: 16,
+        
+      },
+     goalStepsContainer:{
+          marginTop:15,
+          marginBottom:8
+     },
+     goalStepsText:{
+         color: '#A6A6A6',
+        fontFamily: 'MontserratLight',
+     }
 
 })
 

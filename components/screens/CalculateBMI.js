@@ -181,6 +181,7 @@ class BMICalculator extends React.Component {
                 mgs: false,
                 hitApi: true
             })
+             AsyncStorage.setItem('bmiData',JSON.stringify(bmiVal))
             let dataUser = await HttpUtils.post('bmilogs', bmiData)
             console.log(dataUser, 'dataUser');
             let userCode = dataUser.code;
