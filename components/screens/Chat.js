@@ -404,27 +404,28 @@ class Chatscreen extends React.Component {
       currentMonth = `0${currentMonth}`
     }
     //getting weekly excersices 
-    for (var i in data) {
-      let dataApi = data[i];
-      if (dataApi.userId == userId) {
-        //get month name
-        let getMonthNo = dataApi.month.slice(1) - 1;
-        let getMontName = monthName[getMonthNo];
-        dataApi.monthName = getMontName;
-        //check week of the month
-        let checkDate = Number(dataApi.dayOfMonth) - currentDate;
-        let checkMonth = Number(dataApi.month) - currentMonth;
-        let checkYear = Number(dataApi.year) - currentYear;
-        if (checkDate == 0 || checkDate == -1 || checkDate == -2 || checkDate == -3 || checkDate == -4 || checkDate == -5 ||
-          checkDate == -6 || checkDate == -7 && checkMonth == 0 && checkYear == 0) {
-          dataExcersiceArr = [...dataExcersiceArr, dataApi];
-          this.setState({
-            weekExcercise: dataExcersiceArr
-          })
+    if (data) {
+      for (var i in data) {
+        let dataApi = data[i];
+        if (dataApi.userId == userId) {
+          //get month name
+          let getMonthNo = dataApi.month.slice(1) - 1;
+          let getMontName = monthName[getMonthNo];
+          dataApi.monthName = getMontName;
+          //check week of the month
+          let checkDate = Number(dataApi.dayOfMonth) - currentDate;
+          let checkMonth = Number(dataApi.month) - currentMonth;
+          let checkYear = Number(dataApi.year) - currentYear;
+          if (checkDate == 0 || checkDate == -1 || checkDate == -2 || checkDate == -3 || checkDate == -4 || checkDate == -5 ||
+            checkDate == -6 || checkDate == -7 && checkMonth == 0 && checkYear == 0) {
+            dataExcersiceArr = [...dataExcersiceArr, dataApi];
+            this.setState({
+              weekExcercise: dataExcersiceArr
+            })
+          }
         }
       }
     }
-
     // //get week wise data and show bar chart line 
     for (var i in weightData) {
       let dataApi = weightData[i];
@@ -557,7 +558,7 @@ class Chatscreen extends React.Component {
     const chatMessages = this.state.chatMessages.map((message, key) => {
       if (dateNum == undefined) {
         showDate = `${chatDates[key]}-${monthName[chatMonths[key]]}-${chatYear[key]}`
-         console.log(showDate , 'showDate')
+        console.log(showDate, 'showDate')
       }
       else {
         if (dateNum == message.date.slice(3, 5) && month == message.date.slice(0, 2)
@@ -595,11 +596,11 @@ class Chatscreen extends React.Component {
             : null
           }
           {message.senderId == userId && message.type == 'text' ?
-           <View style={styles.messagesContainer}>
-            <Text key={key} style={styles.msgsTextStyle}>
-              {message.message}
-            </Text>
-              <Text style={styles.timeText}>{message.time.slice(0 , 5)}</Text>
+            <View style={styles.messagesContainer}>
+              <Text key={key} style={styles.msgsTextStyle}>
+                {message.message}
+              </Text>
+              <Text style={styles.timeText}>{message.time.slice(0, 5)}</Text>
             </View>
             :
             message.senderId == userId && message.type == 'image' ?
@@ -790,11 +791,11 @@ class Chatscreen extends React.Component {
 
 
           {message.senderId == opponentId && message.type == 'text' ?
-           <View style={styles.replyMessageContainer}>
-            <Text key={key} style={styles.replyMessagesStyle}>
-              {message.message}
-            </Text>
-              <Text style={styles.timeTextReply}>{message.time.slice(0 , 5)}</Text>
+            <View style={styles.replyMessageContainer}>
+              <Text key={key} style={styles.replyMessagesStyle}>
+                {message.message}
+              </Text>
+              <Text style={styles.timeTextReply}>{message.time.slice(0, 5)}</Text>
             </View>
             :
             message.senderId == opponentId && message.type == 'image' ?

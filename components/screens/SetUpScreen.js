@@ -292,9 +292,8 @@ class Setupscreen extends React.Component {
                 time: time,
                 userId: userId,
                 heightCentimeter: totalHeightCentimeter,
-                lose: fitnessResult,
-                gain: fitnessResult,
-                //goalSteps:goalSteps
+                fitnessGoal: fitnessResult,
+                goalSteps:goalSteps
             }
             console.log('send user data >>>', userData)
             try {

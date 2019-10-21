@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert ,Text, View, ScrollView, Dimensions, Image, TouchableOpacity, BackHandler } from 'react-native';
+import { Alert, Text, View, ScrollView, Dimensions, Image, TouchableOpacity, BackHandler } from 'react-native';
 import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
@@ -19,29 +19,32 @@ class Homescreen extends React.Component {
       userId: '',
       pedometerData: '',
       goalSteps: '',
-      userAllData:[],
-      userCurrentWeight:'',
-      excerciseArry:[],
-      bmiData:''
+      userAllData: [],
+      userCurrentWeight: '',
+      excerciseArry: [],
+      bmiData: [],
+      currentUserBMI: ''
+
     }
   }
 
-  
+
   componentWillUnmount() {
     // Remove the event listener
     this.focusListener.remove();
     BackHandler.removeEventListener('hardwareBackPress');
+    // Remove the event listener
+    this.focusListener.remove();
     this.notificationListener();
     this.notificationOpenedListener();
-}
+  }
 
   componentWillMount() {
-     this.getTodayOrYesterdayExcersice()
-
+    this.getTodayOrYesterdayExcersice()
     // this.getTodayOrYesterdayExcersice();
     this.getDaysData();
     this.pedometerFun();
-    
+
     //getting user id from local storage
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
@@ -52,14 +55,14 @@ class Homescreen extends React.Component {
         // dataFromLocalStorage.status = 'Online'
         // console.log(dataFromLocalStorage ,'dataFromLocalStorage')
         // db.ref(`users/${dataUser._id}`).update(userDataForOnlineOff)
-         //console.log(dataFromLocalStorage ,'value')
+        //console.log(dataFromLocalStorage ,'value')
 
         this.setState({
           userId: dataFromLocalStorage._id
         })
       }
     });
-    
+
 
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
@@ -69,14 +72,14 @@ class Homescreen extends React.Component {
     const { userId } = this.state;
     //get all excersice log data
     //let dataUser = await HttpUtils.get('getallexerciselog');
-    await AsyncStorage.getItem('logExercises').then((value)=>{
+    await AsyncStorage.getItem('logExercises').then((value) => {
       let dataFromLocalStorage = JSON.parse(value);
-      console.log('log exercises data >>',dataFromLocalStorage);
+      console.log('log exercises data >>', dataFromLocalStorage);
       this.setState({
-        excerciseArry:dataFromLocalStorage
+        excerciseArry: dataFromLocalStorage
       })
-  })
-    console.log('exercis data >>',this.state.excerciseArry);
+    })
+    console.log('exercis data >>', this.state.excerciseArry);
     let data = this.state.excerciseArry;
     //let data = dataUser.content;
     //get current date 
@@ -89,8 +92,8 @@ class Homescreen extends React.Component {
     //looping with data
     for (var i in data) {
       let dataApi = data[i];
-     // console.log('exer array ',dataApi)
-    //   //check user id with api data and get current user data
+      // console.log('exer array ',dataApi)
+      //   //check user id with api data and get current user data
       if (dataApi.userId == userId) {
         //get today & yesterday of excersice from database 
         let currMonth = Number(currentMonth)
@@ -116,27 +119,44 @@ class Homescreen extends React.Component {
 
   getUserData = async () => {
     let obj = {
-      userId:this.state.userId
+      userId: this.state.userId
     }
     console.log(obj)
     let retrieveData = await HttpUtils.post('getgoal', obj);
-     //console.log('retrieve data >>>', retrieveData)
-     if(retrieveData.code == 200){
+    console.log('retrieve data >>>', retrieveData)
+    if (retrieveData.code == 200) {
       this.setState({
-        userAllData:retrieveData.content
-      },()=>{
+        userAllData: retrieveData.content
+      }, () => {
         //console.log(this.state.userAllData)
         const userData = this.state.userAllData;
-        for(var i in userData){
+        for (var i in userData) {
           //console.log(userData[i].currentWeight)
           this.setState({
-            userCurrentWeight:userData[i].currentWeight
+            userCurrentWeight: userData[i].currentWeight,
+            goalSteps:userData[i].goalSteps
           })
         }
       })
-     }
-     
-    
+    }
+    const userBmiApi = await HttpUtils.post('getbmi', obj);
+    console.log('current user bmi >>>', userBmiApi);
+    if (userBmiApi.code == 200) {
+      this.setState({
+        bmiData: userBmiApi.content
+      }, () => {
+        //console.log(this.state.userAllData)
+        const userBmiData = this.state.bmiData;
+        for (var i in userBmiData) {
+          //console.log(userData[i].currentWeight)
+          this.setState({
+            currentUserBMI: userBmiData[i].bmi
+          })
+        }
+      })
+    }
+
+
   }
 
   pedometerFun = (data) => {
@@ -144,50 +164,64 @@ class Homescreen extends React.Component {
     if (data != undefined) {
       this.setState({
         pedometerData: data.pedometerData,
-        goalSteps: data.goalSteps
       })
     }
 
   }
   changeRout(e) {
+    const {userCurrentWeight , goalSteps}=this.state;
     const { navigate } = this.props.navigation;
     if (e == 'logexercise') {
       navigate('Exerciselog')
     }
     else if (e == 'stepcount') {
-      navigate('StepCountScreen', {
-        'pedometerFun': (data) => this.pedometerFun(data),
-         currentWeight:this.state.userCurrentWeight
-      })
+      if(userCurrentWeight != '' && goalSteps != ''){
+        navigate('StepCountScreen', {
+          'pedometerFun': (data) => this.pedometerFun(data),
+          currentWeight: this.state.userCurrentWeight,
+          goalSteps:this.state.goalSteps,
+        })
+      }
+      else {
+        Alert.alert('Please set goal')
+      }
+      
     }
   }
 
-getBmiData =()=>{
-  AsyncStorage.getItem("bmiData").then((value)=>{
-    if(value){
-      console.log('bmi result >>',JSON.parse(value))
-      this.setState({
-        bmiData:value
-      })
+  getBmiData = async () => {
+    const { userId } = this.state;
+    const userBMI = {
+      userId: userId
     }
-  })
-}
+    console.log('user id >>', userBMI)
+    const userBmiApi = await HttpUtils.post('getbmi', userBMI);
+    console.log('current user bmi >>>', userBmiApi);
+    // AsyncStorage.getItem("bmiData").then((value)=>{
+    //   if(value){
+    //     console.log('bmi result >>',JSON.parse(value))
+    //     this.setState({
+    //       bmiData:value
+    //     })
+    //   }
+    // })
+  }
 
 
-getDaysData=()=>{
-  const { navigation } = this.props;
-        this.focusListener = navigation.addListener('didFocus', () => {
-          this.getUserData();
-          this.getTodayOrYesterdayExcersice();
-          this.getBmiData();
-        });
-}
+  getDaysData = () => {
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.getUserData();
+      this.getTodayOrYesterdayExcersice();
+      //this.getBmiData();
+    });
+  }
 
   handleBackButton = async () => {
     console.log('pressed back button')
     const { navigate } = this.props.navigation;
     const getData = await AsyncStorage.getItem("currentUser");
-    
+
     // const parsForm = JSON.parse(getData)
     // console.log('current user data >>>',parsForm)
     if (getData) {
@@ -201,67 +235,67 @@ getDaysData=()=>{
 
 
 
-     componentDidMount() {
-      this.createNotificationListeners();
-    }
+  componentDidMount() {
+    this.createNotificationListeners();
+  }
 
-      
-   createNotificationListeners = async () => {
-     console.log('Create Notification Listeners run ')
+
+  createNotificationListeners = async () => {
+    console.log('Create Notification Listeners run ')
     /*
     * Triggered when a particular notification has been received in foreground
     * */
     this.notificationListener = firebase.notifications().onNotification((notification) => {
-        const { title, body } = notification;
-        this.showAlert(title, body);
+      const { title, body } = notification;
+      this.showAlert(title, body);
     });
 
     /*
   * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
   * */
-  this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-    const { title, body } = notificationOpen.notification;
-    this.showAlert(title, body);
-});
+    this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+      const { title, body } = notificationOpen.notification;
+      this.showAlert(title, body);
+    });
 
 
-/*
-  * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
-  * */
- const notificationOpen = await firebase.notifications().getInitialNotification();
- if (notificationOpen) {
-     const { title, body } = notificationOpen.notification;
-     this.showAlert(title, body);
- }
+    /*
+      * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+      * */
+    const notificationOpen = await firebase.notifications().getInitialNotification();
+    if (notificationOpen) {
+      const { title, body } = notificationOpen.notification;
+      this.showAlert(title, body);
+    }
 
 
- /*
-  * Triggered for data only payload in foreground
-  * */
- this.messageListener = firebase.messaging().onMessage((message) => {
-  //process data message
-  console.log(JSON.stringify(message));
-});
+    /*
+     * Triggered for data only payload in foreground
+     * */
+    this.messageListener = firebase.messaging().onMessage((message) => {
+      //process data message
+      console.log(JSON.stringify(message));
+    });
 
 
-  }  
+  }
 
   showAlert(title, body) {
     Alert.alert(
       title, body,
       [
-          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
       ],
       { cancelable: false },
     );
   }
-  
+
 
 
 
 
   render() {
-    const { todayData, yestertdayData, pedometerData, goalSteps ,userCurrentWeight,bmiData} = this.state;
+    const { todayData, yestertdayData, pedometerData, goalSteps, userCurrentWeight, currentUserBMI } = this.state;
     const { navigate } = this.props.navigation;
     //console.log('current weight >>',userCurrentWeight)
     return (
@@ -284,10 +318,10 @@ getDaysData=()=>{
 
               </TouchableOpacity>
               <View style={styles.waitContainer}>
-                    <Text style={styles.waitText}>{userCurrentWeight == '' ? 0 : userCurrentWeight} KG</Text>
-                    <Text style={styles.weightLabel}>current weight</Text>
-                    <Text style={styles.bmiText}>{bmiData == '' ? 0 : bmiData}</Text>
-                    <Text style={styles.weightLabel}>current BMI</Text>
+                <Text style={styles.waitText}>{userCurrentWeight == '' ? 0 : userCurrentWeight} KG</Text>
+                <Text style={styles.weightLabel}>current weight</Text>
+                <Text style={styles.bmiText}>{currentUserBMI == '' ? 0 : currentUserBMI}</Text>
+                <Text style={styles.weightLabel}>current BMI</Text>
               </View>
               <TouchableOpacity style={styles.cardOne} onPress={() => { navigate('AddExercise') }}>
                 <Image source={require('../icons/log-exer.png')} style={styles.imgsStyle} />

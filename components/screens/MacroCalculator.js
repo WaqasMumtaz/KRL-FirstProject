@@ -59,7 +59,9 @@ class Macrocalculator extends React.Component {
             currentCarbohy: '',
             currentProteins: '',
             currentMass: '',
-            showCurrentMacro: false
+            showCurrentMacro: false,
+            macroArray: [],
+            macroResult: ''
         }
     }
 
@@ -90,6 +92,10 @@ class Macrocalculator extends React.Component {
             }
         });
         this.getMacro();
+    }
+    componentWillUnmount() {
+        // Remove the event listener
+        this.focusListener.remove();
     }
 
     calulateMacro = async () => {
@@ -278,7 +284,7 @@ class Macrocalculator extends React.Component {
                     macroObj.calculteCalries = calries;
                     macroObj.proteins = proteinVal;
                     macroObj.carbohydrates = carbohydratesVal;
-                    AsyncStorage.setItem('currentMacro', JSON.stringify(macroObj))
+                    //AsyncStorage.setItem('currentMacro', JSON.stringify(macroObj))
                     let dataUser = await HttpUtils.post('macrodata', macroObj)
                     console.log(dataUser, 'dataUser')
                 }
@@ -474,26 +480,52 @@ class Macrocalculator extends React.Component {
         this.focusListener.remove();
     }
 
+    macroGet = async () => {
+        const { userId } = this.state;
+        let userObj = {
+            userId: userId
+        }
+        const specificMacro = await HttpUtils.post('getmacros', userObj);
+        console.log('user macro >>', specificMacro);
+        if (specificMacro.code == 200) {
+            this.setState({
+                macroArray: specificMacro.content
+            }, () => {
+                //console.log(this.state.userAllData)
+                const userMacroData = this.state.macroArray;
+                for (var i in userMacroData) {
+                    //console.log(userData[i].currentWeight)
+                    this.setState({
+                        showCurrentMacro: true,
+                        currentCalories: userMacroData[i].calculteCalries,
+                        currentCarbohy: userMacroData[i].carbohydrates,
+                        currentProteins: userMacroData[i].proteins,
+                        currentMass: userMacroData[i].fatMass
+                    })
+                }
+            })
+        }
+    }
+
     getMacro = () => {
         const { navigation } = this.props;
         this.focusListener = navigation.addListener('didFocus', () => {
-            // console.log('trainer api get >',a)
-            // let a = await HttpUtils.get('gettrainner');
-            AsyncStorage.getItem('currentMacro').then((value) => {
-                if (value) {
-                    let userData = JSON.parse(value)
-                    console.log('user current macro data >>>', userData)
-                    this.setState({
-                        showCurrentMacro: true,
-                        currentCalories: userData.calculteCalries,
-                        currentCarbohy: userData.carbohydrates,
-                        currentProteins: userData.proteins,
-                        currentMass: userData.fatMass
-                    })
-                }
+            this.macroGet();
+            // AsyncStorage.getItem('currentMacro').then((value) => {
+            //     if (value) {
+            //         let userData = JSON.parse(value)
+            //         console.log('user current macro data >>>', userData)
+            //         this.setState({
+            //             showCurrentMacro: true,
+            //             currentCalories: userData.calculteCalries,
+            //             currentCarbohy: userData.carbohydrates,
+            //             currentProteins: userData.proteins,
+            //             currentMass: userData.fatMass
+            //         })
+            //     }
 
 
-            })
+            // })
         });
     }
 

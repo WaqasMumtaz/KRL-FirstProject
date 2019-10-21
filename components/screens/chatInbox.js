@@ -20,6 +20,7 @@ import firebase from '../../Config/Firebase';
 import 'firebase/firestore';
 const db = firebase.database();
 
+let userNamesData = [];
 class ChatInbox extends React.Component {
     constructor(props) {
         super(props);
@@ -32,17 +33,56 @@ class ChatInbox extends React.Component {
         }
         this.checkTrainy()
     }
+    // async componentWillMount() {
+    //     let userData;
+    //     let data = [];
+    //     await AsyncStorage.getItem('opponentProfile').then((value) => {
+    //         userData = JSON.parse(value);
+    //     })
+    //     db.ref('users').on("value", snapshot => {
+    //         let dataFirebase = snapshot.val();
+    //         for (var j in dataFirebase) {
+    //             data.push(dataFirebase[j])
+    //         }
+
+    //     });
+    //     // if (userData) {
+    //     //     for (var i in userData) {
+    //     //         // console.log('opponent data chatbox >>>', userData)
+    //     //         // console.log(data[j], 'data[j]')
+    //     //         if (userData[i].userId == data[j]._id) {
+    //     //             userData[i].status = data[j].status
+    //     //             userNamesData.push(userData[i])
+    //     //         }
+    //     //         this.setState({
+    //     //             messageUser: userNamesData
+    //     //         })
+
+
+    //     //     }
+    //     //     // userNamesData = []
+    //     // }
+    //     console.log(userNamesData, 'userNamesData')
+    //     console.log(data, 'data')
+    //     // console.log(data, 'data')
+
+
+    // }
+
     async componentWillMount() {
         await AsyncStorage.getItem('opponentProfile').then((value) => {
             let userData = JSON.parse(value);
             let userNamesData = []
-            // console.log('opponent data chatbox >>>', userData)
+            console.log('opponent data chatbox >>>', userData)
             db.ref('users').on("value", snapshot => {
                 let data = snapshot.val();
                 for (var i in userData) {
                     for (var j in data) {
                         if (userData[i].userId == data[j]._id) {
                             userData[i].status = data[j].status
+                            if (userNamesData) {
+                                userNamesData = []
+                            }
                             userNamesData.push(userData[i])
                             console.log(userNamesData, 'data')
                         }
@@ -51,8 +91,8 @@ class ChatInbox extends React.Component {
                 this.setState({
                     messageUser: userNamesData
                 })
+                console.log(userNamesData, 'userNamesData')
             });
-
         })
     }
 
@@ -67,7 +107,7 @@ class ChatInbox extends React.Component {
             // let a = await HttpUtils.get('gettrainner');
             AsyncStorage.getItem('currentUser').then((value) => {
                 let userData = JSON.parse(value)
-                console.log('user data >>>', userData)
+                // console.log('user data >>>', userData)
                 let userName = userData.name + ' ' + userData.lastName;
                 if (userData.assignTrainner != undefined) {
                     this.setState({
@@ -128,7 +168,7 @@ class ChatInbox extends React.Component {
     render() {
         const { messageUser, forTrainnerModal, userEmail, currentName, userNumber } = this.state;
         console.log('user message >>>', messageUser)
-        console.log('email >', userEmail, 'name >', currentName, 'number', userNumber)
+        // console.log('email >', userEmail, 'name >', currentName, 'number', userNumber)
         const senderName = messageUser && messageUser.map((elem, key) => {
             // console.log(elem, 'elem')
             return (

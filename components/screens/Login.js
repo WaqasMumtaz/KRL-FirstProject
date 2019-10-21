@@ -125,7 +125,7 @@ componentDidMount() {
       const userObj = {
         email: email,
         password: password,
-        //deviceToken:deviceToken
+        deviceToken:deviceToken
         // type:'trainny'
       }
       try {

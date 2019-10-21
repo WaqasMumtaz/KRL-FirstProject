@@ -86,7 +86,7 @@ class Signup extends React.Component {
     componentWillMount(){
         AsyncStorage.getItem('fcmToken').then((res)=>{
             const deviceToken = res;
-             console.log('This is device token >>>',deviceToken )
+            // console.log('This is device token >>>',deviceToken )
              this.setState({
                  deviceToken:deviceToken
              })
@@ -233,6 +233,7 @@ class Signup extends React.Component {
                 lastName: lastName,
                 gender: gender,
                 mobileNo: mobileNo,
+                deviceToken:deviceToken,
                 type: 'trainee'
             }
             try {
@@ -294,11 +295,12 @@ class Signup extends React.Component {
                 //         }
                 //     })
                // }
-
+                
                 if (!emailNotExist) {
+                    //console.log('signup data user >>', userObj)
                     let dataUser = await HttpUtilsFile.post('signup', userObj)
                      signupCode = dataUser.code;
-                    console.log('signup data user >>>', dataUser)
+                    //console.log('signup data user >>>', dataUser)
                     let currentUserData = {
                         code: dataUser.code,
                         email: this.state.email,
@@ -320,9 +322,9 @@ class Signup extends React.Component {
                         type: userObj.type,
                         userId: dataUser._id
                     }
-                    console.log(userObjForProfile, 'userObjForProfile')
+                    //console.log(userObjForProfile, 'userObjForProfile')
                     let userProfile = await HttpUtilsFile.post('profile', userObjForProfile);
-                    console.log('new user profile data >>>', userProfile)
+                    //console.log('new user profile data >>>', userProfile)
                     profileCode = userProfile.code;
                     if(profileCode == 200){
                         let obj = {
@@ -414,9 +416,9 @@ class Signup extends React.Component {
     }
 
     getEmailsFunc= async (e)=>{
-        console.log('user email >>',e)
+        //console.log('user email >>',e)
         let getEmails = await HttpUtilsFile.get('getuseremail');
-        console.log('get emails >',getEmails);
+        //console.log('get emails >',getEmails);
         let emailCode = getEmails.code;
         const emailContents = getEmails.content;
         if (emailCode == 200) {
@@ -496,10 +498,10 @@ class Signup extends React.Component {
         }
     }
 
-    selectCode(countryTxt) {
-        console.log(countryTxt, 'countryTxt')
-        console.log(this.state.pickerData, 'picker data')
-    }
+    // selectCode(countryTxt) {
+    //     console.log(countryTxt, 'countryTxt')
+    //     console.log(this.state.pickerData, 'picker data')
+    // }
 
 
 

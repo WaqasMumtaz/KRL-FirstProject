@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, Button, Dimensions, Image, TouchableOpacity, Platform } from 'react-native';
+import {Alert, StyleSheet, Text, View, ScrollView, TextInput, Button, Dimensions, Image, TouchableOpacity, Platform } from 'react-native';
 import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/StepCountScreenStyle';
 import DatePicker from 'react-native-datepicker';
@@ -64,7 +64,7 @@ export default class StepCountScreen extends React.Component {
             isLoading: false,
             userId: '',
             stepGoalCountData: '',
-            showAlert:false
+            showAlert: false
 
 
         }
@@ -118,48 +118,52 @@ export default class StepCountScreen extends React.Component {
         await this.getData()
         this.dateFilter()
         this.getGoalStepData();
+        const paramsData = this.props.navigation.state.params;
+        console.log('params data >>>', paramsData)
+        this.setState({
+            goalSteps: paramsData.goalSteps,
 
-        // const paramsData = this.props.navigation.state.params;
-        // console.log('params data >>>', paramsData)
-        // this.setState({
-        //     userCurrentWeight: paramsData.currentWeight,
-        //     goalSteps: paramsData.goalSteps,
-
-        // })
+        })
         //this.googleFitAuthFun()
+        AsyncStorage.getItem('pedometerData').then((value) => {
+            if (value) {
+                //const setValue = JSON.parse(value);
+                console.log('local storage pedometer >>>', value)
+                this.setState({
+                    pedometerData: value
+                })
+            }
+        })
 
     }
 
-    //  static async getDerivedStateFromProps(props, state){
-    //     const stepData = state.pedometerData;
-    //     //const stepData = 20;
-    //     const dailySteps = state.goalSteps;
-    //     console.log('daily >>>', dailySteps)
-    //     console.log('stepdata >>>',stepData)
-    //     console.log(state.currentUserId)
-    //     if (stepData > 0 && Number(dailySteps) > 0) {
-    //         if (stepData == Number(dailySteps)) {
-    //             console.log('step equal true condition work')
-    //             const dataPost = {
-    //                 userId:this.state.currentUserId,
-    //                 time: this.state.curTime,
-    //                 date: this.state.date,
-    //                 stepCount: stepData,
-    //                 dailGoal: dailySteps
-    //             }
-    //             try {
-    //                 let postedData = await HttpUtilsFile.post('pedometer', dataPost)
-    //                 console.log('posted data >>>', postedData)
+    checkFunc(data) {
+        console.log('data will update >>', data);
+        this.setState({
+            abc: data
+        })
+    }
 
-    //             }
-    //             catch (err) {
-    //                 console.log(err)
-    //             }
-    //         }
-    //     }
+    componentDidUpdate(prevProps, prevState) {
+        const { goalSteps } = this.state;
+        //console.log('did update func >>', prevProps);
+        //console.log('did update func >>', prevState);
+        const goalStep =goalSteps;
+        //console.log('number form goal >>', Number(goalSteps))
+        if (prevState.pedometerData == Number(goalStep)) {
+            //console.log('Condition successfully matched ');
+           Alert.alert('Acheive Goal')
+        }
+        // const numberPedometer = nextState.pedometerData;
+        // const paramsData = this.props.navigation.state.params;
+        // const goalStepsData = paramsData.goalSteps;
+        // if (Number(numberPedometer) == Number(goalStepsData)) {
+        //   this.props.onWillOpen();
+        // }
+        // console.log('will update pedometer data >>>', nextState.pedometerData)
+        // AsyncStorage.setItem('pedometerData', nextState.pedometerData);
+    }
 
-
-    // }
 
     //get data from database
     getData = () => {
@@ -400,7 +404,7 @@ export default class StepCountScreen extends React.Component {
                             })
 
                         }
-                        if(data.steps != 0 && Number(this.state.goalSteps) != 0){
+                        if (data.steps != 0 && Number(this.state.goalSteps) != 0) {
                             if (data.steps == Number(this.state.goalSteps)) {
                                 console.log('steps match ')
                                 // this.setState({
@@ -408,7 +412,7 @@ export default class StepCountScreen extends React.Component {
                                 // })
                             }
                         }
-                        
+
 
                     })
                     // console.log('user steps -->', data.steps)
@@ -435,7 +439,7 @@ export default class StepCountScreen extends React.Component {
                                             secondValue: res.steps
                                         })
                                     }
-                                    if(res.steps != 0 && Number(this.state.goalSteps) != 0){
+                                    if (res.steps != 0 && Number(this.state.goalSteps) != 0) {
                                         if (res.steps == Number(this.state.goalSteps)) {
                                             console.log('steps match ')
                                             // this.setState({
@@ -467,14 +471,14 @@ export default class StepCountScreen extends React.Component {
                             // console.log('authorized >>>', res)
                             rnHealthKit.observeSteps((res) => {
                                 // console.log(res)
-                                this.setState({ pedometerData: res.steps },()=>{
+                                this.setState({ pedometerData: res.steps }, () => {
                                     if (res.steps > Number(1)) {
                                         //this.countStepTime()
                                         this.setState({
                                             secondValue: res.steps
                                         })
                                     }
-                                    if(res.steps != 0 && Number(this.state.goalSteps) != 0){
+                                    if (res.steps != 0 && Number(this.state.goalSteps) != 0) {
                                         if (res.steps == Number(this.state.goalSteps)) {
                                             console.log('steps match ')
                                             // this.setState({
@@ -527,7 +531,7 @@ export default class StepCountScreen extends React.Component {
                             })
 
                         }
-                        if(data.steps != 0 && Number(this.state.goalSteps) != 0){
+                        if (data.steps != 0 && Number(this.state.goalSteps) != 0) {
                             if (data.steps == Number(this.state.goalSteps)) {
                                 console.log('steps match ')
                                 this.setState({
@@ -550,26 +554,27 @@ export default class StepCountScreen extends React.Component {
                     }
 
                     GoogleFit.authorize(options)
-                        .then( async (res) => {
-                             console.log('authorized >>>', res)
+                        .then(async (res) => {
+                            console.log('authorized >>>', res)
                             await GoogleFit.observeSteps((res) => {
                                 console.log(res)
                                 this.setState({ pedometerData: res.steps }, () => {
                                     if (res.steps > Number(1)) {
-                                       // this.countStepTime()
+                                        // this.countStepTime()
+                                        AsyncStorage.setItem('pedometerData', res.steps)
                                         this.setState({
                                             secondValue: res.steps
                                         })
                                     }
-                                    if(res.steps != 0 && Number(this.state.goalSteps) != 0){
+                                    if (res.steps != 0 && Number(this.state.goalSteps) != 0) {
                                         if (res.steps == Number(this.state.goalSteps)) {
                                             console.log('steps match ');
                                             //alert('You Achieve Goal Steps')
                                             this.setState({
-                                                pedometerData:'',
-                                                showAlert:true
+                                                pedometerData: '',
+                                                showAlert: true
                                             })
-                                            GoogleFit.observeHistory((result)=>{
+                                            GoogleFit.observeHistory((result) => {
                                                 console.log('history >>', result)
                                             })
                                         }
@@ -598,14 +603,14 @@ export default class StepCountScreen extends React.Component {
                             // console.log('authorized >>>', res)
                             rnHealthKit.observeSteps((res) => {
                                 // console.log(res)
-                                this.setState({ pedometerData: res.steps },()=>{
+                                this.setState({ pedometerData: res.steps }, () => {
                                     if (res.steps > Number(1)) {
                                         // this.countStepTime()
                                         this.setState({
                                             secondValue: res.steps
                                         })
                                     }
-                                    if(res.steps != 0 && Number(this.state.goalSteps) != 0){
+                                    if (res.steps != 0 && Number(this.state.goalSteps) != 0) {
                                         if (res.steps == Number(this.state.goalSteps)) {
                                             console.log('steps match ')
                                             // this.setState({
@@ -642,7 +647,7 @@ export default class StepCountScreen extends React.Component {
                             })
 
                         }
-                        if(data.steps != 0 && Number(this.state.goalSteps) != 0){
+                        if (data.steps != 0 && Number(this.state.goalSteps) != 0) {
                             if (data.steps == Number(this.state.goalSteps)) {
                                 console.log('steps match ')
                                 // this.setState({
@@ -675,7 +680,7 @@ export default class StepCountScreen extends React.Component {
                                             thirdValue: res.steps
                                         })
                                     }
-                                    if(res.steps != 0 && Number(this.state.goalSteps) != 0){
+                                    if (res.steps != 0 && Number(this.state.goalSteps) != 0) {
                                         if (res.steps == Number(this.state.goalSteps)) {
                                             console.log('steps match ')
                                             // this.setState({
@@ -707,14 +712,14 @@ export default class StepCountScreen extends React.Component {
                             // console.log('authorized >>>', res)
                             rnHealthKit.observeSteps((res) => {
                                 // console.log(res)
-                                this.setState({ pedometerData: res.steps },()=>{
+                                this.setState({ pedometerData: res.steps }, () => {
                                     if (res.steps > Number(1)) {
                                         //this.countStepTime()
                                         this.setState({
                                             thirdValue: res.steps
                                         })
                                     }
-                                    if(res.steps != 0 && Number(this.state.goalSteps) != 0){
+                                    if (res.steps != 0 && Number(this.state.goalSteps) != 0) {
                                         if (res.steps == Number(this.state.goalSteps)) {
                                             console.log('steps match ')
                                             // this.setState({
@@ -833,7 +838,7 @@ export default class StepCountScreen extends React.Component {
 
 
     }
-    saveGoalSteps=(e)=> {
+    saveGoalSteps = (e) => {
         //const { goalSteps }=this.state;
         console.log('goal steps >>', e)
         AsyncStorage.setItem('goalSteps', JSON.stringify(e));
@@ -867,7 +872,6 @@ export default class StepCountScreen extends React.Component {
         const { params } = this.props.navigation.state;
         const dataObj = {
             pedometerData: pedometerData,
-            goalSteps: goalSteps
         }
         params.pedometerFun(dataObj)
         //console.log(params)
@@ -887,7 +891,7 @@ export default class StepCountScreen extends React.Component {
         return (
             <ScrollView style={{ backgroundColor: '#FFFFFF', height: heightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
 
-                <View style={{ flex: 2, backgroundColor: 'black', marginHorizontal: 20 }}>
+                {/* <View style={{ flex: 2, backgroundColor: 'black', marginHorizontal: 20 }}>
                     <Text style={{ color: 'white', }}>Today Goal Steps</Text>
                     <TextInput
                         onChangeText={text => { this.saveGoalSteps(text), this.setState({ goalSteps: text }) }}
@@ -897,7 +901,7 @@ export default class StepCountScreen extends React.Component {
                         keyboardType={'numeric'}
                         style={styles.inputTexts}
                     />
-                </View>
+                </View> */}
                 <View style={styles.mainContainer}>
 
                     <View style={styles.childContainer}>
@@ -932,7 +936,7 @@ export default class StepCountScreen extends React.Component {
                                     //             pedometerData > 750 && pedometerData <= 10000 ? 100
                                     //                 : 0
                                     // }
-                                    progress={pedometerData == '' ? 0 :pedometerData}
+                                    progress={pedometerData == '' ? 0 : pedometerData}
                                     backgroundColor={'gray'}
                                     animateFromValue={0}
                                     fullColor={'#FF6200'}
@@ -1031,10 +1035,10 @@ export default class StepCountScreen extends React.Component {
                                 null
                         }
                         {
-                            this.state.showAlert ? 
-                            alert('Achieve Steps')
-                         :
-                         null
+                            this.state.showAlert ?
+                                alert('Achieve Steps')
+                                :
+                                null
                         }
                         <View style={{ flex: 1, width: '100%', height: 30, marginTop: 80 }}>
                             {
