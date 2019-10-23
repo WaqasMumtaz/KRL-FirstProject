@@ -138,6 +138,7 @@ componentDidMount() {
         if (getUserCode) {
           let userDataForOnlineOff = dataUser;
           userDataForOnlineOff.status = 'Online';
+          userDataForOnlineOff.deviceToken = this.state.deviceToken;
           await AsyncStorage.setItem('currentUser', JSON.stringify(dataUser));
           if (dataUser.profile) {
             if (dataUser.profile.length > 0) {

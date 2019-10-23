@@ -85,7 +85,16 @@ class Chatscreen extends React.Component {
       smallVideo: true,
       largeSizeVideo: false,
       showReport: false,
+<<<<<<< HEAD
       yesterdayDate: ''
+=======
+      chatDates: [],
+      chatMonths: [],
+      chatYear: [],
+      yesterdayDate: '',
+      deviceToken: '',
+      userToken: ''
+>>>>>>> 30665de324a7141f48ad6e3c1f3b7b0cb7a26bee
     }
   }
 
@@ -117,6 +126,11 @@ class Chatscreen extends React.Component {
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         dataFromLocalStorage = JSON.parse(value);
+        console.log('localStorage Data >>', dataFromLocalStorage);
+        this.setState({
+          deviceToken: dataFromLocalStorage.deviceToken,
+          userToken: dataFromLocalStorage.token
+        })
         db.ref('chatRoom').on("value", snapshot => {
           let data = snapshot.val()
           for (let i in data) {
@@ -144,9 +158,39 @@ class Chatscreen extends React.Component {
 
   uplaodDataOnFirebase = (userMessage, type) => {
     const { senderData } = this.props.navigation.state.params;
-    const { todayDate, time } = this.state;
+
+    const {todayDate, date, time, deviceToken, userToken } = this.state;
+
+    //const { todayDate, time } = this.state;
+
     let mgs = {}
     let data;
+    let key = 'AAAAOul6SiM:APA91bG9tHwis-DD10R65-mTAHVfungDvlr57tZicYctREGqmRd04mJXS4OP0_tSpsxg9jlfOhLh_WmnxPWJGIiMOA46yj6zNB77nfUGV1e0oRJeDppAtbJBXV3y0N1_v_K-oL2QZ4Ai';
+    let toSend = deviceToken;
+    //console.log('key token >',userToken , 'device token >', toSend)
+    // //token
+    let body = {
+      to: deviceToken,
+      data: {
+        custom_notification: {
+          title: "New Message",
+          body: userMessage,
+        }
+      },
+    };
+    fetch('https://fcm.googleapis.com/fcm/send', {
+            'method': 'POST',
+            'headers': {
+              'Authorization': 'key=' + key,
+              'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify(body)
+          }).then(function (response) {
+            console.log(response);
+          }).catch(function (error) {
+            console.error(error);
+          });
+
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         data = JSON.parse(value);
@@ -159,6 +203,7 @@ class Chatscreen extends React.Component {
           mgs.date = todayDate;
           mgs.time = time;
           mgs.type = type;
+          
           db.ref(`chatRoom/`).push(mgs);
         }
         else if (data.assignTrainny != undefined && data.tainnyId != undefined) {
@@ -170,6 +215,18 @@ class Chatscreen extends React.Component {
           mgs.date = todayDate;
           mgs.time = time;
           mgs.type = type;
+          // fetch('https://fcm.googleapis.com/fcm/send', {
+          //   'method': 'POST',
+          //   'headers': {
+          //     'Authorization': 'key=' + userToken,
+          //     'Content-Type': 'application/json'
+          //   },
+          //   'body': JSON.stringify(body)
+          // }).then(function (response) {
+          //   console.log(response);
+          // }).catch(function (error) {
+          //   console.error(error);
+          // });
           db.ref(`chatRoom/`).push(mgs);
         }
       }
