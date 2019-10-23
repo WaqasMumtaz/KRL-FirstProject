@@ -170,15 +170,15 @@ class Chatscreen extends React.Component {
   uplaodDataOnFirebase = (userMessage, type) => {
     const { senderData } = this.props.navigation.state.params;
 
-    const { date, time, deviceToken, userToken } = this.state;
+    const {todayDate, date, time, deviceToken, userToken } = this.state;
 
-    const { todayDate, time } = this.state;
+    //const { todayDate, time } = this.state;
 
     let mgs = {}
     let data;
     let key = 'AAAAOul6SiM:APA91bG9tHwis-DD10R65-mTAHVfungDvlr57tZicYctREGqmRd04mJXS4OP0_tSpsxg9jlfOhLh_WmnxPWJGIiMOA46yj6zNB77nfUGV1e0oRJeDppAtbJBXV3y0N1_v_K-oL2QZ4Ai';
     let toSend = deviceToken;
-    console.log('key token >',userToken , 'device token >', toSend)
+    //console.log('key token >',userToken , 'device token >', toSend)
     // //token
     let body = {
       to: deviceToken,

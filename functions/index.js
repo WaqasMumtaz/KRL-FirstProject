@@ -17,12 +17,11 @@ exports.sendPushNotification = functions.database
       },
     };
     const reciverId =data.reciverId;
-    return admin.database().ref(`users/${reciverId}/{key}/`).once('value').then((data) => {
-
+    console.log('reciverId >>',reciverId)
+    return admin.database().ref(`users/${reciverId}`).once('value').then((data) => {
       // if (!data.val()) return;
-
       const snapshot = data.val();
-      
+      console.log('reciverId snapshot >>',snapshot)
       const token = snapshot.deviceToken;
 
       return admin.messaging().sendToDevice(token, payload)

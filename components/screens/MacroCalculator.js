@@ -243,7 +243,7 @@ class Macrocalculator extends React.Component {
                     //let tde = Number(tdee);
                     //console.log('tdee value >>>',tde)
 
-                    let tde = tdee.toString()
+                    //let tde = tdee.toString()
 
                     let fatVal = Math.round(fat.toString());
                     let proteinVal = Math.round(protein.toString());
