@@ -256,7 +256,7 @@ class Macrocalculator extends React.Component {
                     let calries = Math.round(calculteCalries.toString());
                     //let calries = Number(calculteCalries);
                     //console.log('calries value >>>',calries)
-                    let tde = tdee.toString()
+                    let tde = Math.round(tdee.toString())
                     //let tde = Number(tdee);
                     //console.log('tdee value >>>',tde)
                     let fatVal = Math.round(fat.toString());
@@ -271,7 +271,7 @@ class Macrocalculator extends React.Component {
 
                     //set the state
                     this.setState({
-                        calculteCalries: calries,
+                        calculteCalries: tde,
                         totalDEE: tde,
                         fatMass: fatVal,
                         proteins: proteinVal,
@@ -281,7 +281,7 @@ class Macrocalculator extends React.Component {
                     macroObj.age = age;
                     macroObj.totalDEE = tde;
                     macroObj.fatMass = fatVal;
-                    macroObj.calculteCalries = calries;
+                    macroObj.calculteCalries = tde;
                     macroObj.proteins = proteinVal;
                     macroObj.carbohydrates = carbohydratesVal;
                     //AsyncStorage.setItem('currentMacro', JSON.stringify(macroObj))
@@ -314,14 +314,14 @@ class Macrocalculator extends React.Component {
                     let carbohydrate = carbohydratesCalries / 4;
                     //convert to string 
                     let calries = Math.round(calculteCalries.toString());
-                    let tde = tdee.toString();
+                    let tde = Math.round(tdee.toString());
                     let fatVal = Math.round(fat.toString());
                     let proteinVal = Math.round(protein.toString());
                     let carbohydratesVal = Math.round(carbohydrate.toString());
 
                     //set the state
                     this.setState({
-                        calculteCalries: calries,
+                        calculteCalries: tde,
                         totalDEE: tde,
                         fatMass: fatVal,
                         proteins: proteinVal,
@@ -331,7 +331,7 @@ class Macrocalculator extends React.Component {
                     macroObj.age = age;
                     macroObj.totalDEE = tde;
                     macroObj.fatMass = fatVal;
-                    macroObj.calculteCalries = calries;
+                    macroObj.calculteCalries = tde;
                     macroObj.proteins = proteinVal;
                     macroObj.carbohydrates = carbohydratesVal;
                     AsyncStorage.setItem('currentMacro', JSON.stringify(macroObj))

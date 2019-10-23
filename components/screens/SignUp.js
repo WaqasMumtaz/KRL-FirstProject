@@ -18,9 +18,9 @@ import OverlayLoader from '../Loader/OverlaySpinner';
 import AsyncStorage from '@react-native-community/async-storage';
 //import PhoneCode from 'react-phone-code';
 import PhoneInput from 'react-native-phone-input'
-// import * as firebase from 'firebase';
-// import 'firebase/firestore';
-import firebase from 'react-native-firebase';
+import firebase from '../../Config/Firebase';
+import 'firebase/firestore';
+const db = firebase.database();
 //console.log(HttpUtilsFile)
 const { height } = Dimensions.get('window');
 
@@ -264,6 +264,7 @@ class Signup extends React.Component {
                 //let signupCode;
                 let profileCode;
                 let signupCode;
+                let userDataForOnlineOff;
                 // const emailContents = getEmails.content;
                 // if (emailCode) {
                 //     this.setState({
@@ -300,6 +301,9 @@ class Signup extends React.Component {
                     //console.log('signup data user >>', userObj)
                     let dataUser = await HttpUtilsFile.post('signup', userObj)
                      signupCode = dataUser.code;
+                     userDataForOnlineOff = dataUser;
+                     userDataForOnlineOff.status = 'Online';
+                     userDataForOnlineOff.deviceToken = this.state.deviceToken;
                     //console.log('signup data user >>>', dataUser)
                     let currentUserData = {
                         code: dataUser.code,
@@ -355,10 +359,11 @@ class Signup extends React.Component {
                             AsyncStorage.setItem('currentUser', JSON.stringify(currentUserData))
                             
                             const { navigate } = this.props.navigation;
+                            console.log('signup api response >>', userDataForOnlineOff); 
+                            db.ref(`users/${dataUser._id}`).update(userDataForOnlineOff);
                             navigate('BottomTabe');
-                            
                         })
-                    }     
+                    }    
 
                     }
                 //}
@@ -521,8 +526,10 @@ class Signup extends React.Component {
             female,
             maleClickedTextStyle,
             femaleClickedTextStyle,
+            deviceToken
         } = this.state;
         //console.log(emailNotExist, 'emailNotExist')
+        //console.log('deviceToken >>>',deviceToken)
         return (
 
             <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
