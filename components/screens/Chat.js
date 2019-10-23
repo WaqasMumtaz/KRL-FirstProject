@@ -20,15 +20,14 @@ import VideoPlayer from 'react-native-video-player';
 import Modal from "react-native-modal";
 import ChartScreen from '../BarChart/BarChart';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { YellowBox, PermissionsAndroid } from 'react-native';
+import { YellowBox } from 'react-native';
+
 YellowBox.ignoreWarnings([
   'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
 ]);
+
 console.disableYellowBox = true;
 console.ignoredYellowBox = ['Remote debugger'];
-// import  from '@react-native-community/async-storage';
-const screenWidth = Dimensions.get('window').width;
-const screenHight = Dimensions.get('window').height;
 
 const db = firebase.database();
 const CryptoJS = require('crypto-js');
@@ -62,7 +61,7 @@ class Chatscreen extends React.Component {
       shareFiles: false,
       avatarSource: null,
       expand: false,
-      date: '',
+      todayDate: '',
       time: '',
       userId: '',
       opponentId: '',
@@ -108,7 +107,7 @@ class Chatscreen extends React.Component {
     }
     let yesterdayDate = Number(date) - 1;
     this.setState({
-      date: month + '-' + date + '-' + year,
+      todayDate: month + '-' + date + '-' + year,
       yesterdayDate: month + '-' + yesterdayDate.toString() + '-' + year,
       time: hours + ':' + min + ':' + sec
     })
@@ -163,7 +162,7 @@ class Chatscreen extends React.Component {
 
   uplaodDataOnFirebase = (userMessage, type) => {
     const { senderData } = this.props.navigation.state.params;
-    const { date, time } = this.state;
+    const { todayDate, time } = this.state;
     let mgs = {}
     let data;
     AsyncStorage.getItem("currentUser").then(value => {
@@ -175,7 +174,7 @@ class Chatscreen extends React.Component {
           mgs.reciverId = data.trainnerId;
           mgs.name = data.name;
           mgs.senderId = data._id;
-          mgs.date = date;
+          mgs.date = todayDate;
           mgs.time = time;
           mgs.type = type;
           db.ref(`chatRoom/`).push(mgs);
@@ -186,7 +185,7 @@ class Chatscreen extends React.Component {
           mgs.reciverId = senderData.userId;
           mgs.name = data.name;
           mgs.senderId = data._id;
-          mgs.date = date;
+          mgs.date = todayDate;
           mgs.time = time;
           mgs.type = type;
           db.ref(`chatRoom/`).push(mgs);
@@ -330,9 +329,8 @@ class Chatscreen extends React.Component {
 
 
 
-  fileOpner(e, type, g) {
+  fileOpner(e, type) {
     const FilePath = e; // path of the file
-    // const FileMimeType = type; // mime type of the
     Linking.openURL(
       FilePath
     ).then((msg) => {
@@ -371,8 +369,6 @@ class Chatscreen extends React.Component {
     })
   }
 
-
-
   //get data from database
   getWeekReportData = async () => {
     const { monthName } = this.state;
@@ -409,7 +405,8 @@ class Chatscreen extends React.Component {
         let dataApi = data[i];
         if (dataApi.userId == userId) {
           //get month name
-          let getMonthNo = dataApi.month.slice(1) - 1;
+          // console.log(dataApi.month.slice(1))
+          let getMonthNo = dataApi.month.slice(1);
           let getMontName = monthName[getMonthNo];
           dataApi.monthName = getMontName;
           //check week of the month
@@ -494,8 +491,7 @@ class Chatscreen extends React.Component {
       }
     }
 
-
-    // // availbe current date and week ago ago data then get lose or gain wieght
+    // availbe current date and week ago ago data then get lose or gain wieght
     if (cureentWeekData != undefined && weekBefore != undefined) {
       let weekAgoWieght = weekBefore.weight.substring(0, weekBefore.weight.length - 2);
       let currentWeekWieght = cureentWeekData.weight.substring(0, cureentWeekData.weight.length - 2);
@@ -550,42 +546,43 @@ class Chatscreen extends React.Component {
 
   render() {
     const { textMessage, sendIcon, sendBtnContainer, recodringBody, attachGray, attachOrange, shareFiles,
-      expand, userId, opponentId, opponnetAvatarSource, name, imagePath, chatDates, chatMonths, chatYear, monthName, yesterdayDate, date } = this.state;
+      expand, userId, opponentId, opponnetAvatarSource, name, imagePath, chatDates, chatMonths, chatYear, monthName, yesterdayDate, todayDate } = this.state;
     let dateNum;
     let month;
     let year;
     let showDate;
     const chatMessages = this.state.chatMessages.map((message, key) => {
       if (dateNum == undefined) {
-        showDate = `${chatDates[key]}-${monthName[chatMonths[key]]}-${chatYear[key]}`
-        console.log(showDate, 'showDate')
+        if (chatDates[key] == todayDate.slice(3, 5) && chatMonths[key] == todayDate.slice(0, 2)
+          && chatYear[key] == todayDate.slice(6)) {
+          showDate = "Today";
+        }
+        else {
+          showDate = `${Number(message.date.slice(3, 5))}-${monthName[Number(message.date.slice(0, 2))]}-${Number(message.date.slice(6))}`
+        }
       }
       else {
-        if (dateNum == message.date.slice(3, 5) && month == message.date.slice(0, 2)
-          && year == message.date.slice(6)) {
+        if (dateNum == Number(message.date.slice(3, 5)) && month == Number(message.date.slice(0, 2))
+          && year == Number(message.date.slice(6))) {
           showDate = ''
         }
         else {
-          // console.log(dateNum, 'dateNum')
-          if (dateNum == yesterdayDate.slice(3, 5) && month == yesterdayDate.slice(0, 2)
-            && year == yesterdayDate.slice(6)) {
-            console.log("Yesterday")
+          if (chatDates[key] == todayDate.slice(3, 5) && chatMonths[key] == todayDate.slice(0, 2)
+            && chatYear[key] == todayDate.slice(6)) {
+            showDate = "Today";
+          }
+          else if (chatDates[key] == yesterdayDate.slice(3, 5) && chatMonths[key] == yesterdayDate.slice(0, 2)
+            && chatYear[key] == yesterdayDate.slice(6)) {
             showDate = "Yesterday";
           }
           else {
-            showDate = `${chatDates[key]}-${monthName[chatMonths[key]]}-${chatYear[key]}`
-            // console.log(showDate , 'showDate')
-            if (chatDates[key] == date.slice(3, 5) && chatMonths[key] == date.slice(0, 2)
-              && chatYear[key] == date.slice(6)) {
-              console.log("Today")
-              showDate = "Today";
-            }
+            showDate = `${Number(message.date.slice(3, 5))}-${monthName[Number(message.date.slice(0, 2))]}-${Number(message.date.slice(6))}`
           }
         }
       }
-      dateNum = message.date.slice(3, 5);
-      month = message.date.slice(0, 2);
-      year = message.date.slice(6);
+      dateNum = Number(message.date.slice(3, 5));
+      month = Number(message.date.slice(0, 2));
+      year = Number(message.date.slice(6));
 
       return (
         <View>

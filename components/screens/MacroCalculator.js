@@ -2,11 +2,12 @@ import React from 'react';
 import { Text, View, ScrollView, Button, Image, Dimensions, TextInput, TouchableOpacity, Picker } from 'react-native';
 import styles from '../Styling/MacroStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
-import InputImgsScreen from '../screens/InputImgs';
 import DatePicker from 'react-native-datepicker';
 import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
+
 const { HeightDimension } = Dimensions.get('window');
+
 class Macrocalculator extends React.Component {
     static navigationOptions = () => ({
         headerStyle: {
@@ -93,22 +94,22 @@ class Macrocalculator extends React.Component {
         });
         this.getMacro();
     }
-    componentWillUnmount() {
-        // Remove the event listener
-        this.focusListener.remove();
+    getMacro = () => {
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener('didFocus', () => {
+            this.macroGet();
+        });
     }
 
     calulateMacro = async () => {
         const { dob, gender, height, heightInch, currentWeight, goalWeight, currentWeightUnit, goalWeightUnit,
             activityLevel, tdeeObj, date, time, currentYear, currentDate, currentMonth, userId } = this.state;
-        console.log('tdee Ojbject >>>', tdeeObj)
         let age;
         let macroObj = {
             dob: dob,
             gender: gender,
             height: height,
             heightInch: heightInch,
-            // heightUnit: heightUnit,
             currentWeight: currentWeight,
             currentWeightUnit: currentWeightUnit,
             goalWeight: goalWeight,
@@ -212,33 +213,15 @@ class Macrocalculator extends React.Component {
             })
         }
         if (dob != '') {
-            // const dobYear = new Date(dob).getFullYear();
             const dobYear = dob.slice(6, 10);
-            // const dobMonth = new Date(dob).getMonth() + 1;
-            // const dobDate = new Date(dob).getDate();
             age = currentYear - dobYear;
-            console.log(dobYear, 'year');
-            console.log(currentYear, 'currentyear');
-            console.log(dob, 'dooobbb');
-            // let month = currentMonth - dobMonth;
-            // console.log(month, 'month minus')
-            // console.log(currentMonth, 'currentMonth minus')
-            // console.log(dobMonth, 'dobMonth minus')
-            // if (month < 0 || (month === 0 && currentDate < dobDate)) {
-            //     age = age - 1;
-            //     console.log(age, 'age in condition')
-            // }
-
         }
         if (gender == 'male') {
             if (dob != '' && height != '' && heightInch != '' && currentWeight != '' && goalWeight != '' &&
                 currentWeightUnit != '' && currentWeightUnit != '0' && goalWeightUnit != '' && goalWeightUnit != '0' && activityLevel != '') {
                 const heightCentimeter = height * 30.48;
-                //console.log('height centi >>>', heightCentimeter)
                 const heightInchCentimeter = heightInch * 2.54;
-                //console.log('height inches centi >>>', heightInchCentimeter);
                 const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
-                console.log('total centimeter >>>', totalHeightCentimeter)
                 let calculteCalries = 10 * currentWeight + 6.25 * totalHeightCentimeter - 5 * age + 5;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
                     // get tdee value
@@ -254,20 +237,11 @@ class Macrocalculator extends React.Component {
                     let carbohydrate = carbohydratesCalries / 4;
                     //convert to string 
                     let calries = Math.round(calculteCalries.toString());
-                    //let calries = Number(calculteCalries);
                     //console.log('calries value >>>',calries)
                     let tde = tdee.toString()
-                    //let tde = Number(tdee);
-                    //console.log('tdee value >>>',tde)
                     let fatVal = Math.round(fat.toString());
-                    //let fatVal = Number(fat);
-                    // console.log('fatval value >>>',fatVal)
                     let proteinVal = Math.round(protein.toString());
-                    //let proteinVal = Number(protein);
-                    //console.log('protein value >>>',proteinVal)
                     let carbohydratesVal = Math.round(carbohydrate.toString());
-                    //let carbohydratesVal = Number(carbohydrate);
-                    //console.log('carbohyrates value >>>', carbohydratesVal)
 
                     //set the state
                     this.setState({
@@ -284,7 +258,6 @@ class Macrocalculator extends React.Component {
                     macroObj.calculteCalries = calries;
                     macroObj.proteins = proteinVal;
                     macroObj.carbohydrates = carbohydratesVal;
-                    //AsyncStorage.setItem('currentMacro', JSON.stringify(macroObj))
                     let dataUser = await HttpUtils.post('macrodata', macroObj)
                     console.log(dataUser, 'dataUser')
                 }
@@ -294,11 +267,8 @@ class Macrocalculator extends React.Component {
             if (dob != '' && height != '' && heightInch != '' && currentWeight != '' && goalWeight != '' &&
                 currentWeightUnit != '' && currentWeightUnit != '0' && goalWeightUnit != '' && goalWeightUnit != '0' && activityLevel != '') {
                 const heightCentimeter = height * 30.48;
-                //console.log('height centi >>>', heightCentimeter)
                 const heightInchCentimeter = heightInch * 2.54;
-                //console.log('height inches centi >>>', heightInchCentimeter);
                 const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
-                console.log('total centimeter >>>', totalHeightCentimeter)
                 let calculteCalries = 10 * currentWeight + 6.25 * totalHeightCentimeter - 5 * age - 161;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
                     // get tdee value
@@ -334,13 +304,13 @@ class Macrocalculator extends React.Component {
                     macroObj.calculteCalries = calries;
                     macroObj.proteins = proteinVal;
                     macroObj.carbohydrates = carbohydratesVal;
-                    AsyncStorage.setItem('currentMacro', JSON.stringify(macroObj))
                     let dataUser = await HttpUtils.post('macrodata', macroObj)
                     console.log(dataUser, 'dataUser')
                 }
             }
         }
     }
+
     getGender(gender) {
         if (gender == 'male') {
             this.setState({
@@ -357,6 +327,7 @@ class Macrocalculator extends React.Component {
             })
         }
     }
+
     activityLevel(activity) {
         if (activity == 'active') {
             this.setState({
@@ -395,6 +366,7 @@ class Macrocalculator extends React.Component {
             })
         }
     }
+
     increamentVal(value) {
         const { height, heightInch, currentWeight, goalWeight } = this.state;
         if (value == 'height') {
@@ -426,6 +398,7 @@ class Macrocalculator extends React.Component {
             })
         }
     }
+
     decrementVal(value) {
         const { height, heightInch, currentWeight, goalWeight } = this.state;
         if (value == 'height') {
@@ -457,6 +430,7 @@ class Macrocalculator extends React.Component {
             })
         }
     }
+
     updateUnits(e, givenUnit) {
         if (e == "height Unit") {
             this.setState({
@@ -475,26 +449,18 @@ class Macrocalculator extends React.Component {
         }
     }
 
-    componentWillUnmount() {
-        // Remove the event listener
-        this.focusListener.remove();
-    }
-
     macroGet = async () => {
         const { userId } = this.state;
         let userObj = {
             userId: userId
         }
         const specificMacro = await HttpUtils.post('getmacros', userObj);
-        console.log('user macro >>', specificMacro);
         if (specificMacro.code == 200) {
             this.setState({
                 macroArray: specificMacro.content
             }, () => {
-                //console.log(this.state.userAllData)
                 const userMacroData = this.state.macroArray;
                 for (var i in userMacroData) {
-                    //console.log(userData[i].currentWeight)
                     this.setState({
                         showCurrentMacro: true,
                         currentCalories: userMacroData[i].calculteCalries,
@@ -507,43 +473,17 @@ class Macrocalculator extends React.Component {
         }
     }
 
-    getMacro = () => {
-        const { navigation } = this.props;
-        this.focusListener = navigation.addListener('didFocus', () => {
-            this.macroGet();
-            // AsyncStorage.getItem('currentMacro').then((value) => {
-            //     if (value) {
-            //         let userData = JSON.parse(value)
-            //         console.log('user current macro data >>>', userData)
-            //         this.setState({
-            //             showCurrentMacro: true,
-            //             currentCalories: userData.calculteCalries,
-            //             currentCarbohy: userData.carbohydrates,
-            //             currentProteins: userData.proteins,
-            //             currentMass: userData.fatMass
-            //         })
-            //     }
-
-
-            // })
-        });
+    componentWillUnmount() {
+        // Remove the event listener
+        this.focusListener.remove();
     }
 
     render() {
-        const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation, heightUnitValidation,
-            currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation, male, female,
-            moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates, dob, date,
-            currentWeight, goalWeight, height, age,
-            currentCalories,
-            currentCarbohy,
-            currentProteins,
-            currentMass,
-            showCurrentMacro
+        const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation,
+            heightUnitValidation, currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation,
+            male, female, moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates,
+            dob, date, currentCalories, currentCarbohy, currentProteins, currentMass, showCurrentMacro 
         } = this.state;
-        console.log('height >>>', height)
-        console.log('age >>>', dob);
-        console.log('current w8 >>>', currentWeight);
-        console.log('goal weight >>>', goalWeight)
 
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: HeightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -572,7 +512,6 @@ class Macrocalculator extends React.Component {
                                 :
                                 null
                         }
-
                         <View style={styles.dateBirth}>
                             <Text style={styles.textStyle}>Date Of Birth</Text>
                         </View>
@@ -669,14 +608,6 @@ class Macrocalculator extends React.Component {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                            {/* <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
-                                <Picker selectedValue={this.state.heightUnit}
-                                    onValueChange={this.updateUnits.bind(this, 'height Unit')}
-                                    style={styles.pickerStyle}>
-                                    <Picker.Item label='Select an option...' value='0' />
-                                    <Picker.Item label="Inches" value="inches" />
-                                </Picker>
-                            </View> */}
                         </View>
                         <View style={styles.showValidationContainer}>
                             {heightValidation ?
