@@ -13,7 +13,7 @@ exports.sendPushNotification = functions.database
     payload = {
       notification: {
         title: "Message from",
-        body: event.after._data.message,
+        body: data.message,
       },
     };
     const reciverId =data.reciverId;
@@ -22,6 +22,7 @@ exports.sendPushNotification = functions.database
       // if (!data.val()) return;
 
       const snapshot = data.val();
+      
       const token = snapshot.deviceToken;
 
       return admin.messaging().sendToDevice(token, payload)

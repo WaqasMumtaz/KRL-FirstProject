@@ -238,13 +238,13 @@ class Macrocalculator extends React.Component {
                     //convert to string 
                     let calries = Math.round(calculteCalries.toString());
                     //console.log('calries value >>>',calries)
-<<<<<<< HEAD
+
                     let tde = Math.round(tdee.toString())
                     //let tde = Number(tdee);
                     //console.log('tdee value >>>',tde)
-=======
+
                     let tde = tdee.toString()
->>>>>>> ca90712d6d2dfdfae24d7c0c6e99a91665207dec
+
                     let fatVal = Math.round(fat.toString());
                     let proteinVal = Math.round(protein.toString());
                     let carbohydratesVal = Math.round(carbohydrate.toString());
