@@ -85,16 +85,14 @@ class Chatscreen extends React.Component {
       smallVideo: true,
       largeSizeVideo: false,
       showReport: false,
-<<<<<<< HEAD
-      yesterdayDate: ''
-=======
+      yesterdayDate: '',
       chatDates: [],
       chatMonths: [],
       chatYear: [],
       yesterdayDate: '',
       deviceToken: '',
       userToken: ''
->>>>>>> 30665de324a7141f48ad6e3c1f3b7b0cb7a26bee
+
     }
   }
 
