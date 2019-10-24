@@ -85,12 +85,16 @@ class Chatscreen extends React.Component {
       smallVideo: true,
       largeSizeVideo: false,
       showReport: false,
+<<<<<<< HEAD
+      yesterdayDate: ''
+=======
       chatDates: [],
       chatMonths: [],
       chatYear: [],
       yesterdayDate: '',
       deviceToken: '',
       userToken: ''
+>>>>>>> 30665de324a7141f48ad6e3c1f3b7b0cb7a26bee
     }
   }
 
@@ -118,9 +122,6 @@ class Chatscreen extends React.Component {
   componentWillMount() {
     const { senderData } = this.props.navigation.state.params;
     let chatArrayTemp = [];
-    let chatDates = [];
-    let chatMonths = [];
-    let chatYear = [];
     let dataFromLocalStorage;
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
@@ -134,20 +135,11 @@ class Chatscreen extends React.Component {
           let data = snapshot.val()
           for (let i in data) {
             let firbaseData = data[i];
-            const date = new Date(firbaseData.date).getDate();
-            const month = new Date(firbaseData.date).getMonth() + 1;
-            const year = new Date(firbaseData.date).getFullYear();
             if (firbaseData.reciverId == dataFromLocalStorage._id && firbaseData.senderId == senderData.userId) {
               chatArrayTemp.push(firbaseData);
-              chatDates.push(date);
-              chatMonths.push(month);
-              chatYear.push(year);
             }
             if (firbaseData.senderId == dataFromLocalStorage._id && firbaseData.reciverId == senderData.userId) {
               chatArrayTemp.push(firbaseData);
-              chatDates.push(date);
-              chatMonths.push(month);
-              chatYear.push(year);
             }
           }
           this.setState({
@@ -156,9 +148,6 @@ class Chatscreen extends React.Component {
             opponentId: senderData.userId,
             opponnetAvatarSource: senderData.image,
             name: senderData.name,
-            chatDates: chatDates,
-            chatMonths: chatMonths,
-            chatYear: chatYear
           })
           chatArrayTemp = [];
         });
@@ -456,7 +445,7 @@ class Chatscreen extends React.Component {
         if (dataApi.userId == userId) {
           //get month name
           // console.log(dataApi.month.slice(1))
-          let getMonthNo = dataApi.month.slice(1);
+          let getMonthNo = dataApi.month;
           let getMontName = monthName[getMonthNo];
           dataApi.monthName = getMontName;
           //check week of the month
@@ -596,15 +585,16 @@ class Chatscreen extends React.Component {
 
   render() {
     const { textMessage, sendIcon, sendBtnContainer, recodringBody, attachGray, attachOrange, shareFiles,
-      expand, userId, opponentId, opponnetAvatarSource, name, imagePath, chatDates, chatMonths, chatYear, monthName, yesterdayDate, todayDate } = this.state;
+      expand, userId, opponentId, opponnetAvatarSource, name, imagePath, monthName, yesterdayDate, todayDate } = this.state;
     let dateNum;
     let month;
     let year;
     let showDate;
+
     const chatMessages = this.state.chatMessages.map((message, key) => {
       if (dateNum == undefined) {
-        if (chatDates[key] == todayDate.slice(3, 5) && chatMonths[key] == todayDate.slice(0, 2)
-          && chatYear[key] == todayDate.slice(6)) {
+        if (Number(message.date.slice(3, 5)) == Number(todayDate.slice(3, 5)) && Number(message.date.slice(0, 2)) == Number(todayDate.slice(0, 2))
+          && Number(message.date.slice(6)) == Number(todayDate.slice(6))) {
           showDate = "Today";
         }
         else {
@@ -617,12 +607,12 @@ class Chatscreen extends React.Component {
           showDate = ''
         }
         else {
-          if (chatDates[key] == todayDate.slice(3, 5) && chatMonths[key] == todayDate.slice(0, 2)
-            && chatYear[key] == todayDate.slice(6)) {
+          if (Number(message.date.slice(3, 5)) == Number(todayDate.slice(3, 5)) && Number(message.date.slice(0, 2)) == Number(todayDate.slice(0, 2))
+            && Number(message.date.slice(6)) == Number(todayDate.slice(6))) {
             showDate = "Today";
           }
-          else if (chatDates[key] == yesterdayDate.slice(3, 5) && chatMonths[key] == yesterdayDate.slice(0, 2)
-            && chatYear[key] == yesterdayDate.slice(6)) {
+          else if (Number(message.date.slice(3, 5)) == Number(yesterdayDate.slice(3, 5)) && Number(message.date.slice(0, 2)) == Number(yesterdayDate.slice(0, 2))
+            && Number(message.date.slice(6)) == Number(yesterdayDate.slice(6))) {
             showDate = "Yesterday";
           }
           else {

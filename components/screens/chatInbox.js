@@ -70,30 +70,35 @@ class ChatInbox extends React.Component {
     // }
 
     async componentWillMount() {
+        let userData;
+        let userNamesData = []
         await AsyncStorage.getItem('opponentProfile').then((value) => {
-            let userData = JSON.parse(value);
-            let userNamesData = []
-            console.log('opponent data chatbox >>>', userData)
-            db.ref('users').on("value", snapshot => {
-                let data = snapshot.val();
-                for (var i in userData) {
-                    for (var j in data) {
-                        if (userData[i].userId == data[j]._id) {
-                            userData[i].status = data[j].status
-                            if (userNamesData) {
-                                userNamesData = []
-                            }
-                            userNamesData.push(userData[i])
-                            console.log(userNamesData, 'data')
-                        }
+            userData = JSON.parse(value);
+            
+        })
+        console.log('opponent data chatbox >>>', userData)
+        await db.ref('users').on("value", snapshot => {
+            let data = snapshot.val();
+            for (var i in userData) {
+                for (var j in data) {
+                    if (userData[i].userId == data[j]._id) {
+                        userData[i].status = data[j].status
+                        // if (userNamesData) {
+                        //     userNamesData = []
+                        // }
+                        userNamesData.push(userData[i])
+                        console.log(userNamesData, 'data')
                     }
                 }
-                this.setState({
-                    messageUser: userNamesData
-                })
-                console.log(userNamesData, 'userNamesData')
-            });
-        })
+            }
+            this.setState({
+                messageUser: userNamesData
+            })
+            userNamesData = [];
+        });
+
+        console.log(userNamesData, 'userNamesData')
+
     }
 
     componentWillUnmount() {
