@@ -131,7 +131,8 @@ const styles = StyleSheet.create({
     },
     dateWithCancelIcon: {
         flexDirection: 'row',
-        // justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginHorizontal:8
     },
     toggelBtnContainer: {
         flexDirection: 'row',

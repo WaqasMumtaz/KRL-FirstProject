@@ -98,69 +98,70 @@ class Payment extends React.Component {
       isLoading, serviceValidation, userId, serviceName, transactionId, receiptImg } = this.state;
     let res;
     //validation of the form
-    if (serviceValidation == "credit card") {
-      if (name == '') {
-        this.setState({
-          nameValidation: true,
-          isLoading: false,
-        })
-      }
-      else {
-        this.setState({
-          nameValidation: false,
-          isLoading: true,
-        })
-      }
-      if (email == '') {
-        this.setState({
-          emailValidation: true,
-          isLoading: false,
-        })
-      }
-      else {
-        this.setState({
-          emailValidation: false,
-          isLoading: true,
-        })
-      }
-      if (paymentMonth == '') {
-        this.setState({
-          paymentMonthValidation: true,
-          isLoading: false,
-        })
-      }
-      else {
-        this.setState({
-          paymentMonthValidation: false,
-          isLoading: true,
-        })
-      }
-      if (amount == '') {
-        this.setState({
-          amountValidation: true,
-          isLoading: false,
-        })
-      }
-      else {
-        this.setState({
-          amountValidation: false,
-          isLoading: true,
-        })
-      }
-      if (currency == '') {
-        this.setState({
-          currencyValidation: true,
-          isLoading: false,
-        })
-      }
-      else {
-        this.setState({
-          currencyValidation: false,
-          isLoading: true,
-        })
-      }
-    }
-    if (serviceValidation == "other") {
+    // if (serviceValidation == "credit card") {
+    //   console.log("credit card console")
+    //   if (name == '') {
+    //     this.setState({
+    //       nameValidation: true,
+    //       isLoading: false,
+    //     })
+    //   }
+    //   else {
+    //     this.setState({
+    //       nameValidation: false,
+    //       isLoading: true,
+    //     })
+    //   }
+    //   if (email == '') {
+    //     this.setState({
+    //       emailValidation: true,
+    //       isLoading: false,
+    //     })
+    //   }
+    //   else {
+    //     this.setState({
+    //       emailValidation: false,
+    //       isLoading: true,
+    //     })
+    //   }
+    //   if (paymentMonth == '') {
+    //     this.setState({
+    //       paymentMonthValidation: true,
+    //       isLoading: false,
+    //     })
+    //   }
+    //   else {
+    //     this.setState({
+    //       paymentMonthValidation: false,
+    //       isLoading: true,
+    //     })
+    //   }
+    //   if (amount == '') {
+    //     this.setState({
+    //       amountValidation: true,
+    //       isLoading: false,
+    //     })
+    //   }
+    //   else {
+    //     this.setState({
+    //       amountValidation: false,
+    //       isLoading: true,
+    //     })
+    //   }
+    //   if (currency == '') {
+    //     this.setState({
+    //       currencyValidation: true,
+    //       isLoading: false,
+    //     })
+    //   }
+    //   else {
+    //     this.setState({
+    //       currencyValidation: false,
+    //       isLoading: true,
+    //     })
+    //   }
+    // }
+    // if (serviceValidation == "other") {
       console.log('condition true')
       if (serviceName == '') {
         this.setState({
@@ -246,7 +247,7 @@ class Payment extends React.Component {
           isLoading: true
         })
       }
-    }
+    // }
 
     //get current year
     const year = new Date().getFullYear();
@@ -254,38 +255,38 @@ class Payment extends React.Component {
     let monthNumber = Number(paymentMonth)
     let paymentMonthYear = `${monthArr[monthNumber]}, ${year}`
 
-    if (serviceValidation == "credit card") {
-      //seprate month & year for create token request
-      let expMonth = Number(expiry.slice(0, 2));
-      let expYear = Number(expiry.slice(3, 5));
-      //object for create token
-      const params = {
-        // mandatory
-        number: creditCardNo,
-        expMonth: expMonth,
-        expYear: expYear,
-        cvc: cvc,
-        typeCard: typeCard,
-      }
-      if (params.number != '') {
-        this.setState({
-          isLoading: true
-        })
-      }
-      const token = await stripe.createTokenWithCard(params)
-      // send object to database
-      let paymentObj = {
-        name: name,
-        email: email,
-        paymentMonth: paymentMonthYear,
-        amount: amount,
-        currency: currency,
-        token: token.tokenId,
-        userId: userId
-      }
-      res = await HttpUtils.post('payment', paymentObj);
-    }
-    else if(serviceValidation == "other"){
+    // if (serviceValidation == "credit card") {
+    //   //seprate month & year for create token request
+    //   let expMonth = Number(expiry.slice(0, 2));
+    //   let expYear = Number(expiry.slice(3, 5));
+    //   //object for create token
+    //   const params = {
+    //     // mandatory
+    //     number: creditCardNo,
+    //     expMonth: expMonth,
+    //     expYear: expYear,
+    //     cvc: cvc,
+    //     typeCard: typeCard,
+    //   }
+    //   if (params.number != '') {
+    //     this.setState({
+    //       isLoading: true
+    //     })
+    //   }
+    //   const token = await stripe.createTokenWithCard(params)
+    //   // send object to database
+    //   let paymentObj = {
+    //     name: name,
+    //     email: email,
+    //     paymentMonth: paymentMonthYear,
+    //     amount: amount,
+    //     currency: currency,
+    //     token: token.tokenId,
+    //     userId: userId
+    //   }
+    //   res = await HttpUtils.post('payment', paymentObj);
+    // }
+    // else if(serviceValidation == "other"){
       // other screen data send on api
       let paymentObj = {
         serviceName: serviceName,
@@ -298,7 +299,7 @@ class Payment extends React.Component {
         userId: userId
       }
       res = await HttpUtils.post('otherpayment', paymentObj);
-    }
+    // }
     if (res.code == 200) {
       this.setState({
         isLoading: false,

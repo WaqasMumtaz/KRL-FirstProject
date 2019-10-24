@@ -32,7 +32,7 @@ class Homescreen extends React.Component {
   componentWillUnmount() {
     // Remove the event listener
     this.focusListener.remove();
-    BackHandler.removeEventListener('hardwareBackPress');
+    BackHandler.removeEventListener('hardwareBackPress',);
     // Remove the event listener
     this.focusListener.remove();
     this.notificationListener();
@@ -64,7 +64,7 @@ class Homescreen extends React.Component {
     });
 
 
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    
   }
 
   getTodayOrYesterdayExcersice = async () => {
@@ -159,6 +159,11 @@ class Homescreen extends React.Component {
 
   }
 
+  backScreen=()=>{
+    console.log('press back button');
+
+  }
+
   pedometerFun = (data) => {
     //console.log('data from child component >>>', data)
     if (data != undefined) {
@@ -210,7 +215,11 @@ class Homescreen extends React.Component {
 
   getDaysData = () => {
     const { navigation } = this.props;
-    this.focusListener = navigation.addListener('didFocus', () => {
+    this.focusListener = navigation.addListener('didFocus', (res) => {
+      console.log('back screens >>', res)
+      if(res.state.routeName === 'Homescreen'){
+        BackHandler.addEventListener('hardwareBackPress',this.handleBackButton);
+      }
       this.getUserData();
       this.getTodayOrYesterdayExcersice();
       //this.getBmiData();
@@ -221,7 +230,6 @@ class Homescreen extends React.Component {
     console.log('pressed back button')
     const { navigate } = this.props.navigation;
     const getData = await AsyncStorage.getItem("currentUser");
-
     // const parsForm = JSON.parse(getData)
     // console.log('current user data >>>',parsForm)
     if (getData) {

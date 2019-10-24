@@ -1070,6 +1070,7 @@ class Chatscreen extends React.Component {
                   coverScreen={true}
                   animationInTiming={800}
                   animationOutTiming={500}
+                  onRequestClose={()=>this.backToPage}
                 >
                   <View style={styles.cardContainer}>
                     <View style={styles.dateWithCancelIcon}>
@@ -1153,9 +1154,15 @@ class Chatscreen extends React.Component {
               </TouchableOpacity>}
             </View>
             {sendBtnContainer && <View style={styles.sentBtnContainer}>
-              {sendIcon && <TouchableOpacity onPress={this.sendMessage}>
+
+              {textMessage == '' ? <TouchableOpacity disabled={true}>
                 <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
-              </TouchableOpacity>}
+              </TouchableOpacity>
+            : 
+            <TouchableOpacity onPress={this.sendMessage}>
+                <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
+              </TouchableOpacity> 
+            }
               {/* {micIcon && <TouchableOpacity onPress={this.toggelMic}>
                 <Image source={require('../icons/mic.png')} style={styles.micIconStyle} />
               </TouchableOpacity>}

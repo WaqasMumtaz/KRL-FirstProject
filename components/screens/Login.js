@@ -41,13 +41,28 @@ class Login extends React.Component {
     }
     this.checkUserLogin()
   }
+  componentWillMount(){
+    this.getTokenPermission();
+  }
+  componentWillUnmount(){
+    this.focusListener.remove();
+  }
 
   // Start here firebase push notification
-componentDidMount() {
-  this.checkPermission();
+getTokenPermission=()=>{
+  const { navigation } = this.props;
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.checkPermission();
+    });
 }
+ componentDidMount() {
+  this.checkPermission();
+  
+}
+
    //1
    checkPermission = async () =>{
+    //  console.log('permission function run here')
     const enabled = await firebasePushNotification.messaging().hasPermission();
     if (enabled) {
         this.getToken();
@@ -58,10 +73,11 @@ componentDidMount() {
 
    //3
     getToken = async ()=>{
+      console.log('get token function')
     let fcmToken = await AsyncStorage.getItem('fcmToken');
+    //console.log('fcmToken >>', fcmToken);
     if (!fcmToken) {
         fcmToken = await firebasePushNotification.messaging().getToken();
-
         if (fcmToken) {
             // user has a device token
             console.log('User Device token >>>', fcmToken)
@@ -71,6 +87,12 @@ componentDidMount() {
             await AsyncStorage.setItem('fcmToken', fcmToken);
         }
     }
+    else {
+      this.setState({
+        deviceToken:fcmToken
+      })
+      await AsyncStorage.setItem('fcmToken', fcmToken);
+    }
   }
 
     //2
@@ -78,6 +100,7 @@ componentDidMount() {
     try {
         await firebasePushNotification.messaging().requestPermission();
         // User has authorised
+       // console.log('request permission user authorised');
         this.getToken();
     } catch (error) {
         // User has rejected permissions

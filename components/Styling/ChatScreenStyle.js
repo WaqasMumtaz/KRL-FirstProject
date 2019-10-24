@@ -124,12 +124,21 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     expandImges: {
-        padding: 60,
-        margin: 10,
-        borderRadius: 10,
+       // padding: 60,
+        //margin: 10,
+        //borderRadius: 10,
         width: '100%',
         height: '80%',
         resizeMode: 'contain'
+    },
+    dateWithCancelIcon:{
+        flexDirection:'row',
+        justifyContent:'flex-end'
+    },
+    cardContainer:{
+        width:'100%',
+        // borderColor:'black',
+        // borderWidth:3
     },
     mgsTouctable: {
         marginBottom: 20,
