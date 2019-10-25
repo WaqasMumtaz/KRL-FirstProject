@@ -12,7 +12,7 @@ exports.sendPushNotification = functions.database
     console.log('user data >>', data)
     payload = {
       notification: {
-        title: "Message from",
+        title: `Message from ${data.name}`,
         body: data.message,
       },
     };

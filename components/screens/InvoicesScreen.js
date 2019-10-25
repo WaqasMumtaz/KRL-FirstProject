@@ -120,16 +120,17 @@ class Invoices extends React.Component {
                     this.setState({
                         allDataUser: userContent,
                         invoiceData: userContent
-                    }, () => {
-                        for (let i in this.state.allDataUser) {
-                            const dataUser = this.state.allDataUser[i];
-                            //console.log('setstate data >>>',dataUser)
-                            if (dataUser.receiptImg != undefined) {
-                                this.setState({
-                                    receipt_img: dataUser.receiptImg
-                                })
-                            }
-                        }
+                    // }
+                    // , () => {
+                    //     for (let i in this.state.allDataUser) {
+                    //         const dataUser = this.state.allDataUser[i];
+                    //         //console.log('setstate data >>>',dataUser)
+                    //         if (dataUser.receiptImg != undefined) {
+                    //             this.setState({
+                    //                 receipt_img: dataUser.receiptImg
+                    //             })
+                    //         }
+                    //     }
                     })
                 }
             }
@@ -142,10 +143,14 @@ class Invoices extends React.Component {
 
     }
 
-    openModal = () => {
+    openModal = (data) => {
+        console.log('receipt image >>', data)
         this.setState({
-            isVisibleModal: true
-        })
+            receipt_img:data,
+            
+        },()=>
+        this.setState({isVisibleModal: true,})
+        )
     }
     closeModal = () => {
         this.setState({
@@ -157,7 +162,7 @@ class Invoices extends React.Component {
     _keyExtractor = (item, index) => item.id;
 
     renderDataItems = ({ item }) => {
-        // console.log('data items >>', item)
+       console.log('data items >>', item)
         // console.log('service name >>>', item.serviceName)
         return (
             <View style={styles.bodyContainer}>
@@ -171,8 +176,9 @@ class Invoices extends React.Component {
                             {item.serviceName != undefined ?
                                 <View style={styles.checkReceipt}>
                                     <Text style={styles.checkReceiptText}>Check Receipt</Text>
-                                    <TouchableOpacity onPress={this.openModal}>
+                                    <TouchableOpacity onPress={this.openModal.bind(this, item.receiptImg)}>
                                         <Image source={require('../icons/attach-orange.png')}
+                                        
                                             style={styles.iconStyle}
                                             resizeMode='cover'
                                         />
@@ -374,12 +380,12 @@ class Invoices extends React.Component {
                     <Modal
                         isVisible={this.state.isVisibleModal}
                         animationIn='bounce'
-                        animationOut='bounce'
+                        animationOut='fadeInDown'
                         //animationOut='zoomOutDown'
                         backdropOpacity={0.8}
                         backdropColor='white'
                         coverScreen={true}
-                        animationInTiming={300}
+                        animationInTiming={100}
                         animationOutTiming={100}
                     >
 

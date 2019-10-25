@@ -234,6 +234,7 @@ class ChatInbox extends React.Component {
                             <View style={styles.userInstruction}>
                                 <Text style={styles.userInsTextStyle}>Get premium account to get a coach</Text>
                                 <Text style={styles.userInsTextStyle}>Kindly contact </Text>
+                                <Text style={styles.userInsTextStyle}>After trainner successfully assign to you than restart your login process  </Text>
                                 <TouchableOpacity
                                     style={styles.sendReqContainer}
                                     activeOpacity={0.7}

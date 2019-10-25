@@ -133,7 +133,8 @@ const styles = StyleSheet.create({
     },
     dateWithCancelIcon:{
         flexDirection:'row',
-        justifyContent:'flex-end'
+        justifyContent:'flex-end',
+        backgroundColor:'#000000'
     },
     cardContainer:{
         width:'100%',
@@ -680,10 +681,11 @@ const styles = StyleSheet.create({
     withOutTrainerModal: {
         width: '100%',
         //justifyContent:'center',
-        height: 180,
+        //height: 180,
         borderRadius: 5,
         backgroundColor: '#000000',
         alignSelf: 'center',
+        padding:8
     },
     textColor: {
         fontFamily: "MontserratExtraBold",

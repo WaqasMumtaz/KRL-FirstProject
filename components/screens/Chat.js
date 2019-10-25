@@ -167,27 +167,6 @@ class Chatscreen extends React.Component {
     let toSend = deviceToken;
     //console.log('key token >',userToken , 'device token >', toSend)
     // //token
-    let body = {
-      to: deviceToken,
-      data: {
-        custom_notification: {
-          title: "New Message",
-          body: userMessage,
-        }
-      },
-    };
-    fetch('https://fcm.googleapis.com/fcm/send', {
-            'method': 'POST',
-            'headers': {
-              'Authorization': 'key=' + key,
-              'Content-Type': 'application/json'
-            },
-            'body': JSON.stringify(body)
-          }).then(function (response) {
-            console.log(response);
-          }).catch(function (error) {
-            console.error(error);
-          });
 
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
@@ -201,6 +180,28 @@ class Chatscreen extends React.Component {
           mgs.date = todayDate;
           mgs.time = time;
           mgs.type = type;
+          //Add firebase push notification
+          let body = {
+            to: deviceToken,
+            data: {
+              custom_notification: {
+                title: "New Message",
+                body: userMessage,
+              }
+            },
+          };
+          fetch('https://fcm.googleapis.com/fcm/send', {
+                  'method': 'POST',
+                  'headers': {
+                    'Authorization': 'key=' + key,
+                    'Content-Type': 'application/json'
+                  },
+                  'body': JSON.stringify(body)
+                }).then(function (response) {
+                  console.log(response);
+                }).catch(function (error) {
+                  console.error(error);
+                });      
           
           db.ref(`chatRoom/`).push(mgs);
         }
@@ -213,18 +214,29 @@ class Chatscreen extends React.Component {
           mgs.date = todayDate;
           mgs.time = time;
           mgs.type = type;
-          // fetch('https://fcm.googleapis.com/fcm/send', {
-          //   'method': 'POST',
-          //   'headers': {
-          //     'Authorization': 'key=' + userToken,
-          //     'Content-Type': 'application/json'
-          //   },
-          //   'body': JSON.stringify(body)
-          // }).then(function (response) {
-          //   console.log(response);
-          // }).catch(function (error) {
-          //   console.error(error);
-          // });
+          //Add firebase push notification
+          let body = {
+            to: deviceToken,
+            data: {
+              custom_notification: {
+                title: "New Message",
+                body: userMessage,
+              }
+            },
+          };
+          fetch('https://fcm.googleapis.com/fcm/send', {
+                  'method': 'POST',
+                  'headers': {
+                    'Authorization': 'key=' + key,
+                    'Content-Type': 'application/json'
+                  },
+                  'body': JSON.stringify(body)
+                }).then(function (response) {
+                  console.log(response);
+                }).catch(function (error) {
+                  console.error(error);
+                });      
+          
           db.ref(`chatRoom/`).push(mgs);
         }
       }
@@ -1058,14 +1070,14 @@ class Chatscreen extends React.Component {
                   coverScreen={true}
                   animationInTiming={800}
                   animationOutTiming={500}
-                  onRequestClose={()=>this.backToPage}
+                  onBackdropPress={()=>this.setState({isVisibleModal:false})}
                 >
                   <View style={styles.cardContainer}>
-                    <View style={styles.dateWithCancelIcon}>
+                    {/* <View style={styles.dateWithCancelIcon}>
                       <TouchableOpacity onPress={this.backToPage} activeOpacity={0.6}>
                         <Image source={require('../icons/cancel.png')} />
                       </TouchableOpacity>
-                    </View>
+                    </View> */}
                     <Image style={styles.expandImges} source={{
                       uri: `${imagePath}`
                     }} />
