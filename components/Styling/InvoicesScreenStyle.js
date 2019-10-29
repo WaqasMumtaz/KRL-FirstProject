@@ -53,10 +53,11 @@ cardLeft:{
     // borderColor:'black',
     height:255,
     borderRadius:5,
-    width:172,
+    width:168,
     backgroundColor:'black',
     marginTop:15,
-    padding:5
+    padding:5,
+    
 },
 cardRight:{
     // borderWidth:3,
@@ -141,8 +142,9 @@ superScriptTextStyle:{
    },
    receiptImgStyle:{
        height:390,
-       width:370,
-       marginTop:10
+       width:'100%',
+       //marginTop:10,
+       //alignSelf: 'stretch',
    }
 })
 

@@ -44,13 +44,13 @@ const styles = StyleSheet.create({
         flex: 1,
         fontFamily: 'MontserratLight',
         height: 40,
-        backgroundColor: 'white',
+        backgroundColor: '#FFFFFF',
         borderRadius:2,
         //borderWidth: 2,
         //marginRight: 20,
         paddingLeft: 16,
         marginTop:7,
-        opacity:0.3
+        
         
     },
     newPasswordText:{
@@ -126,13 +126,13 @@ const styles = StyleSheet.create({
         flex: 0.5,
         fontFamily: 'MontserratLight',
         height: 40,
-        backgroundColor: 'white',
+        backgroundColor: '#FFFFFF',
         borderRadius:2,
         //borderWidth: 2,
         //marginRight: 20,
         paddingLeft: 16,
         marginTop:7,
-        opacity:0.3
+       
      },
      emailCodeText:{
         color: '#A6A6A6',

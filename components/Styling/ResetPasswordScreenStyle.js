@@ -47,11 +47,11 @@ const styles = StyleSheet.create({
             //marginLeft: 20,
             height: 40,
             //borderColor: 'gray',
-            backgroundColor: 'white',
+            backgroundColor: '#FFFFFF',
             borderRadius: 2,
             //marginRight: 20,
             paddingLeft: 16,
-            opacity:0.3
+            
       },
     
       textsStyles:{

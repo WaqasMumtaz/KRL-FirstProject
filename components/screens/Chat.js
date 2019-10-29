@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   Text,
   View,
   ScrollView,
@@ -21,6 +22,8 @@ import Modal from "react-native-modal";
 import ChartScreen from '../BarChart/BarChart';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { YellowBox } from 'react-native';
+import firebasePushNotification from 'react-native-firebase';
+
 
 YellowBox.ignoreWarnings([
   'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
@@ -87,7 +90,15 @@ class Chatscreen extends React.Component {
       showReport: false,
       yesterdayDate: '',
       deviceToken: '',
-      userToken: ''
+      userToken: '',
+      yesterdayDate: '',
+      chatDates: [],
+      chatMonths: [],
+      chatYear: [],
+      // yesterdayDate: '',
+      // deviceToken: '',
+      // userToken: ''
+
     }
   }
 
@@ -111,6 +122,7 @@ class Chatscreen extends React.Component {
       time: hours + ':' + min + ':' + sec
     })
 
+    this.createNotificationListeners();
   }
   componentWillMount() {
     const { senderData } = this.props.navigation.state.params;
@@ -151,6 +163,12 @@ class Chatscreen extends React.Component {
     this.getWeekReportData()
   }
 
+  componentWillUnmount() {
+    this.notificationListener();
+    this.notificationOpenedListener();
+  }
+
+
   uplaodDataOnFirebase = (userMessage, type) => {
     const { senderData } = this.props.navigation.state.params;
 
@@ -164,27 +182,6 @@ class Chatscreen extends React.Component {
     let toSend = deviceToken;
     //console.log('key token >',userToken , 'device token >', toSend)
     // //token
-    let body = {
-      to: deviceToken,
-      data: {
-        custom_notification: {
-          title: "New Message",
-          body: userMessage,
-        }
-      },
-    };
-    fetch('https://fcm.googleapis.com/fcm/send', {
-            'method': 'POST',
-            'headers': {
-              'Authorization': 'key=' + key,
-              'Content-Type': 'application/json'
-            },
-            'body': JSON.stringify(body)
-          }).then(function (response) {
-            console.log(response);
-          }).catch(function (error) {
-            console.error(error);
-          });
 
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
@@ -198,6 +195,28 @@ class Chatscreen extends React.Component {
           mgs.date = todayDate;
           mgs.time = time;
           mgs.type = type;
+          //Add firebase push notification
+          let body = {
+            to: deviceToken,
+            data: {
+              custom_notification: {
+                title: "New Message",
+                body: userMessage,
+              }
+            },
+          };
+          fetch('https://fcm.googleapis.com/fcm/send', {
+                  'method': 'POST',
+                  'headers': {
+                    'Authorization': 'key=' + key,
+                    'Content-Type': 'application/json'
+                  },
+                  'body': JSON.stringify(body)
+                }).then(function (response) {
+                  console.log(response);
+                }).catch(function (error) {
+                  console.error(error);
+                });      
           
           db.ref(`chatRoom/`).push(mgs);
         }
@@ -210,18 +229,29 @@ class Chatscreen extends React.Component {
           mgs.date = todayDate;
           mgs.time = time;
           mgs.type = type;
-          // fetch('https://fcm.googleapis.com/fcm/send', {
-          //   'method': 'POST',
-          //   'headers': {
-          //     'Authorization': 'key=' + userToken,
-          //     'Content-Type': 'application/json'
-          //   },
-          //   'body': JSON.stringify(body)
-          // }).then(function (response) {
-          //   console.log(response);
-          // }).catch(function (error) {
-          //   console.error(error);
-          // });
+          //Add firebase push notification
+          let body = {
+            to: deviceToken,
+            data: {
+              custom_notification: {
+                title: "New Message",
+                body: userMessage,
+              }
+            },
+          };
+          fetch('https://fcm.googleapis.com/fcm/send', {
+                  'method': 'POST',
+                  'headers': {
+                    'Authorization': 'key=' + key,
+                    'Content-Type': 'application/json'
+                  },
+                  'body': JSON.stringify(body)
+                }).then(function (response) {
+                  console.log(response);
+                }).catch(function (error) {
+                  console.error(error);
+                });      
+          
           db.ref(`chatRoom/`).push(mgs);
         }
       }
@@ -577,6 +607,61 @@ class Chatscreen extends React.Component {
       })
     }
   }
+
+//Push Notification Methods here 
+
+createNotificationListeners = async () => {
+  console.log('Create Notification Listeners run ')
+  /*
+  * Triggered when a particular notification has been received in foreground
+  * */
+  // this.notificationListener = firebasePushNotification.notifications().onNotification((notification) => {
+  //   const { title, body } = notification;
+  //   this.showAlert(title, body);
+  // });
+
+  /*
+* If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
+* */
+  this.notificationOpenedListener = firebasePushNotification.notifications().onNotificationOpened((notificationOpen) => {
+    const { title, body } = notificationOpen.notification;
+    this.showAlert(title, body);
+  });
+
+
+  /*
+    * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+    * */
+  const notificationOpen = await firebasePushNotification.notifications().getInitialNotification();
+  if (notificationOpen) {
+    const { title, body } = notificationOpen.notification;
+    this.showAlert(title, body);
+  }
+
+
+  /*
+   * Triggered for data only payload in foreground
+   * */
+  this.messageListener = firebasePushNotification.messaging().onMessage((message) => {
+    //process data message
+    console.log(JSON.stringify(message));
+  });
+
+  
+
+
+}
+
+showAlert(title, body) {
+  Alert.alert(
+    title, body,
+    [
+      { text: 'OK', onPress: () => console.log('OK Pressed') },
+    ],
+    { cancelable: false },
+  );
+}
+
 
   render() {
     const { textMessage, sendIcon, sendBtnContainer, recodringBody, attachGray, attachOrange, shareFiles,
@@ -1055,13 +1140,14 @@ class Chatscreen extends React.Component {
                   coverScreen={true}
                   animationInTiming={800}
                   animationOutTiming={500}
+                  onBackdropPress={()=>this.setState({isVisibleModal:false})}
                 >
                   <View style={styles.cardContainer}>
-                    <View style={styles.dateWithCancelIcon}>
+                    {/* <View style={styles.dateWithCancelIcon}>
                       <TouchableOpacity onPress={this.backToPage} activeOpacity={0.6}>
                         <Image source={require('../icons/cancel.png')} />
                       </TouchableOpacity>
-                    </View>
+                    </View> */}
                     <Image style={styles.expandImges} source={{
                       uri: `${imagePath}`
                     }} />
@@ -1137,10 +1223,20 @@ class Chatscreen extends React.Component {
                 />
               </TouchableOpacity>}
             </View>
-            {sendBtnContainer && <View style={styles.sentBtnContainer}>
-              {sendIcon && <TouchableOpacity onPress={this.sendMessage}>
+            {textMessage == '' ? <View style={styles.sentBtnDisableStyle}>
+
+               <TouchableOpacity disabled={true}>
                 <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
-              </TouchableOpacity>}
+              </TouchableOpacity>
+              </View>
+            : 
+           <View style={styles.sentBtnContainer}>
+            <TouchableOpacity onPress={this.sendMessage}>
+                <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
+              </TouchableOpacity> 
+           </View>  
+            }
+
               {/* {micIcon && <TouchableOpacity onPress={this.toggelMic}>
                 <Image source={require('../icons/mic.png')} style={styles.micIconStyle} />
               </TouchableOpacity>}
@@ -1149,7 +1245,6 @@ class Chatscreen extends React.Component {
               {micOrange && <TouchableOpacity onPress={this.toggelMicOrange}>
                 <Image source={require('../icons/mic-orange.png')} style={styles.micIconStyle} />
               </TouchableOpacity>} */}
-            </View>}
             {/* When user does not assign trainer show this modal*/}
 
 

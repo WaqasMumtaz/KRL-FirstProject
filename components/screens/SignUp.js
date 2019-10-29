@@ -21,6 +21,7 @@ import PhoneInput from 'react-native-phone-input'
 import firebase from '../../Config/Firebase';
 import 'firebase/firestore';
 const db = firebase.database();
+import firebasePushNotification from 'react-native-firebase';
 //console.log(HttpUtilsFile)
 const { height } = Dimensions.get('window');
 
@@ -81,18 +82,21 @@ class Signup extends React.Component {
             pickerData: this.phone.getPickerData()
         })
         //console.log(this.phone.getCountryCode())
+        
     }
 
     componentWillMount(){
         AsyncStorage.getItem('fcmToken').then((res)=>{
             const deviceToken = res;
-            // console.log('This is device token >>>',deviceToken )
+             console.log('This is device token >>>',deviceToken )
              this.setState({
                  deviceToken:deviceToken
              })
         })
+        
     }
-
+    
+    
     selectCountry(country) {
         //console.log('country >>', country)
         //this.myCountryPicker.open()

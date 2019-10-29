@@ -42,7 +42,8 @@ const styles =StyleSheet.create({
     // },
     styleForLabel:{
         color:'#4f4f4f',
-        fontFamily:'MontserratLight'
+        fontFamily:'MontserratLight',
+        
     },
     dateBirth:{
         flex:0.2,
@@ -85,14 +86,16 @@ const styles =StyleSheet.create({
         height:40 ,
         borderTopLeftRadius:3,
         borderBottomLeftRadius:3,
+        marginTop:15.5
         // opacity:0.6
     },
     textInputStyleParent:{
         flex:1,
         height: 40,
-        textAlign: 'center', 
         backgroundColor: '#e5e5e5',
-        //opacity:0.3
+        paddingLeft:16,
+        marginTop:10,
+        marginBottom:5
     },
     touchableOpacityTwo:{
         flex: 1,
@@ -105,6 +108,7 @@ const styles =StyleSheet.create({
         height:40 ,
         borderTopRightRadius:3,
         borderBottomRightRadius:3,
+        marginTop:15.5
         //marginLeft:15
        // opacity:0.6
     },
@@ -250,6 +254,7 @@ const styles =StyleSheet.create({
         height: 38, 
         width: '43%', 
         //marginLeft: 16, 
+        color:'white',
         justifyContent: 'center', 
         backgroundColor: '#FF6200', 
         marginTop: 5, 
@@ -268,6 +273,7 @@ const styles =StyleSheet.create({
         height: 38, 
         width: '43%', 
         //marginLeft: 16, 
+        color:'white',
         justifyContent: 'center', 
         backgroundColor: '#FF6200', 
         marginTop: 5, 
@@ -420,7 +426,55 @@ const styles =StyleSheet.create({
         color:'#000000',
         marginTop:10,
         
+    },
+    unitPara:{
+        color:'#4f4f4f',
+        fontFamily:'MontserratLight'
+    },
+    unitValueContainer:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginTop:5
+    },
+    metrilClick:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        color:'white',
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    impClick:{
+        height: 38, 
+        width: '43%', 
+        //marginLeft: 16, 
+        color:'white',
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    buttonStyle:{
+        height: 38,
+        width: '30%', 
+        justifyContent: 'center', 
+        backgroundColor: '#e5e5e5', 
+        marginTop: 5, 
+        borderRadius: 3 
+    },
+    clickedButton:{
+        height: 38, 
+        width: '30%', 
+        //marginLeft: 16, 
+        color:'white',
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
+        borderRadius: 3 
     }
+    
 })
 
 export default styles;

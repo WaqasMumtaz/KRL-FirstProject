@@ -46,6 +46,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    sentBtnDisableStyle:{
+        width: 45,
+        height: 45,
+        borderRadius: 45 / 2,
+        backgroundColor: '#FF6200',
+        justifyContent: 'center',
+        alignItems: 'center',
+        opacity:0.2
+    },
     micIconStyle: {
         flex: 1,
         width: 15,
@@ -57,6 +66,15 @@ const styles = StyleSheet.create({
         width: 27,
         height: 23,
         resizeMode: 'contain'
+    },
+    disableBtnStyle:{
+        flex: 2,
+        height: 40,
+        justifyContent: 'center',
+        backgroundColor: '#FF6200',
+        alignItems: 'center',
+        borderRadius: 5,
+        opacity: 0.2
     },
     orangeMicContainer: {
         width: 45,
@@ -124,12 +142,22 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     expandImges: {
-        padding: 60,
-        margin: 10,
-        borderRadius: 10,
+       // padding: 60,
+        //margin: 10,
+        //borderRadius: 10,
         width: '100%',
         height: '80%',
         resizeMode: 'contain'
+    },
+    dateWithCancelIcon:{
+        flexDirection:'row',
+        justifyContent:'flex-end',
+        backgroundColor:'#000000'
+    },
+    cardContainer:{
+        width:'100%',
+        // borderColor:'black',
+        // borderWidth:3
     },
     mgsTouctable: {
         marginBottom: 20,
@@ -671,10 +699,11 @@ const styles = StyleSheet.create({
     withOutTrainerModal: {
         width: '100%',
         //justifyContent:'center',
-        height: 180,
+        //height: 180,
         borderRadius: 5,
         backgroundColor: '#000000',
         alignSelf: 'center',
+        padding:8
     },
     textColor: {
         fontFamily: "MontserratExtraBold",

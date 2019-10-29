@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     forImages: {
-        // flex: 1,
+        //flex: 1,
         height: 250,
         width: 250,
         alignSelf: 'stretch',
@@ -131,7 +131,8 @@ const styles = StyleSheet.create({
     },
     dateWithCancelIcon: {
         flexDirection: 'row',
-        // justifyContent: 'space-between'
+        justifyContent: 'center',
+       // marginHorizontal:8
     },
     toggelBtnContainer: {
         flexDirection: 'row',
@@ -218,6 +219,10 @@ const styles = StyleSheet.create({
         height: 150,
         borderRadius: 150 / 2
     },
+    validationInstruction:{
+        color: '#FF6200',
+        fontFamily: 'MontserratLight',
+    }
     // pickerStyle:{
     //     backgroundColor:'#e5e5e5'
     // }

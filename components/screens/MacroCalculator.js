@@ -6,6 +6,7 @@ import DatePicker from 'react-native-datepicker';
 import AsyncStorage from '@react-native-community/async-storage';
 import HttpUtils from '../Services/HttpUtils';
 
+
 const { HeightDimension } = Dimensions.get('window');
 
 class Macrocalculator extends React.Component {
@@ -62,11 +63,25 @@ class Macrocalculator extends React.Component {
             currentMass: '',
             showCurrentMacro: false,
             macroArray: [],
-            macroResult: ''
+            macroResult: '',
+            unitValue: '',
+            impClick: false,
+            metrilClick: false,
+            unitValidation: false,
+            desiredUnitValue: '',
+            normal: false,
+            mild: false,
+            extremeBtn: false,
+            desiredUnitValidation: false,
+            fitnessGoal: '',
+            showDesiredBtn: false,
+            fitnessObj: { normal: 300, mild: 500, extremeBtn: 700 }
         }
     }
 
     componentWillMount() {
+        const { params } = this.props.navigation.state;
+        console.log('params data >>', params)
         let monthNo = new Date().getMonth();
         const date = new Date().getDate();
         const year = new Date().getFullYear();
@@ -89,10 +104,23 @@ class Macrocalculator extends React.Component {
                     currentYear: year,
                     currentDate: date,
                     currentMonth: month,
+                    fitnessGoal: params.fitnessGoal
+                }, () => {
+                    if (this.state.fitnessGoal == 'maintain weight') {
+                        this.setState({
+                            showDesiredBtn: false
+                        })
+                    }
+                    else {
+                        this.setState({
+                            showDesiredBtn: true
+                        })
+                    }
                 })
             }
         });
         this.getMacro();
+
     }
     getMacro = () => {
         const { navigation } = this.props;
@@ -102,8 +130,9 @@ class Macrocalculator extends React.Component {
     }
 
     calulateMacro = async () => {
-        const { dob, gender, height, heightInch, currentWeight, goalWeight, currentWeightUnit, goalWeightUnit,
-            activityLevel, tdeeObj, date, time, currentYear, currentDate, currentMonth, userId } = this.state;
+        const { dob, gender, height, heightInch, currentWeight, currentWeightUnit,
+            activityLevel, tdeeObj, date, time, currentYear, currentDate, currentMonth, userId,
+            unitValue, desiredUnitValue, fitnessObj, fitnessGoal } = this.state;
         let age;
         let macroObj = {
             dob: dob,
@@ -112,8 +141,8 @@ class Macrocalculator extends React.Component {
             heightInch: heightInch,
             currentWeight: currentWeight,
             currentWeightUnit: currentWeightUnit,
-            goalWeight: goalWeight,
-            goalWeightUnit: goalWeightUnit,
+            // goalWeight: goalWeight,
+            // goalWeightUnit: goalWeightUnit,
             activityLevel: activityLevel,
             date: date,
             time: time,
@@ -162,16 +191,16 @@ class Macrocalculator extends React.Component {
                 currentWeightValidation: false
             })
         }
-        if (goalWeight == '') {
-            this.setState({
-                goalWeightValidation: true
-            })
-        }
-        else {
-            this.setState({
-                goalWeightValidation: false
-            })
-        }
+        // if (goalWeight == '') {
+        //     this.setState({
+        //         goalWeightValidation: true
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         goalWeightValidation: false
+        //     })
+        // }
         if (heightInch == '') {
             this.setState({
                 heightUnitValidation: true
@@ -192,16 +221,16 @@ class Macrocalculator extends React.Component {
                 currentWeightUnitValidation: false
             })
         }
-        if (goalWeightUnit == '' || goalWeightUnit == '0') {
-            this.setState({
-                goalWeightUnitValidation: true
-            })
-        }
-        else {
-            this.setState({
-                goalWeightUnitValidation: false
-            })
-        }
+        // if (goalWeightUnit == '' || goalWeightUnit == '0') {
+        //     this.setState({
+        //         goalWeightUnitValidation: true
+        //     })
+        // }
+        // else {
+        //     this.setState({
+        //         goalWeightUnitValidation: false
+        //     })
+        // }
         if (activityLevel == '') {
             this.setState({
                 activityLevelValidation: true
@@ -212,109 +241,663 @@ class Macrocalculator extends React.Component {
                 activityLevelValidation: false
             })
         }
+        if (unitValue == '') {
+            this.setState({
+                unitValidation: true
+            })
+        }
+        else {
+            this.setState({
+                unitValidation: false
+            })
+        }
+        if (desiredUnitValue == '') {
+            this.setState({
+                desiredUnitValidation: true
+            })
+        }
+        else {
+            this.setState({
+                desiredUnitValidation: false
+            })
+        }
         if (dob != '') {
             const dobYear = dob.slice(6, 10);
             age = currentYear - dobYear;
         }
-        if (gender == 'male') {
-            if (dob != '' && height != '' && heightInch != '' && currentWeight != '' && goalWeight != '' &&
-                currentWeightUnit != '' && currentWeightUnit != '0' && goalWeightUnit != '' && goalWeightUnit != '0' && activityLevel != '') {
+        if (gender == 'male' && unitValue == 'imperial') {
+            if (dob != '' && height != '' && heightInch != '' && currentWeight != '' &&
+                currentWeightUnit != '' && currentWeightUnit != '0' && activityLevel != '' && unitValue != '') {
                 const heightCentimeter = height * 30.48;
                 const heightInchCentimeter = heightInch * 2.54;
                 const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
-                let calculteCalries = 10 * currentWeight + 6.25 * totalHeightCentimeter - 5 * age + 5;
+                const userWeight = Math.round(currentWeight * 0.454);
+                console.log('user weight >>', userWeight)
+                let BMR = (10 * userWeight) + (6.25 * totalHeightCentimeter) - (5 * age) + 5;
+                console.log('calories >>', BMR)
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
-                    // get tdee value
-                    let tdee = calculteCalries * tdeeObj[activityLevel]
-                    //calculate fat
-                    let fatCalries = tdee * 0.25;
-                    let fat = fatCalries / 9
-                    //calculate protein
-                    let proteinCalries = calculteCalries * 0.25;
-                    let protein = proteinCalries / 4;
-                    //calculate carbohydrate
-                    let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
-                    let carbohydrate = carbohydratesCalries / 4;
-                    //convert to string 
-                    let calries = Math.round(calculteCalries.toString());
-                    //console.log('calries value >>>',calries)
 
-                    let tde = Math.round(tdee.toString())
-                    //let tde = Number(tdee);
-                    //console.log('tdee value >>>',tde)
+                    if (fitnessGoal == 'lose weight') {
+                        // let caloriesResult = Math.round(tdee - fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result lose>>', caloriesResult);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        let addBMR = Math.round(finalBMR - fitnessObj[desiredUnitValue]);
+                        console.log('minus bmr >', addBMR)
+                        let fatCalries = finalBMR * 0.30;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.30;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.40;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
 
-                    //let tde = tdee.toString()
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
 
-                    let fatVal = Math.round(fat.toString());
-                    let proteinVal = Math.round(protein.toString());
-                    let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //let tde = tdee.toString()
 
-                    //set the state
-                    this.setState({
-                        calculteCalries: tde,
-                        totalDEE: tde,
-                        fatMass: fatVal,
-                        proteins: proteinVal,
-                        carbohydrates: carbohydratesVal
-                    })
-                    //add properties to object
-                    macroObj.age = age;
-                    macroObj.totalDEE = tde;
-                    macroObj.fatMass = fatVal;
-                    macroObj.calculteCalries = tde;
-                    macroObj.proteins = proteinVal;
-                    macroObj.carbohydrates = carbohydratesVal;
-                    let dataUser = await HttpUtils.post('macrodata', macroObj)
-                    console.log(dataUser, 'dataUser')
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+                    }
+                    else if (fitnessGoal == 'gain weight') {
+                        // let caloriesResultGain = Math.round(tdee + fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result gain>>', caloriesResultGain);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        let addBMR = Math.round(finalBMR + fitnessObj[desiredUnitValue]);
+                        let fatCalries = finalBMR * 0.30;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.30;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.40;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+
+                    }
+                    else if (fitnessGoal == 'maintain weight') {
+                        // get tdee value
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        //calculate fat
+                        let fatCalries = finalBMR * 0.30;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = BMR * 0.30;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        //let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = finalBMR * 0.40;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: finalBMR,
+                            totalDEE: finalBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = finalBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = finalBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+                    }
+
+
                 }
             }
         }
-        else if (gender == 'female') {
-            if (dob != '' && height != '' && heightInch != '' && currentWeight != '' && goalWeight != '' &&
-                currentWeightUnit != '' && currentWeightUnit != '0' && goalWeightUnit != '' && goalWeightUnit != '0' && activityLevel != '') {
+        else if (gender == 'male' || unitValue == '' || unitValue == 'metric') {
+            console.log('run condition')
+            if (dob != '' && height != '' && currentWeight != '' &&
+                currentWeightUnit != '' && currentWeightUnit != '0' && activityLevel != '') {
+                // console.log('user weight >>', userWeight)
+                let BMR = (10 * currentWeight) + (6.25 * height) - (5 * age) + 5;
+                console.log('calories >>', BMR)
+                if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
+                    if (fitnessGoal == 'lose weight') {
+                        // let caloriesResult = Math.round(tdee - fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result lose>>', caloriesResult);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        console.log('final bmr >',finalBMR)
+                        let addBMR = Math.round(finalBMR - fitnessObj[desiredUnitValue]);
+                        console.log('minus bmr >', addBMR)
+                        let fatCalries = addBMR * 0.30;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.30;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.40;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        console.log('fat value >>', fatVal);
+                        console.log('protein value >>', proteinVal);
+                        console.log('carbohyderates >>', carbohydratesVal)
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+                    }
+                    else if (fitnessGoal == 'gain weight') {
+                        // let caloriesResultGain = Math.round(tdee + fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result gain>>', caloriesResultGain);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        let addBMR = Math.round(finalBMR + fitnessObj[desiredUnitValue]);
+                        let fatCalries = finalBMR * 0.30;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.30;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.40;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+
+                    }
+                    else if (fitnessGoal == 'maintain weight') {
+                        // get tdee value
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        //calculate fat
+                        let fatCalries = finalBMR * 0.30;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = BMR * 0.30;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        //let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = finalBMR * 0.40;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: finalBMR,
+                            totalDEE: finalBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = finalBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = finalBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+                    }
+                }
+            }
+
+        }
+        else if (gender == 'female' && unitValue == 'imperial') {
+            if (dob != '' && height != '' && heightInch != '' && currentWeight != '' &&
+                currentWeightUnit != '' && currentWeightUnit != '0' && activityLevel != '') {
                 const heightCentimeter = height * 30.48;
                 const heightInchCentimeter = heightInch * 2.54;
+                const userWeight = Math.round(currentWeight * 0.454);
                 const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
-                let calculteCalries = 10 * currentWeight + 6.25 * totalHeightCentimeter - 5 * age - 161;
+                let BMR = (10 * userWeight) + (6.25 * totalHeightCentimeter) - (5 * age) - 161;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
-                    // get tdee value
-                    let tdee = calculteCalries * tdeeObj[activityLevel];
-                    //calculate fat
-                    let fatCalries = tdee * 0.25;
-                    let fat = fatCalries / 9
-                    //calculate protein
-                    let proteinCalries = calculteCalries * 0.25;
-                    let protein = proteinCalries / 4;
-                    //calculate carbohydrate
-                    let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
-                    let carbohydrate = carbohydratesCalries / 4;
-                    //convert to string 
-                    let calries = Math.round(calculteCalries.toString());
-                    let tde = Math.round(tdee.toString());
-                    let fatVal = Math.round(fat.toString());
-                    let proteinVal = Math.round(protein.toString());
-                    let carbohydratesVal = Math.round(carbohydrate.toString());
+                    if (fitnessGoal == 'lose weight') {
+                        // let caloriesResult = Math.round(tdee - fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result lose>>', caloriesResult);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        console.log('final bmr >',finalBMR)
+                        let addBMR = Math.round(finalBMR - fitnessObj[desiredUnitValue]);
+                        console.log('minus bmr >', addBMR)
+                        let fatCalries = addBMR * 0.25;
+                        let fat = fatCalries / 9;
+                        console.log('femail fat >>', fat);
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        console.log('femail protein >>', protein)
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        console.log('femail carbohydrates >>', carbohydrate)
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
 
-                    //set the state
-                    this.setState({
-                        calculteCalries: tde,
-                        totalDEE: tde,
-                        fatMass: fatVal,
-                        proteins: proteinVal,
-                        carbohydrates: carbohydratesVal
-                    })
-                    //add properties to object
-                    macroObj.age = age;
-                    macroObj.totalDEE = tde;
-                    macroObj.fatMass = fatVal;
-                    macroObj.calculteCalries = tde;
-                    macroObj.proteins = proteinVal;
-                    macroObj.carbohydrates = carbohydratesVal;
-                    let dataUser = await HttpUtils.post('macrodata', macroObj)
-                    console.log(dataUser, 'dataUser')
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        console.log('fat value >>', fatVal);
+                        console.log('protein value >>', proteinVal);
+                        console.log('carbohyderates >>', carbohydratesVal)
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+                    }
+                    else if (fitnessGoal == 'gain weight') {
+                        // let caloriesResultGain = Math.round(tdee + fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result gain>>', caloriesResultGain);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        let addBMR = Math.round(finalBMR + fitnessObj[desiredUnitValue]);
+                        let fatCalries = finalBMR * 0.25;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+
+                    }
+
+                    else if (fitnessGoal == 'maintain weight') {
+                        // get tdee value
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        //calculate fat
+                        let fatCalries = finalBMR * 0.25;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = BMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        //let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = finalBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+    
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+    
+                        //let tde = tdee.toString()
+    
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: finalBMR,
+                            totalDEE: finalBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = finalBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = finalBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+                    }
                 }
+                
             }
         }
+        else if (gender == 'female' || unitValue == 'metric' || unitValue == '') {
+            if (dob != '' && height != '' && heightInch != '' && currentWeight != '' &&
+                currentWeightUnit != '' && currentWeightUnit != '0' && activityLevel != '') {
+                let BMR = (10 * currentWeight) + (6.25 * height) - (5 * age) - 161;
+                if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
+                    if (fitnessGoal == 'lose weight') {
+                        // let caloriesResult = Math.round(tdee - fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result lose>>', caloriesResult);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        console.log('final bmr >',finalBMR)
+                        let addBMR = Math.round(finalBMR - fitnessObj[desiredUnitValue]);
+                        console.log('minus bmr >', addBMR)
+                        let fatCalries = addBMR * 0.25;
+                        let fat = fatCalries / 9;
+                        console.log('femail fat >>', fat);
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        console.log('femail protein >>', protein)
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        console.log('femail carbohydrates >>', carbohydrate)
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        console.log('fat value >>', fatVal);
+                        console.log('protein value >>', proteinVal);
+                        console.log('carbohyderates >>', carbohydratesVal)
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+                    }
+                    else if (fitnessGoal == 'gain weight') {
+                        // let caloriesResultGain = Math.round(tdee + fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result gain>>', caloriesResultGain);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        let addBMR = Math.round(finalBMR + fitnessObj[desiredUnitValue]);
+                        let fatCalries = finalBMR * 0.25;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+
+                    }
+
+                    else if (fitnessGoal == 'maintain weight') {
+                        // get tdee value
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        //calculate fat
+                        let fatCalries = finalBMR * 0.25;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = BMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        //let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = finalBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+    
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+    
+                        //let tde = tdee.toString()
+    
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: finalBMR,
+                            totalDEE: finalBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = finalBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = finalBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+                    }
+                
+                }     
+            }
+        }
+
+
     }
 
     getGender(gender) {
@@ -438,6 +1021,7 @@ class Macrocalculator extends React.Component {
     }
 
     updateUnits(e, givenUnit) {
+        //console.log('unit >', givenUnit)
         if (e == "height Unit") {
             this.setState({
                 heightUnit: givenUnit
@@ -453,6 +1037,7 @@ class Macrocalculator extends React.Component {
                 goalWeightUnit: givenUnit
             })
         }
+
     }
 
     macroGet = async () => {
@@ -483,14 +1068,57 @@ class Macrocalculator extends React.Component {
         // Remove the event listener
         this.focusListener.remove();
     }
+    getUnit(data) {
+        if (data == 'metric') {
+            this.setState({
+                unitValue: 'metric',
+                impClick: false,
+                metrilClick: true
+            })
+        }
+        else if (data == 'imperial') {
+            this.setState({
+                unitValue: 'imperial',
+                impClick: true,
+                metrilClick: false
+            })
+        }
+        else if (data == 'normal') {
+            this.setState({
+                desiredUnitValue: 'normal',
+                normal: true,
+                mild: false,
+                extremeBtn: false
+            })
+        }
+        else if (data == 'mild') {
+            this.setState({
+                desiredUnitValue: 'mild',
+                normal: false,
+                mild: true,
+                extremeBtn: false
+            })
+        }
+        else if (data == 'extreme') {
+            this.setState({
+                desiredUnitValue: 'extreme',
+                normal: false,
+                mild: false,
+                extremeBtn: true
+            })
+        }
+    }
 
     render() {
         const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation,
             heightUnitValidation, currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation,
             male, female, moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates,
-            dob, date, currentCalories, currentCarbohy, currentProteins, currentMass, showCurrentMacro 
+            dob, date, currentCalories, currentCarbohy, currentProteins, currentMass, showCurrentMacro,
+            impClick, metrilClick, unitValue, unitValidation, height, mild, extremeBtn, normal, desiredUnitValue, desiredUnitValidation,
+            fitnessGoal, showDesiredBtn
         } = this.state;
-
+        //console.log('height centimeter >>>', Number(height))
+        console.log('current weight >', this.state.currentWeight)
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: HeightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.mainContainer}>
@@ -510,14 +1138,79 @@ class Macrocalculator extends React.Component {
                                     <Text style={styles.currentMacroText}>Your Current Macro *</Text>
                                     <View style={styles.inputCaloriesContainer}>
                                         <TextInput placeholder={"e.g 1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={currentCalories + ' Kcal calories'} />
-                                        <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={currentMass + ' g Carbohyderates'} />
+                                        <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={currentCarbohy + ' g Carbohyderates'} />
                                         <TextInput placeholder={"e.g 107 g\Protein"} style={styles.inputCaloriesStyleThree} value={currentProteins + ' g Proteins'} />
-                                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={currentCarbohy + ' g Fat'} />
+                                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={currentMass + ' g Fat'} />
+                                        
                                     </View>
                                 </View>
                                 :
                                 null
                         }
+                        <View style={{ marginTop: 10 }}>
+                            <Text style={styles.unitPara}>Please choose your prefer to unit</Text>
+                        </View>
+                        <View style={styles.unitValueContainer}>
+                            <TouchableOpacity
+                                onPress={this.getUnit.bind(this, 'metric')}
+                                style={metrilClick ? styles.metrilClick : styles.maleTouchableOpacity}
+                            >
+                                <Text style={styles.maleTextStyle}>Metric </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={this.getUnit.bind(this, 'imperial')}
+                                style={impClick ? styles.impClick : styles.femaleContainer}
+                            >
+                                <Text style={styles.maleTextStyle}>Imperial </Text>
+                            </TouchableOpacity>
+                        </View>
+                        {
+                            < View style={{ marginTop: 3 }}>
+                                {unitValidation ?
+                                    <Text style={styles.validationInstruction}>
+                                        Please choose your unit
+                                </Text>
+                                    : null}
+                            </View>
+
+                        }
+                        <View style={{ marginTop: 8 }}>
+                            <Text style={styles.unitPara}>What is your desired deficit</Text>
+                        </View>
+                        {
+                            showDesiredBtn ?
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                                    <TouchableOpacity
+                                        onPress={this.getUnit.bind(this, 'normal')}
+                                        style={normal ? styles.clickedButton : styles.buttonStyle}
+                                    >
+                                        <Text style={styles.maleTextStyle}>Normal</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={this.getUnit.bind(this, 'mild')}
+                                        style={mild ? styles.clickedButton : styles.buttonStyle}
+                                    >
+                                        <Text style={styles.maleTextStyle}>Mild</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={this.getUnit.bind(this, 'extreme')}
+                                        style={extremeBtn ? styles.clickedButton : styles.buttonStyle}
+                                    >
+                                        <Text style={styles.maleTextStyle}>Exreme</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                :
+                                null
+                        }
+                        {
+                            desiredUnitValidation ?
+                                <Text style={styles.validationInstruction}>
+                                    Please choose your desired
+                          </Text>
+                                :
+                                null
+                        }
+
                         <View style={styles.dateBirth}>
                             <Text style={styles.textStyle}>Date Of Birth</Text>
                         </View>
@@ -570,107 +1263,183 @@ class Macrocalculator extends React.Component {
                                 </Text>
                                 : null}
                         </View>
-                        <View style={{ flexDirection: 'row', marginRight: 80, justifyContent: 'space-between' }}>
-                            <Text style={styles.styleForLabel}>Height (fit)</Text>
-                            <Text style={styles.styleForLabel}>Height (Inch)</Text>
-                        </View>
-                        <View style={styles.heightContainer}>
-                            <View style={styles.inputContainer}>
-                                <View style={styles.container}>
-                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
-                                        onPress={this.decrementVal.bind(this, 'height')}>
-                                        <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
-                                    </TouchableOpacity>
-                                    <View style={styles.textInputContainer}>
-                                        <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+
+
+
+                        {
+                            unitValue == 'imperial' ?
+                                <View>
+                                    <View style={{ flexDirection: 'row', marginRight: 50, justifyContent: 'space-between' }}>
+                                        <Text style={styles.styleForLabel}>Height (fit)</Text>
+                                        <Text style={styles.styleForLabel}>Height (Inch)</Text>
+                                    </View>
+                                    <View style={styles.heightContainer}>
+                                        <View style={styles.inputContainer}>
+                                            <View style={styles.container}>
+                                                <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                                    onPress={this.decrementVal.bind(this, 'height')}>
+                                                    <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                                </TouchableOpacity>
+                                                <View style={styles.textInputContainer}>
+                                                    <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                                        type="number"
+                                                        onChangeText={(height) => this.setState({ height: height })}
+                                                        value={this.state.height}
+                                                    />
+                                                </View>
+                                                <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                                    onPress={this.increamentVal.bind(this, 'height')}>
+                                                    <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+
+                                        <View style={styles.inputContainer}>
+                                            <View style={styles.container}>
+                                                <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                                    onPress={this.decrementVal.bind(this, 'heightInch')}>
+                                                    <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                                </TouchableOpacity>
+                                                <View style={styles.textInputContainer}>
+                                                    <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                                        type="number"
+                                                        onChangeText={(height) => this.setState({ heightInch: height })}
+                                                        value={this.state.heightInch}
+                                                    />
+                                                </View>
+                                                <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                                    onPress={this.increamentVal.bind(this, 'heightInch')}>
+                                                    <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <View style={styles.showValidationContainer}>
+                                        {heightValidation ?
+                                            <Text style={styles.validationInstruction}>
+                                                Please fill your height fit
+                                </Text>
+
+                                            : null}
+                                        {heightUnitValidation ?
+                                            <Text style={styles.validationInstruction}>
+                                                Please select height inches
+                                </Text>
+                                            : null}
+                                    </View>
+                                </View>
+
+                                :
+                                <View>
+                                    <Text style={styles.styleForLabel}>Height in centimeter</Text>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <TextInput
+                                            style={styles.textInputStyleParent}
                                             type="number"
+                                            keyboardType='numeric'
                                             onChangeText={(height) => this.setState({ height: height })}
                                             value={this.state.height}
                                         />
                                     </View>
-                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
-                                        onPress={this.increamentVal.bind(this, 'height')}>
-                                        <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
-                                    </TouchableOpacity>
                                 </View>
-                            </View>
 
-                            <View style={styles.inputContainer}>
-                                <View style={styles.container}>
-                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
-                                        onPress={this.decrementVal.bind(this, 'heightInch')}>
-                                        <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
-                                    </TouchableOpacity>
-                                    <View style={styles.textInputContainer}>
-                                        <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
-                                            type="number"
-                                            onChangeText={(height) => this.setState({ heightInch: height })}
-                                            value={this.state.heightInch}
-                                        />
+                        }
+                        {
+                            unitValue == 'imperial' ?
+                                <View>
+                                    <Text style={styles.styleForLabel}>Current Weight</Text>
+                                    <View style={styles.currentWeightContainer}>
+                                        <View style={styles.inputContainer}>
+                                            <View style={styles.container}>
+                                                <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                                    onPress={this.decrementVal.bind(this, 'currentWeight')}>
+                                                    <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                                </TouchableOpacity>
+                                                <View style={styles.textInputContainer}>
+                                                    <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                                        type="number"
+                                                        onChangeText={(currentWeight) => this.setState({ currentWeight: currentWeight })}
+                                                        value={this.state.currentWeight}
+                                                    />
+                                                </View>
+                                                <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                                    onPress={this.increamentVal.bind(this, 'currentWeight')}>
+                                                    <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                        <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 15, height: 40 }}>
+                                            <Picker selectedValue={this.state.currentWeightUnit}
+                                                onValueChange={this.updateUnits.bind(this, 'current weight Unit')}
+                                                style={styles.pickerStyle}>
+                                                <Picker.Item label='Select an option...' value='0' />
+                                                <Picker.Item label="LBS" value="lbs" />
+                                            </Picker>
+                                        </View>
                                     </View>
-                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
-                                        onPress={this.increamentVal.bind(this, 'heightInch')}>
-                                        <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={styles.showValidationContainer}>
-                            {heightValidation ?
-                                <Text style={styles.validationInstruction}>
-                                    Please fill your height fit
+                                    <View style={styles.showValidationContainer}>
+                                        {currentWeightValidation ?
+                                            <Text style={styles.validationInstruction}>
+                                                Please fill your weight
                                 </Text>
+                                            : null}
+                                        {currentWeightUnitValidation ?
+                                            <Text style={styles.validationInstruction}>
+                                                Please select weight unit
+                                </Text>
+                                            : null}
+                                    </View>
+                                </View>
+                                :
+                                <View>
+                                    <Text style={styles.styleForLabel}>Current Weight</Text>
+                                    <View style={styles.currentWeightContainer}>
+                                        <View style={styles.inputContainer}>
+                                            <View style={styles.container}>
+                                                <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                                    onPress={this.decrementVal.bind(this, 'currentWeight')}>
+                                                    <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
+                                                </TouchableOpacity>
+                                                <View style={styles.textInputContainer}>
+                                                    <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                                        type="number"
+                                                        onChangeText={(currentWeight) => this.setState({ currentWeight: currentWeight })}
+                                                        value={this.state.currentWeight}
+                                                    />
+                                                </View>
+                                                <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
+                                                    onPress={this.increamentVal.bind(this, 'currentWeight')}>
+                                                    <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                        <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 15, height: 40 }}>
+                                            <Picker selectedValue={this.state.currentWeightUnit}
+                                                onValueChange={this.updateUnits.bind(this, 'current weight Unit')}
+                                                style={styles.pickerStyle}>
+                                                <Picker.Item label='Select an option...' value='0' />
+                                                <Picker.Item label="KG" value="kg" />
+                                            </Picker>
+                                        </View>
+                                    </View>
+                                    <View style={styles.showValidationContainer}>
+                                        {currentWeightValidation ?
+                                            <Text style={styles.validationInstruction}>
+                                                Please fill your weight
+                                </Text>
+                                            : null}
+                                        {currentWeightUnitValidation ?
+                                            <Text style={styles.validationInstruction}>
+                                                Please select weight unit
+                                </Text>
+                                            : null}
+                                    </View>
+                                </View>
 
-                                : null}
-                            {heightUnitValidation ?
-                                <Text style={styles.validationInstruction}>
-                                    Please select height inches
-                                </Text>
-                                : null}
-                        </View>
-                        <Text style={styles.styleForLabel}>Current Weight</Text>
-                        <View style={styles.currentWeightContainer}>
-                            <View style={styles.inputContainer}>
-                                <View style={styles.container}>
-                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
-                                        onPress={this.decrementVal.bind(this, 'currentWeight')}>
-                                        <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
-                                    </TouchableOpacity>
-                                    <View style={styles.textInputContainer}>
-                                        <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
-                                            type="number"
-                                            onChangeText={(currentWeight) => this.setState({ currentWeight: currentWeight })}
-                                            value={this.state.currentWeight}
-                                        />
-                                    </View>
-                                    <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
-                                        onPress={this.increamentVal.bind(this, 'currentWeight')}>
-                                        <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
-                                <Picker selectedValue={this.state.currentWeightUnit}
-                                    onValueChange={this.updateUnits.bind(this, 'current weight Unit')}
-                                    style={styles.pickerStyle}>
-                                    <Picker.Item label='Select an option...' value='0' />
-                                    <Picker.Item label="KG" value="kg" />
-                                </Picker>
-                            </View>
-                        </View>
-                        <View style={styles.showValidationContainer}>
-                            {currentWeightValidation ?
-                                <Text style={styles.validationInstruction}>
-                                    Please fill your weight
-                                </Text>
-                                : null}
-                            {currentWeightUnitValidation ?
-                                <Text style={styles.validationInstruction}>
-                                    Please select weight unit
-                                </Text>
-                                : null}
-                        </View>
-                        <Text style={styles.styleForLabel}>Goal Weight</Text>
+                        }
+
+
+                        {/* <Text style={styles.styleForLabel}>Goal Weight</Text>
                         <View style={styles.goalWeightContainer}>
                             <View style={styles.inputContainer}>
                                 <View style={styles.container}>
@@ -712,7 +1481,8 @@ class Macrocalculator extends React.Component {
                                     Please select weight unit
                                 </Text>
                                 : null}
-                        </View>
+                        </View> */}
+
                         <Text style={styles.styleForLabel}>Activity Level</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <TouchableOpacity style={sedentary ? styles.clickSedetary : styles.sedetaryContainer}
@@ -756,9 +1526,10 @@ class Macrocalculator extends React.Component {
                     </View>
                     <View style={styles.inputCaloriesContainer}>
                         <TextInput placeholder={"e.g 1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={calculteCalries + ' Kcal calories'} />
-                        <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={fatMass + ' g Carbohyderates'} />
+                        <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={carbohydrates + ' g Carbohyderates'} />
                         <TextInput placeholder={"e.g 107 g\Protein"} style={styles.inputCaloriesStyleThree} value={proteins + ' g Proteins'} />
-                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={carbohydrates + ' g Fat'} />
+                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={fatMass + ' g Fat'} />
+                        
                     </View>
                     <View style={styles.lastParaContainer}>
                         <Text style={styles.lastParaStyle}>
@@ -775,7 +1546,7 @@ class Macrocalculator extends React.Component {
                     <View style={{ flex: 2, marginBottom: 30 }}>
                     </View>
                 </View>
-            </ScrollView>
+            </ScrollView >
         )
     }
 

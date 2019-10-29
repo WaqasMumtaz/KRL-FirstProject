@@ -4,7 +4,7 @@ import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
-import firebase from 'react-native-firebase';
+// import firebase from 'react-native-firebase';
 
 const { height } = Dimensions.get('window');
 let userId = {};
@@ -23,7 +23,8 @@ class Homescreen extends React.Component {
       userCurrentWeight: '',
       excerciseArry: [],
       bmiData: [],
-      currentUserBMI: ''
+      currentUserBMI: '',
+      fitnessGoal:''
 
     }
   }
@@ -32,11 +33,9 @@ class Homescreen extends React.Component {
   componentWillUnmount() {
     // Remove the event listener
     this.focusListener.remove();
-    BackHandler.removeEventListener('hardwareBackPress');
+    BackHandler.removeEventListener('hardwareBackPress',);
     // Remove the event listener
     this.focusListener.remove();
-    this.notificationListener();
-    this.notificationOpenedListener();
   }
 
   componentWillMount() {
@@ -64,7 +63,7 @@ class Homescreen extends React.Component {
     });
 
 
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    
   }
 
   getTodayOrYesterdayExcersice = async () => {
@@ -134,7 +133,8 @@ class Homescreen extends React.Component {
           //console.log(userData[i].currentWeight)
           this.setState({
             userCurrentWeight: userData[i].currentWeight,
-            goalSteps:userData[i].goalSteps
+            goalSteps:userData[i].goalSteps,
+            fitnessGoal:userData[i].fitnessGoal
           })
         }
       })
@@ -159,6 +159,11 @@ class Homescreen extends React.Component {
 
   }
 
+  backScreen=()=>{
+    console.log('press back button');
+
+  }
+
   pedometerFun = (data) => {
     //console.log('data from child component >>>', data)
     if (data != undefined) {
@@ -169,7 +174,7 @@ class Homescreen extends React.Component {
 
   }
   changeRout(e) {
-    const {userCurrentWeight , goalSteps}=this.state;
+    const {userCurrentWeight , goalSteps,fitnessGoal}=this.state;
     const { navigate } = this.props.navigation;
     if (e == 'logexercise') {
       navigate('Exerciselog')
@@ -187,6 +192,17 @@ class Homescreen extends React.Component {
       }
       
     }
+  else if (e == 'Macrocalculator'){
+    if(fitnessGoal !=''){
+      navigate('Macrocalculator',{
+        'fitnessGoal':fitnessGoal
+      })
+    }
+    else {
+      Alert.alert('Please set goal')
+    }
+  }
+
   }
 
   getBmiData = async () => {
@@ -210,7 +226,11 @@ class Homescreen extends React.Component {
 
   getDaysData = () => {
     const { navigation } = this.props;
-    this.focusListener = navigation.addListener('didFocus', () => {
+    this.focusListener = navigation.addListener('didFocus', (res) => {
+      //console.log('back screens >>', res)
+      if(res.state.routeName === 'Homescreen'){
+        BackHandler.addEventListener('hardwareBackPress',this.handleBackButton);
+      }
       this.getUserData();
       this.getTodayOrYesterdayExcersice();
       //this.getBmiData();
@@ -221,7 +241,6 @@ class Homescreen extends React.Component {
     console.log('pressed back button')
     const { navigate } = this.props.navigation;
     const getData = await AsyncStorage.getItem("currentUser");
-
     // const parsForm = JSON.parse(getData)
     // console.log('current user data >>>',parsForm)
     if (getData) {
@@ -235,69 +254,8 @@ class Homescreen extends React.Component {
 
 
 
-  componentDidMount() {
-    this.createNotificationListeners();
-  }
-
-
-  createNotificationListeners = async () => {
-    console.log('Create Notification Listeners run ')
-    /*
-    * Triggered when a particular notification has been received in foreground
-    * */
-    this.notificationListener = firebase.notifications().onNotification((notification) => {
-      const { title, body } = notification;
-      this.showAlert(title, body);
-    });
-
-    /*
-  * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
-  * */
-    this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-      const { title, body } = notificationOpen.notification;
-      this.showAlert(title, body);
-    });
-
-
-    /*
-      * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
-      * */
-    const notificationOpen = await firebase.notifications().getInitialNotification();
-    if (notificationOpen) {
-      const { title, body } = notificationOpen.notification;
-      this.showAlert(title, body);
-    }
-
-
-    /*
-     * Triggered for data only payload in foreground
-     * */
-    this.messageListener = firebase.messaging().onMessage((message) => {
-      //process data message
-      console.log(JSON.stringify(message));
-    });
-
-    
-
-
-  }
-
-  showAlert(title, body) {
-    Alert.alert(
-      title, body,
-      [
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
-      ],
-      { cancelable: false },
-    );
-  }
-
-
-
-
-
   render() {
-    const { todayData, yestertdayData, pedometerData, goalSteps, userCurrentWeight, currentUserBMI } = this.state;
+    const { todayData, yestertdayData, pedometerData, goalSteps, userCurrentWeight, currentUserBMI,fitnessGoal } = this.state;
     const { navigate } = this.props.navigation;
     //console.log('current weight >>',userCurrentWeight)
     return (
@@ -331,7 +289,7 @@ class Homescreen extends React.Component {
               <TouchableOpacity style={styles.cardThree} onPress={() => navigate('ShowMeasurementsScreen')}>
                 <Image source={require('../icons/log-weight.png')} style={styles.imgsStyle} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.cardFive} onPress={() => navigate('Macrocalculator')}>
+              <TouchableOpacity style={styles.cardFive} onPress={this.changeRout.bind(this, 'Macrocalculator')}>
                 <Image source={require('../icons/calc-macros.png')} style={styles.imgsStyle} />
               </TouchableOpacity>
 
