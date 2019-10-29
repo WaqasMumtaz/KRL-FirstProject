@@ -142,8 +142,9 @@ superScriptTextStyle:{
    },
    receiptImgStyle:{
        height:390,
-       width:370,
-       marginTop:10
+       width:'100%',
+       //marginTop:10,
+       //alignSelf: 'stretch',
    }
 })
 

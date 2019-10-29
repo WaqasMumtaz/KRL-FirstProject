@@ -244,7 +244,7 @@ class Invoices extends React.Component {
                 console.log('Condition Worked Fine')
                 this.setState({
                     invoiceData: arr,
-                    showPicker: false,
+                   // showPicker: false,
                 })
             }
             // else if (allDataUser.length < 0){
@@ -387,18 +387,20 @@ class Invoices extends React.Component {
                         coverScreen={true}
                         animationInTiming={100}
                         animationOutTiming={100}
+                        
+                        onBackdropPress={() => this.setState({ isVisibleModal: false })}
                     >
 
-                        <View style={{ justifyContent: 'center', alignSelf: 'center', padding: 10, height: 400, width: 380 }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ justifyContent: 'center', alignSelf: 'center', height: 300, width: '100%' }}>
+                            {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <Text style={{ color: '#FF6200' }}>Receipt Image</Text>
                                 <TouchableOpacity onPress={this.closeModal}>
                                     <Image source={require('../icons/cancel.png')}
                                     />
                                 </TouchableOpacity>
-                            </View>
+                            </View> */}
                             <Image source={{ uri: this.state.receipt_img }}
-                                resizeMode='cover'
+                                resizeMode='contain'
                                 style={styles.receiptImgStyle}
                             />
                         </View>

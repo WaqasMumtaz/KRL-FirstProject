@@ -4,7 +4,7 @@ import Wheelspiner from '../Progress Wheel/Progress';
 import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
-import firebase from 'react-native-firebase';
+// import firebase from 'react-native-firebase';
 
 const { height } = Dimensions.get('window');
 let userId = {};
@@ -36,8 +36,6 @@ class Homescreen extends React.Component {
     BackHandler.removeEventListener('hardwareBackPress',);
     // Remove the event listener
     this.focusListener.remove();
-    this.notificationListener();
-    this.notificationOpenedListener();
   }
 
   componentWillMount() {
@@ -253,67 +251,6 @@ class Homescreen extends React.Component {
     }
 
   }
-
-
-
-  componentDidMount() {
-    this.createNotificationListeners();
-  }
-
-
-  createNotificationListeners = async () => {
-    console.log('Create Notification Listeners run ')
-    /*
-    * Triggered when a particular notification has been received in foreground
-    * */
-    this.notificationListener = firebase.notifications().onNotification((notification) => {
-      const { title, body } = notification;
-      this.showAlert(title, body);
-    });
-
-    /*
-  * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
-  * */
-    this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-      const { title, body } = notificationOpen.notification;
-      this.showAlert(title, body);
-    });
-
-
-    /*
-      * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
-      * */
-    const notificationOpen = await firebase.notifications().getInitialNotification();
-    if (notificationOpen) {
-      const { title, body } = notificationOpen.notification;
-      this.showAlert(title, body);
-    }
-
-
-    /*
-     * Triggered for data only payload in foreground
-     * */
-    this.messageListener = firebase.messaging().onMessage((message) => {
-      //process data message
-      console.log(JSON.stringify(message));
-    });
-
-    
-
-
-  }
-
-  showAlert(title, body) {
-    Alert.alert(
-      title, body,
-      [
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
-      ],
-      { cancelable: false },
-    );
-  }
-
-
 
 
 

@@ -48,6 +48,7 @@ class LogMeasurementsScreen extends React.Component {
 
     
     componentWillMount() {
+        let month;
         const { dayOfMonth } = this.state;
         let monthNo = new Date().getMonth() + 1;
         const day = new Date().getDay();
@@ -60,7 +61,8 @@ class LogMeasurementsScreen extends React.Component {
             month = `0${monthNo + 1}`;
         }
         else {
-            month = monthNo + 1;
+            month = monthNo;
+            console.log('month >>', month)
         }
         AsyncStorage.getItem("currentUser").then(value => {
             if (value) {
@@ -226,7 +228,7 @@ class LogMeasurementsScreen extends React.Component {
                     isLoading: false
                 }, () => {
                     this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true)
-                    this.props.navigation.navigate('ShowMeasurementsScreen')
+                    this.props.navigation.navigate('BottomTabe')
                 })
             }
             else if (!dataUser.code) {
@@ -287,8 +289,10 @@ class LogMeasurementsScreen extends React.Component {
             isLoading,
             neck,
             shoulder,
+            date
         } = this.state;
         // console.log('Neck -->>', neck , 'Shoulder-->>',shoulder)
+        console.log('date >>', date)
         return (
             <View style={styles.mainContainer}>
 

@@ -150,22 +150,14 @@ export default class StepCountScreen extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         const { goalSteps } = this.state;
-        //console.log('did update func >>', prevProps);
-        //console.log('did update func >>', prevState);
         const goalStep = goalSteps;
         //console.log('number form goal >>', Number(goalSteps))
         if (prevState.pedometerData == Number(goalStep)) {
             //console.log('Condition successfully matched ');
-            Alert.alert('Acheive Goal')
+            Alert.alert('Acheive Goal');
+            this.sendDataPedometer();
         }
-        // const numberPedometer = nextState.pedometerData;
-        // const paramsData = this.props.navigation.state.params;
-        // const goalStepsData = paramsData.goalSteps;
-        // if (Number(numberPedometer) == Number(goalStepsData)) {
-        //   this.props.onWillOpen();
-        // }
-        // console.log('will update pedometer data >>>', nextState.pedometerData)
-        // AsyncStorage.setItem('pedometerData', nextState.pedometerData);
+        
     }
 
 
@@ -255,15 +247,10 @@ export default class StepCountScreen extends React.Component {
     }
 
     sendDataPedometer = async () => {
-        this.setState({
-            isLoading: true
-        })
         const dataPost = {
             userId: this.state.currentUserId,
             time: this.state.curTime,
             date: this.state.date,
-            // stepCount: '55',
-            // dailGoal: '55'
             stepCount: this.state.pedometerData,
             dailGoal: this.state.goalSteps
         }
@@ -271,13 +258,7 @@ export default class StepCountScreen extends React.Component {
             let postedData = await HttpUtilsFile.post('pedometer', dataPost)
             console.log('posted data >>>', postedData)
             if (postedData.code == 200) {
-                this.setState({
-                    isLoading: false
-                }, () => {
-                    const { navigate } = this.props.navigation;
-                    navigate('BottomTabe');
-                })
-
+               console.log('data sumbit')
             }
         }
         catch (err) {

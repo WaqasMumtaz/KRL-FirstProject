@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text,View,Image,TouchableOpacity,} from 'react-native';
+import { Text, View, Image, TouchableOpacity, } from 'react-native';
 import styles from './styling/styling'
 
 
@@ -25,12 +25,14 @@ export default class LogMeasurementsDetailedView extends React.Component {
                         </TouchableOpacity>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-                        <Text style={{ color: '#a6a6a6', fontSize: 12 }}>{this.props.userDetailData.biceps}</Text>
-                        <Text style={{ color: '#a6a6a6', fontSize: 12 }}>{this.props.userDetailData.neck}</Text>
+                        <Text style={{ color: '#a6a6a6', fontSize: 12 }}>{this.props.userDetailData.weight}</Text>
+                        <Text style={{ color: '#a6a6a6', fontSize: 12 }}>{this.props.userDetailData.day}</Text>
+
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Bicep</Text>
-                        <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Neck</Text>
+                        <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Weight</Text>
+                        <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Day</Text>
+
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={styles.borderLineStyle}></Text>
@@ -51,12 +53,13 @@ export default class LogMeasurementsDetailedView extends React.Component {
                     </View>
                     {/* Start Day and other any one */}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-                        <Text style={{ color: '#a6a6a6', fontSize: 12 }}>{this.props.userDetailData.day}</Text>
-                        <Text style={{ color: '#a6a6a6', fontSize: 12 }}>{this.props.userDetailData.weight}</Text>
+                        <Text style={{ color: '#a6a6a6', fontSize: 12 }}>{this.props.userDetailData.biceps}</Text>
+                        <Text style={{ color: '#a6a6a6', fontSize: 12 }}>{this.props.userDetailData.neck}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Day</Text>
-                        <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Weight</Text>
+                        <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Bicep</Text>
+                        <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Neck</Text>
+
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={styles.borderLineStyle}></Text>

@@ -46,6 +46,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    sentBtnDisableStyle:{
+        width: 45,
+        height: 45,
+        borderRadius: 45 / 2,
+        backgroundColor: '#FF6200',
+        justifyContent: 'center',
+        alignItems: 'center',
+        opacity:0.2
+    },
     micIconStyle: {
         flex: 1,
         width: 15,
@@ -57,6 +66,15 @@ const styles = StyleSheet.create({
         width: 27,
         height: 23,
         resizeMode: 'contain'
+    },
+    disableBtnStyle:{
+        flex: 2,
+        height: 40,
+        justifyContent: 'center',
+        backgroundColor: '#FF6200',
+        alignItems: 'center',
+        borderRadius: 5,
+        opacity: 0.2
     },
     orangeMicContainer: {
         width: 45,

@@ -256,6 +256,7 @@ class ConfirmResetPassword extends React.Component {
                 onChangeText={(text)=>{this.setState({emailCode:text})}}
                 keyboardType="numeric"
                 placeholder="e.g:4567"
+                placeholderTextColor="#7e7e7e"
                 value={emailCode}
                 style={styles.emailCodeInputStyle} />
 
@@ -272,6 +273,7 @@ class ConfirmResetPassword extends React.Component {
                 onChangeText={text => this.newPasswrdInputValueHandle(text)}
                 secureTextEntry={true}
                 placeholder="type new password"
+                placeholderTextColor='#7e7e7e'
                 value={newPassword}
                 style={[styles.newPasswordFieldStyle, !this.state.newPasswordValidate ? styles.errorInput : null]} />
 
@@ -290,6 +292,7 @@ class ConfirmResetPassword extends React.Component {
                 onChangeText={(text)=>{this.retypePasswordInputHandle(text)}}
                 secureTextEntry={true}
                 placeholder="retype new password"
+                placeholderTextColor='7e7e7e'
                 value={retypePassword}
                 style={[styles.newPasswordFieldStyle,!this.state.retypePasswordValidate ? styles.errorInput : null]}
                 underlineColorAndroid="transparent"

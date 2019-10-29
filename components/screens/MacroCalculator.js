@@ -585,88 +585,315 @@ class Macrocalculator extends React.Component {
                 const heightInchCentimeter = heightInch * 2.54;
                 const userWeight = Math.round(currentWeight * 0.454);
                 const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
-                let calculteCalries = (10 * userWeight) + (6.25 * totalHeightCentimeter) - (5 * age) - 161;
+                let BMR = (10 * userWeight) + (6.25 * totalHeightCentimeter) - (5 * age) - 161;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
-                    // get tdee value
-                    let tdee = calculteCalries * tdeeObj[activityLevel];
-                    //calculate fat
-                    let fatCalries = tdee * 0.25;
-                    let fat = fatCalries / 9
-                    //calculate protein
-                    let proteinCalries = calculteCalries * 0.25;
-                    let protein = proteinCalries / 4;
-                    //calculate carbohydrate
-                    let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
-                    let carbohydrate = carbohydratesCalries / 4;
-                    //convert to string 
-                    let calries = Math.round(calculteCalries.toString());
-                    let tde = Math.round(tdee.toString());
-                    let fatVal = Math.round(fat.toString());
-                    let proteinVal = Math.round(protein.toString());
-                    let carbohydratesVal = Math.round(carbohydrate.toString());
+                    if (fitnessGoal == 'lose weight') {
+                        // let caloriesResult = Math.round(tdee - fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result lose>>', caloriesResult);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        console.log('final bmr >',finalBMR)
+                        let addBMR = Math.round(finalBMR - fitnessObj[desiredUnitValue]);
+                        console.log('minus bmr >', addBMR)
+                        let fatCalries = addBMR * 0.25;
+                        let fat = fatCalries / 9;
+                        console.log('femail fat >>', fat);
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        console.log('femail protein >>', protein)
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        console.log('femail carbohydrates >>', carbohydrate)
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
 
-                    //set the state
-                    this.setState({
-                        calculteCalries: tde,
-                        totalDEE: tde,
-                        fatMass: fatVal,
-                        proteins: proteinVal,
-                        carbohydrates: carbohydratesVal
-                    })
-                    //add properties to object
-                    macroObj.age = age;
-                    macroObj.totalDEE = tde;
-                    macroObj.fatMass = fatVal;
-                    macroObj.calculteCalries = tde;
-                    macroObj.proteins = proteinVal;
-                    macroObj.carbohydrates = carbohydratesVal;
-                    let dataUser = await HttpUtils.post('macrodata', macroObj)
-                    console.log(dataUser, 'dataUser')
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        console.log('fat value >>', fatVal);
+                        console.log('protein value >>', proteinVal);
+                        console.log('carbohyderates >>', carbohydratesVal)
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+                    }
+                    else if (fitnessGoal == 'gain weight') {
+                        // let caloriesResultGain = Math.round(tdee + fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result gain>>', caloriesResultGain);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        let addBMR = Math.round(finalBMR + fitnessObj[desiredUnitValue]);
+                        let fatCalries = finalBMR * 0.25;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+
+                    }
+
+                    else if (fitnessGoal == 'maintain weight') {
+                        // get tdee value
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        //calculate fat
+                        let fatCalries = finalBMR * 0.25;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = BMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        //let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = finalBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+    
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+    
+                        //let tde = tdee.toString()
+    
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: finalBMR,
+                            totalDEE: finalBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = finalBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = finalBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+                    }
                 }
+                
             }
         }
         else if (gender == 'female' || unitValue == 'metric' || unitValue == '') {
             if (dob != '' && height != '' && heightInch != '' && currentWeight != '' &&
                 currentWeightUnit != '' && currentWeightUnit != '0' && activityLevel != '') {
-
-                let calculteCalries = (10 * currentWeight) + (6.25 * height) - (5 * age) - 161;
+                let BMR = (10 * currentWeight) + (6.25 * height) - (5 * age) - 161;
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
-                    // get tdee value
-                    let tdee = calculteCalries * tdeeObj[activityLevel];
-                    //calculate fat
-                    let fatCalries = tdee * 0.25;
-                    let fat = fatCalries / 9
-                    //calculate protein
-                    let proteinCalries = calculteCalries * 0.25;
-                    let protein = proteinCalries / 4;
-                    //calculate carbohydrate
-                    let carbohydratesCalries = calculteCalries - (fatCalries + proteinCalries);
-                    let carbohydrate = carbohydratesCalries / 4;
-                    //convert to string 
-                    let calries = Math.round(calculteCalries.toString());
-                    let tde = Math.round(tdee.toString());
-                    let fatVal = Math.round(fat.toString());
-                    let proteinVal = Math.round(protein.toString());
-                    let carbohydratesVal = Math.round(carbohydrate.toString());
+                    if (fitnessGoal == 'lose weight') {
+                        // let caloriesResult = Math.round(tdee - fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result lose>>', caloriesResult);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        console.log('final bmr >',finalBMR)
+                        let addBMR = Math.round(finalBMR - fitnessObj[desiredUnitValue]);
+                        console.log('minus bmr >', addBMR)
+                        let fatCalries = addBMR * 0.25;
+                        let fat = fatCalries / 9;
+                        console.log('femail fat >>', fat);
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        console.log('femail protein >>', protein)
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        console.log('femail carbohydrates >>', carbohydrate)
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
 
-                    //set the state
-                    this.setState({
-                        calculteCalries: tde,
-                        totalDEE: tde,
-                        fatMass: fatVal,
-                        proteins: proteinVal,
-                        carbohydrates: carbohydratesVal
-                    })
-                    //add properties to object
-                    macroObj.age = age;
-                    macroObj.totalDEE = tde;
-                    macroObj.fatMass = fatVal;
-                    macroObj.calculteCalries = tde;
-                    macroObj.proteins = proteinVal;
-                    macroObj.carbohydrates = carbohydratesVal;
-                    let dataUser = await HttpUtils.post('macrodata', macroObj)
-                    console.log(dataUser, 'dataUser')
-                }
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        console.log('fat value >>', fatVal);
+                        console.log('protein value >>', proteinVal);
+                        console.log('carbohyderates >>', carbohydratesVal)
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+                    }
+                    else if (fitnessGoal == 'gain weight') {
+                        // let caloriesResultGain = Math.round(tdee + fitnessObj[desiredUnitValue]);
+                        // console.log('fitness result gain>>', caloriesResultGain);
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        let addBMR = Math.round(finalBMR + fitnessObj[desiredUnitValue]);
+                        let fatCalries = finalBMR * 0.25;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = addBMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = addBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+
+                        //let tde = tdee.toString()
+
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: addBMR,
+                            totalDEE: addBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = addBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = addBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+
+
+
+                    }
+
+                    else if (fitnessGoal == 'maintain weight') {
+                        // get tdee value
+                        let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
+                        //calculate fat
+                        let fatCalries = finalBMR * 0.25;
+                        let fat = fatCalries / 9
+                        //calculate protein
+                        let proteinCalries = BMR * 0.25;
+                        let protein = proteinCalries / 4;
+                        //calculate carbohydrate
+                        //let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
+                        let carbohydratesCalries = finalBMR * 0.50;
+                        let carbohydrate = carbohydratesCalries / 4;
+                        //convert to string 
+                        //let calries = Math.round(calculteCalries.toString());
+                        //console.log('calries value >>>',calries)
+    
+                        //let tde = Math.round(tdee.toString())
+                        //let tde = Number(tdee);
+                        //console.log('tdee value >>>',tde)
+    
+                        //let tde = tdee.toString()
+    
+                        let fatVal = Math.round(fat.toString());
+                        let proteinVal = Math.round(protein.toString());
+                        let carbohydratesVal = Math.round(carbohydrate.toString());
+                        //set the state
+                        this.setState({
+                            calculteCalries: finalBMR,
+                            totalDEE: finalBMR,
+                            fatMass: fatVal,
+                            proteins: proteinVal,
+                            carbohydrates: carbohydratesVal
+                        })
+                        //add properties to object
+                        macroObj.age = age;
+                        macroObj.totalDEE = finalBMR;
+                        macroObj.fatMass = fatVal;
+                        macroObj.calculteCalries = finalBMR;
+                        macroObj.proteins = proteinVal;
+                        macroObj.carbohydrates = carbohydratesVal;
+                        let dataUser = await HttpUtils.post('macrodata', macroObj)
+                        console.log(dataUser, 'dataUser')
+                    }
+                
+                }     
             }
         }
 
@@ -911,9 +1138,10 @@ class Macrocalculator extends React.Component {
                                     <Text style={styles.currentMacroText}>Your Current Macro *</Text>
                                     <View style={styles.inputCaloriesContainer}>
                                         <TextInput placeholder={"e.g 1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={currentCalories + ' Kcal calories'} />
-                                        <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={currentMass + ' g Carbohyderates'} />
+                                        <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={currentCarbohy + ' g Carbohyderates'} />
                                         <TextInput placeholder={"e.g 107 g\Protein"} style={styles.inputCaloriesStyleThree} value={currentProteins + ' g Proteins'} />
-                                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={currentCarbohy + ' g Fat'} />
+                                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={currentMass + ' g Fat'} />
+                                        
                                     </View>
                                 </View>
                                 :
@@ -1298,9 +1526,10 @@ class Macrocalculator extends React.Component {
                     </View>
                     <View style={styles.inputCaloriesContainer}>
                         <TextInput placeholder={"e.g 1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={calculteCalries + ' Kcal calories'} />
-                        <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={fatMass + ' g Carbohyderates'} />
+                        <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={carbohydrates + ' g Carbohyderates'} />
                         <TextInput placeholder={"e.g 107 g\Protein"} style={styles.inputCaloriesStyleThree} value={proteins + ' g Proteins'} />
-                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={carbohydrates + ' g Fat'} />
+                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={fatMass + ' g Fat'} />
+                        
                     </View>
                     <View style={styles.lastParaContainer}>
                         <Text style={styles.lastParaStyle}>

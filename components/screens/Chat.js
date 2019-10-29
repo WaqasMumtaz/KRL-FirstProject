@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   Text,
   View,
   ScrollView,
@@ -21,6 +22,8 @@ import Modal from "react-native-modal";
 import ChartScreen from '../BarChart/BarChart';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { YellowBox } from 'react-native';
+import firebasePushNotification from 'react-native-firebase';
+
 
 YellowBox.ignoreWarnings([
   'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
@@ -116,6 +119,7 @@ class Chatscreen extends React.Component {
       time: hours + ':' + min + ':' + sec
     })
 
+    this.createNotificationListeners();
   }
   componentWillMount() {
     const { senderData } = this.props.navigation.state.params;
@@ -153,6 +157,12 @@ class Chatscreen extends React.Component {
     });
     this.getWeekReportData()
   }
+
+  componentWillUnmount() {
+    this.notificationListener();
+    this.notificationOpenedListener();
+  }
+
 
   uplaodDataOnFirebase = (userMessage, type) => {
     const { senderData } = this.props.navigation.state.params;
@@ -592,6 +602,61 @@ class Chatscreen extends React.Component {
       })
     }
   }
+
+//Push Notification Methods here 
+
+createNotificationListeners = async () => {
+  console.log('Create Notification Listeners run ')
+  /*
+  * Triggered when a particular notification has been received in foreground
+  * */
+  // this.notificationListener = firebasePushNotification.notifications().onNotification((notification) => {
+  //   const { title, body } = notification;
+  //   this.showAlert(title, body);
+  // });
+
+  /*
+* If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
+* */
+  this.notificationOpenedListener = firebasePushNotification.notifications().onNotificationOpened((notificationOpen) => {
+    const { title, body } = notificationOpen.notification;
+    this.showAlert(title, body);
+  });
+
+
+  /*
+    * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+    * */
+  const notificationOpen = await firebasePushNotification.notifications().getInitialNotification();
+  if (notificationOpen) {
+    const { title, body } = notificationOpen.notification;
+    this.showAlert(title, body);
+  }
+
+
+  /*
+   * Triggered for data only payload in foreground
+   * */
+  this.messageListener = firebasePushNotification.messaging().onMessage((message) => {
+    //process data message
+    console.log(JSON.stringify(message));
+  });
+
+  
+
+
+}
+
+showAlert(title, body) {
+  Alert.alert(
+    title, body,
+    [
+      { text: 'OK', onPress: () => console.log('OK Pressed') },
+    ],
+    { cancelable: false },
+  );
+}
+
 
   render() {
     const { textMessage, sendIcon, sendBtnContainer, recodringBody, attachGray, attachOrange, shareFiles,
@@ -1153,16 +1218,20 @@ class Chatscreen extends React.Component {
                 />
               </TouchableOpacity>}
             </View>
-            {sendBtnContainer && <View style={styles.sentBtnContainer}>
+            {textMessage == '' ? <View style={styles.sentBtnDisableStyle}>
 
-              {textMessage == '' ? <TouchableOpacity disabled={true}>
+               <TouchableOpacity disabled={true}>
                 <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
               </TouchableOpacity>
+              </View>
             : 
+           <View style={styles.sentBtnContainer}>
             <TouchableOpacity onPress={this.sendMessage}>
                 <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
               </TouchableOpacity> 
+           </View>  
             }
+
               {/* {micIcon && <TouchableOpacity onPress={this.toggelMic}>
                 <Image source={require('../icons/mic.png')} style={styles.micIconStyle} />
               </TouchableOpacity>}
@@ -1171,7 +1240,6 @@ class Chatscreen extends React.Component {
               {micOrange && <TouchableOpacity onPress={this.toggelMicOrange}>
                 <Image source={require('../icons/mic-orange.png')} style={styles.micIconStyle} />
               </TouchableOpacity>} */}
-            </View>}
             {/* When user does not assign trainer show this modal*/}
 
 

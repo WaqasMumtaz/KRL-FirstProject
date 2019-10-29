@@ -117,9 +117,9 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     forImages: {
-        // flex: 1,
-        // height: 250,
-        // width: 250,
+        //flex: 1,
+        height: 250,
+        width: 250,
         alignSelf: 'stretch',
         // marginBottom: 4
 

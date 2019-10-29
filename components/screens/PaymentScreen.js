@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert,StyleSheet, Image, Text, View, ScrollView, Dimensions, TextInput, Picker, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, Image, Text, View, ScrollView, Dimensions, TextInput, Picker, TouchableOpacity } from 'react-native';
 import styles from '../Styling/PaymentScreenStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import stripe from 'tipsi-stripe';
@@ -95,8 +95,7 @@ class Payment extends React.Component {
   }
   pay = async () => {
     const { name, email, monthArr, paymentMonth, amount, currency, creditCardNo, cvc, expiry, typeCard,
-      isLoading, serviceValidation, userId, serviceName, transactionId, receiptImg } = this.state;
-    let res;
+      isLoading, serviceValidation, userId, serviceName, transactionId, receiptImg, receiptImgValidation } = this.state;
     //validation of the form
     // if (serviceValidation == "credit card") {
     //   console.log("credit card console")
@@ -161,130 +160,145 @@ class Payment extends React.Component {
     //     })
     //   }
     // }
-    if (serviceValidation == "other") {
-      console.log('condition true')
-      //get current year
-      const year = new Date().getFullYear();
-      // //geting payment month & year
-      let monthNumber = Number(paymentMonth)
-      let paymentMonthYear = `${monthArr[monthNumber]}, ${year}`
-      if (serviceName == '') {
-        this.setState({
-          serviceNameValidation: true,
-          isLoading: false,
-        })
-      }
-      else {
-        this.setState({
-          serviceNameValidation: false,
-          isLoading: true,
-        })
-      }
-      if (email == '') {
-        this.setState({
-          emailValidation: true,
-          isLoading: false,
-        })
-      }
-      else {
-        this.setState({
-          emailValidation: false,
-          isLoading: true,
-        })
-      }
-      if (paymentMonth == '') {
-        this.setState({
-          paymentMonthValidation: true,
-          isLoading: false,
-        })
-      }
-      else {
-        this.setState({
-          paymentMonthValidation: false,
-          isLoading: true,
-        })
-      }
-      if (amount == '') {
-        this.setState({
-          amountValidation: true,
-          isLoading: false,
-        })
-      }
-      else {
-        this.setState({
-          amountValidation: false,
-          isLoading: true,
-        })
-      }
-      if (currency == '') {
-        this.setState({
-          currencyValidation: true,
-          isLoading: false,
-        })
-      }
-      else {
-        this.setState({
-          currencyValidation: false,
-          isLoading: true,
-        })
-      }
-      if (transactionId == '') {
-        this.setState({
-          transactionIdValidation: true,
-          isLoading: false,
-        })
-      }
-      else {
-        this.setState({
-          transactionIdValidation: false,
-          isLoading: true,
-        })
-      }
-      if (receiptImg == '') {
-        this.setState({
-          receiptImgValidation: true,
-          isLoading: false
-        })
-      }
-      else {
-        this.setState({
-          receiptImgValidation: false,
-          isLoading: true
-        })
-      }
-      if(serviceName != ''|| email != '' || paymentMonth != ''|| amount != '' || currency != '' || transactionId != '' || receiptImgValidation != true){
-        let paymentObj = {
-          serviceName: serviceName,
-          email: email,
-          paymentMonth: paymentMonthYear,
-          amount: amount,
-          currency: currency,
-          transactionId: transactionId,
-          receiptImg: receiptImg,
-          userId: userId
-        }
-        res = await HttpUtils.post('otherpayment', paymentObj);
-        // }
-        if (res.code == 200) {
-          this.setState({
-            isLoading: false,
-            dataSubmit: true,
-            isVisibleModal: true
-          })
-        }
-        else {
-          this.setState({
-            isLoading: false
-          }, () => {
-            this.toastFunction(`Some thing went wrong of ${res.error}`, this.state.position, DURATION.LENGTH_LONG, true)
-          })
-        }
-      }
-      else {
-      alert('Please insert all fields')
-      }
-      
+    //if (serviceValidation == "other") {
+    console.log('condition true')
+    //get current year
+    const year = new Date().getFullYear();
+    // //geting payment month & year
+    let monthNumber = Number(paymentMonth)
+    let paymentMonthYear = `${monthArr[monthNumber]}, ${year}`
+    if (serviceName == '') {
+      this.setState({
+        serviceNameValidation: true,
+        isLoading: false,
+      })
     }
+    else {
+      this.setState({
+        serviceNameValidation: false,
+        isLoading: true,
+      })
+    }
+    if (email == '') {
+      this.setState({
+        emailValidation: true,
+        isLoading: false,
+      })
+    }
+    else {
+      this.setState({
+        emailValidation: false,
+        isLoading: true,
+      })
+    }
+    if (paymentMonth == '') {
+      this.setState({
+        paymentMonthValidation: true,
+        isLoading: false,
+      })
+    }
+    else {
+      this.setState({
+        paymentMonthValidation: false,
+        isLoading: true,
+      })
+    }
+    if (amount == '') {
+      this.setState({
+        amountValidation: true,
+        isLoading: false,
+      })
+    }
+    else {
+      this.setState({
+        amountValidation: false,
+        isLoading: true,
+      })
+    }
+    if (currency == '') {
+      this.setState({
+        currencyValidation: true,
+        isLoading: false,
+      })
+    }
+    else {
+      this.setState({
+        currencyValidation: false,
+        isLoading: true,
+      })
+    }
+    if (transactionId == '') {
+      this.setState({
+        transactionIdValidation: true,
+        isLoading: false,
+      })
+    }
+    else {
+      this.setState({
+        transactionIdValidation: false,
+        isLoading: true,
+      })
+    }
+    if (receiptImg == '') {
+      this.setState({
+        receiptImgValidation: true,
+        isLoading: false
+      })
+    }
+    else {
+      this.setState({
+        receiptImgValidation: false,
+        isLoading: true
+      })
+    }
+    if (serviceName != '' && email != '' && paymentMonth != '' && amount != '' && currency != '' && transactionId != '' && receiptImg != '' ) {
+      console.log('data if condition work fine')
+      let paymentObj = {
+        serviceName: serviceName,
+        email: email,
+        paymentMonth: paymentMonthYear,
+        amount: amount,
+        currency: currency,
+        transactionId: transactionId,
+        receiptImg: receiptImg,
+        userId: userId
+      }
+      let res = await HttpUtils.post('otherpayment', paymentObj);
+      console.log('payment object >>', res)
+      if (res.code == 200) {
+        this.setState({
+          isLoading: false,
+          dataSubmit: true,
+          isVisibleModal: true,
+          serviceName:'',
+          email:'',
+          paymentMonth:'',
+          amount:'',
+          currency:'',
+          transactionId:'',
+          receiptImg:''
+        })
+      }
+      else {
+        this.setState({
+          isLoading: false,
+          serviceName:'',
+          email:'',
+          paymentMonth:'',
+          amount:'',
+          currency:'',
+          transactionId:'',
+          receiptImg:''
+        }, () => {
+          this.toastFunction(`Some thing went wrong of ${res.error}`, this.state.position, DURATION.LENGTH_LONG, true)
+        })
+      }
+    }
+    // else {
+    // alert('Please insert all fields')
+    // }
+
+    //}
 
 
 
@@ -444,9 +458,14 @@ class Payment extends React.Component {
       serviceNameValidation,
       transactionIdValidation,
       receiptImgValidation,
-      serviceValidation
+      serviceValidation,
+      email,
+      paymentMonth,
+      amount,
+      transactionId
     } = this.state;
-    console.log(serviceValidation, 'serviceValidation')
+    console.log('receipt image >>', receiptImg);
+
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={{ backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -662,6 +681,7 @@ class Payment extends React.Component {
                 keyboardType="email-address"
                 placeholderColor="#4f4f4f"
                 autoCapitalize="none"
+                value={email}
                 onChangeText={(email) => this.setState({ email })}
               />
             </View>
@@ -680,6 +700,7 @@ class Payment extends React.Component {
                 style={styles.inputTextStyle}
                 keyboardType={"numeric"}
                 placeholderColor="#4f4f4f"
+                value={paymentMonth}
                 onChangeText={(paymentMonth) => this.setState({ paymentMonth })}
               />
             </View>
@@ -698,6 +719,7 @@ class Payment extends React.Component {
                 style={styles.inputTextStyle}
                 keyboardType={"numeric"}
                 placeholderColor="#4f4f4f"
+                value={amount}
                 onChangeText={(amount) => this.setState({ amount })}
               />
               <Picker
@@ -734,6 +756,7 @@ class Payment extends React.Component {
                 style={styles.inputTextStyle}
                 keyboardType={"numeric"}
                 placeholderColor="#4f4f4f"
+                value={transactionId}
                 onChangeText={(transactionId) => this.setState({ transactionId })}
               />
 
@@ -762,7 +785,7 @@ class Payment extends React.Component {
             <View>
               {receiptImgValidation ?
                 <View>
-                 <Text style={styles.validationInstruction}>
+                  <Text style={styles.validationInstruction}>
                     Please upload image
                   </Text>
                 </View>
@@ -781,7 +804,7 @@ class Payment extends React.Component {
               <Modal
                 isVisible={this.state.isVisibleModal}
                 animationIn='zoomIn'
-                //animationOut='zoomOutDown'
+                animationOut='zoomOutDown'
                 backdropOpacity={0.8}
                 backdropColor='white'
                 coverScreen={true}

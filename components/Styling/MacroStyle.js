@@ -86,7 +86,7 @@ const styles =StyleSheet.create({
         height:40 ,
         borderTopLeftRadius:3,
         borderBottomLeftRadius:3,
-        marginTop:15
+        marginTop:15.5
         // opacity:0.6
     },
     textInputStyleParent:{
@@ -108,7 +108,7 @@ const styles =StyleSheet.create({
         height:40 ,
         borderTopRightRadius:3,
         borderBottomRightRadius:3,
-        marginTop:15
+        marginTop:15.5
         //marginLeft:15
        // opacity:0.6
     },

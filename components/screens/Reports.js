@@ -59,6 +59,7 @@ class Reportscreen extends React.Component {
     let userObj = {
       userId:userId
     };
+    console.log('user id >>', userObj)
     let userPedometerData = await HttpUtils.post('getpedometerbyid',userObj);
     console.log('user pedometer data >>',userPedometerData.content);
 
