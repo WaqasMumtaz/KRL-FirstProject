@@ -23,7 +23,8 @@ class Homescreen extends React.Component {
       userCurrentWeight: '',
       excerciseArry: [],
       bmiData: [],
-      currentUserBMI: ''
+      currentUserBMI: '',
+      fitnessGoal:''
 
     }
   }
@@ -134,7 +135,8 @@ class Homescreen extends React.Component {
           //console.log(userData[i].currentWeight)
           this.setState({
             userCurrentWeight: userData[i].currentWeight,
-            goalSteps:userData[i].goalSteps
+            goalSteps:userData[i].goalSteps,
+            fitnessGoal:userData[i].fitnessGoal
           })
         }
       })
@@ -174,7 +176,7 @@ class Homescreen extends React.Component {
 
   }
   changeRout(e) {
-    const {userCurrentWeight , goalSteps}=this.state;
+    const {userCurrentWeight , goalSteps,fitnessGoal}=this.state;
     const { navigate } = this.props.navigation;
     if (e == 'logexercise') {
       navigate('Exerciselog')
@@ -192,6 +194,17 @@ class Homescreen extends React.Component {
       }
       
     }
+  else if (e == 'Macrocalculator'){
+    if(fitnessGoal !=''){
+      navigate('Macrocalculator',{
+        'fitnessGoal':fitnessGoal
+      })
+    }
+    else {
+      Alert.alert('Please set goal')
+    }
+  }
+
   }
 
   getBmiData = async () => {
@@ -216,7 +229,7 @@ class Homescreen extends React.Component {
   getDaysData = () => {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', (res) => {
-      console.log('back screens >>', res)
+      //console.log('back screens >>', res)
       if(res.state.routeName === 'Homescreen'){
         BackHandler.addEventListener('hardwareBackPress',this.handleBackButton);
       }
@@ -305,7 +318,7 @@ class Homescreen extends React.Component {
 
 
   render() {
-    const { todayData, yestertdayData, pedometerData, goalSteps, userCurrentWeight, currentUserBMI } = this.state;
+    const { todayData, yestertdayData, pedometerData, goalSteps, userCurrentWeight, currentUserBMI,fitnessGoal } = this.state;
     const { navigate } = this.props.navigation;
     //console.log('current weight >>',userCurrentWeight)
     return (
@@ -339,7 +352,7 @@ class Homescreen extends React.Component {
               <TouchableOpacity style={styles.cardThree} onPress={() => navigate('ShowMeasurementsScreen')}>
                 <Image source={require('../icons/log-weight.png')} style={styles.imgsStyle} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.cardFive} onPress={() => navigate('Macrocalculator')}>
+              <TouchableOpacity style={styles.cardFive} onPress={this.changeRout.bind(this, 'Macrocalculator')}>
                 <Image source={require('../icons/calc-macros.png')} style={styles.imgsStyle} />
               </TouchableOpacity>
 
