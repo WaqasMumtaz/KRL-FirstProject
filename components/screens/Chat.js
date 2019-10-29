@@ -85,16 +85,9 @@ class Chatscreen extends React.Component {
       smallVideo: true,
       largeSizeVideo: false,
       showReport: false,
-<<<<<<< HEAD
-      yesterdayDate: ''
-=======
-      chatDates: [],
-      chatMonths: [],
-      chatYear: [],
       yesterdayDate: '',
       deviceToken: '',
       userToken: ''
->>>>>>> 30665de324a7141f48ad6e3c1f3b7b0cb7a26bee
     }
   }
 
@@ -127,10 +120,10 @@ class Chatscreen extends React.Component {
       if (value) {
         dataFromLocalStorage = JSON.parse(value);
         console.log('localStorage Data >>', dataFromLocalStorage);
-        this.setState({
-          deviceToken: dataFromLocalStorage.deviceToken,
-          userToken: dataFromLocalStorage.token
-        })
+        // this.setState({
+        //   deviceToken: dataFromLocalStorage.deviceToken,
+        //   userToken: dataFromLocalStorage.token
+        // })
         db.ref('chatRoom').on("value", snapshot => {
           let data = snapshot.val()
           for (let i in data) {
@@ -143,8 +136,10 @@ class Chatscreen extends React.Component {
             }
           }
           this.setState({
-            chatMessages: chatArrayTemp,
             userId: dataFromLocalStorage._id,
+            deviceToken: dataFromLocalStorage.deviceToken,
+            userToken: dataFromLocalStorage.token,
+            chatMessages: chatArrayTemp,
             opponentId: senderData.userId,
             opponnetAvatarSource: senderData.image,
             name: senderData.name,
@@ -159,7 +154,7 @@ class Chatscreen extends React.Component {
   uplaodDataOnFirebase = (userMessage, type) => {
     const { senderData } = this.props.navigation.state.params;
 
-    const {todayDate, date, time, deviceToken, userToken } = this.state;
+    const {todayDate, time, deviceToken, userToken } = this.state;
 
     //const { todayDate, time } = this.state;
 
