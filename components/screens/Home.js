@@ -73,12 +73,12 @@ class Homescreen extends React.Component {
     //let dataUser = await HttpUtils.get('getallexerciselog');
     await AsyncStorage.getItem('logExercises').then((value) => {
       let dataFromLocalStorage = JSON.parse(value);
-      console.log('log exercises data >>', dataFromLocalStorage);
+      //console.log('log exercises data >>', dataFromLocalStorage);
       this.setState({
         excerciseArry: dataFromLocalStorage
       })
     })
-    console.log('exercis data >>', this.state.excerciseArry);
+    //console.log('exercis data >>', this.state.excerciseArry);
     let data = this.state.excerciseArry;
     //let data = dataUser.content;
     //get current date 
@@ -120,9 +120,9 @@ class Homescreen extends React.Component {
     let obj = {
       userId: this.state.userId
     }
-    console.log(obj)
+    //console.log(obj)
     let retrieveData = await HttpUtils.post('getgoal', obj);
-    console.log('retrieve data >>>', retrieveData)
+   // console.log('retrieve data >>>', retrieveData)
     if (retrieveData.code == 200) {
       this.setState({
         userAllData: retrieveData.content
@@ -134,13 +134,13 @@ class Homescreen extends React.Component {
           this.setState({
             userCurrentWeight: userData[i].currentWeight,
             goalSteps:userData[i].goalSteps,
-            fitnessGoal:userData[i].fitnessGoal
+            //fitnessGoal:userData[i].fitnessGoal
           })
         }
       })
     }
     const userBmiApi = await HttpUtils.post('getbmi', obj);
-    console.log('current user bmi >>>', userBmiApi);
+    //console.log('current user bmi >>>', userBmiApi);
     if (userBmiApi.code == 200) {
       this.setState({
         bmiData: userBmiApi.content
@@ -160,7 +160,7 @@ class Homescreen extends React.Component {
   }
 
   backScreen=()=>{
-    console.log('press back button');
+    //console.log('press back button');
 
   }
 
@@ -193,14 +193,7 @@ class Homescreen extends React.Component {
       
     }
   else if (e == 'Macrocalculator'){
-    if(fitnessGoal !=''){
-      navigate('Macrocalculator',{
-        'fitnessGoal':fitnessGoal
-      })
-    }
-    else {
-      Alert.alert('Please set goal')
-    }
+      navigate('Macrocalculator')
   }
 
   }
@@ -210,9 +203,9 @@ class Homescreen extends React.Component {
     const userBMI = {
       userId: userId
     }
-    console.log('user id >>', userBMI)
+    //console.log('user id >>', userBMI)
     const userBmiApi = await HttpUtils.post('getbmi', userBMI);
-    console.log('current user bmi >>>', userBmiApi);
+    //console.log('current user bmi >>>', userBmiApi);
     // AsyncStorage.getItem("bmiData").then((value)=>{
     //   if(value){
     //     console.log('bmi result >>',JSON.parse(value))
@@ -238,7 +231,7 @@ class Homescreen extends React.Component {
   }
 
   handleBackButton = async () => {
-    console.log('pressed back button')
+   // console.log('pressed back button')
     const { navigate } = this.props.navigation;
     const getData = await AsyncStorage.getItem("currentUser");
     // const parsForm = JSON.parse(getData)

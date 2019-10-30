@@ -159,7 +159,7 @@ class Chatscreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.notificationListener();
+    //this.notificationListener();
     this.notificationOpenedListener();
   }
 

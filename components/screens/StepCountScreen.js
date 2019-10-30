@@ -69,7 +69,8 @@ export default class StepCountScreen extends React.Component {
             eightToSixteen: false,
             sixteenTo23: false,
             oneToEight: false,
-            tapLoad: true
+            tapLoad: true,
+            stepsPercentage:''
 
         }
 
@@ -101,27 +102,27 @@ export default class StepCountScreen extends React.Component {
     //         })
     // }
 
-    getGoalStepData = () => {
-        console.log('run function get goal steps')
-        const { navigation } = this.props;
-        this.focusListener = navigation.addListener('didFocus', () => {
-            //    this.getData()
-            AsyncStorage.getItem('goalSteps').then((value) => {
-                if (value) {
-                    const goalStepsValue = JSON.parse(value);
-                    console.log('user steps >>', goalStepsValue);
-                    this.setState({
-                        goalSteps: goalStepsValue
-                    })
-                }
-            })
-        });
+    // getGoalStepData = () => {
+    //     //console.log('run function get goal steps')
+    //     const { navigation } = this.props;
+    //     this.focusListener = navigation.addListener('didFocus', () => {
+    //         //    this.getData()
+    //         AsyncStorage.getItem('goalSteps').then((value) => {
+    //             if (value) {
+    //                 const goalStepsValue = JSON.parse(value);
+    //                 console.log('user steps >>', goalStepsValue);
+    //                 this.setState({
+    //                     goalSteps: goalStepsValue
+    //                 })
+    //             }
+    //         })
+    //     });
 
-    }
+    // }
     async componentWillMount() {
         await this.getData()
         this.dateFilter()
-        this.getGoalStepData();
+        //this.getGoalStepData();
         const paramsData = this.props.navigation.state.params;
         console.log('params data >>>', paramsData)
         this.setState({
@@ -142,7 +143,7 @@ export default class StepCountScreen extends React.Component {
     }
 
     checkFunc(data) {
-        console.log('data will update >>', data);
+        //console.log('data will update >>', data);
         this.setState({
             abc: data
         })
@@ -354,6 +355,16 @@ export default class StepCountScreen extends React.Component {
                                     })
             
                                 }
+                            const multiplySteps = res.steps / Number(this.state.goalSteps);
+                            //console.log('multiply >>',multiplySteps);
+                            const divideSteps = multiplySteps*100;
+                            //console.log('divided >>',divideSteps )
+                            const roundedValue = Math.round(divideSteps);
+                            //console.log('percentage steps >>',roundedValue)
+                            this.setState({
+                                stepsPercentage:roundedValue
+                            })
+
 
                             }
                             if (res.steps != 0 && Number(this.state.goalSteps) != 0) {
@@ -895,7 +906,8 @@ export default class StepCountScreen extends React.Component {
             goalSteps,
             curTime,
             stepGoalCountData,
-            tapLoad
+            tapLoad,
+            stepsPercentage
             //currentUserId
         } = this.state;
         //console.log(currentUserId)
@@ -968,7 +980,7 @@ export default class StepCountScreen extends React.Component {
                                     //             pedometerData > 750 && pedometerData <= 10000 ? 100
                                     //                 : 0
                                     // }
-                                    progress={pedometerData == '' ? 0 : pedometerData}
+                                    progress={stepsPercentage == '' ? 0 : stepsPercentage}
                                     backgroundColor={'gray'}
                                     animateFromValue={0}
                                     fullColor={'#FF6200'}

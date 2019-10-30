@@ -64,30 +64,15 @@ class Invoices extends React.Component {
             showNullInvoices: false,
             notMatch: false,
             showalert: false,
-            
-
+            matchArr: false
         }
 
     }
 
     componentWillMount() {
         this.dataRetrieve()
-        //console.log(moment)
         // let monthNo = new Date().getMonth();
-        // const date = new Date().getDate();
-        // const year = new Date().getFullYear();
-        // const hours = new Date().getHours();
-        // const min = new Date().getMinutes();
-        // const sec = new Date().getSeconds();
-        // if (monthNo == 1 || monthNo == 2 || monthNo == 3 || monthNo == 4 || monthNo == 5 || monthNo == 6 || monthNo == 7 || monthNo == 8 || monthNo == 9) {
-        //     month = `0${monthNo + 1}`;
-        // }
-        // else {
-        //     month = monthNo + 1;
-        // }
-        // this.setState({
-        //     month:date + '-' + month + '-' + year,
-        // })
+        // this.setState({ month: monthNo })
     }
 
 
@@ -95,42 +80,24 @@ class Invoices extends React.Component {
     dataRetrieve = async () => {
         const getData = await AsyncStorage.getItem("currentUser");
         const parsForm = JSON.parse(getData)
-        console.log(parsForm)
         let userObj = {
             userId: parsForm._id
         }
-        console.log('obj id >>>', userObj)
         try {
             const userData = await HttpUtilsFile.post('invoice', userObj)
-            console.log('api response >>>', userData)
             const userContent = userData.content;
-            //console.log(userContent.length)
             if (userData.code == 200) {
-                console.log('api success')
                 if (userContent.length == 0) {
-                    console.log(userData.msg)
                     this.setState({
                         noInvoices: userData.msg,
                         showNullInvoices: true
                     })
                 }
                 else {
-                    //    let arrayData = this.state.allDataUser;
-                    //    arrayData = [...arrayData, userContent]
+
                     this.setState({
-                        allDataUser: userContent,
-                        invoiceData: userContent
-                    // }
-                    // , () => {
-                    //     for (let i in this.state.allDataUser) {
-                    //         const dataUser = this.state.allDataUser[i];
-                    //         //console.log('setstate data >>>',dataUser)
-                    //         if (dataUser.receiptImg != undefined) {
-                    //             this.setState({
-                    //                 receipt_img: dataUser.receiptImg
-                    //             })
-                    //         }
-                    //     }
+                        invoiceData: userContent,
+                        allDataUser:userContent
                     })
                 }
             }
@@ -146,10 +113,10 @@ class Invoices extends React.Component {
     openModal = (data) => {
         console.log('receipt image >>', data)
         this.setState({
-            receipt_img:data,
-            
-        },()=>
-        this.setState({isVisibleModal: true,})
+            receipt_img: data,
+
+        }, () =>
+            this.setState({ isVisibleModal: true, })
         )
     }
     closeModal = () => {
@@ -159,11 +126,55 @@ class Invoices extends React.Component {
     }
 
 
+    // renderFullData = ({ item }) => {
+    //     return (
+    //         <View style={styles.bodyContainer}>
+    //             <View style={styles.cardLeft}>
+    //                 <View style={styles.childContainer}>
+    //                     <View style={styles.cardNumberContainer}>
+    //                         <Text style={styles.cardNumberStyle}>{item.serviceName == undefined ?
+    //                             'Online Payment'
+    //                             : item.serviceName
+    //                         }</Text>
+    //                         {item.serviceName != undefined ?
+    //                             <View style={styles.checkReceipt}>
+    //                                 <Text style={styles.checkReceiptText}>Check Receipt</Text>
+    //                                 <TouchableOpacity onPress={this.openModal.bind(this, item.receiptImg)}>
+    //                                     <Image source={require('../icons/attach-orange.png')}
+
+    //                                         style={styles.iconStyle}
+    //                                         resizeMode='cover'
+    //                                     />
+    //                                 </TouchableOpacity>
+    //                             </View>
+    //                             : null
+    //                         }
+    //                         <Text style={styles.priceDetail}>
+    //                             Rs. {item.amount}
+    //                         </Text>
+    //                         <Text style={styles.textStyle}>Coach fees</Text>
+    //                         <View style={styles.dateMonthContainer}>
+    //                             <Text style={styles.monthName}>
+    //                                 {item.paymentMonth}
+    //                             </Text>
+    //                         </View>
+    //                         <Text style={styles.textStyle}>Issue date</Text>
+    //                         <View style={styles.paymentStatusContainer}>
+    //                             <Text style={styles.unpaidTextStyle}>paid</Text>
+    //                             <Text style={styles.textStyle}>Payment status</Text>
+    //                         </View>
+    //                     </View>
+
+    //                 </View>
+    //             </View>
+    //         </View>
+    //     )
+    // }
+
     _keyExtractor = (item, index) => item.id;
 
     renderDataItems = ({ item }) => {
-       console.log('data items >>', item)
-        // console.log('service name >>>', item.serviceName)
+        console.log('data items >>', item)
         return (
             <View style={styles.bodyContainer}>
                 <View style={styles.cardLeft}>
@@ -178,7 +189,7 @@ class Invoices extends React.Component {
                                     <Text style={styles.checkReceiptText}>Check Receipt</Text>
                                     <TouchableOpacity onPress={this.openModal.bind(this, item.receiptImg)}>
                                         <Image source={require('../icons/attach-orange.png')}
-                                        
+
                                             style={styles.iconStyle}
                                             resizeMode='cover'
                                         />
@@ -194,9 +205,6 @@ class Invoices extends React.Component {
                                 <Text style={styles.monthName}>
                                     {item.paymentMonth}
                                 </Text>
-                                {/* <Text style={styles.dateNumber}>1</Text>
-              <Text style={styles.superScriptTextStyle}>st</Text>
-              <Text style={styles.yearStyle}>,2019</Text> */}
                             </View>
                             <Text style={styles.textStyle}>Issue date</Text>
                             <View style={styles.paymentStatusContainer}>
@@ -213,7 +221,7 @@ class Invoices extends React.Component {
 
 
 
-    
+
 
     showMonthPicker = () => {
         this.setState({
@@ -222,40 +230,27 @@ class Invoices extends React.Component {
 
     }
     monthSelect = (date) => {
-        const { allDataUser } = this.state;
-        let arr = []
-        // console.log(e, 'month')
-        const getMonth = Number(date._i.slice(3, 4));
-        const getYear = date._i.slice(5, 9);
-        const getMonthName = this.state.monthArr[getMonth];
+        const { allDataUser, month } = this.state;
+        let arr = [];
+        const firstSlashIndex = date._i.indexOf('-');
+        let lastSlashIndex = date._i.lastIndexOf('-')
+        let monthNo = Number(date._i.slice(firstSlashIndex + 1, lastSlashIndex));
+        const getYear = date._i.slice(lastSlashIndex + 1, 10);
+        const getMonthName = this.state.monthArr[monthNo];
         const concatMonthYear = `${getMonthName}, ${getYear}`;
-        console.log(concatMonthYear, 'concatMonthYear')
-        for (var i = 0; i < allDataUser.length; i++) {
-            console.log(allDataUser[i], 'data')
+        // console.log(concatMonthYear, 'concatMonthYear')
+        for (var i in allDataUser) {
+            // console.log(allDataUser[i], 'data')
             if (allDataUser[i].paymentMonth == concatMonthYear) {
-                arr.push(allDataUser[i])
-                this.setState({
-                    invoiceData: arr,
-                    showPicker: false,
-                    showalert: false
-                })
+                arr.push(allDataUser[i]);                
             }
-            else if (allDataUser[i].paymentMonth != concatMonthYear) {
-                console.log('Condition Worked Fine')
-                this.setState({
-                    invoiceData: arr,
-                   // showPicker: false,
-                })
-            }
-            // else if (allDataUser.length < 0){
-            //     alert('No Found Data')
-            // }
         }
-        // this.setState({
-        //     allDataUser: arr,
-        //     showPicker: false
-        // })
-
+        this.setState({
+            invoiceData: arr,
+            showPicker: false,
+            matchArr: false
+        })
+        // console.log(arr, 'arr')
     }
 
     render() {
@@ -272,10 +267,13 @@ class Invoices extends React.Component {
             showNullInvoices,
             showalert,
             invoiceData,
-            
+            matchArr
+            //allDataUser
+
+
         } = this.state;
 
-        // console.log('render all data user >>>', allDataUser);
+        console.log('invoice data >>>', invoiceData);
         // console.log('Receipt image >>>', this.state.receipt_img);
 
         return (
@@ -286,15 +284,12 @@ class Invoices extends React.Component {
 
                 </View>
                 <View style={styles.arrowContainer}>
-                    {/* <TouchableOpacity style={{ marginRight: 20 }}><Image source={require('../icons/left.png')} style={styles.forImgs} /></TouchableOpacity> */}
-
-                    {
-                    invoiceData.length > 0 ?
-                    <TouchableOpacity onPress={this.showMonthPicker}><Text>Filter By Month</Text></TouchableOpacity>
-                    : 
-                    null
-                    }
-                    {/* <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity> */}
+                    {/* { */}
+                        {/* invoiceData.length > 0 ? */}
+                            <TouchableOpacity onPress={this.showMonthPicker}><Text>Filter By Month</Text></TouchableOpacity>
+                            {/* :
+                            null
+                    }  */}
                 </View>
                 <ScrollView style={{ flex: 1, backgrousndColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
 
@@ -303,24 +298,7 @@ class Invoices extends React.Component {
                             <MonthSelectorCalendar
                                 //selectedDate={}
                                 onMonthTapped={(e) => this.monthSelect(e)}
-                            // onMonthTapped={(date) => this.setState({ month: date }, () => {
-                            //     //this.renderDataFun.bind(this, date._i)
-                            //     if (date._i) {
-                            //         this.setState({ showPicker: false, })
-                            //         const getMonth = Number(date._i.slice(3, 4));
-                            //         const getYear = date._i.slice(5, 9);
-                            //         // console.log('get month >>', getMonth)
-                            //         // console.log('get year >>', getYear)
-                            //         const getMonthName = this.state.monthArr[getMonth];
-                            //         const concatMonthYear = `${getMonthName}, ${getYear}`;
-                            //         //console.log('concate month >>>', concatMonthYear)
-                            //         this.setState({
-                            //             renderMonthData: concatMonthYear,
-                            //             allDataShow: false,
-                            //             monthRelatedData: true,
-                            //         })
-                            //     }
-                            // })}
+
                             />
                             : null
                     }
@@ -356,6 +334,20 @@ class Invoices extends React.Component {
                         :
                         null
                     } */}
+                    {/* {
+                        allDataShow && allDataUser.length >= 0 ?
+                        <FlatList
+                           data={allDataUser}
+                            renderItem={this.renderFullData}
+                            keyExtractor={this._keyExtractor}
+                            numColumns={columsNum}
+                        />
+                        :
+                        null
+                    } */}
+
+
+
 
                     {invoiceData.length > 0 ?
                         <FlatList
@@ -364,18 +356,26 @@ class Invoices extends React.Component {
                             keyExtractor={this._keyExtractor}
                             numColumns={columsNum}
                         />
-                        
+
                         :
-                        invoiceData.length <= 0 ?
                         <View
-                        style={{justifyContent:'center',alignItems:'center'}}
+                            style={{ justifyContent: 'center', alignItems: 'center' }}
                         >
-                            <Text style={{color: '#FF6200', fontFamily: "MontserratMedium"}}>No Found Invoices</Text>
-                       </View>
-                       :
-                       null
+                            <Text style={{ color: '#FF6200', fontFamily: "MontserratMedium" }}>No Found Invoices</Text>
+                        </View>
+
                     }
-                    
+                    {/* {
+                        matchArr ?
+                        <View
+                                style={{ justifyContent: 'center', alignItems: 'center' }}
+                            >
+                                <Text style={{ color: '#FF6200', fontFamily: "MontserratMedium" }}>No Found Invoices</Text>
+                            </View>
+                       :
+                       null     
+                    } */}
+
 
                     <Modal
                         isVisible={this.state.isVisibleModal}
@@ -387,7 +387,7 @@ class Invoices extends React.Component {
                         coverScreen={true}
                         animationInTiming={100}
                         animationOutTiming={100}
-                        
+
                         onBackdropPress={() => this.setState({ isVisibleModal: false })}
                     >
 

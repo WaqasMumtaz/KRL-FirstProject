@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF6200',
         justifyContent: 'center',
         alignItems: 'center',
-        opacity:0.2
+        opacity:0.6
     },
     micIconStyle: {
         flex: 1,
@@ -715,7 +715,13 @@ const styles = StyleSheet.create({
         // flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 10
+        padding: 10,
+        borderBottomColor:'#e5e5e5',
+        borderBottomWidth:1,
+        //borderRadius:2,
+        borderBottomLeftRadius:75,
+        borderBottomRightRadius:5
+
     },
     name: {
         fontFamily: "MontserratExtraBold",
