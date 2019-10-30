@@ -302,6 +302,15 @@ export default class StepCountScreen extends React.Component {
                         })
 
                     }
+                    const multiplySteps = data.steps / Number(this.state.goalSteps);
+                    //console.log('multiply >>',multiplySteps);
+                    const divideSteps = multiplySteps*100;
+                    //console.log('divided >>',divideSteps )
+                    const roundedValue = Math.round(divideSteps);
+                    //console.log('percentage steps >>',roundedValue)
+                    this.setState({
+                        stepsPercentage:roundedValue
+                    })    
 
                 }
                 if (data.steps != 0 && Number(this.state.goalSteps) != 0) {
@@ -915,7 +924,7 @@ export default class StepCountScreen extends React.Component {
         //console.log('goal steps database >>',stepGoalCountData)
         const { params } = this.props.navigation.state;
         const dataObj = {
-            pedometerData: pedometerData,
+            pedometerData: stepsPercentage,
         }
         params.pedometerFun(dataObj)
         //console.log(params)

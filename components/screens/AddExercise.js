@@ -75,6 +75,8 @@ class AddExercise extends React.Component {
 
         }
     }
+  
+
     componentDidMount() {
         const date = new Date().getDate();
         let month = new Date().getMonth() + 1;
@@ -159,7 +161,8 @@ class AddExercise extends React.Component {
              //let userMsg = dataUser.msg;
             //  if(dataUser.code == 200){
                 this.toastFunction('Data Save Successfully', this.state.position, DURATION.LENGTH_LONG, true);
-                 navigate('Exerciselog')
+                 navigate('Exerciselog');
+                exerciseArry = [];
              //}
             //  else {
             //     this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true)
@@ -222,48 +225,11 @@ class AddExercise extends React.Component {
         exerciseArry = exerciseArry.filter(function (item) {
             return item !== e
         })
-        // exerciseArry.filter((item) => {
-        //     return (item !== e)
-
-        // })
+        
         this.setState({
             exerciseArr: exerciseArry
         })
-        //console.log('remove array >>>', exerciseArry)
-        //}
-        // else if (e == 'High paced jogging') {
-        //     this.setState({ show: true, jogging: false, iconShow: false })
-        // }
-        // else if (e == 'Push ups') {
-        //     this.setState({ show: true, pushups: false, iconShow: false })
-        // }
-        // else if (e == 'Bicep curls') {
-        //     this.setState({ show: true, bicep: false, iconShow: false })
-        // }
-        // else if (e == 'Side Crunch') {
-        //     this.setState({ show: true, crunch: false, iconShow: false })
-        // }
-        // else if (e == 'Reverse Crunches') {
-        //     this.setState({ show: true, reverseCrunch: false, iconShow: false })
-        // }
-        // else if (e == 'Vertical Leg Crunch') {
-        //     this.setState({ show: true, verticalLegCrunch: false, iconShow: false })
-        // }
-        // else if (e == 'Bicycle Exercise') {
-        //     this.setState({ show: true, bicycleEx: false, iconShow: false })
-        // }
-        // else if (e == 'Rolling Plank Exercise') {
-        //     this.setState({ show: true, rollingEx: false, iconShow: false })
-        // }
-        // else if (e == 'Walking') {
-        //     this.setState({ show: true, walking: false, iconShow: false })
-        // }
-        // else if (e == 'Running') {
-        //     this.setState({ show: true, running: false, iconShow: false })
-        // }
-        // else if (e == 'Jogging') {
-        //     this.setState({ sho w: true, joggingEx: false, iconShow: false })
-        // }
+       
     }
 
 
@@ -295,9 +261,9 @@ class AddExercise extends React.Component {
 
     }
     increamentVal(data , item){
-        let emptyArr={}
-        console.log('inc data >',Number(data))
-        console.log('item value >', item)
+        // let emptyArr={}
+        // console.log('inc data >',Number(data))
+        // console.log('item value >', item)
         const inputValue = Number(data)+1;
         const incValue = inputValue.toString();
         console.log(incValue);

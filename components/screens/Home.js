@@ -17,7 +17,6 @@ class Homescreen extends React.Component {
       yestertdayData: '',
       pedometerData: '',
       userId: '',
-      pedometerData: '',
       goalSteps: '',
       userAllData: [],
       userCurrentWeight: '',

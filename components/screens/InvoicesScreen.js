@@ -174,7 +174,7 @@ class Invoices extends React.Component {
     _keyExtractor = (item, index) => item.id;
 
     renderDataItems = ({ item }) => {
-        console.log('data items >>', item)
+        //console.log('data items >>', item)
         return (
             <View style={styles.bodyContainer}>
                 <View style={styles.cardLeft}>
@@ -273,7 +273,7 @@ class Invoices extends React.Component {
 
         } = this.state;
 
-        console.log('invoice data >>>', invoiceData);
+        //console.log('invoice data >>>', invoiceData);
         // console.log('Receipt image >>>', this.state.receipt_img);
 
         return (

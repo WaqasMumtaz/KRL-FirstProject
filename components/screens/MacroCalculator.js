@@ -75,7 +75,7 @@ class Macrocalculator extends React.Component {
             desiredUnitValidation: false,
             fitnessGoal: '',
             showDesiredBtn: false,
-            fitnessObj: { normal: 300, mild: 500, extremeBtn: 700 },
+            fitnessObj: { normal: 300, mild: 500, extreme: 700 },
             userAllData:[]
         }
     }

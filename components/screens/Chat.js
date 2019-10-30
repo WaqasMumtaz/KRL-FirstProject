@@ -625,7 +625,8 @@ createNotificationListeners = async () => {
 * */
   this.notificationOpenedListener = firebasePushNotification.notifications().onNotificationOpened((notificationOpen) => {
     const { title, body } = notificationOpen.notification;
-    this.showAlert(title, body);
+    // this.showAlert(title, body);
+    console.log('title >>', title , 'body >>', body)
   });
 
 
@@ -635,7 +636,8 @@ createNotificationListeners = async () => {
   const notificationOpen = await firebasePushNotification.notifications().getInitialNotification();
   if (notificationOpen) {
     const { title, body } = notificationOpen.notification;
-    this.showAlert(title, body);
+    // this.showAlert(title, body);
+    console.log('title >>', title , 'body >>', body)
   }
 
 
@@ -652,15 +654,15 @@ createNotificationListeners = async () => {
 
 }
 
-showAlert(title, body) {
-  Alert.alert(
-    title, body,
-    [
-      { text: 'OK', onPress: () => console.log('OK Pressed') },
-    ],
-    { cancelable: false },
-  );
-}
+// showAlert(title, body) {
+//   Alert.alert(
+//     title, body,
+//     [
+//       { text: 'OK', onPress: () => console.log('OK Pressed') },
+//     ],
+//     { cancelable: false },
+//   );
+// }
 
 
   render() {
@@ -717,7 +719,7 @@ showAlert(title, body) {
               <Text key={key} style={styles.msgsTextStyle}>
                 {message.message}
               </Text>
-              <Text style={styles.timeText}>{message.time.slice(0, 5)}</Text>
+              {/* <Text style={styles.timeText}>{message.time.slice(0, 5)}</Text> */}
             </View>
             :
             message.senderId == userId && message.type == 'image' ?
@@ -912,7 +914,7 @@ showAlert(title, body) {
               <Text key={key} style={styles.replyMessagesStyle}>
                 {message.message}
               </Text>
-              <Text style={styles.timeTextReply}>{message.time.slice(0, 5)}</Text>
+              {/* <Text style={styles.timeTextReply}>{message.time.slice(0, 5)}</Text> */}
             </View>
             :
             message.senderId == opponentId && message.type == 'image' ?
