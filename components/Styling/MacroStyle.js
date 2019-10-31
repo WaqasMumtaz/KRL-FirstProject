@@ -473,7 +473,45 @@ const styles =StyleSheet.create({
         backgroundColor: '#FF6200', 
         marginTop: 5, 
         borderRadius: 3 
-    }
+    },
+    genderTextStyle:{
+        color: '#4f4f4f',
+        fontFamily: 'MontserratLight',
+        marginTop:12
+    },
+    maleClickedTextStyle:{
+        color:'white',
+        textAlign: 'center', 
+        fontFamily: 'MontserratLight',
+      },
+    weightStatusBtn:{
+        height: 38,
+        width: '30%', 
+        justifyContent: 'center', 
+        backgroundColor: '#e5e5e5', 
+        marginTop: 5, 
+        borderRadius: 3
+    },
+    weightStatusClicked:{
+        height: 38, 
+        width: '30%', 
+        //marginLeft: 16, 
+        color:'white',
+        justifyContent: 'center', 
+        backgroundColor: '#FF6200', 
+        marginTop: 5, 
+        borderRadius: 3
+    },
+    fitnessTextStyle:{
+        textAlign: 'center', 
+        color: '#000000',
+        fontFamily: 'MontserratLight'
+    },
+    validationInstruction:{
+        fontSize:12,
+        fontFamily:'MontserratLight',
+        color:'#FF6200'
+    },  
     
 })
 

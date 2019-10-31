@@ -74,9 +74,14 @@ class Macrocalculator extends React.Component {
             extremeBtn: false,
             desiredUnitValidation: false,
             fitnessGoal: '',
-            showDesiredBtn: false,
+            showDesiredBtn: true,
             fitnessObj: { normal: 300, mild: 500, extreme: 700 },
-            userAllData:[]
+            userAllData: [],
+            lose: false,
+            gain: false,
+            maintain: false,
+            fitnessResult: '',
+            fitnessValidation:false
         }
     }
 
@@ -105,17 +110,15 @@ class Macrocalculator extends React.Component {
                     currentYear: year,
                     currentDate: date,
                     currentMonth: month,
-                    //fitnessGoal: params.fitnessGoal
-                }, () => {
-                    this.fitnessResultDataGetting();
-                    console.log('fitness goal will mount >>', this.state.fitnessGoal)
-                    
                 })
             }
         });
         this.getMacro();
-        
+
     }
+//  componentDidMount(){
+//     this.macroGet();
+//  }   
     getMacro = () => {
         const { navigation } = this.props;
         this.focusListener = navigation.addListener('didFocus', () => {
@@ -126,7 +129,7 @@ class Macrocalculator extends React.Component {
     calulateMacro = async () => {
         const { dob, gender, height, heightInch, currentWeight, currentWeightUnit,
             activityLevel, tdeeObj, date, time, currentYear, currentDate, currentMonth, userId,
-            unitValue, desiredUnitValue, fitnessObj, fitnessGoal } = this.state;
+            unitValue, desiredUnitValue, fitnessObj, fitnessGoal,fitnessValidation } = this.state;
         let age;
         let macroObj = {
             dob: dob,
@@ -185,16 +188,17 @@ class Macrocalculator extends React.Component {
                 currentWeightValidation: false
             })
         }
-        // if (goalWeight == '') {
-        //     this.setState({
-        //         goalWeightValidation: true
-        //     })
-        // }
-        // else {
-        //     this.setState({
-        //         goalWeightValidation: false
-        //     })
-        // }
+        if(fitnessGoal == ''){
+            this.setState({
+                fitnessValidation:true
+            })
+        }
+        else {
+            this.setState({
+                fitnessValidation:false
+            })
+        }
+        
         if (heightInch == '') {
             this.setState({
                 heightUnitValidation: true
@@ -215,16 +219,7 @@ class Macrocalculator extends React.Component {
                 currentWeightUnitValidation: false
             })
         }
-        // if (goalWeightUnit == '' || goalWeightUnit == '0') {
-        //     this.setState({
-        //         goalWeightUnitValidation: true
-        //     })
-        // }
-        // else {
-        //     this.setState({
-        //         goalWeightUnitValidation: false
-        //     })
-        // }
+        
         if (activityLevel == '') {
             this.setState({
                 activityLevelValidation: true
@@ -699,13 +694,13 @@ class Macrocalculator extends React.Component {
                         //convert to string 
                         //let calries = Math.round(calculteCalries.toString());
                         //console.log('calries value >>>',calries)
-    
+
                         //let tde = Math.round(tdee.toString())
                         //let tde = Number(tdee);
                         //console.log('tdee value >>>',tde)
-    
+
                         //let tde = tdee.toString()
-    
+
                         let fatVal = Math.round(fat.toString());
                         let proteinVal = Math.round(protein.toString());
                         let carbohydratesVal = Math.round(carbohydrate.toString());
@@ -728,7 +723,7 @@ class Macrocalculator extends React.Component {
                         //console.log(dataUser, 'dataUser')
                     }
                 }
-                
+
             }
         }
         else if (gender == 'female' || unitValue == 'metric' || unitValue == '') {
@@ -749,7 +744,7 @@ class Macrocalculator extends React.Component {
                         //calculate protein
                         let proteinCalries = addBMR * 0.25;
                         let protein = proteinCalries / 4;
-                       // console.log('femail protein >>', protein)
+                        // console.log('femail protein >>', protein)
                         //calculate carbohydrate
                         // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
                         let carbohydratesCalries = addBMR * 0.50;
@@ -856,13 +851,13 @@ class Macrocalculator extends React.Component {
                         //convert to string 
                         //let calries = Math.round(calculteCalries.toString());
                         //console.log('calries value >>>',calries)
-    
+
                         //let tde = Math.round(tdee.toString())
                         //let tde = Number(tdee);
                         //console.log('tdee value >>>',tde)
-    
+
                         //let tde = tdee.toString()
-    
+
                         let fatVal = Math.round(fat.toString());
                         let proteinVal = Math.round(protein.toString());
                         let carbohydratesVal = Math.round(carbohydrate.toString());
@@ -882,10 +877,10 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                       // console.log(dataUser, 'dataUser')
+                        // console.log(dataUser, 'dataUser')
                     }
-                
-                }     
+
+                }
             }
         }
 
@@ -1056,40 +1051,7 @@ class Macrocalculator extends React.Component {
         }
     }
 
-    fitnessResultDataGetting= async ()=>{
-        let obj = {
-            userId: this.state.userId
-          }
-          console.log(obj)
-          let retrieveData = await HttpUtils.post('getgoal', obj);
-          console.log('retrieve data >>>', retrieveData)
-          if (retrieveData.code == 200) {
-            this.setState({
-              userAllData: retrieveData.content
-            }, () => {
-              //console.log(this.state.userAllData)
-              const userData = this.state.userAllData;
-              for (var i in userData) {
-                //console.log(userData[i].currentWeight)
-                this.setState({
-                  fitnessGoal:userData[i].fitnessGoal
-                },()=>{
-                    if (this.state.fitnessGoal == 'maintain weight') {
-                        this.setState({
-                            showDesiredBtn: false
-                        })
-                    }
-                    else {
-                        this.setState({
-                            showDesiredBtn: true
-                        })
-                    }
-                })
-              }
-            })
-          }
-    }
-
+   
     componentWillUnmount() {
         // Remove the event listener
         this.focusListener.remove();
@@ -1135,15 +1097,47 @@ class Macrocalculator extends React.Component {
         }
     }
 
+    fitnessFun(result) {
+        if (result == 'lose') {
+            this.setState({
+                lose: true,
+                gain: false,
+                maintain: false,
+                fitnessGoal: 'lose weight',
+                showDesiredBtn:true
+            })
+        }
+        else if (result == 'gain') {
+            this.setState({
+                lose: false,
+                gain: true,
+                maintain: false,
+                fitnessGoal: 'gain weight',
+                showDesiredBtn:true
+            })
+        }
+        else if (result == 'maintain') {
+            this.setState({
+                lose: false,
+                gain: false,
+                maintain: true,
+                fitnessGoal: 'maintain weight',
+                showDesiredBtn:false
+
+            })
+        }
+    }
+
+
     render() {
         const { dobValidation, genderValidation, heightValidation, currentWeightValidation, goalWeightValidation,
             heightUnitValidation, currentWeightUnitValidation, goalWeightUnitValidation, activityLevelValidation,
             male, female, moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates,
             dob, date, currentCalories, currentCarbohy, currentProteins, currentMass, showCurrentMacro,
             impClick, metrilClick, unitValue, unitValidation, height, mild, extremeBtn, normal, desiredUnitValue, desiredUnitValidation,
-            fitnessGoal, showDesiredBtn
+            fitnessGoal, showDesiredBtn,fitnessValidation,lose,gain,maintain,currentDate
         } = this.state;
-        //console.log('height centimeter >>>', Number(height))
+        console.log('date >>>', date)
         console.log('fitness goal >', fitnessGoal)
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: HeightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -1167,7 +1161,7 @@ class Macrocalculator extends React.Component {
                                         <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={currentCarbohy + ' g Carbohyderates'} />
                                         <TextInput placeholder={"e.g 107 g\Protein"} style={styles.inputCaloriesStyleThree} value={currentProteins + ' g Proteins'} />
                                         <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={currentMass + ' g Fat'} />
-                                        
+
                                     </View>
                                 </View>
                                 :
@@ -1200,32 +1194,61 @@ class Macrocalculator extends React.Component {
                             </View>
 
                         }
+                        {/* Set fitness goal here  */}
+
+                        <Text style={styles.genderTextStyle}>Select fitness goal</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
+                            <TouchableOpacity style={lose ? styles.weightStatusClicked : styles.weightStatusBtn} onPress={this.fitnessFun.bind(this, 'lose')}>
+                                <Text style={styles.fitnessTextStyle}>
+                                    Lose Weight
+                            </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={gain ? styles.weightStatusClicked : styles.weightStatusBtn} onPress={this.fitnessFun.bind(this, 'gain')}>
+                                <Text style={styles.fitnessTextStyle}>
+                                    Gain Weight</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={maintain ? styles.weightStatusClicked : styles.weightStatusBtn} onPress={this.fitnessFun.bind(this, 'maintain')}>
+                                <Text style={styles.fitnessTextStyle}>
+                                    Maintain Weight</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {fitnessValidation ?
+                            <View style={{ flexDirection: 'row', marginVertical: 10, }}>
+                                <Text style={styles.validationInstruction}>
+                                    Please select fitness goal
+                                    </Text>
+                            </View>
+                            :
+                            null
+                        }
+
+
                         {
                             showDesiredBtn ?
-                        <View>
-                        <View style={{ marginTop: 8 }}>
-                            <Text style={styles.unitPara}>What is your desired deficit</Text>
-                        </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
-                                    <TouchableOpacity
-                                        onPress={this.getUnit.bind(this, 'normal')}
-                                        style={normal ? styles.clickedButton : styles.buttonStyle}
-                                    >
-                                        <Text style={styles.maleTextStyle}>Normal</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={this.getUnit.bind(this, 'mild')}
-                                        style={mild ? styles.clickedButton : styles.buttonStyle}
-                                    >
-                                        <Text style={styles.maleTextStyle}>Mild</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={this.getUnit.bind(this, 'extreme')}
-                                        style={extremeBtn ? styles.clickedButton : styles.buttonStyle}
-                                    >
-                                        <Text style={styles.maleTextStyle}>Exreme</Text>
-                                    </TouchableOpacity>
-                                </View>
+                                <View>
+                                    <View style={{ marginTop: 8 }}>
+                                        <Text style={styles.unitPara}>What is your desired deficit</Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                                        <TouchableOpacity
+                                            onPress={this.getUnit.bind(this, 'normal')}
+                                            style={normal ? styles.clickedButton : styles.buttonStyle}
+                                        >
+                                            <Text style={styles.maleTextStyle}>Normal</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={this.getUnit.bind(this, 'mild')}
+                                            style={mild ? styles.clickedButton : styles.buttonStyle}
+                                        >
+                                            <Text style={styles.maleTextStyle}>Mild</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={this.getUnit.bind(this, 'extreme')}
+                                            style={extremeBtn ? styles.clickedButton : styles.buttonStyle}
+                                        >
+                                            <Text style={styles.maleTextStyle}>Exreme</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                                 :
                                 null
@@ -1243,11 +1266,12 @@ class Macrocalculator extends React.Component {
                             <Text style={styles.textStyle}>Date Of Birth</Text>
                         </View>
                         <View style={styles.ageInputContainer}>
-                            <DatePicker
+                        <DatePicker
                                 style={{ width: 200 }}
                                 date={dob} //initial date from state
                                 mode="date" //The enum of date, datetime and time
                                 placeholder="select date"
+                                placeholderTextColor="#7e7e7e"
                                 format="DD-MM-YYYY"
                                 minDate="01-01-1950"
                                 maxDate={date}
@@ -1258,10 +1282,13 @@ class Macrocalculator extends React.Component {
                                         width: 0,
                                         height: 0,
                                     },
-                                    backgroundColor: 'white',
-                                    opacity: 0.3
+                                    
+                                        backgroundColor:'white',
+                                        //opacity:0.4
+                                        color:'black'
+                                
                                 }}
-                                onDateChange={(date) => { this.setState({ dob: date }) }}
+                                onDateChange={(e) => { this.setState({ dob: e }) }}
                             />
                         </View>
                         {dobValidation ?
@@ -1557,7 +1584,7 @@ class Macrocalculator extends React.Component {
                         <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={carbohydrates + ' g Carbohyderates'} />
                         <TextInput placeholder={"e.g 107 g\Protein"} style={styles.inputCaloriesStyleThree} value={proteins + ' g Proteins'} />
                         <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={fatMass + ' g Fat'} />
-                        
+
                     </View>
                     <View style={styles.lastParaContainer}>
                         <Text style={styles.lastParaStyle}>

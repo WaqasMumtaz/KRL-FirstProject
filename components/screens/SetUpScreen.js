@@ -35,60 +35,11 @@ class Setupscreen extends React.Component {
             currentWeightUnitValidation: false,
             goalWeightUnitValidation: false,
             goalStepsValidation: false,
-            maleClickedTextStyle: false,
-            femaleClickedTextStyle: false,
-            maintainClicked: false,
-            fitnessResult: '',
-            lose: false,
-            gain: false,
-            maintain: false,
-            fitnessValidation: false,
             isLoading: false,
-            clickedMaintainTextStyle: false
         }
     }
 
-    fitnessFun(result) {
-        if (result == 'lose') {
-            this.setState({
-                lose: true,
-                gain: false,
-                maintain: false,
-                maleClickedTextStyle: true,
-                femaleClickedTextStyle: false,
-                clickedMaintainTextStyle: false,
-                maintainClicked: false,
-                fitnessResult: 'lose weight'
-            })
-        }
-        else if (result == 'gain') {
-            this.setState({
-                lose: false,
-                gain: true,
-                maintain: false,
-                fitnessResult: 'gain weight',
-                maleClickedTextStyle: false,
-                femaleClickedTextStyle: true,
-                clickedMaintainTextStyle: false,
-                maintainClicked: false
-            })
-        }
-        else if (result == 'maintain') {
-            this.setState({
-                lose: false,
-                gain: false,
-                maintain: true,
-                fitnessResult: 'maintain weight',
-                maintainClicked: true,
-                maleClickedTextStyle: false,
-                femaleClickedTextStyle: false,
-                clickedMaintainTextStyle: true,
-
-
-            })
-        }
-    }
-
+    
 
     decrementVal(value) {
         const { height, heightInch, currentWeight, goalWeight } = this.state;
@@ -201,16 +152,6 @@ class Setupscreen extends React.Component {
         else {
             this.setState({
                 currentWeightValidation: false
-            })
-        }
-        if (fitnessResult == '') {
-            this.setState({
-                fitnessValidation: true
-            })
-        }
-        else {
-            this.setState({
-                fitnessValidation: false
             })
         }
         if (goalSteps == '') {
@@ -493,31 +434,7 @@ class Setupscreen extends React.Component {
                                 :
                                 null}
                         </View>
-                        <Text style={styles.genderTextStyle}>Select fitness goal</Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
-                            <TouchableOpacity style={lose ? styles.clickedMale : styles.maleTouchableOpacity} onPress={this.fitnessFun.bind(this, 'lose')}>
-                                <Text style={maleClickedTextStyle ? styles.maleClickedTextStyle : styles.maleTextStyle}>
-                                    Lose Weight
-                            </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={gain ? styles.clickedFemale : styles.femaleContainer} onPress={this.fitnessFun.bind(this, 'gain')}>
-                                <Text style={femaleClickedTextStyle ? styles.femaleClickedTextStyle : styles.maleTextStyle}>
-                                    Gain Weight</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={maintain ? styles.maintainClicked : styles.maintainContainer} onPress={this.fitnessFun.bind(this, 'maintain')}>
-                                <Text style={clickedMaintainTextStyle ? styles.clickedMaintainTextStyle : styles.maintainTextStyle}>
-                                    Maintain Weight</Text>
-                            </TouchableOpacity>
-                        </View>
-                        {fitnessValidation ?
-                            <View style={{ flexDirection: 'row', marginVertical: 10, }}>
-                                <Text style={styles.validationInstruction}>
-                                    Please select fitness goal
-                                    </Text>
-                            </View>
-                            :
-                            null
-                        }
+                        
                         <View style={styles.goalStepsContainer}>
                             <Text style={styles.goalStepsText}>Select Goal Steps</Text>
                             </View>

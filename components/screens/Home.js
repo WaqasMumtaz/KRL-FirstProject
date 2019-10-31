@@ -5,6 +5,7 @@ import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
 // import firebase from 'react-native-firebase';
+import HandleBack from '../BackHandler/BackHandler';
 
 const { height } = Dimensions.get('window');
 let userId = {};
@@ -13,6 +14,7 @@ class Homescreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      homeScreen:false,
       todayData: '',
       yestertdayData: '',
       pedometerData: '',
@@ -28,14 +30,6 @@ class Homescreen extends React.Component {
     }
   }
 
-
-  componentWillUnmount() {
-    // Remove the event listener
-    this.focusListener.remove();
-    BackHandler.removeEventListener('hardwareBackPress',);
-    // Remove the event listener
-    this.focusListener.remove();
-  }
 
   componentWillMount() {
     this.getTodayOrYesterdayExcersice()
@@ -56,7 +50,8 @@ class Homescreen extends React.Component {
         //console.log(dataFromLocalStorage ,'value')
 
         this.setState({
-          userId: dataFromLocalStorage._id
+          userId: dataFromLocalStorage._id,
+          homeScreen:true
         })
       }
     });
@@ -133,7 +128,6 @@ class Homescreen extends React.Component {
           this.setState({
             userCurrentWeight: userData[i].currentWeight,
             goalSteps:userData[i].goalSteps,
-            //fitnessGoal:userData[i].fitnessGoal
           })
         }
       })
@@ -220,14 +214,16 @@ class Homescreen extends React.Component {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', (res) => {
       //console.log('back screens >>', res)
-      if(res.state.routeName === 'Homescreen'){
-        BackHandler.addEventListener('hardwareBackPress',this.handleBackButton);
-      }
       this.getUserData();
       this.getTodayOrYesterdayExcersice();
       //this.getBmiData();
     });
   }
+  // componentDidMount(){
+
+  //        BackHandler.addEventListener('hardwareBackPress',this.handleBackButton);
+
+  // }
 
   handleBackButton = async () => {
    // console.log('pressed back button')
@@ -244,6 +240,13 @@ class Homescreen extends React.Component {
 
   }
 
+  onBack = () => {
+    if (this.state.homeScreen) {
+      return true;
+    }
+    return false;
+  };
+
 
 
   render() {
@@ -251,6 +254,7 @@ class Homescreen extends React.Component {
     const { navigate } = this.props.navigation;
     //console.log('current weight >>',userCurrentWeight)
     return (
+      <HandleBack onBack={this.onBack}>
       <View style={styles.container}>
         <View style={styles.headingContainer}>
           <Text style={styles.textStyleOne}>GetFit</Text>
@@ -333,6 +337,7 @@ class Homescreen extends React.Component {
           </View>
         </ScrollView>
       </View>
+      </HandleBack>  
     );
   }
 }
