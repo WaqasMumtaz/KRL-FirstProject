@@ -39,6 +39,7 @@ import PackagesScreen from '../screens/Packages';
 // import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
 //import ChartScreen from '../BarChart/BarChart';
+import ChatInbox from '../screens/chatInbox';
 
 
 const MainNavigator = createStackNavigator({
@@ -46,6 +47,14 @@ const MainNavigator = createStackNavigator({
   // Linechart: { screen: Linechart },  
   //StepCountScreen:{screen:StepCountScreen},
   //PackagesScreen:{screen:PackagesScreen},
+  // Chatscreen: {
+  //   screen: ChatInbox,
+  //   navigationOptions: {
+  //     headerStyle: {
+  //       elevation: 0,
+  //     }
+  //   }
+  // },
   Login: { screen: Login },
   Signup: { screen: Signup },
   Setupscreen1: { screen: Setupscreen1 },
@@ -87,11 +96,11 @@ const MainNavigator = createStackNavigator({
   // Homescreen: { screen: Homescreen },
 
 
-  Homescreen:{
-    screen:Homescreen
+  Homescreen: {
+    screen: Homescreen
   },
-  ChatBox:{
-    screen:Chatscreen,
+  ChatBox: {
+    screen: Chatscreen,
     navigationOptions: {
       headerStyle: {
         elevation: 0,
@@ -206,8 +215,8 @@ const MainNavigator = createStackNavigator({
       }
     }
   },
-  PackagesScreen:{
-    screen:PackagesScreen,
+  PackagesScreen: {
+    screen: PackagesScreen,
     navigationOptions: {
       headerStyle: {
         elevation: 0,

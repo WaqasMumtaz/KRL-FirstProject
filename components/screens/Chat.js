@@ -107,19 +107,60 @@ class Chatscreen extends React.Component {
     let month = new Date().getMonth() + 1;
     const year = new Date().getFullYear();
     const hours = new Date().getHours();
-    const min = new Date().getMinutes();
+    let min = new Date().getMinutes();
     const sec = new Date().getSeconds();
+    let time;
     if (month == 1 || month == 2 || month == 3 || month == 4 || month == 5 || month == 6 || month == 7 || month == 8 || month == 9) {
       month = `0${month}`
     }
     if (date == 1 || date == 2 || date == 3 || date == 4 || date == 5 || date == 6 || date == 7 || date == 8 || date == 9) {
       date = `0${date}`
     }
+    if (min == 0 || min == 1 || min == 2 || min == 3 || min == 4 || min == 5 || min == 6 || min == 7 || min == 8 || min == 9) {
+      min = `0${min}`
+    }
+    if (hours == 12 || hours == 13 || hours == 14 || hours == 15 || hours == 16 || hours == 17 || hours == 18 || hours == 19 || hours == 20 || hours == 21 ||
+      hours == 22 || hours == 23) {
+      if (hours == 12) {
+        time = `12:${min} PM`;
+      } else if (hours == 13) {
+        time = `1:${min} PM`;
+      } else if (hours == 14) {
+        time = `2:${min} PM`;
+      } else if (hours == 15) {
+        time = `3:${min} PM`;
+      } else if (hours == 16) {
+        time = `4:${min} PM`;
+      } else if (hours == 17) {
+        time = `5:${min} PM`;
+      } else if (hours == 18) {
+        time = `6:${min} PM`;
+      } else if (hours == 19) {
+        time = `7:${min} PM`;
+      } else if (hours == 20) {
+        time = `8:${min} PM`;
+      } else if (hours == 21) {
+        time = `9:${min} PM`;
+      } else if (hours == 22) {
+        time = `10:${min} PM`;
+      } else if (hours == 23) {
+        time = `11:${min} PM`;
+      }
+    }
+    else {
+      if (hours == "00") {
+        time = `12:${min} AM`;
+      }
+      else {
+        time = `${hours}:${min} AM`;
+      }
+    }
+    console.log(time, 'time with am or pm')
     let yesterdayDate = Number(date) - 1;
     this.setState({
       todayDate: month + '-' + date + '-' + year,
       yesterdayDate: month + '-' + yesterdayDate.toString() + '-' + year,
-      time: hours + ':' + min + ':' + sec
+      time: time
     })
 
     this.createNotificationListeners();
@@ -172,7 +213,7 @@ class Chatscreen extends React.Component {
   uplaodDataOnFirebase = (userMessage, type) => {
     const { senderData } = this.props.navigation.state.params;
 
-    const {todayDate, time, deviceToken, userToken } = this.state;
+    const { todayDate, time, deviceToken, userToken } = this.state;
 
     //const { todayDate, time } = this.state;
 
@@ -206,18 +247,18 @@ class Chatscreen extends React.Component {
             },
           };
           fetch('https://fcm.googleapis.com/fcm/send', {
-                  'method': 'POST',
-                  'headers': {
-                    'Authorization': 'key=' + key,
-                    'Content-Type': 'application/json'
-                  },
-                  'body': JSON.stringify(body)
-                }).then(function (response) {
-                  console.log(response);
-                }).catch(function (error) {
-                  console.error(error);
-                });      
-          
+            'method': 'POST',
+            'headers': {
+              'Authorization': 'key=' + key,
+              'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify(body)
+          }).then(function (response) {
+            console.log(response);
+          }).catch(function (error) {
+            console.error(error);
+          });
+
           db.ref(`chatRoom/`).push(mgs);
         }
         else if (data.assignTrainny != undefined && data.tainnyId != undefined) {
@@ -240,18 +281,18 @@ class Chatscreen extends React.Component {
             },
           };
           fetch('https://fcm.googleapis.com/fcm/send', {
-                  'method': 'POST',
-                  'headers': {
-                    'Authorization': 'key=' + key,
-                    'Content-Type': 'application/json'
-                  },
-                  'body': JSON.stringify(body)
-                }).then(function (response) {
-                  console.log(response);
-                }).catch(function (error) {
-                  console.error(error);
-                });      
-          
+            'method': 'POST',
+            'headers': {
+              'Authorization': 'key=' + key,
+              'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify(body)
+          }).then(function (response) {
+            console.log(response);
+          }).catch(function (error) {
+            console.error(error);
+          });
+
           db.ref(`chatRoom/`).push(mgs);
         }
       }
@@ -608,59 +649,59 @@ class Chatscreen extends React.Component {
     }
   }
 
-//Push Notification Methods here 
+  //Push Notification Methods here 
 
-createNotificationListeners = async () => {
-  console.log('Create Notification Listeners run ')
-  /*
-  * Triggered when a particular notification has been received in foreground
-  * */
-  // this.notificationListener = firebasePushNotification.notifications().onNotification((notification) => {
-  //   const { title, body } = notification;
-  //   this.showAlert(title, body);
-  // });
-
-  /*
-* If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
-* */
-  this.notificationOpenedListener = firebasePushNotification.notifications().onNotificationOpened((notificationOpen) => {
-    const { title, body } = notificationOpen.notification;
-    this.showAlert(title, body);
-  });
-
-
-  /*
-    * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+  createNotificationListeners = async () => {
+    console.log('Create Notification Listeners run ')
+    /*
+    * Triggered when a particular notification has been received in foreground
     * */
-  const notificationOpen = await firebasePushNotification.notifications().getInitialNotification();
-  if (notificationOpen) {
-    const { title, body } = notificationOpen.notification;
-    this.showAlert(title, body);
+    // this.notificationListener = firebasePushNotification.notifications().onNotification((notification) => {
+    //   const { title, body } = notification;
+    //   this.showAlert(title, body);
+    // });
+
+    /*
+  * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
+  * */
+    this.notificationOpenedListener = firebasePushNotification.notifications().onNotificationOpened((notificationOpen) => {
+      const { title, body } = notificationOpen.notification;
+      this.showAlert(title, body);
+    });
+
+
+    /*
+      * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+      * */
+    const notificationOpen = await firebasePushNotification.notifications().getInitialNotification();
+    if (notificationOpen) {
+      const { title, body } = notificationOpen.notification;
+      this.showAlert(title, body);
+    }
+
+
+    /*
+     * Triggered for data only payload in foreground
+     * */
+    this.messageListener = firebasePushNotification.messaging().onMessage((message) => {
+      //process data message
+      console.log(JSON.stringify(message));
+    });
+
+
+
+
   }
 
-
-  /*
-   * Triggered for data only payload in foreground
-   * */
-  this.messageListener = firebasePushNotification.messaging().onMessage((message) => {
-    //process data message
-    console.log(JSON.stringify(message));
-  });
-
-  
-
-
-}
-
-showAlert(title, body) {
-  Alert.alert(
-    title, body,
-    [
-      { text: 'OK', onPress: () => console.log('OK Pressed') },
-    ],
-    { cancelable: false },
-  );
-}
+  showAlert(title, body) {
+    Alert.alert(
+      title, body,
+      [
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ],
+      { cancelable: false },
+    );
+  }
 
 
   render() {
@@ -1140,7 +1181,7 @@ showAlert(title, body) {
                   coverScreen={true}
                   animationInTiming={800}
                   animationOutTiming={500}
-                  onBackdropPress={()=>this.setState({isVisibleModal:false})}
+                  onBackdropPress={() => this.setState({ isVisibleModal: false })}
                 >
                   <View style={styles.cardContainer}>
                     {/* <View style={styles.dateWithCancelIcon}>
@@ -1225,19 +1266,19 @@ showAlert(title, body) {
             </View>
             {textMessage == '' ? <View style={styles.sentBtnDisableStyle}>
 
-               <TouchableOpacity disabled={true}>
+              <TouchableOpacity disabled={true}>
                 <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
               </TouchableOpacity>
+            </View>
+              :
+              <View style={styles.sentBtnContainer}>
+                <TouchableOpacity onPress={this.sendMessage}>
+                  <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
+                </TouchableOpacity>
               </View>
-            : 
-           <View style={styles.sentBtnContainer}>
-            <TouchableOpacity onPress={this.sendMessage}>
-                <Image source={require('../icons/send-btn.png')} style={styles.sendIconStyle} />
-              </TouchableOpacity> 
-           </View>  
             }
 
-              {/* {micIcon && <TouchableOpacity onPress={this.toggelMic}>
+            {/* {micIcon && <TouchableOpacity onPress={this.toggelMic}>
                 <Image source={require('../icons/mic.png')} style={styles.micIconStyle} />
               </TouchableOpacity>}
             </View>}
