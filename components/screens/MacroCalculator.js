@@ -1267,7 +1267,7 @@ class Macrocalculator extends React.Component {
                         </View>
                         <View style={styles.ageInputContainer}>
                         <DatePicker
-                                style={{ width: 200 }}
+                                style={{ width: 190 }}
                                 date={dob} //initial date from state
                                 mode="date" //The enum of date, datetime and time
                                 placeholder="select date"
@@ -1283,12 +1283,12 @@ class Macrocalculator extends React.Component {
                                         height: 0,
                                     },
                                     
-                                        backgroundColor:'white',
-                                        //opacity:0.4
-                                        color:'black'
-                                
+                                    dateInput: {
+                                        backgroundColor:'#FFFFFF'
+                                      }
                                 }}
-                                onDateChange={(e) => { this.setState({ dob: e }) }}
+                                onDateChange={(date) => { this.setState({ dob: date }) }}
+                            
                             />
                         </View>
                         {dobValidation ?
