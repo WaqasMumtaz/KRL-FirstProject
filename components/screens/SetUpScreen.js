@@ -528,6 +528,7 @@ class Setupscreen extends React.Component {
                             }}
                                 placeholder="Goal steps..."
                                 placeholderTextColor="#7e7e7e"
+                                keyboardType='numeric'
                                 value={goalSteps}
                                 style={styles.inputTexts} />
                         </View>

@@ -205,7 +205,7 @@ class Chatscreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.notificationListener();
+    //this.notificationListener();
     this.notificationOpenedListener();
   }
 
@@ -662,13 +662,13 @@ class Chatscreen extends React.Component {
     // });
 
     /*
-  * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
-  * */
-    this.notificationOpenedListener = firebasePushNotification.notifications().onNotificationOpened((notificationOpen) => {
-      const { title, body } = notificationOpen.notification;
-      this.showAlert(title, body);
-    });
-
+* If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
+* */
+  this.notificationOpenedListener = firebasePushNotification.notifications().onNotificationOpened((notificationOpen) => {
+    const { title, body } = notificationOpen.notification;
+    // this.showAlert(title, body);
+    console.log('title >>', title , 'body >>', body)
+  });
 
     /*
       * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
@@ -676,9 +676,10 @@ class Chatscreen extends React.Component {
     const notificationOpen = await firebasePushNotification.notifications().getInitialNotification();
     if (notificationOpen) {
       const { title, body } = notificationOpen.notification;
-      this.showAlert(title, body);
-    }
+    console.log('title >>', title , 'body >>', body)
 
+      // this.showAlert(title, body);
+    }
 
     /*
      * Triggered for data only payload in foreground
@@ -687,21 +688,27 @@ class Chatscreen extends React.Component {
       //process data message
       console.log(JSON.stringify(message));
     });
-
-
-
-
   }
 
-  showAlert(title, body) {
-    Alert.alert(
-      title, body,
-      [
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
-      ],
-      { cancelable: false },
-    );
-  }
+  // showAlert(title, body) {
+  //   Alert.alert(
+  //     title, body,
+  //     [
+  //       { text: 'OK', onPress: () => console.log('OK Pressed') },
+  //     ],
+  //     { cancelable: false },
+  //   );
+  // }
+
+// showAlert(title, body) {
+//   Alert.alert(
+//     title, body,
+//     [
+//       { text: 'OK', onPress: () => console.log('OK Pressed') },
+//     ],
+//     { cancelable: false },
+//   );
+// }
 
 
   render() {
@@ -758,7 +765,7 @@ class Chatscreen extends React.Component {
               <Text key={key} style={styles.msgsTextStyle}>
                 {message.message}
               </Text>
-              <Text style={styles.timeText}>{message.time.slice(0, 5)}</Text>
+              <Text style={styles.timeText}>{message.time}</Text>
             </View>
             :
             message.senderId == userId && message.type == 'image' ?
@@ -953,7 +960,7 @@ class Chatscreen extends React.Component {
               <Text key={key} style={styles.replyMessagesStyle}>
                 {message.message}
               </Text>
-              <Text style={styles.timeTextReply}>{message.time.slice(0, 5)}</Text>
+              <Text style={styles.timeTextReply}>{message.time}</Text>
             </View>
             :
             message.senderId == opponentId && message.type == 'image' ?

@@ -75,13 +75,14 @@ class Macrocalculator extends React.Component {
             desiredUnitValidation: false,
             fitnessGoal: '',
             showDesiredBtn: false,
-            fitnessObj: { normal: 300, mild: 500, extremeBtn: 700 }
+            fitnessObj: { normal: 300, mild: 500, extreme: 700 },
+            userAllData:[]
         }
     }
 
     componentWillMount() {
-        const { params } = this.props.navigation.state;
-        console.log('params data >>', params)
+        //const { params } = this.props.navigation.state;
+        //console.log('params data >>', params)
         let monthNo = new Date().getMonth();
         const date = new Date().getDate();
         const year = new Date().getFullYear();
@@ -89,10 +90,10 @@ class Macrocalculator extends React.Component {
         const min = new Date().getMinutes();
         const sec = new Date().getSeconds();
         if (monthNo == 1 || monthNo == 2 || monthNo == 3 || monthNo == 4 || monthNo == 5 || monthNo == 6 || monthNo == 7 || monthNo == 8 || monthNo == 9) {
-            month = `${monthNo + 1}`;
+            month = `0${monthNo}`;
         }
         else {
-            month = monthNo + 1;
+            month = monthNo;
         }
         AsyncStorage.getItem("currentUser").then(value => {
             if (value) {
@@ -104,23 +105,16 @@ class Macrocalculator extends React.Component {
                     currentYear: year,
                     currentDate: date,
                     currentMonth: month,
-                    fitnessGoal: params.fitnessGoal
+                    //fitnessGoal: params.fitnessGoal
                 }, () => {
-                    if (this.state.fitnessGoal == 'maintain weight') {
-                        this.setState({
-                            showDesiredBtn: false
-                        })
-                    }
-                    else {
-                        this.setState({
-                            showDesiredBtn: true
-                        })
-                    }
+                    this.fitnessResultDataGetting();
+                    console.log('fitness goal will mount >>', this.state.fitnessGoal)
+                    
                 })
             }
         });
         this.getMacro();
-
+        
     }
     getMacro = () => {
         const { navigation } = this.props;
@@ -272,9 +266,9 @@ class Macrocalculator extends React.Component {
                 const heightInchCentimeter = heightInch * 2.54;
                 const totalHeightCentimeter = Math.round(heightCentimeter + heightInchCentimeter);
                 const userWeight = Math.round(currentWeight * 0.454);
-                console.log('user weight >>', userWeight)
+                //console.log('user weight >>', userWeight)
                 let BMR = (10 * userWeight) + (6.25 * totalHeightCentimeter) - (5 * age) + 5;
-                console.log('calories >>', BMR)
+                //console.log('calories >>', BMR)
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
 
                     if (fitnessGoal == 'lose weight') {
@@ -282,7 +276,7 @@ class Macrocalculator extends React.Component {
                         // console.log('fitness result lose>>', caloriesResult);
                         let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
                         let addBMR = Math.round(finalBMR - fitnessObj[desiredUnitValue]);
-                        console.log('minus bmr >', addBMR)
+                        //console.log('minus bmr >', addBMR)
                         let fatCalries = finalBMR * 0.30;
                         let fat = fatCalries / 9
                         //calculate protein
@@ -321,7 +315,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
+                        //console.log(dataUser, 'dataUser')
 
 
                     }
@@ -368,9 +362,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
-
-
+                        //console.log(dataUser, 'dataUser')
 
                     }
                     else if (fitnessGoal == 'maintain weight') {
@@ -415,7 +407,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
+                        //console.log(dataUser, 'dataUser')
                     }
 
 
@@ -423,7 +415,7 @@ class Macrocalculator extends React.Component {
             }
         }
         else if (gender == 'male' || unitValue == '' || unitValue == 'metric') {
-            console.log('run condition')
+            //console.log('run condition')
             if (dob != '' && height != '' && currentWeight != '' &&
                 currentWeightUnit != '' && currentWeightUnit != '0' && activityLevel != '') {
                 // console.log('user weight >>', userWeight)
@@ -434,9 +426,9 @@ class Macrocalculator extends React.Component {
                         // let caloriesResult = Math.round(tdee - fitnessObj[desiredUnitValue]);
                         // console.log('fitness result lose>>', caloriesResult);
                         let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
-                        console.log('final bmr >',finalBMR)
+                        //console.log('final bmr >',finalBMR)
                         let addBMR = Math.round(finalBMR - fitnessObj[desiredUnitValue]);
-                        console.log('minus bmr >', addBMR)
+                        //console.log('minus bmr >', addBMR)
                         let fatCalries = addBMR * 0.30;
                         let fat = fatCalries / 9
                         //calculate protein
@@ -459,9 +451,9 @@ class Macrocalculator extends React.Component {
                         let fatVal = Math.round(fat.toString());
                         let proteinVal = Math.round(protein.toString());
                         let carbohydratesVal = Math.round(carbohydrate.toString());
-                        console.log('fat value >>', fatVal);
-                        console.log('protein value >>', proteinVal);
-                        console.log('carbohyderates >>', carbohydratesVal)
+                        // console.log('fat value >>', fatVal);
+                        // console.log('protein value >>', proteinVal);
+                        // console.log('carbohyderates >>', carbohydratesVal)
                         //set the state
                         this.setState({
                             calculteCalries: addBMR,
@@ -478,7 +470,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
+                        //console.log(dataUser, 'dataUser')
 
 
                     }
@@ -525,7 +517,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
+                        //console.log(dataUser, 'dataUser')
 
 
 
@@ -572,7 +564,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
+                        //console.log(dataUser, 'dataUser')
                     }
                 }
             }
@@ -591,21 +583,21 @@ class Macrocalculator extends React.Component {
                         // let caloriesResult = Math.round(tdee - fitnessObj[desiredUnitValue]);
                         // console.log('fitness result lose>>', caloriesResult);
                         let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
-                        console.log('final bmr >',finalBMR)
+                        //console.log('final bmr >',finalBMR)
                         let addBMR = Math.round(finalBMR - fitnessObj[desiredUnitValue]);
-                        console.log('minus bmr >', addBMR)
+                        //console.log('minus bmr >', addBMR)
                         let fatCalries = addBMR * 0.25;
                         let fat = fatCalries / 9;
-                        console.log('femail fat >>', fat);
+                        //console.log('femail fat >>', fat);
                         //calculate protein
                         let proteinCalries = addBMR * 0.25;
                         let protein = proteinCalries / 4;
-                        console.log('femail protein >>', protein)
+                        //console.log('femail protein >>', protein)
                         //calculate carbohydrate
                         // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
                         let carbohydratesCalries = addBMR * 0.50;
                         let carbohydrate = carbohydratesCalries / 4;
-                        console.log('femail carbohydrates >>', carbohydrate)
+                        //console.log('femail carbohydrates >>', carbohydrate)
                         //convert to string 
                         //let calries = Math.round(calculteCalries.toString());
                         //console.log('calries value >>>',calries)
@@ -619,9 +611,9 @@ class Macrocalculator extends React.Component {
                         let fatVal = Math.round(fat.toString());
                         let proteinVal = Math.round(protein.toString());
                         let carbohydratesVal = Math.round(carbohydrate.toString());
-                        console.log('fat value >>', fatVal);
-                        console.log('protein value >>', proteinVal);
-                        console.log('carbohyderates >>', carbohydratesVal)
+                        // console.log('fat value >>', fatVal);
+                        // console.log('protein value >>', proteinVal);
+                        // console.log('carbohyderates >>', carbohydratesVal)
                         //set the state
                         this.setState({
                             calculteCalries: addBMR,
@@ -638,7 +630,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
+                        //console.log(dataUser, 'dataUser')
 
 
                     }
@@ -685,7 +677,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
+                        //console.log(dataUser, 'dataUser')
 
 
 
@@ -733,7 +725,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
+                        //console.log(dataUser, 'dataUser')
                     }
                 }
                 
@@ -748,21 +740,21 @@ class Macrocalculator extends React.Component {
                         // let caloriesResult = Math.round(tdee - fitnessObj[desiredUnitValue]);
                         // console.log('fitness result lose>>', caloriesResult);
                         let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
-                        console.log('final bmr >',finalBMR)
+                        //console.log('final bmr >',finalBMR)
                         let addBMR = Math.round(finalBMR - fitnessObj[desiredUnitValue]);
-                        console.log('minus bmr >', addBMR)
+                        //console.log('minus bmr >', addBMR)
                         let fatCalries = addBMR * 0.25;
                         let fat = fatCalries / 9;
-                        console.log('femail fat >>', fat);
+                        //console.log('femail fat >>', fat);
                         //calculate protein
                         let proteinCalries = addBMR * 0.25;
                         let protein = proteinCalries / 4;
-                        console.log('femail protein >>', protein)
+                       // console.log('femail protein >>', protein)
                         //calculate carbohydrate
                         // let carbohydratesCalries = BMR - (fatCalries + proteinCalries);
                         let carbohydratesCalries = addBMR * 0.50;
                         let carbohydrate = carbohydratesCalries / 4;
-                        console.log('femail carbohydrates >>', carbohydrate)
+                        //console.log('femail carbohydrates >>', carbohydrate)
                         //convert to string 
                         //let calries = Math.round(calculteCalries.toString());
                         //console.log('calries value >>>',calries)
@@ -776,9 +768,9 @@ class Macrocalculator extends React.Component {
                         let fatVal = Math.round(fat.toString());
                         let proteinVal = Math.round(protein.toString());
                         let carbohydratesVal = Math.round(carbohydrate.toString());
-                        console.log('fat value >>', fatVal);
-                        console.log('protein value >>', proteinVal);
-                        console.log('carbohyderates >>', carbohydratesVal)
+                        // console.log('fat value >>', fatVal);
+                        // console.log('protein value >>', proteinVal);
+                        // console.log('carbohyderates >>', carbohydratesVal)
                         //set the state
                         this.setState({
                             calculteCalries: addBMR,
@@ -795,7 +787,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
+                        //console.log(dataUser, 'dataUser')
 
 
                     }
@@ -842,7 +834,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
+                        //console.log(dataUser, 'dataUser')
 
 
 
@@ -890,7 +882,7 @@ class Macrocalculator extends React.Component {
                         macroObj.proteins = proteinVal;
                         macroObj.carbohydrates = carbohydratesVal;
                         let dataUser = await HttpUtils.post('macrodata', macroObj)
-                        console.log(dataUser, 'dataUser')
+                       // console.log(dataUser, 'dataUser')
                     }
                 
                 }     
@@ -1064,6 +1056,40 @@ class Macrocalculator extends React.Component {
         }
     }
 
+    fitnessResultDataGetting= async ()=>{
+        let obj = {
+            userId: this.state.userId
+          }
+          console.log(obj)
+          let retrieveData = await HttpUtils.post('getgoal', obj);
+          console.log('retrieve data >>>', retrieveData)
+          if (retrieveData.code == 200) {
+            this.setState({
+              userAllData: retrieveData.content
+            }, () => {
+              //console.log(this.state.userAllData)
+              const userData = this.state.userAllData;
+              for (var i in userData) {
+                //console.log(userData[i].currentWeight)
+                this.setState({
+                  fitnessGoal:userData[i].fitnessGoal
+                },()=>{
+                    if (this.state.fitnessGoal == 'maintain weight') {
+                        this.setState({
+                            showDesiredBtn: false
+                        })
+                    }
+                    else {
+                        this.setState({
+                            showDesiredBtn: true
+                        })
+                    }
+                })
+              }
+            })
+          }
+    }
+
     componentWillUnmount() {
         // Remove the event listener
         this.focusListener.remove();
@@ -1118,7 +1144,7 @@ class Macrocalculator extends React.Component {
             fitnessGoal, showDesiredBtn
         } = this.state;
         //console.log('height centimeter >>>', Number(height))
-        console.log('current weight >', this.state.currentWeight)
+        console.log('fitness goal >', fitnessGoal)
         return (
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: HeightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
                 <View style={styles.mainContainer}>
@@ -1174,11 +1200,12 @@ class Macrocalculator extends React.Component {
                             </View>
 
                         }
+                        {
+                            showDesiredBtn ?
+                        <View>
                         <View style={{ marginTop: 8 }}>
                             <Text style={styles.unitPara}>What is your desired deficit</Text>
                         </View>
-                        {
-                            showDesiredBtn ?
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
                                     <TouchableOpacity
                                         onPress={this.getUnit.bind(this, 'normal')}
@@ -1199,11 +1226,12 @@ class Macrocalculator extends React.Component {
                                         <Text style={styles.maleTextStyle}>Exreme</Text>
                                     </TouchableOpacity>
                                 </View>
+                                </View>
                                 :
                                 null
                         }
                         {
-                            desiredUnitValidation ?
+                            desiredUnitValidation && showDesiredBtn ?
                                 <Text style={styles.validationInstruction}>
                                     Please choose your desired
                           </Text>

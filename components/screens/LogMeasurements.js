@@ -58,11 +58,11 @@ class LogMeasurementsScreen extends React.Component {
         const min = new Date().getMinutes();
         const sec = new Date().getSeconds();
         if (monthNo == 1 || monthNo == 2 || monthNo == 3 || monthNo == 4 || monthNo == 5 || monthNo == 6 || monthNo == 7 || monthNo == 8 || monthNo == 9) {
-            month = `0${monthNo + 1}`;
+            month = `0${monthNo}`;
         }
         else {
             month = monthNo;
-            console.log('month >>', month)
+            //console.log('month >>', month)
         }
         AsyncStorage.getItem("currentUser").then(value => {
             if (value) {
@@ -110,7 +110,7 @@ class LogMeasurementsScreen extends React.Component {
             thigh,
             year
         } = this.state;
-        console.log('Neck -->', neck, 'Shoulder -->', shoulder)
+        // console.log('Neck -->', neck, 'Shoulder -->', shoulder)
         let addWeight = {}
         // if (weight == '') {
         //     this.setState({
@@ -219,9 +219,9 @@ class LogMeasurementsScreen extends React.Component {
             this.setState({
                 isLoading: true
             })
-            console.log(addWeight, 'addWeight')
+            //console.log(addWeight, 'addWeight')
             let dataUser = await HttpUtils.post('weightLog', addWeight)
-            console.log(dataUser, 'dataUser')
+            //console.log(dataUser, 'dataUser')
             let userMsg = dataUser.msg;
             if (dataUser.code) {
                 this.setState({
@@ -258,7 +258,7 @@ class LogMeasurementsScreen extends React.Component {
             }
             else if (e != undefined) {
                 if (dataFilter.date == e) {
-                    console.log('condition true')
+                   // console.log('condition true')
                     dataArr = [...dataArr, dataFilter]
                     this.setState({
                         filterData: dataArr,
@@ -271,7 +271,7 @@ class LogMeasurementsScreen extends React.Component {
 
     getData = async () => {
         let dataUser = await HttpUtils.get('getweightlog')
-        console.log(dataUser, 'dataUser from log ')
+       // console.log(dataUser, 'dataUser from log ')
         await this.setState({
             data: dataUser.content
         })
@@ -292,7 +292,7 @@ class LogMeasurementsScreen extends React.Component {
             date
         } = this.state;
         // console.log('Neck -->>', neck , 'Shoulder-->>',shoulder)
-        console.log('date >>', date)
+        //console.log('date >>', date)
         return (
             <View style={styles.mainContainer}>
 
