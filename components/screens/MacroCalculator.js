@@ -76,16 +76,12 @@ class Macrocalculator extends React.Component {
             fitnessGoal: '',
             showDesiredBtn: true,
             fitnessObj: { normal: 300, mild: 500, extreme: 700 },
-<<<<<<< HEAD
-            userAllData: []
-=======
             userAllData: [],
             lose: false,
             gain: false,
             maintain: false,
             fitnessResult: '',
             fitnessValidation:false
->>>>>>> ecce7ccfd4c18a27d3bb5ec76ea0df2681855cb7
         }
     }
 
@@ -114,14 +110,12 @@ class Macrocalculator extends React.Component {
                     currentYear: year,
                     currentDate: date,
                     currentMonth: month,
-<<<<<<< HEAD
                     //fitnessGoal: params.fitnessGoal
                 }, () => {
                     this.fitnessResultDataGetting();
                     console.log('fitness goal will mount >>', this.state.fitnessGoal)
 
-=======
->>>>>>> ecce7ccfd4c18a27d3bb5ec76ea0df2681855cb7
+
                 })
             }
         });
@@ -1063,7 +1057,6 @@ class Macrocalculator extends React.Component {
         }
     }
 
-<<<<<<< HEAD
     fitnessResultDataGetting = async () => {
         let obj = {
             userId: this.state.userId
@@ -1098,9 +1091,7 @@ class Macrocalculator extends React.Component {
         }
     }
 
-=======
    
->>>>>>> ecce7ccfd4c18a27d3bb5ec76ea0df2681855cb7
     componentWillUnmount() {
         // Remove the event listener
         this.focusListener.remove();
