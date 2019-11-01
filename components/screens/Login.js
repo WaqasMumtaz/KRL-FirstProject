@@ -118,7 +118,7 @@ getTokenPermission=()=>{
       this.setState({
         isLoading: false
       })
-      navigate('BottomTabe')
+      navigate('BottomTabe',this.props.navigation.push('HomeScreen'))
     }
     else {
       this.setState({
