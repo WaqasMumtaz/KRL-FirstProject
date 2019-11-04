@@ -6,6 +6,7 @@ import Reportscreen from '../screens/Reports';
 import Homescreen from '../screens/Home';
 import Options from '../screens/Options';
 
+
 const activeHome = <Image source={require('../icons/home-active.png')} style={{ width: 26, height: 26 }} />
 const inactiveHome = <Image source={require('../icons/home-inactive.png')} style={{ width: 26, height: 26 }} />
 const activeChat = <Image source={require('../icons/chat-active.png')} style={{ width: 26, height: 26 }} />

@@ -146,8 +146,8 @@ const styles = StyleSheet.create({
         //margin: 10,
         //borderRadius: 10,
         width: '100%',
-        height: '80%',
-        resizeMode: 'contain'
+        height: '100%',
+        // resizeMode: 'contain'
     },
     dateWithCancelIcon:{
         flexDirection:'row',
@@ -156,8 +156,9 @@ const styles = StyleSheet.create({
     },
     cardContainer:{
         width:'100%',
-        // borderColor:'black',
-        // borderWidth:3
+        height:'50%',
+        // borderWidth:4,
+        // borderColor:'black'
     },
     mgsTouctable: {
         marginBottom: 20,

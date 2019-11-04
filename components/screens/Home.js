@@ -6,6 +6,7 @@ import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
 // import firebase from 'react-native-firebase';
 import HandleBack from '../BackHandler/BackHandler';
+//import { StackActions, NavigationActions } from 'react-navigation';
 
 const { height } = Dimensions.get('window');
 let userId = {};
@@ -25,14 +26,16 @@ class Homescreen extends React.Component {
       excerciseArry: [],
       bmiData: [],
       currentUserBMI: '',
-      fitnessGoal:''
+      fitnessGoal:'',
+      stepsPercentage:''
 
     }
+    //console.log('constructor method run here')
   }
 
 
   componentWillMount() {
-    // console.log('end')
+    // console.log('end')    
     this.getTodayOrYesterdayExcersice()
     // this.getTodayOrYesterdayExcersice();
     this.getDaysData();
@@ -52,7 +55,7 @@ class Homescreen extends React.Component {
 
         this.setState({
           userId: dataFromLocalStorage._id,
-          homeScreen:true
+          
         })
       }
     });
@@ -60,6 +63,17 @@ class Homescreen extends React.Component {
 
     
   }
+
+  // componentDidMount(){
+  //   console.log('did mount')
+  //   const resetAction = StackActions;
+  //   console.log('stacks >>',resetAction)
+    //.reset({
+  //     index: 1,
+  //     //actions: [NavigationActions.navigate({ routeName: 'Homescreen' })],
+  // });
+  //console.log('dispatch >>',this.props.navigation);
+  //}
 
   getTodayOrYesterdayExcersice = async () => {
     //console.log('getTodayOrYesterdayExcersice')
@@ -112,6 +126,10 @@ class Homescreen extends React.Component {
   }
 
   getUserData = async () => {
+    this.setState({
+      homeScreen:true
+    })
+    
     let obj = {
       userId: this.state.userId
     }
@@ -150,20 +168,30 @@ class Homescreen extends React.Component {
       })
     }
 
-
   }
 
-  backScreen=()=>{
-    //console.log('press back button');
+  // backScreen=()=>{
+  //   //console.log('press back button');
 
-  }
+  // }
 
   pedometerFun = (data) => {
     //console.log('data from child component >>>', data)
     if (data != undefined) {
+      const multiplySteps = data / Number(this.state.goalSteps);
+      //console.log('multiply >>',multiplySteps);
+      const divideSteps = multiplySteps*100;
+      //console.log('divided >>',divideSteps )
+      const roundedValue = Math.round(divideSteps);
+      //console.log('percentage steps >>',roundedValue)
       this.setState({
-        pedometerData: data.pedometerData,
-      })
+          stepsPercentage:roundedValue,
+          pedometerData: data
+      })    
+
+      // this.setState({
+      //   pedometerData: data,
+      // })
     }
 
   }
@@ -214,9 +242,12 @@ class Homescreen extends React.Component {
   getDaysData = () => {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', (res) => {
-      //console.log('back screens >>', res)
+      console.log('back screens >>', res)
       this.getUserData();
       this.getTodayOrYesterdayExcersice();
+      this.setState({
+        homeScreen:true
+      })
       //this.getBmiData();
     });
   }
@@ -242,7 +273,7 @@ class Homescreen extends React.Component {
   }
 
   onBack = () => {
-    if (this.state.homeScreen) {
+    if (this.state.homeScreen == true) {
       return true;
     }
     return false;
@@ -251,9 +282,9 @@ class Homescreen extends React.Component {
 
 
   render() {
-    const { todayData, yestertdayData, pedometerData, goalSteps, userCurrentWeight, currentUserBMI,fitnessGoal } = this.state;
+    const { todayData, yestertdayData, pedometerData, goalSteps, userCurrentWeight, currentUserBMI,fitnessGoal,stepsPercentage } = this.state;
     const { navigate } = this.props.navigation;
-    //console.log('current weight >>',userCurrentWeight)
+    //console.log('current steps home >>',stepsPercentage)
     return (
       <HandleBack onBack={this.onBack}>
       <View style={styles.container}>
@@ -301,7 +332,7 @@ class Homescreen extends React.Component {
                     size={65}
                     width={10}
                     color={'#FF6200'}
-                    progress={pedometerData == '' || pedometerData == undefined ? 0 : pedometerData}
+                    progress={stepsPercentage == '' ? 0 : stepsPercentage}
                     backgroundColor={'gray'}
                     animateFromValue={0}
                     fullColor={'#FF6200'}

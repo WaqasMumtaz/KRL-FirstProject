@@ -139,7 +139,8 @@ export default class StepCountScreen extends React.Component {
                 })
             }
         })
-        this.matchTime()
+        this.matchTime();
+        this._startPedometer();
     }
 
     checkFunc(data) {
@@ -269,8 +270,9 @@ export default class StepCountScreen extends React.Component {
 
 
     _startPedometer() {
+        const { params } = this.props.navigation.state;
         console.log('Pedometer Function')
-        this.setState({ tapLoad: false })
+        this.setState({ tapLoad: false,})
         //this.matchTime()
         this.updateTime()
         //console.log('all data of user >>>',this.state.allDataUser)
@@ -283,6 +285,7 @@ export default class StepCountScreen extends React.Component {
         SensorManager.startStepCounter(1000);
         DeviceEventEmitter.addListener('StepCounter', (data) => {
             console.log('sensor manager data -->>', data)
+            params.pedometerFun(data.steps)
             this.setState({ pedometerData: data.steps }, () => {
                 if (data.steps > Number(1)) {
                     //this.countStepTime()
@@ -317,8 +320,8 @@ export default class StepCountScreen extends React.Component {
                     if (data.steps == Number(this.state.goalSteps)) {
                         console.log('steps match ')
                         // this.setState({
-                        //     showButton: true
-                        // })
+                            //     showButton: true
+                            // })
                     }
                 }
 
@@ -345,6 +348,10 @@ export default class StepCountScreen extends React.Component {
                     //alert(`${res.message}`)
                     GoogleFit.observeSteps((res) => {
                         console.log('google fit steps', res)
+                        // const dataObj = {
+                        //     pedometerData: res,
+                        // }
+                        params.pedometerFun(res.steps)
                         this.setState({ pedometerData: res.steps }, () => {
                             if (res.steps > Number(1)) {
                                 //this.countStepTime()
@@ -922,11 +929,7 @@ export default class StepCountScreen extends React.Component {
         //console.log(currentUserId)
         //console.log('pedometer data in number form ', Number(pedometerData))
         //console.log('goal steps database >>',stepGoalCountData)
-        const { params } = this.props.navigation.state;
-        const dataObj = {
-            pedometerData: stepsPercentage,
-        }
-        params.pedometerFun(dataObj)
+       
         //console.log(params)
         //console.log('curnt time and data >>>', curTime, date)
         // console.log('login user weight >>>', userCurrentWeight)
