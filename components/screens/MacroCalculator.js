@@ -110,6 +110,12 @@ class Macrocalculator extends React.Component {
                     currentYear: year,
                     currentDate: date,
                     currentMonth: month,
+                    //fitnessGoal: params.fitnessGoal
+                }, () => {
+                    this.fitnessResultDataGetting();
+                    console.log('fitness goal will mount >>', this.state.fitnessGoal)
+
+
                 })
             }
         });
@@ -1051,6 +1057,40 @@ class Macrocalculator extends React.Component {
         }
     }
 
+    fitnessResultDataGetting = async () => {
+        let obj = {
+            userId: this.state.userId
+        }
+        console.log(obj)
+        let retrieveData = await HttpUtils.post('getgoal', obj);
+        console.log('retrieve data >>>', retrieveData)
+        if (retrieveData.code == 200) {
+            this.setState({
+                userAllData: retrieveData.content
+            }, () => {
+                //console.log(this.state.userAllData)
+                const userData = this.state.userAllData;
+                for (var i in userData) {
+                    //console.log(userData[i].currentWeight)
+                    this.setState({
+                        fitnessGoal: userData[i].fitnessGoal
+                    }, () => {
+                        if (this.state.fitnessGoal == 'maintain weight') {
+                            this.setState({
+                                showDesiredBtn: false
+                            })
+                        }
+                        else {
+                            this.setState({
+                                showDesiredBtn: true
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    }
+
    
     componentWillUnmount() {
         // Remove the event listener
@@ -1095,6 +1135,9 @@ class Macrocalculator extends React.Component {
                 extremeBtn: true
             })
         }
+    }
+    datepick(date) {
+        console.log(date, 'date')
     }
 
     fitnessFun(result) {
@@ -1279,8 +1322,8 @@ class Macrocalculator extends React.Component {
                                 cancelBtnText="Cancel"
                                 customStyles={{
                                     dateIcon: {
-                                        width: 0,
-                                        height: 0,
+                                        width: 1,
+                                        height: 1,
                                     },
                                     dateInput: {
                                         backgroundColor:'white',
@@ -1288,7 +1331,10 @@ class Macrocalculator extends React.Component {
                                         color:'black'
                                     }
                                 }}
-                                onDateChange={(date) => { this.setState({ dob: date }) }}
+                                onDateChange={
+                                    // (date) => this.datepick.bind(this, date)
+                                    (date) => { this.setState({ dob: date }) }
+                                }
                             />
                         </View>
                         {dobValidation ?

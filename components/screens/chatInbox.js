@@ -33,42 +33,6 @@ class ChatInbox extends React.Component {
         }
         this.checkTrainy()
     }
-    // async componentWillMount() {
-    //     let userData;
-    //     let data = [];
-    //     await AsyncStorage.getItem('opponentProfile').then((value) => {
-    //         userData = JSON.parse(value);
-    //     })
-    //     db.ref('users').on("value", snapshot => {
-    //         let dataFirebase = snapshot.val();
-    //         for (var j in dataFirebase) {
-    //             data.push(dataFirebase[j])
-    //         }
-
-    //     });
-    //     // if (userData) {
-    //     //     for (var i in userData) {
-    //     //         // console.log('opponent data chatbox >>>', userData)
-    //     //         // console.log(data[j], 'data[j]')
-    //     //         if (userData[i].userId == data[j]._id) {
-    //     //             userData[i].status = data[j].status
-    //     //             userNamesData.push(userData[i])
-    //     //         }
-    //     //         this.setState({
-    //     //             messageUser: userNamesData
-    //     //         })
-
-
-    //     //     }
-    //     //     // userNamesData = []
-    //     // }
-    //     console.log(userNamesData, 'userNamesData')
-    //     console.log(data, 'data')
-    //     // console.log(data, 'data')
-
-
-    // }
-
     async componentWillMount() {
         let userData;
         let userNamesData = []
@@ -87,7 +51,7 @@ class ChatInbox extends React.Component {
                         //     userNamesData = []
                         // }
                         userNamesData.push(userData[i])
-                        console.log(userNamesData, 'data')
+                        // console.log(userNamesData, 'data')
                     }
                 }
             }
@@ -108,11 +72,8 @@ class ChatInbox extends React.Component {
     checkTrainy = () => {
         const { navigation } = this.props;
         this.focusListener = navigation.addListener('didFocus', () => {
-            // console.log('trainer api get >',a)
-            // let a = await HttpUtils.get('gettrainner');
             AsyncStorage.getItem('currentUser').then((value) => {
                 let userData = JSON.parse(value)
-                // console.log('user data >>>', userData)
                 let userName = userData.name + ' ' + userData.lastName;
                 if (userData.assignTrainner != undefined) {
                     this.setState({

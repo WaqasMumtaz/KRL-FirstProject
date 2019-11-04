@@ -73,14 +73,11 @@ getTokenPermission=()=>{
 
    //3
     getToken = async ()=>{
-      console.log('get token function')
     let fcmToken = await AsyncStorage.getItem('fcmToken');
-    //console.log('fcmToken >>', fcmToken);
     if (!fcmToken) {
         fcmToken = await firebasePushNotification.messaging().getToken();
         if (fcmToken) {
             // user has a device token
-            console.log('User Device token >>>', fcmToken)
             this.setState({
               deviceToken:fcmToken
             })

@@ -39,7 +39,7 @@ import PackagesScreen from '../screens/Packages';
 // import Resetpassword from '../screens/ResetPasswrd';
 // import Dashboard from '../screens/Dashboard';
 //import ChartScreen from '../BarChart/BarChart';
-import ChatInbox from '../screens/chatInbox';
+// import ChatInbox from '../screens/chatInbox';
 
 
 const MainNavigator = createStackNavigator({
