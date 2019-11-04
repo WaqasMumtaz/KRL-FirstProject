@@ -791,6 +791,7 @@ class Chatscreen extends React.Component {
                       <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                     </View>
                   </TouchableOpacity>
+
                 </View>
                 :
                 message.senderId == userId && message.type == 'txt' ?
@@ -805,6 +806,7 @@ class Chatscreen extends React.Component {
                         </View>
                         <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                       </View>
+                      
                     </TouchableOpacity>
                   </View>
                   :

@@ -151,11 +151,10 @@ getTokenPermission=()=>{
       try {
         let dataUser = await HttpUtilsFile.post('signin', userObj)
         console.log('Login api >>>', dataUser);
-        //const assignTrainerName = dataUser.assignTrainner;
         let getUserCode = dataUser.code;
         let userWrong = dataUser.Match;
         let userMsg = dataUser.msg;
-        if (getUserCode) {
+        if (getUserCode == 200) {
           let userDataForOnlineOff = dataUser;
           userDataForOnlineOff.status = 'Online';
           userDataForOnlineOff.deviceToken = this.state.deviceToken;

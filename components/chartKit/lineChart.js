@@ -2,18 +2,8 @@ import React from 'react';
 import {
     Text,
     View,
-    ScrollView,
-    Image,
-    Dimensions,
-    TextInput,
-    TouchableOpacity,
-    Picker
 } from 'react-native';
-const { screenWidth } = Dimensions.get('window').width;
-import ChartScreen from '../BarChart/BarChart';
-import { BarChart, Grid, YAxis, XAxis } from 'react-native-svg-charts'
-import * as scale from 'd3-scale';
-
+import { BarChart } from 'react-native-svg-charts'
 
 
 class Linechart extends React.Component {
@@ -21,9 +11,7 @@ class Linechart extends React.Component {
         super(props)
 
     }
-
-
-
+    
     render() {
         const data = [0,0,55,0,0]
         return (

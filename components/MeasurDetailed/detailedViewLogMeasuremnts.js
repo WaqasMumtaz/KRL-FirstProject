@@ -6,7 +6,6 @@ import styles from './styling/styling'
 export default class LogMeasurementsDetailedView extends React.Component {
     constructor(props) {
         super(props)
-
     }
     render() {
         return (
@@ -32,7 +31,6 @@ export default class LogMeasurementsDetailedView extends React.Component {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Weight</Text>
                         <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Day</Text>
-
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={styles.borderLineStyle}></Text>
@@ -59,7 +57,6 @@ export default class LogMeasurementsDetailedView extends React.Component {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Bicep</Text>
                         <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Neck</Text>
-
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={styles.borderLineStyle}></Text>
@@ -74,11 +71,8 @@ export default class LogMeasurementsDetailedView extends React.Component {
                         <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Shoulder</Text>
                         <Text style={{ color: '#a6a6a6', fontSize: 10 }}>Waist</Text>
                     </View>
-
-
                 </View>
             </View>
-
         )
     }
 }

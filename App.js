@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, NetInfo } from 'react-native';
 import AppContainer from './components/navigation/StackNavigation';
 import SplashScreen from 'react-native-splash-screen'
 import * as firebase from 'firebase';
@@ -17,24 +17,69 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     SplashScreen.hide();
   }
-
   componentWillMount() {
+    // NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+    NetInfo.isConnected.fetch().then(isConnected => {
+      if (isConnected == true) {
+        AsyncStorage.getItem("currentUser").then(value => {
+          if (value) {
+            let userData = JSON.parse(value);
+            userData.status = 'Online';
+            console.log(userData, 'userData')
+            db.ref(`users/${userData._id}`).update(userData);
+          }
+        })
+      } else {
+        AsyncStorage.getItem("currentUser").then(value => {
+          if (value) {
+            let userData = JSON.parse(value);
+            userData.status = 'Offline';
+            console.log(userData, 'userData')
+            db.ref(`users/${userData._id}`).update(userData);
+          }
+        })
+      }
+    });
+  }
+
+
+  componentWillUnmount() {
+    // NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         let userData = JSON.parse(value);
-        userData.status = 'Online'
-        // console.log(userData, 'userData');
-        // console.log("start")
+        userData.status = 'Offline';
+        console.log(userData, 'userData')
         db.ref(`users/${userData._id}`).update(userData);
       }
     })
   }
 
-  componentWillUnmount() {
-    console.log("end")
-  }
+  // handleConnectivityChange = isConnected => {
+  //   // if (isConnected == true) {
+  //   //   AsyncStorage.getItem("currentUser").then(value => {
+  //   //     if (value) {
+  //   //       let userData = JSON.parse(value);
+  //   //       userData.status = 'Online';
+  //   //       console.log(userData, 'userData')
+  //   //       db.ref(`users/${userData._id}`).update(userData);
+  //   //     }
+  //   //   })
+  //   // } else
+  //   if (!isConnected) {
+  //     AsyncStorage.getItem("currentUser").then(value => {
+  //       if (value) {
+  //         let userData = JSON.parse(value);
+  //         userData.status = 'Offline';
+  //         console.log(userData, 'userData')
+  //         db.ref(`users/${userData._id}`).update(userData);
+  //       }
+  //     })
+  //   }
+  // };
 
   render() {
     return <AppContainer />
