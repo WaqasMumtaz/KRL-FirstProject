@@ -6,6 +6,7 @@ import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
 // import firebase from 'react-native-firebase';
 import HandleBack from '../BackHandler/BackHandler';
+//import { StackActions, NavigationActions } from 'react-navigation';
 
 const { height } = Dimensions.get('window');
 let userId = {};
@@ -29,10 +30,12 @@ class Homescreen extends React.Component {
       stepsPercentage:''
 
     }
+    //console.log('constructor method run here')
   }
 
 
   componentWillMount() {
+    
     this.getTodayOrYesterdayExcersice()
     // this.getTodayOrYesterdayExcersice();
     this.getDaysData();
@@ -60,6 +63,17 @@ class Homescreen extends React.Component {
 
     
   }
+
+  // componentDidMount(){
+  //   console.log('did mount')
+  //   const resetAction = StackActions;
+  //   console.log('stacks >>',resetAction)
+    //.reset({
+  //     index: 1,
+  //     //actions: [NavigationActions.navigate({ routeName: 'Homescreen' })],
+  // });
+  //console.log('dispatch >>',this.props.navigation);
+  //}
 
   getTodayOrYesterdayExcersice = async () => {
     //console.log('getTodayOrYesterdayExcersice')
@@ -112,6 +126,10 @@ class Homescreen extends React.Component {
   }
 
   getUserData = async () => {
+    this.setState({
+      homeScreen:true
+    })
+    
     let obj = {
       userId: this.state.userId
     }
@@ -150,13 +168,12 @@ class Homescreen extends React.Component {
       })
     }
 
-
   }
 
-  backScreen=()=>{
-    //console.log('press back button');
+  // backScreen=()=>{
+  //   //console.log('press back button');
 
-  }
+  // }
 
   pedometerFun = (data) => {
     //console.log('data from child component >>>', data)
@@ -225,7 +242,7 @@ class Homescreen extends React.Component {
   getDaysData = () => {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', (res) => {
-      //console.log('back screens >>', res)
+      console.log('back screens >>', res)
       this.getUserData();
       this.getTodayOrYesterdayExcersice();
       this.setState({
@@ -256,7 +273,7 @@ class Homescreen extends React.Component {
   }
 
   onBack = () => {
-    if (this.state.homeScreen) {
+    if (this.state.homeScreen == true) {
       return true;
     }
     return false;
