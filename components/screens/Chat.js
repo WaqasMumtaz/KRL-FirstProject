@@ -664,11 +664,11 @@ class Chatscreen extends React.Component {
     /*
 * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
 * */
-  this.notificationOpenedListener = firebasePushNotification.notifications().onNotificationOpened((notificationOpen) => {
-    const { title, body } = notificationOpen.notification;
-    // this.showAlert(title, body);
-    console.log('title >>', title , 'body >>', body)
-  });
+    this.notificationOpenedListener = firebasePushNotification.notifications().onNotificationOpened((notificationOpen) => {
+      const { title, body } = notificationOpen.notification;
+      // this.showAlert(title, body);
+      console.log('title >>', title, 'body >>', body)
+    });
 
     /*
       * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
@@ -676,7 +676,7 @@ class Chatscreen extends React.Component {
     const notificationOpen = await firebasePushNotification.notifications().getInitialNotification();
     if (notificationOpen) {
       const { title, body } = notificationOpen.notification;
-    console.log('title >>', title , 'body >>', body)
+      console.log('title >>', title, 'body >>', body)
 
       // this.showAlert(title, body);
     }
@@ -700,15 +700,15 @@ class Chatscreen extends React.Component {
   //   );
   // }
 
-// showAlert(title, body) {
-//   Alert.alert(
-//     title, body,
-//     [
-//       { text: 'OK', onPress: () => console.log('OK Pressed') },
-//     ],
-//     { cancelable: false },
-//   );
-// }
+  // showAlert(title, body) {
+  //   Alert.alert(
+  //     title, body,
+  //     [
+  //       { text: 'OK', onPress: () => console.log('OK Pressed') },
+  //     ],
+  //     { cancelable: false },
+  //   );
+  // }
 
 
   render() {
@@ -718,6 +718,7 @@ class Chatscreen extends React.Component {
     let month;
     let year;
     let showDate;
+    console.log('image path >>', imagePath)
 
     const chatMessages = this.state.chatMessages.map((message, key) => {
       if (dateNum == undefined) {
@@ -776,6 +777,7 @@ class Chatscreen extends React.Component {
                 <Image key={key} style={styles.mgsImges} source={{
                   uri: `${message.message.secure_url}`
                 }} />
+                <Text style={styles.timeText}>{message.time}</Text>
               </TouchableOpacity>
               :
               message.senderId == userId && message.type == 'pdf' ?
@@ -784,13 +786,18 @@ class Chatscreen extends React.Component {
                     style={styles.mgsTouctable}
                     onPress={this.fileOpner.bind(this, message.message.secure_url, message.type)}
                   >
-                    <View style={styles.fileTagStyle}>
-                      <View style={styles.extensionFile}>
-                        <Image style={styles.thumbnailImageStyle} source={require('../icons/pdf.png')} />
+                    <View>
+                      <View style={styles.fileTagStyle}>
+                        <View style={styles.extensionFile}>
+                          <Image style={styles.thumbnailImageStyle} source={require('../icons/pdf.png')} />
+                        </View>
+                        <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                       </View>
-                      <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
+                      {/* <View style={{ backgroundColor: 'black' }}> */}
+                      {/* </View> */}
                     </View>
                   </TouchableOpacity>
+                        <Text style={styles.timeText}>{message.time}</Text>
                 </View>
                 :
                 message.senderId == userId && message.type == 'txt' ?
@@ -806,6 +813,7 @@ class Chatscreen extends React.Component {
                         <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                       </View>
                     </TouchableOpacity>
+                    <Text style={styles.timeTextReply}>{message.time}</Text>
                   </View>
                   :
                   message.senderId == userId && message.type == 'docx' ?
@@ -820,6 +828,7 @@ class Chatscreen extends React.Component {
                           </View>
                           <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                         </View>
+                        <Text style={styles.timeText}>{message.time}</Text>
                       </TouchableOpacity>
                     </View>
                     :
@@ -835,6 +844,7 @@ class Chatscreen extends React.Component {
                             </View>
                             <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                           </View>
+                          <Text style={styles.timeText}>{message.time}</Text>
                         </TouchableOpacity>
                       </View>
                       :
@@ -850,6 +860,7 @@ class Chatscreen extends React.Component {
                               </View>
                               <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                             </View>
+                            <Text style={styles.timeText}>{message.time}</Text>
                           </TouchableOpacity>
                         </View>
                         :
@@ -867,6 +878,7 @@ class Chatscreen extends React.Component {
                                 <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                               </View>
                             </TouchableOpacity>
+                            <Text style={styles.timeText}>{message.time}</Text>
                           </View>
                           :
                           message.senderId == userId &&
@@ -881,6 +893,7 @@ class Chatscreen extends React.Component {
                                 ref={r => this.player = r}
                                 style={styles.backgroundVideo}
                               />
+                              <Text style={styles.timeText}>{message.time}</Text>
                             </View>
                             :
                             message.senderId == userId && message.type == 'weeklyReport'
@@ -950,6 +963,7 @@ class Chatscreen extends React.Component {
                                     }
                                   </View>
                                 </View>
+                                <Text style={styles.timeText}>{message.time}</Text>
                               </View>
                               : null
           }
@@ -971,6 +985,7 @@ class Chatscreen extends React.Component {
                 <Image key={key} style={styles.replymgsImges} source={{
                   uri: `${message.message.secure_url}`
                 }} />
+                <Text style={styles.timeTextReply}>{message.time}</Text>
               </TouchableOpacity>
               :
               message.senderId == opponentId && message.type == 'pdf' ?
@@ -985,6 +1000,7 @@ class Chatscreen extends React.Component {
                       </View>
                       <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                     </View>
+                    <Text style={styles.timeTextReply}>{message.time}</Text>
                   </TouchableOpacity>
                 </View>
                 :
@@ -1001,6 +1017,7 @@ class Chatscreen extends React.Component {
                         <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                       </View>
                     </TouchableOpacity>
+                    <Text style={styles.timeTextReply}>{message.time}</Text>
                   </View>
                   :
                   message.senderId == opponentId && message.type == 'docx' ?
@@ -1015,6 +1032,7 @@ class Chatscreen extends React.Component {
                           </View>
                           <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                         </View>
+                        <Text style={styles.timeTextReply}>{message.time}</Text>
                       </TouchableOpacity>
                     </View>
                     :
@@ -1030,6 +1048,7 @@ class Chatscreen extends React.Component {
                             </View>
                             <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                           </View>
+                          <Text style={styles.timeTextReply}>{message.time}</Text>
                         </TouchableOpacity>
                       </View>
                       :
@@ -1045,6 +1064,7 @@ class Chatscreen extends React.Component {
                               </View>
                               <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                             </View>
+                            <Text style={styles.timeTextReply}>{message.time}</Text>
                           </TouchableOpacity>
                         </View>
                         :
@@ -1062,6 +1082,7 @@ class Chatscreen extends React.Component {
                                 <Text style={styles.replythumbnailNameTextStyle}>{message.message.original_filename}</Text>
                               </View>
                             </TouchableOpacity>
+                            <Text style={styles.timeTextReply}>{message.time}</Text>
                           </View>
                           :
                           message.senderId == opponentId &&
@@ -1077,6 +1098,7 @@ class Chatscreen extends React.Component {
                                 style={styles.backgroundVideo}
                               // fullScreen={true}
                               />
+                              <Text style={styles.timeTextReply}>{message.time}</Text>
                             </View>
                             :
                             message.senderId == opponentId && message.type == 'weeklyReport'
@@ -1146,6 +1168,7 @@ class Chatscreen extends React.Component {
                                     }
                                   </View>
                                 </View>
+                                <Text style={styles.timeTextReply}>{message.time}</Text>
                               </View >
                               : null
           }
@@ -1182,8 +1205,8 @@ class Chatscreen extends React.Component {
               {expand ?
                 <Modal
                   isVisible={this.state.isVisibleModal}
-                  animationIn='zoomIn'
-                  backdropOpacity={0.8}
+                  animationIn='bounce'
+                  backdropOpacity={0.7}
                   backdropColor='white'
                   coverScreen={true}
                   animationInTiming={800}
@@ -1196,12 +1219,19 @@ class Chatscreen extends React.Component {
                         <Image source={require('../icons/cancel.png')} />
                       </TouchableOpacity>
                     </View> */}
-                    <Image style={styles.expandImges} source={{
-                      uri: `${imagePath}`
-                    }} />
+                    <View style={{width:'100%'}}>
+                    <Image
+                      style={styles.expandImges} source={{
+                        uri: `${imagePath}`
+                      }}
+                      resizeMode='contain'
+                    />
+                    </View>
+                   
                   </View>
                 </Modal>
-                : null}
+                : null
+                }
               {shareFiles && <View style={styles.sendFielsTypeContainer}>
                 <Text style={styles.shareTextStyle}>Share...</Text>
                 <View style={styles.filesContainer}>
