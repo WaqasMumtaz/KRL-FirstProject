@@ -25,13 +25,11 @@ class ChartScreen extends React.Component {
                             fillColor: '#FF6200',
                             data: [
                                 { value: 0 },
-                                // { value: 0 },
                             ]
                         },
                         //last week graph
                         {
                             fillColor: '#a6a6a6',
-
                             data: [{
                                 value: lastWeek,
                                 // value: 0

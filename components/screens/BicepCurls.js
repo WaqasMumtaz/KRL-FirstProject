@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import BriskScreen from './BriskScreen';
 
 const Bicepcurls = (props) => {
@@ -8,12 +8,11 @@ const Bicepcurls = (props) => {
             <BriskScreen title="Bicep curls"
                 increamentVal={props.increamentVal}
                 decrementVal={props.decrementVal}
-                //  label="Reps" value="reps" 
-                backFunc={props.backFunc} 
+                backFunc={props.backFunc}
                 setAmount={props.setAmount}
                 amount={props.amount}
                 updateUnit={props.updateUnit}
-                unit={props.unit}/>
+                unit={props.unit} />
         </View>
     )
 

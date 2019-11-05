@@ -797,7 +797,7 @@ class Chatscreen extends React.Component {
                       {/* </View> */}
                     </View>
                   </TouchableOpacity>
-                        <Text style={styles.timeText}>{message.time}</Text>
+                  <Text style={styles.timeText}>{message.time}</Text>
                 </View>
                 :
                 message.senderId == userId && message.type == 'txt' ?
@@ -812,6 +812,7 @@ class Chatscreen extends React.Component {
                         </View>
                         <Text style={styles.thumbnailNameTextStyle}>{message.message.original_filename}</Text>
                       </View>
+
                     </TouchableOpacity>
                     <Text style={styles.timeTextReply}>{message.time}</Text>
                   </View>
@@ -1219,19 +1220,19 @@ class Chatscreen extends React.Component {
                         <Image source={require('../icons/cancel.png')} />
                       </TouchableOpacity>
                     </View> */}
-                    <View style={{width:'100%'}}>
-                    <Image
-                      style={styles.expandImges} source={{
-                        uri: `${imagePath}`
-                      }}
-                      resizeMode='contain'
-                    />
+                    <View style={{ width: '100%' }}>
+                      <Image
+                        style={styles.expandImges} source={{
+                          uri: `${imagePath}`
+                        }}
+                        resizeMode='contain'
+                      />
                     </View>
-                   
+
                   </View>
                 </Modal>
                 : null
-                }
+              }
               {shareFiles && <View style={styles.sendFielsTypeContainer}>
                 <Text style={styles.shareTextStyle}>Share...</Text>
                 <View style={styles.filesContainer}>

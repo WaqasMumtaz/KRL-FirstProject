@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import { Image } from 'react-native';
 import ChatInbox from '../screens/chatInbox';
-// import Chatscreen from '../screens/Chat';
 import Reportscreen from '../screens/Reports';
 import Homescreen from '../screens/Home';
 import Options from '../screens/Options';
@@ -41,24 +39,14 @@ const MainNavigator = createBottomTabNavigator({
     screen: ChatInbox,
     navigationOptions: {
       tabBarIcon: (navigation) => {
-        //console.log('tabBarIcon navigation >>>',navigation.state)
-        // console.log('chatscreen rout >>>', navigation.focused)
         const forFocused = navigation.focused;
         const renderChat = forFocused ? activeChat : inactiveChat;
-        //const routScreen = forFocused ? getData() : null;
         return (
           renderChat
-          
         )
       }
-
-     
-
     },
-    
-    
   },
-
   Reportscreen: {
     screen: Reportscreen,
     navigationOptions: {
@@ -110,6 +98,5 @@ const MainNavigator = createBottomTabNavigator({
 );
 
 const BottomTabe = createAppContainer(MainNavigator);
-
 export default BottomTabe;
 

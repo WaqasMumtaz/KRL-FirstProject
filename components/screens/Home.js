@@ -35,7 +35,7 @@ class Homescreen extends React.Component {
 
 
   componentWillMount() {
-    
+    // console.log('end')    
     this.getTodayOrYesterdayExcersice()
     // this.getTodayOrYesterdayExcersice();
     this.getDaysData();

@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import styles from '../Styling/LoadSpinner';
 import {
   ActivityIndicator,
-  StyleSheet,
-  Text,
   View,
 } from 'react-native'
 

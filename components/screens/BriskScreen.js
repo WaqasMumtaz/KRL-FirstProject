@@ -1,7 +1,6 @@
 import React from 'react';
-import { Text, View, ScrollView, Button, Image, Dimensions, TextInput, TouchableOpacity, Picker } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, Picker } from 'react-native';
 import styles from '../Styling/BriskStyle';
-const { height } = Dimensions.get('window').height;
 
 class BriskScreen extends React.Component {
     constructor(props) {
@@ -11,20 +10,15 @@ class BriskScreen extends React.Component {
             user: '',
             brisk: false
         }
-
     }
+    
     changeScreen = () => {
         this.setState({ brisk: true })
     }
 
     render() {
-        const { brisk } = this.state;
-        //console.log(this.props.amount, 'props amount')
         return (
             <View style={styles.mainContainer}>
-                {/* <ScrollView style={{ flex: 1, backgroundColor: 'white',
-                
-                 height: height }} contentContainerStyle={{ flexGrow: 1 }}> */}
                 <View style={styles.cardStyle}>
                     <View style={styles.cardChildOne}>
                         <Text style={styles.heading}>{this.props.title}</Text>
@@ -39,32 +33,22 @@ class BriskScreen extends React.Component {
                 </View>
                 <View style={styles.cardChildTwo}>
                     <View style={styles.cardChildTwoSiblingContainer}>
-                        {/* <TouchableOpacity style={styles.minusImgContainer} onPress={this.props.decrementVal}>
-                            <Image source={require('../icons/minus-gray.png')} style={styles.imgsIcon} />
-                        </TouchableOpacity> */}
                         <TextInput placeholder="0" placeholderTextColor="black"
-                        
-                            onChangeText={(text)=>this.props.setAmount(text)} 
+                            onChangeText={(text) => this.props.setAmount(text)}
                             value={this.props.value}
                             key={this.props.indexNumber}
                             maxLength={3} keyboardType="numeric" style={styles.inputFieldStyle} />
-                        {/* <TouchableOpacity style={styles.plusImgStyle} onPress={this.props.increamentVal}>
-                            <Image source={require('../icons/plus-gray.png')} style={styles.imgsIcon} />
-                        </TouchableOpacity> */}
                     </View>
                     <View style={styles.pickerContainer}>
-                        <Picker selectedValue={this.props.unit} onValueChange={(text)=>this.props.updateUnit(text)} style={styles.pickerStyle} mode="dropdown">
+                        <Picker selectedValue={this.props.unit} onValueChange={(text) => this.props.updateUnit(text)} style={styles.pickerStyle} mode="dropdown">
                             <Picker.Item label='Select an option...' value='0' />
                             <Picker.Item label="Hours" value="hours" />
                             <Picker.Item label="Minutes" value="minutes" />
-                            {/* <Picker.Item label = {this.props.label} value = {this.props.value} /> */}
                             <Picker.Item label="Seconds" value="seconds" />
                         </Picker>
                     </View>
                 </View>
-                {/* </ScrollView> */}
             </View>
-
         )
     }
 }

@@ -1,11 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-//import console = require('console');
-// const screenWidth=Dimensions.get('window').width;
-// const screenHeight=Dimensions.get('window').height;
 
 const CaloriesSetupBtn = (props) => {
-  //console.log(props)
   return (
     <View style={styles.mainContainer}>
       <View style={{ flex: 1 }}></View>
