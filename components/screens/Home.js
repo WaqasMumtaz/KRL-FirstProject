@@ -64,17 +64,7 @@ class Homescreen extends React.Component {
     
   }
 
-  // componentDidMount(){
-  //   console.log('did mount')
-  //   const resetAction = StackActions;
-  //   console.log('stacks >>',resetAction)
-    //.reset({
-  //     index: 1,
-  //     //actions: [NavigationActions.navigate({ routeName: 'Homescreen' })],
-  // });
-  //console.log('dispatch >>',this.props.navigation);
-  //}
-
+  
   getTodayOrYesterdayExcersice = async () => {
     //console.log('getTodayOrYesterdayExcersice')
     const { userId } = this.state;
@@ -207,6 +197,7 @@ class Homescreen extends React.Component {
           'pedometerFun': (data) => this.pedometerFun(data),
           currentWeight: this.state.userCurrentWeight,
           goalSteps:this.state.goalSteps,
+          pedometerData:this.state.pedometerData
         })
       }
       else {
@@ -242,7 +233,7 @@ class Homescreen extends React.Component {
   getDaysData = () => {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', (res) => {
-      console.log('back screens >>', res)
+      BackHandler.addEventListener("hardwareBackPress", this.onBack)
       this.getUserData();
       this.getTodayOrYesterdayExcersice();
       this.setState({
@@ -251,11 +242,18 @@ class Homescreen extends React.Component {
       //this.getBmiData();
     });
   }
-  // componentDidMount(){
+  componentDidMount(){
+         BackHandler.addEventListener('hardwareBackPress',this.handleBackButton);
+         this.willBlur = this.props.navigation.addListener("willBlur", payload =>
+         BackHandler.removeEventListener("hardwareBackPress", this.onBack),
+       );
+  }
+  componentWillUnmount() {
+    this.didFocus.remove();
+    this.willBlur.remove();
+    BackHandler.removeEventListener("hardwareBackPress", this.onBack);
+  }
 
-  //        BackHandler.addEventListener('hardwareBackPress',this.handleBackButton);
-
-  // }
 
   handleBackButton = async () => {
    // console.log('pressed back button')
@@ -286,7 +284,7 @@ class Homescreen extends React.Component {
     const { navigate } = this.props.navigation;
     //console.log('current steps home >>',stepsPercentage)
     return (
-      <HandleBack onBack={this.onBack}>
+      // <HandleBack onBack={this.onBack}>
       <View style={styles.container}>
         <View style={styles.headingContainer}>
           <Text style={styles.textStyleOne}>GetFit</Text>
@@ -369,7 +367,7 @@ class Homescreen extends React.Component {
           </View>
         </ScrollView>
       </View>
-      </HandleBack>  
+      // </HandleBack>  
     );
   }
 }

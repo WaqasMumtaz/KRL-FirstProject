@@ -127,7 +127,7 @@ export default class StepCountScreen extends React.Component {
         console.log('params data >>>', paramsData)
         this.setState({
             goalSteps: paramsData.goalSteps,
-
+            pedometerData:paramsData.pedometerData
         })
         //this.googleFitAuthFun()
         AsyncStorage.getItem('pedometerData').then((value) => {
@@ -347,7 +347,7 @@ export default class StepCountScreen extends React.Component {
                     console.log('authorized >>>', res)
                     //alert(`${res.message}`)
                     GoogleFit.observeSteps((res) => {
-                        console.log('google fit steps', res)
+                       // console.log('google fit steps', res)
                         // const dataObj = {
                         //     pedometerData: res,
                         // }
