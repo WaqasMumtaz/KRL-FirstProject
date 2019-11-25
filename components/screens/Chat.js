@@ -106,16 +106,32 @@ class Chatscreen extends React.Component {
     let date = new Date().getDate();
     let month = new Date().getMonth() + 1;
     const year = new Date().getFullYear();
-    const hours = new Date().getHours();
-    let min = new Date().getMinutes();
-    const sec = new Date().getSeconds();
-    let time;
     if (month == 1 || month == 2 || month == 3 || month == 4 || month == 5 || month == 6 || month == 7 || month == 8 || month == 9) {
       month = `0${month}`
     }
     if (date == 1 || date == 2 || date == 3 || date == 4 || date == 5 || date == 6 || date == 7 || date == 8 || date == 9) {
       date = `0${date}`
     }
+   
+    // console.log(time, 'time with am or pm')
+    let yesterdayDate = Number(date) - 1;
+    this.setState({
+      todayDate: month + '-' + date + '-' + year,
+      yesterdayDate: month + '-' + yesterdayDate.toString() + '-' + year,
+     
+    })
+
+    this.createNotificationListeners();
+  }
+  componentWillMount() {
+    const { senderData } = this.props.navigation.state.params;
+    let chatArrayTemp = [];
+    let dataFromLocalStorage;
+    const hours = new Date().getHours();
+    let min = new Date().getMinutes();
+    const sec = new Date().getSeconds();
+    let time;
+
     if (min == 0 || min == 1 || min == 2 || min == 3 || min == 4 || min == 5 || min == 6 || min == 7 || min == 8 || min == 9) {
       min = `0${min}`
     }
@@ -155,28 +171,9 @@ class Chatscreen extends React.Component {
         time = `${hours}:${min} AM`;
       }
     }
-    console.log(time, 'time with am or pm')
-    let yesterdayDate = Number(date) - 1;
-    this.setState({
-      todayDate: month + '-' + date + '-' + year,
-      yesterdayDate: month + '-' + yesterdayDate.toString() + '-' + year,
-      time: time
-    })
-
-    this.createNotificationListeners();
-  }
-  componentWillMount() {
-    const { senderData } = this.props.navigation.state.params;
-    let chatArrayTemp = [];
-    let dataFromLocalStorage;
     AsyncStorage.getItem("currentUser").then(value => {
       if (value) {
         dataFromLocalStorage = JSON.parse(value);
-        console.log('localStorage Data >>', dataFromLocalStorage);
-        // this.setState({
-        //   deviceToken: dataFromLocalStorage.deviceToken,
-        //   userToken: dataFromLocalStorage.token
-        // })
         db.ref('chatRoom').on("value", snapshot => {
           let data = snapshot.val()
           for (let i in data) {
@@ -196,6 +193,7 @@ class Chatscreen extends React.Component {
             opponentId: senderData.userId,
             opponnetAvatarSource: senderData.image,
             name: senderData.name,
+            time: time
           })
           chatArrayTemp = [];
         });
