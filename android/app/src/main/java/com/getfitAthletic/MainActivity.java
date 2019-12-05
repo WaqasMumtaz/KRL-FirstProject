@@ -1,4 +1,4 @@
-package com.getfit;
+package com.getfitAthletic;
 
 import android.os.Bundle; // required for onCreate parameter
 import org.devio.rn.splashscreen.SplashScreen; // required for react-native-splash-screen

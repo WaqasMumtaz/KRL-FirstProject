@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:253025208867:android:c23eb728a71799b279ff96",
         "android_client_info": {
-          "package_name": "com.getfit"
+          "package_name": "com.getfitAthletic"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "253025208867-lgea0ttt59f4aulqe70nhnkgoo9n1j5l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.getfit",
+            "package_name": "com.getfitAthletic",
             "certificate_hash": "42f8d0fe2e0a123fdccb12fb78cc874e9c3e3a66"
           }
         },

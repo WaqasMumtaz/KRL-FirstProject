@@ -1,4 +1,4 @@
-package com.getfit;
+package com.getfitAthletic;
 
 import android.app.Application;
 
