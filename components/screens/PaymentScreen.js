@@ -17,6 +17,7 @@ const { height } = Dimensions.get('window');
 
 class Payment extends React.Component {
   static navigationOptions = (navigation) => {
+    
     stripe.setOptions({
       publishableKey: navigation.navigation.state.params.stripeKey
     });
