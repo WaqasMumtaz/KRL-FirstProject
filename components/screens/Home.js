@@ -125,7 +125,7 @@ class Homescreen extends React.Component {
     }
     //console.log(obj)
     let retrieveData = await HttpUtils.post('getgoal', obj);
-   // console.log('retrieve data >>>', retrieveData)
+    console.log('retrieve data >>>', retrieveData)
     if (retrieveData.code == 200) {
       this.setState({
         userAllData: retrieveData.content

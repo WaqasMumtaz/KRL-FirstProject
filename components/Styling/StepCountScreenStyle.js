@@ -83,6 +83,11 @@ const styles =StyleSheet.create({
         paddingLeft: 16,
         
       },
+      toggelSwitch:{
+          flexDirection:'row',
+          justifyContent:'space-between',
+          marginTop:12
+      }
     
 })
 

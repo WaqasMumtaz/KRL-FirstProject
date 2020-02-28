@@ -19,6 +19,9 @@ import { thisExpression } from '@babel/types';
 import OverlayLoader from '../Loader/OverlaySpinner';
 //import { TextInput } from 'react-native-gesture-handler';
 const rnHealthKit = NativeModules.RNHealthKit;
+import ToggleSwitch from 'toggle-switch-react-native';
+// Import the react-native-pedometer module
+var Pedometer = require('react-native-pedometer');
 
 const { heightDimension } = Dimensions.get('window');
 const date = new Date().getDate();
@@ -70,13 +73,114 @@ export default class StepCountScreen extends React.Component {
             sixteenTo23: false,
             oneToEight: false,
             tapLoad: true,
-            stepsPercentage:''
+            stepsPercentage: '',
+            onOffToggle: false
 
         }
 
     }
 
+    toggelSwitchFun = (isOn) => {
+        // console.log('function value >>', isOn);
+        this.setState({ onOffToggle: isOn },
+            () => {
+                if (this.state.onOffToggle != false) {
+                    //Use Google Fit Api 
 
+
+                    if (Platform.OS === 'android') {
+                        const options = {
+                            scopes: [
+                                Scopes.FITNESS_ACTIVITY_READ_WRITE,
+                                Scopes.FITNESS_BODY_READ_WRITE,
+                            ],
+                        }
+                        GoogleFit.authorize(options)
+                            .then((res) => {
+                                console.log('authorized >>>', res)
+                                //alert(`${res.message}`)
+                                GoogleFit.observeSteps((res) => {
+                                    // console.log('google fit steps', res)
+                                    // const dataObj = {
+                                    //     pedometerData: res,
+                                    // }
+                                    params.pedometerFun(res.steps)
+                                    this.setState({ pedometerData: res.steps }, () => {
+                                        if (res.steps > Number(1)) {
+                                            //this.countStepTime()
+                                            if (this.state.eightToSixteen == true) {
+                                                this.setState({
+                                                    firstValue: res.steps
+                                                })
+                                            }
+                                            else if (this.state.sixteenTo23 == true) {
+                                                this.setState({
+                                                    secondValue: res.steps
+                                                })
+                                            }
+                                            else if (this.state.oneToEight == true) {
+                                                this.setState({
+                                                    thirdValue: res.steps
+                                                })
+
+                                            }
+                                            const multiplySteps = res.steps / Number(this.state.goalSteps);
+                                            //console.log('multiply >>',multiplySteps);
+                                            const divideSteps = multiplySteps * 100;
+                                            //console.log('divided >>',divideSteps )
+                                            const roundedValue = Math.round(divideSteps);
+                                            //console.log('percentage steps >>',roundedValue)
+                                            this.setState({
+                                                stepsPercentage: roundedValue
+                                            })
+
+
+                                        }
+                                        if (res.steps != 0 && Number(this.state.goalSteps) != 0) {
+                                            if (res.steps == Number(this.state.goalSteps)) {
+                                                console.log('steps match ')
+
+                                            }
+                                        }
+
+
+                                    })
+                                })
+
+                            })
+
+                            .catch((err) => {
+                                console.log('err >>> ', err)
+                            })
+
+
+                    }
+                    else if (Platform.OS === 'ios') {
+                        const options = {
+                            scopes: [
+                                Scopes.FITNESS_ACTIVITY_READ_WRITE,
+                                Scopes.FITNESS_BODY_READ_WRITE,
+                            ],
+                        }
+
+                        rnHealthKit.authorize(options)
+                            .then((res) => {
+                                console.log('authorized >>>', res)
+                                rnHealthKit.observeSteps((res) => {
+                                    // console.log(res)
+                                    this.setState({ pedometerData: res.steps })
+                                })
+
+
+                            })
+                            .catch((err) => {
+                                console.log('err >>> ', err)
+                            })
+
+                    }
+                }
+            })
+    }
 
     // googleFitAuthFun=()=>{
     //     const options = {
@@ -127,7 +231,7 @@ export default class StepCountScreen extends React.Component {
         console.log('params data >>>', paramsData)
         this.setState({
             goalSteps: paramsData.goalSteps,
-            pedometerData:paramsData.pedometerData
+            pedometerData: paramsData.pedometerData
         })
         //this.googleFitAuthFun()
         AsyncStorage.getItem('pedometerData').then((value) => {
@@ -159,7 +263,7 @@ export default class StepCountScreen extends React.Component {
             Alert.alert('Acheive Goal');
             this.sendDataPedometer();
         }
-        
+
     }
 
 
@@ -260,7 +364,7 @@ export default class StepCountScreen extends React.Component {
             let postedData = await HttpUtilsFile.post('pedometer', dataPost)
             console.log('posted data >>>', postedData)
             if (postedData.code == 200) {
-               console.log('data sumbit')
+                console.log('data sumbit')
             }
         }
         catch (err) {
@@ -272,13 +376,15 @@ export default class StepCountScreen extends React.Component {
     _startPedometer() {
         const { params } = this.props.navigation.state;
         console.log('Pedometer Function')
-        this.setState({ tapLoad: false,})
+        // this.setState({ tapLoad: false,})
         //this.matchTime()
         this.updateTime()
         //console.log('all data of user >>>',this.state.allDataUser)
         this.countStepTime()
 
         //console.log('watch time >>', this.state.timeWatch)
+        // start tracking from current time
+        
 
         //Sensor Manager For Stepcount
 
@@ -299,7 +405,7 @@ export default class StepCountScreen extends React.Component {
                             secondValue: data.steps
                         })
                     }
-                    else if(this.state.oneToEight == true){
+                    else if (this.state.oneToEight == true) {
                         this.setState({
                             thirdValue: data.steps
                         })
@@ -307,21 +413,21 @@ export default class StepCountScreen extends React.Component {
                     }
                     const multiplySteps = data.steps / Number(this.state.goalSteps);
                     //console.log('multiply >>',multiplySteps);
-                    const divideSteps = multiplySteps*100;
+                    const divideSteps = multiplySteps * 100;
                     //console.log('divided >>',divideSteps )
                     const roundedValue = Math.round(divideSteps);
                     //console.log('percentage steps >>',roundedValue)
                     this.setState({
-                        stepsPercentage:roundedValue
-                    })    
+                        stepsPercentage: roundedValue
+                    })
 
                 }
                 if (data.steps != 0 && Number(this.state.goalSteps) != 0) {
                     if (data.steps == Number(this.state.goalSteps)) {
                         console.log('steps match ')
                         // this.setState({
-                            //     showButton: true
-                            // })
+                        //     showButton: true
+                        // })
                     }
                 }
 
@@ -331,102 +437,6 @@ export default class StepCountScreen extends React.Component {
 
 
         });
-
-        //Use Google Fit Api 
-
-
-        if (Platform.OS === 'android') {
-            const options = {
-                scopes: [
-                    Scopes.FITNESS_ACTIVITY_READ_WRITE,
-                    Scopes.FITNESS_BODY_READ_WRITE,
-                ],
-            }
-            GoogleFit.authorize(options)
-                .then((res) => {
-                    console.log('authorized >>>', res)
-                    //alert(`${res.message}`)
-                    GoogleFit.observeSteps((res) => {
-                       // console.log('google fit steps', res)
-                        // const dataObj = {
-                        //     pedometerData: res,
-                        // }
-                        params.pedometerFun(res.steps)
-                        this.setState({ pedometerData: res.steps }, () => {
-                            if (res.steps > Number(1)) {
-                                //this.countStepTime()
-                                if (this.state.eightToSixteen == true) {
-                                    this.setState({
-                                        firstValue: res.steps
-                                    })
-                                }
-                                else if (this.state.sixteenTo23 == true) {
-                                    this.setState({
-                                        secondValue: res.steps
-                                    })
-                                }
-                                else if(this.state.oneToEight == true){
-                                    this.setState({
-                                        thirdValue: res.steps
-                                    })
-            
-                                }
-                            const multiplySteps = res.steps / Number(this.state.goalSteps);
-                            //console.log('multiply >>',multiplySteps);
-                            const divideSteps = multiplySteps*100;
-                            //console.log('divided >>',divideSteps )
-                            const roundedValue = Math.round(divideSteps);
-                            //console.log('percentage steps >>',roundedValue)
-                            this.setState({
-                                stepsPercentage:roundedValue
-                            })
-
-
-                            }
-                            if (res.steps != 0 && Number(this.state.goalSteps) != 0) {
-                                if (res.steps == Number(this.state.goalSteps)) {
-                                    console.log('steps match ')
-                                    
-                                }
-                            }
-
-
-                        })
-                    })
-
-                })
-
-                .catch((err) => {
-                    console.log('err >>> ', err)
-                })
-
-
-        }
-        else if (Platform.OS === 'ios') {
-            const options = {
-                scopes: [
-                    Scopes.FITNESS_ACTIVITY_READ_WRITE,
-                    Scopes.FITNESS_BODY_READ_WRITE,
-                ],
-            }
-
-            rnHealthKit.authorize(options)
-                .then((res) => {
-                    console.log('authorized >>>', res)
-                    rnHealthKit.observeSteps((res) => {
-                        // console.log(res)
-                        this.setState({ pedometerData: res.steps })
-                    })
-
-
-                })
-                .catch((err) => {
-                    console.log('err >>> ', err)
-                })
-
-        }
-
-
 
     }
 
@@ -465,7 +475,7 @@ export default class StepCountScreen extends React.Component {
             else if (currentTime < time16 || currentTime >= eightTime) {
                 console.log('8 to 16 time condition')
                 this.setState({
-                    eightToSixteen:true
+                    eightToSixteen: true
                 })
             }
             //     if (Platform.OS === 'android') {
@@ -923,13 +933,15 @@ export default class StepCountScreen extends React.Component {
             curTime,
             stepGoalCountData,
             tapLoad,
-            stepsPercentage
+            stepsPercentage,
+            onOffToggle
+
             //currentUserId
         } = this.state;
         //console.log(currentUserId)
         //console.log('pedometer data in number form ', Number(pedometerData))
         //console.log('goal steps database >>',stepGoalCountData)
-       
+
         //console.log(params)
         //console.log('curnt time and data >>>', curTime, date)
         // console.log('login user weight >>>', userCurrentWeight)
@@ -969,15 +981,29 @@ export default class StepCountScreen extends React.Component {
                         </View>
 
 
-                        {/* {achieve && <View style={styles.achieveText}>
-                    <Text style={styles.textStyle}>Achieve a day target steps</Text>
-                </View>
-                } */}
+                        {/* <View style={styles.toggelSwitch}>
+                            <View>
+                                <Text style={{
+                                    color: '#000',
+                                    fontFamily: 'MontserratLight',
+                                }}>If pedometer not work open API</Text>
+                            </View>
+                            <View>
+                                <ToggleSwitch
+                                    isOn={onOffToggle}
+                                    onColor="#FF6200"
+                                    offColor="#a6a6a6"
+                                    size="medium"
+                                    onToggle={isOn => this.toggelSwitchFun(isOn)}
+                                />
+                            </View>
+
+                        </View> */}
 
                         <TouchableOpacity
                             style={styles.stepCountContainer}
                             activeOpacity={0.7}
-                            onPress={this._startPedometer.bind(this)}
+                            // onPress={this._startPedometer.bind(this)}
                             //onPress={this.countStepTime}
                             disabled={this.state.startDisable}
                         >
@@ -986,19 +1012,13 @@ export default class StepCountScreen extends React.Component {
                                     size={90}
                                     width={12}
                                     color={'#FF6200'}
-                                    // progress={pedometerData > 1 && pedometerData < 250 ? 25 :
-                                    //     pedometerData > 250 && pedometerData < 500 ? 50 :
-                                    //         pedometerData > 500 && pedometerData < 750 ? 75 :
-                                    //             pedometerData > 750 && pedometerData <= 10000 ? 100
-                                    //                 : 0
-                                    // }
                                     progress={stepsPercentage == '' ? 0 : stepsPercentage}
                                     backgroundColor={'gray'}
                                     animateFromValue={0}
                                     fullColor={'#FF6200'}
-                                //duration={60000}
+
                                 />
-                                {tapLoad ? <Text style={styles.tapLoadText}>Tap to load</Text> : null}
+                                {/* {tapLoad ? <Text style={styles.tapLoadText}>Tap to load</Text> : null} */}
                             </View>
                             <View style={styles.stepCountData}>
                                 <View style={{ flexDirection: 'row', marginRight: 50 }}>

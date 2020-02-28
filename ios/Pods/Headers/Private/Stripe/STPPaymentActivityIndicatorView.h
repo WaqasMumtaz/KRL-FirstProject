@@ -1,5 +1,0 @@
-XSym
-0070
-f115db8b13ad8c800d466a75ba0ea329
-../../../Stripe/Stripe/PublicHeaders/STPPaymentActivityIndicatorView.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

@@ -337,7 +337,7 @@ const styles =StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         flexDirection: 'row',
-        marginVertical: 5,
+        marginTop: 5.5,
         //borderRadius:2
     },
     clickBtnStyle:{
@@ -386,7 +386,7 @@ const styles =StyleSheet.create({
     },
     heightContainer:{
         // height:70,
-        // backgroundColor:'pink',
+        //  backgroundColor:'pink',
         // borderColor:'black',
         // borderWidth:3,
         flexDirection:'row',

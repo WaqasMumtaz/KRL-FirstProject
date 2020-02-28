@@ -1,5 +1,0 @@
-XSym
-0055
-3051619c33288873374eebdfa07d8769
-../../../Stripe/Stripe/PublicHeaders/STPPaymentMethod.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        

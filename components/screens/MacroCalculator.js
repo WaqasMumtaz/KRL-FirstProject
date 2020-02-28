@@ -269,7 +269,7 @@ class Macrocalculator extends React.Component {
                 const userWeight = Math.round(currentWeight * 0.454);
                 //console.log('user weight >>', userWeight)
                 let BMR = (10 * userWeight) + (6.25 * totalHeightCentimeter) - (5 * age) + 5;
-                //console.log('calories >>', BMR)
+                console.log('calories BMR>>', BMR)
                 if (activityLevel == 'sedentary' || activityLevel == 'active' || activityLevel == 'lightActivity' || activityLevel == 'veryActive') {
 
                     if (fitnessGoal == 'lose weight') {
@@ -277,7 +277,7 @@ class Macrocalculator extends React.Component {
                         // console.log('fitness result lose>>', caloriesResult);
                         let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
                         let addBMR = Math.round(finalBMR - fitnessObj[desiredUnitValue]);
-                        //console.log('minus bmr >', addBMR)
+                        console.log('minus bmr >', addBMR)
                         let fatCalries = finalBMR * 0.30;
                         let fat = fatCalries / 9
                         //calculate protein
@@ -325,6 +325,7 @@ class Macrocalculator extends React.Component {
                         // console.log('fitness result gain>>', caloriesResultGain);
                         let finalBMR = Math.round(BMR * tdeeObj[activityLevel]);
                         let addBMR = Math.round(finalBMR + fitnessObj[desiredUnitValue]);
+                        console.log('Gain BMR >>', addBMR)
                         let fatCalries = finalBMR * 0.30;
                         let fat = fatCalries / 9
                         //calculate protein

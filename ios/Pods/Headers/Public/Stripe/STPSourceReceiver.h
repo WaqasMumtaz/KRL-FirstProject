@@ -1,5 +1,0 @@
-XSym
-0056
-88a84a62e543f755c1841e60e961e62c
-../../../Stripe/Stripe/PublicHeaders/STPSourceReceiver.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
