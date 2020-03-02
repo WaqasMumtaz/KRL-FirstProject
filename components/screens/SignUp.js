@@ -332,7 +332,7 @@ class Signup extends React.Component {
                     }
                     //console.log(userObjForProfile, 'userObjForProfile')
                     let userProfile = await HttpUtilsFile.post('profile', userObjForProfile);
-                    //console.log('new user profile data >>>', userProfile)
+                    console.log('new user profile data >>>', userProfile)
                     profileCode = userProfile.code;
                     if(profileCode == 200){
                         let obj = {
@@ -350,6 +350,7 @@ class Signup extends React.Component {
                             type: userProfile.type
                         }
                         //console.log('myProfile data >>>>', obj)
+
                         AsyncStorage.setItem('myProfile', JSON.stringify(obj));
                     }
                     

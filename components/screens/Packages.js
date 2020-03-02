@@ -58,6 +58,7 @@ class PackagesScreen extends React.Component {
 
     async sendRequestAdmin(data){
         const {name , email , number }= this.state;
+        const { navigate } = this.props.navigation;
         
         if(data == 'Monthly Plan'){
             const userObj = {
@@ -67,15 +68,22 @@ class PackagesScreen extends React.Component {
                 packageName:'Monthly Plan'
             }
             console.log('user send data >>>', userObj)
-            let requestData = await HttpUtilsFile.post('email', userObj);
-            let userMsg = requestData.msg;
-             console.log('user request data >>>', requestData);
-            if(requestData.code == 200){
-                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+            try {
+                let requestData = await HttpUtilsFile.post('email', userObj);
+                console.log('user request data >>>', requestData);
+                let userMsg = requestData.msg;
+                if(requestData.code == 200){
+                    this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+                    navigate('BottomTabe');
+                }
+                else {
+                    this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+                }
             }
-            else {
-                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+            catch(err){
+                console.log('error >>', err)
             }
+            
         }
         else if(data == 'Medical Condition Plan'){
             const userObj = {
@@ -90,6 +98,8 @@ class PackagesScreen extends React.Component {
              console.log('user request data >>>', requestData);
             if(requestData.code == 200){
                 this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+                navigate('BottomTabe');
+
             }
             else {
                 this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
@@ -108,6 +118,8 @@ class PackagesScreen extends React.Component {
              console.log('user request data >>>', requestData);
             if(requestData.code == 200){
                 this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+                navigate('BottomTabe');
+
             }
             else {
                 this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
@@ -126,6 +138,8 @@ class PackagesScreen extends React.Component {
              console.log('user request data >>>', requestData);
             if(requestData.code == 200){
                 this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+                navigate('BottomTabe');
+
             }
             else {
                 this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);

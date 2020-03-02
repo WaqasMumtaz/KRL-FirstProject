@@ -74,7 +74,9 @@ class ChatInbox extends React.Component {
         this.focusListener = navigation.addListener('didFocus', () => {
             AsyncStorage.getItem('currentUser').then((value) => {
                 let userData = JSON.parse(value)
+                console.log('user data >>', userData);
                 let userName = userData.name + ' ' + userData.lastName;
+                console.log('user name >', userName)
                 if (userData.assignTrainner != undefined) {
                     this.setState({
                         forTrainnerModal: false
@@ -126,6 +128,7 @@ class ChatInbox extends React.Component {
                 userNumber: this.state.userNumber
 
             })
+            // console.log('Name >>',this.state.currentName)
         })
     }
 

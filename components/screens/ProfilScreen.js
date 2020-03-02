@@ -56,6 +56,10 @@ class Profile extends React.Component {
 
   async  componentWillMount() {
     console.log(checkProfile, 'checkProfile')
+    // AsyncStorage.getItem('myProfile').then((value) => {
+    //   let userData = JSON.parse(value);
+    //   console.log(userData, 'userData')
+    // })  
     if (checkProfile) {
       const { senderData } = this.props.navigation.state.params;
       console.log(senderData, 'sender data')
