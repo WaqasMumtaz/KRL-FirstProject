@@ -19,34 +19,26 @@ class Reportscreen extends React.Component {
       dataExcersices: [],
       currentDateDataWeights: [],
       weekAgoDateDataWeights: [],
-      weekAgoDateDataGoalSteps:'',
+      weekAgoDateDataGoalSteps: [],
+      weekAgoDateDataRunSteps: [],
       monthName: ["January", "February", "March", "April", "May", "June", "July", "August",
         "September", "October", "November", "December"],
       loseWeight: '',
       gainWeight: '',
       lastWeek: '',
       cureentWeek: '',
-      userID:'',
-      stepCountData:'',
-      goalSteps:'',
-      goalStepsDate:''
+      userID: '',
+      stepCountData: '',
+      goalSteps: '',
+      goalStepsDate: '',
+
     }
   }
   async componentWillMount() {
     await this.getData();
-    console.log('componentWillMount Run ')
-  
+    // console.log('componentWillMount Run ')
+
   }
-
-  
-  weekAndDay = (date)=>{
-    console.log('date >>', date)
-    var days = ['Sunday','Monday','Tuesday','Wednesday',
-                'Thursday','Friday','Saturday'],
-        prefixes = ['First', 'Second', 'Third', 'Fourth', 'Fifth'];
-    return prefixes[Math.floor(date.getDate() / 7)] + ' ' + days[date.getDay()];
-
-}
 
 
 
@@ -71,35 +63,28 @@ class Reportscreen extends React.Component {
     let dataExcersice = await HttpUtils.get('getallexerciselog');
     let dataWeight = await HttpUtils.get('getweightlog');
     let userObj = {
-      userId:userId
+      userId: userId
     };
     // console.log('user id >>', userObj)
-    let userPedometerData = await HttpUtils.post('getpedometerbyid',userObj);
+    let userPedometerData = await HttpUtils.post('getpedometerbyid', userObj);
+    // console.log('user get pedometer data >>', userPedometerData);
     let retrieveGoalSteps = await HttpUtils.post('getgoal', userObj);
 
     // console.log('user pedometer data >>',userPedometerData.content);
 
-    if(userPedometerData.code == 200 && retrieveGoalSteps.code == 200){
-        const userContent =  userPedometerData.content;
-        const userGoalSteps = retrieveGoalSteps.content;
-        console.log('user goal steps >>', userGoalSteps);
-        for(let i in userContent){
-          console.log(userContent[i])
-          const userSteps = userContent[i].stepCount;
-          console.log(userSteps)
-          this.setState({
-            stepCountData:userSteps
-          })
-        }
-        for(let i in userGoalSteps){
-          // console.log(userGoalSteps[i])
-          const goalSteps = userGoalSteps[i].goalSteps;
-          const goalStepsDate = userGoalSteps[i].date;
-          this.setState({
-            goalSteps,
-            goalStepsDate
-          })
-        }  
+    if (userPedometerData.code == 200 && retrieveGoalSteps.code == 200) {
+      const userContent = userPedometerData.content;
+      const userGoalSteps = retrieveGoalSteps.content;
+      // console.log('user goal steps >>', userGoalSteps);
+      for (let i in userContent) {
+        // console.log(userContent[i])
+        const userSteps = userContent[i].stepCount;
+        // console.log(userSteps)
+        this.setState({
+          stepCountData: userSteps
+        })
+      }
+
 
     }
     // for(let i in userPedometerData){
@@ -113,10 +98,11 @@ class Reportscreen extends React.Component {
     let data = dataExcersice.content;
     let weightData = dataWeight.content;
     let userGoalSteps = retrieveGoalSteps.content;
+    let userPedometerDataSteps = userPedometerData.content
 
     //gettibg curent date
     const currentDayOfWeek = new Date().getDay() + 1;
-    console.log('current day of week >>', currentDayOfWeek);
+    // console.log('current day of week >>', currentDayOfWeek);
     const currentDate = new Date().getDate();
     let currentMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
@@ -147,88 +133,96 @@ class Reportscreen extends React.Component {
     }
 
     //get week wise goal steps
-    for(let i in userGoalSteps){
+    for (let i in userGoalSteps) {
       // console.log(userGoalSteps[i])
-      if(userGoalSteps[i].userId == userId){
+      if (userGoalSteps[i].userId == userId) {
         const goalStepsData = userGoalSteps[i];
-        console.log('goalStepData >>', goalSteps)
+        const justGoalSteps = userGoalSteps[i].goalSteps;
+        // console.log('goalSteps >>', justGoalSteps)
         const date = goalStepsData.date;
         // console.log('date >>', date);
         const getMonth = goalStepsData.month;
+        const getMontName = monthName[getMonth];
+        goalStepsData.monthName = getMontName;
         // console.log('month >>', getMonth);
         const getYear = goalStepsData.year;
         // console.log('current year >>', getYear);
-        let checkWeekDay = (Math.abs(currentDayOfWeek - goalStepsData.dayOfWeek));
+        // let checkWeekDay = (Math.abs(currentDayOfWeek - goalStepsData.dayOfWeek));
         // console.log('weekDay >>', checkWeekDay)
         let checkDate = Number(date) - currentDate;
         let checkMonth = Number(getMonth) - currentMonth;
         let checkYear = Number(getYear) - currentYear;
-        console.log('check date >>',checkDate);
-        console.log('check month >>', checkMonth);
-        console.log('checkyear >>', checkYear);
-        if (checkWeekDay == 0 && checkDate != 0 && checkMonth == 0 && checkYear == 0) {
-          console.log('weekago data')
-          weekBefore = goalStepsData
+        const weekDate = Number(currentDate - 7);
+        // console.log('week Date >>', weekDate);
+        // console.log('check date >>', checkDate);
+        // console.log('check month >>', checkMonth);
+        // console.log('checkyear >>', checkYear);
+        // if (checkDate == 0 || checkDate == -1 || checkDate == -2 || checkDate == -3 || checkDate == -4 || checkDate == -5 ||
+        //   checkDate == -6 || checkDate == -7 && checkMonth == 0 && checkYear == 0) {
+        //   dataExcersiceArr = [...dataExcersiceArr, goalStepsData];
+        //   this.setState({
+        //     weekAgoDateDataGoalSteps: dataExcersiceArr
+        //   },()=>{console.log('State Goal Steps >>',this.state.weekAgoDateDataGoalSteps)})
+        // }
+        if (checkDate == 0 || checkDate == -1 || checkDate == -2 || checkDate == -3 || checkDate == -4 || checkDate == -5 ||
+          checkDate == -6 || checkDate == -7 || weekDate == -5 || weekDate == -4 || weekDate == -3 || weekDate == -2 || weekDate == -1
+          && checkMonth == 0 || checkMonth == -1 || checkMonth == -2 || checkMonth == -3 ||
+          checkMonth == -4 || checkMonth == -5 || checkMonth == -6 || checkMonth == -7
+          || checkMonth == -8 || checkMonth == -9 || checkMonth == -10 ||
+          checkMonth == -11 || checkMonth == 0 && checkYear == 0) {
+          dataExcersiceArr = [...dataExcersiceArr, justGoalSteps];
           this.setState({
-            weekAgoDateDataGoalSteps: weekBefore
-          },()=>{console.log('week goal steps >>',this.state.weekAgoDateDataGoalSteps)})
+            weekAgoDateDataGoalSteps: dataExcersiceArr
+          })
         }
-        //if data not has week ago then check a last week any day data
-        if (checkWeekDay != 0 && checkMonth == 0 && checkYear == 0) {
-          if (checkWeekDay == 1 && checkMonth == 0 && checkYear == 0) {
-            weekBefore = goalStepsData.goalSteps
-            this.setState({
-              weekAgoDateDataGoalSteps: weekBefore
-            })
-          }
-          else if (checkWeekDay == 2 && checkMonth == 0 && checkYear == 0) {
-            weekBefore = goalStepsData.goalSteps
-            this.setState({
-              weekAgoDateDataGoalSteps: weekBefore
-            })
-          }
-          else if (checkWeekDay == 3 && checkMonth == 0 && checkYear == 0) {
-            weekBefore = goalStepsData.goalSteps
-          this.setState({
-            weekAgoDateDataGoalSteps: weekBefore
-          })
-          }
-          else if (checkWeekDay == 4 && checkMonth == 0 && checkYear == 0) {
-            weekBefore = goalStepsData.goalSteps
-          this.setState({
-            weekAgoDateDataGoalSteps: weekBefore
-          })
-          } else if (checkWeekDay == 5 && checkMonth == 0 && checkYear == 0) {
-            weekBefore = goalStepsData.goalSteps
-          this.setState({
-            weekAgoDateDataGoalSteps: weekBefore
-          })
-          } else if (checkWeekDay == 6 && checkMonth == 0 && checkYear == 0) {
-            weekBefore = goalStepsData.goalSteps
-          this.setState({
-            weekAgoDateDataGoalSteps: weekBefore
-          })
-          } else if (checkWeekDay == 7 && checkMonth == 0 && checkYear == 0) {
-            weekBefore = goalStepsData.goalSteps
-          this.setState({
-            weekAgoDateDataGoalSteps: weekBefore
-          })
-          }
-        }
-        //current date data
-        if (checkDate == 0 && checkMonth == 0 && checkYear == 0) {
-          //  console.log(currentDateDataWeights)
-          weekBefore = goalStepsData.goalSteps
-          this.setState({
-            weekAgoDateDataGoalSteps: weekBefore
-          },()=>{console.log('user week steps >>', this.state.weekAgoDateDataGoalSteps)})
-        }
-        
-
-
       }
-      
-    }  
+
+    }
+    //get week wise runing steps
+    for (let i in userPedometerDataSteps) {
+      // console.log(userPedometerDataSteps[i])
+      if (userPedometerDataSteps[i].userId == userId) {
+        const goalStepsData = userPedometerDataSteps[i];
+        const justGoalSteps = userPedometerDataSteps[i].stepCount;
+        // console.log('goalSteps >>', justGoalSteps)
+        const date = goalStepsData.date;
+        // console.log('date >>', date);
+        const getMonth = goalStepsData.month;
+        const getMontName = monthName[getMonth];
+        goalStepsData.monthName = getMontName;
+        // console.log('month >>', getMonth);
+        const getYear = goalStepsData.year;
+        // console.log('current year >>', getYear);
+        // let checkWeekDay = (Math.abs(currentDayOfWeek - goalStepsData.dayOfWeek));
+        // console.log('weekDay >>', checkWeekDay)
+        let checkDate = Number(date) - currentDate;
+        let checkMonth = Number(getMonth) - currentMonth;
+        let checkYear = Number(getYear) - currentYear;
+        const weekDate = Number(currentDate - 7);
+        // console.log('week Date >>', weekDate);
+        // console.log('check date >>', checkDate);
+        // console.log('check month >>', checkMonth);
+        // console.log('checkyear >>', checkYear);
+        // if (checkDate == 0 || checkDate == -1 || checkDate == -2 || checkDate == -3 || checkDate == -4 || checkDate == -5 ||
+        //   checkDate == -6 || checkDate == -7 && checkMonth == 0 && checkYear == 0) {
+        //   dataExcersiceArr = [...dataExcersiceArr, goalStepsData];
+        //   this.setState({
+        //     weekAgoDateDataGoalSteps: dataExcersiceArr
+        //   },()=>{console.log('State Goal Steps >>',this.state.weekAgoDateDataGoalSteps)})
+        // }
+        if (checkDate == 0 || checkDate == -1 || checkDate == -2 || checkDate == -3 || checkDate == -4 || checkDate == -5 ||
+          checkDate == -6 || checkDate == -7 || weekDate == -5 || weekDate == -4 || weekDate == -3 || weekDate == -2 || weekDate == -1
+          && checkMonth == 0 || checkMonth == -1 || checkMonth == -2 || checkMonth == -3 ||
+          checkMonth == -4 || checkMonth == -5 || checkMonth == -6 || checkMonth == -7
+          || checkMonth == -8 || checkMonth == -9 || checkMonth == -10 ||
+          checkMonth == -11 || checkMonth == 0 && checkYear == 0) {
+          dataExcersiceArr = [...dataExcersiceArr, justGoalSteps];
+          this.setState({
+            weekAgoDateDataRunSteps: dataExcersiceArr
+          })
+        }
+      }
+    }
 
     //get week wise data and show bar chart line 
     for (var i in weightData) {
@@ -241,7 +235,7 @@ class Reportscreen extends React.Component {
         let checkYear = Number(dataApi.year) - currentYear;
         //condition check week ago data
         if (checkWeekDay == 0 && checkDate != 0 && checkMonth == 0 && checkYear == 0) {
-          console.log('weekago data')
+          // console.log('weekago data')
           weekBefore = dataApi
           this.setState({
             weekAgoDateDataWeights: weekBefore
@@ -342,17 +336,36 @@ class Reportscreen extends React.Component {
     }
   }
   render() {
-    const { dataExcersices, 
-      currentDateDataWeights, 
-      weekAgoDateDataWeights, 
-      loseWeight, 
-      gainWeight, 
-      lastWeek, 
+    const { dataExcersices,
+      currentDateDataWeights,
+      weekAgoDateDataWeights,
+      loseWeight,
+      gainWeight,
+      lastWeek,
       cureentWeek,
       stepCountData,
-      weekAgoDateDataGoalSteps
-        } = this.state
-    console.log(loseWeight , 'loseWeight')
+      weekAgoDateDataGoalSteps,
+      weekAgoDateDataRunSteps
+    } = this.state
+    console.log(loseWeight, 'loseWeight')
+    let initialValue = Number(0)
+    weekAgoDateDataGoalSteps && weekAgoDateDataGoalSteps.map((item, index) => {
+      return initialValue = initialValue + Number(item);
+    })
+    console.log('Total Steps >>', initialValue);
+    let runSteps = Number(0);
+    weekAgoDateDataRunSteps && weekAgoDateDataRunSteps.map((item, index) => {
+      return runSteps = runSteps + Number(item)
+    })
+    const multiplySteps = runSteps / initialValue;
+    //console.log('multiply >>',multiplySteps);
+    const divideSteps = multiplySteps * 100;
+    //console.log('divided >>',divideSteps )
+    const roundedValue = Math.round(divideSteps);
+    //console.log('percentage steps >>',roundedValue)
+    // this.setState({
+    //   stepsPercentage: roundedValue
+    // })
     let weeklyExcersice = dataExcersices && dataExcersices.map((elem, key) => {
       return (
         <View style={styles.exerciseResultCard}>
@@ -399,24 +412,24 @@ class Reportscreen extends React.Component {
               <View style={styles.weeklyStepWalk}>
                 <Text style={styles.headingText}>Total steps walked</Text>
                 <View style={styles.spinerContainer}>
-                  <Wheelspiner 
-                  size={65}
-                  width={10}
-                  color={'#FF6200'}
-                  progress={stepCountData > 1 && stepCountData < 250 ? 25 :
-                    stepCountData > 250 && stepCountData < 500 ? 50 :
-                    stepCountData > 500 && stepCountData < 750 ? 75 :
-                    stepCountData > 750 && stepCountData <= 10000 ? 100
-                                : 0
-                }
-                  backgroundColor={'gray'}
-                  animateFromValue={0}
-                  fullColor={'#FF6200'}
+                  <Wheelspiner
+                    size={65}
+                    width={10}
+                    color={'#FF6200'}
+                    progress={runSteps > 1 && runSteps < 250 ? 25 :
+                      runSteps > 250 && runSteps < 500 ? 50 :
+                      runSteps > 500 && runSteps < 750 ? 75 :
+                      runSteps > 750 && runSteps <= 10000 ? 100
+                            : 0
+                    }
+                    backgroundColor={'gray'}
+                    animateFromValue={0}
+                    fullColor={'#FF6200'}
                   />
                 </View>
                 <View style={styles.resultContainer}>
-                  <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight' }}>{stepCountData == '' ? 0 : stepCountData}</Text>
-              <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight' }}>/{this.state.weekAgoDateDataGoalSteps}</Text>
+                  <Text style={{ color: '#FF6200', fontFamily: 'MontserratLight' }}>{runSteps == 0 ? 0 : runSteps}</Text>
+                  <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight' }}>/{initialValue == 0 ? 0 : initialValue}</Text>
                 </View>
                 <Text style={{ color: '#a6a6a6', fontFamily: 'MontserratLight', marginLeft: 14 }}>steps</Text>
               </View>
@@ -438,7 +451,7 @@ class Reportscreen extends React.Component {
                     <Text style={styles.thisWeek}>This week</Text>
                     <Text style={styles.lastWeek}>Last week</Text>
                   </View>
-                  {loseWeight || loseWeight == 0 || loseWeight != ''?
+                  {loseWeight || loseWeight == 0 || loseWeight != '' ?
                     <View>
                       <Text style={styles.lostKg}>{`${loseWeight} KG`} </Text>
                       <Text style={styles.lostText}>Lost</Text>

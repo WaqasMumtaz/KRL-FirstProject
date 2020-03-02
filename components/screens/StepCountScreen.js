@@ -353,12 +353,23 @@ export default class StepCountScreen extends React.Component {
     }
 
     sendDataPedometer = async () => {
+            const currentDayOfWeek = new Date().getDay() + 1;
+            const currentDate = new Date().getDate();
+            let currentMonth = new Date().getMonth() + 1;
+            const currentYear = new Date().getFullYear();
+            console.log('current week >>', currentDayOfWeek);
+            console.log('currentDate >>', currentDate);
+            console.log('currentMont >>', currentMonth);
+            console.log('currentYear >>', currentYear);
         const dataPost = {
             userId: this.state.currentUserId,
             time: this.state.curTime,
-            date: this.state.date,
+            date: currentDate,
             stepCount: this.state.pedometerData,
-            dailGoal: this.state.goalSteps
+            dailGoal: this.state.goalSteps,
+            dayOfWeek:currentDayOfWeek,
+            month:currentMonth,
+            year:currentYear
         }
         try {
             let postedData = await HttpUtilsFile.post('pedometer', dataPost)
@@ -981,7 +992,7 @@ export default class StepCountScreen extends React.Component {
                         </View>
 
 
-                        {/* <View style={styles.toggelSwitch}>
+                        <View style={styles.toggelSwitch}>
                             <View>
                                 <Text style={{
                                     color: '#000',
@@ -998,7 +1009,7 @@ export default class StepCountScreen extends React.Component {
                                 />
                             </View>
 
-                        </View> */}
+                        </View>
 
                         <TouchableOpacity
                             style={styles.stepCountContainer}
