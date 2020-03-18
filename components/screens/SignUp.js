@@ -231,7 +231,8 @@ class Signup extends React.Component {
         else {
             this.setState({ isLoading: true })
             const userObj = {
-                name: name,
+                // name: name,
+                name: `${name} ${lastName}`,
                 email: email,
                 password: newPasswrd,
                 lastName: lastName,
@@ -240,7 +241,9 @@ class Signup extends React.Component {
                 deviceToken:deviceToken,
                 type: 'trainee'
             }
+            console.log('userObj >>', userObj)
             try {
+
                 // let dataUser = await HttpUtilsFile.post('signup', userObj)
                 // let signupCode = dataUser.code;
                 // let currentUserData = {
@@ -312,14 +315,15 @@ class Signup extends React.Component {
                     let currentUserData = {
                         code: dataUser.code,
                         email: this.state.email,
-                        name: this.state.name,
+                        name: `${this.state.name} ${this.state.lastName}`,
                         lastName: this.state.lastName,
                         token: dataUser.token,
                         mobileNo: mobileNo,
                         _id: dataUser._id
                     }
                     let userObjForProfile = {
-                        name: this.state.name,
+                        // name: this.state.name,
+                        name: `${this.state.name} ${this.state.lastName}`,
                         gender:this.state.gender,
                         email: this.state.email,
                         lastName:this.state.lastName,
@@ -343,6 +347,7 @@ class Signup extends React.Component {
                             gender: userProfile.content.gender,
                             image: userProfile.content.image,
                             name: userProfile.content.name,
+                            // name: `${this.state.name} ${this.state.lastName}`,
                             lastName:userProfile.content.lastName,
                             _id: userProfile.content._id,
                             time: userProfile.content.time,

@@ -77,7 +77,7 @@ class PackagesScreen extends React.Component {
                     navigate('BottomTabe');
                 }
                 else {
-                    this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+                    this.toastFunction('Something went wrong', this.state.position, DURATION.LENGTH_LONG, true);
                 }
             }
             catch(err){
@@ -102,7 +102,7 @@ class PackagesScreen extends React.Component {
 
             }
             else {
-                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+                this.toastFunction('Something went wrong', this.state.position, DURATION.LENGTH_LONG, true);
             }
         }
          else if(data == 'The Transformation Plan'){
@@ -122,7 +122,7 @@ class PackagesScreen extends React.Component {
 
             }
             else {
-                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+                this.toastFunction('Something went wrong', this.state.position, DURATION.LENGTH_LONG, true);
             }
         }
         else if(data == 'Post Partum Plan'){
@@ -142,7 +142,7 @@ class PackagesScreen extends React.Component {
 
             }
             else {
-                this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true);
+                this.toastFunction('Something went wrong', this.state.position, DURATION.LENGTH_LONG, true);
             }
         }
 

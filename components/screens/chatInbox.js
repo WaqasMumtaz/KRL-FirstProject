@@ -90,7 +90,7 @@ class ChatInbox extends React.Component {
                 else {
                     this.setState({
                         forTrainnerModal: true,
-                        currentName: userName,
+                        currentName: userData.name,
                         userEmail: userData.email,
                         userNumber: userData.mobileNo
                     })
