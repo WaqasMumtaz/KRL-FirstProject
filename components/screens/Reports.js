@@ -158,7 +158,7 @@ class Reportscreen extends React.Component {
         // console.log('check date >>', checkDate);
         // console.log('check month >>', checkMonth);
         // console.log('checkyear >>', checkYear);
-        // console.log('moment time >>', moment())
+         console.log('moment time >>', moment())
         let dayCount = 7;
         var toDate = new Date();
         for (var k = dayCount; k = dayCount; k--) {

@@ -239,7 +239,7 @@ class Setupscreen extends React.Component {
                 dob: dob,
                 heightFit: height,
                 heightInch: heightInch,
-                currentWeight: currentWeight,
+                currentWeight: currentWeight + `${' KG'}`,
                 date: currentDate,
                 time: time,
                 userId: userId,

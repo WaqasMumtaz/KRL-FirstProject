@@ -22,6 +22,7 @@ class Homescreen extends React.Component {
       userId: '',
       goalSteps: '',
       userAllData: [],
+      allDataUser: [],
       userCurrentWeight: '',
       excerciseArry: [],
       bmiData: [],
@@ -157,6 +158,34 @@ class Homescreen extends React.Component {
         }
       })
     }
+    let dataUser = await HttpUtils.get('getweightlog')
+    console.log(dataUser, 'dataUser');
+    console.log('Current User Id >>', this.state.userId);
+    let code = dataUser.code;
+            if (code == 200) {
+                let dataArr = [];
+                //console.log(dataUser.content)
+                let checkId = dataUser.content;
+                // console.log('User Content >>', checkId);
+                for (const i in checkId) {
+                    //console.log(checkId[i])
+                    let data = checkId[i];
+                    // console.log('User DAta >>', data);
+                    // console.log('Match User >>',data.userId == this.state.userId)
+                    if (data.userId == this.state.userId) {
+                      console.log('Current User Successfully ');
+                      // console.log('Current User Weight >>',data.weight)
+                        // dataArr = [...dataArr, data]
+                        this.setState({
+                          userCurrentWeight: data.weight
+                        })
+                    }
+                }
+
+            }
+            else {
+                console.log('User Not Login')
+            }
 
   }
 
@@ -304,7 +333,7 @@ class Homescreen extends React.Component {
 
               </TouchableOpacity>
               <View style={styles.waitContainer}>
-                <Text style={styles.waitText}>{userCurrentWeight == '' ? 0 : userCurrentWeight} KG</Text>
+                <Text style={styles.waitText}>{userCurrentWeight == '' ? 0 : userCurrentWeight} </Text>
                 <Text style={styles.weightLabel}>current weight</Text>
                 <Text style={styles.bmiText}>{currentUserBMI == '' ? 0 : currentUserBMI}</Text>
                 <Text style={styles.weightLabel}>current BMI</Text>
