@@ -90,10 +90,10 @@ const styles =StyleSheet.create({
         // opacity:0.6
     },
     textInputStyleParent:{
-        flex:1,
+        flex:1.2,
         height: 40,
         backgroundColor: '#e5e5e5',
-        paddingLeft:16,
+        // paddingLeft:16,
         marginTop:10,
         marginBottom:5
     },

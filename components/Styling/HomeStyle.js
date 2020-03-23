@@ -129,6 +129,23 @@ imgsStyle:{
     borderRadius:5
     
 },
+bmiCard:{
+    height:140,
+    width:157,
+    backgroundColor:'#000000',
+    // borderWidth:2,
+    // borderColor:'black',
+    borderRadius:5,
+    marginTop:12,
+    marginLeft:2
+
+},
+bmiHeading:{
+    color:'#FFFFFF',
+    fontFamily:"MontserratExtraBold",
+    marginLeft:14,
+    marginTop:20
+},
 whelSpinerContainer:{
     height:'23%',
     //backgroundColor:'white',
@@ -155,7 +172,7 @@ arrowIcon:{
 lastArrow:{
     height:23,
     width:23,
-    marginTop:22,
+    marginTop:50,
     marginLeft:14
 },
 waitContainer:{

@@ -81,7 +81,7 @@ class Macrocalculator extends React.Component {
             gain: false,
             maintain: false,
             fitnessResult: '',
-            fitnessValidation:false
+            fitnessValidation: false
         }
     }
 
@@ -122,9 +122,9 @@ class Macrocalculator extends React.Component {
         this.getMacro();
 
     }
-//  componentDidMount(){
-//     this.macroGet();
-//  }   
+    //  componentDidMount(){
+    //     this.macroGet();
+    //  }   
     getMacro = () => {
         const { navigation } = this.props;
         this.focusListener = navigation.addListener('didFocus', () => {
@@ -135,7 +135,7 @@ class Macrocalculator extends React.Component {
     calulateMacro = async () => {
         const { dob, gender, height, heightInch, currentWeight, currentWeightUnit,
             activityLevel, tdeeObj, date, time, currentYear, currentDate, currentMonth, userId,
-            unitValue, desiredUnitValue, fitnessObj, fitnessGoal,fitnessValidation } = this.state;
+            unitValue, desiredUnitValue, fitnessObj, fitnessGoal, fitnessValidation } = this.state;
         let age;
         let macroObj = {
             dob: dob,
@@ -194,17 +194,17 @@ class Macrocalculator extends React.Component {
                 currentWeightValidation: false
             })
         }
-        if(fitnessGoal == ''){
+        if (fitnessGoal == '') {
             this.setState({
-                fitnessValidation:true
+                fitnessValidation: true
             })
         }
         else {
             this.setState({
-                fitnessValidation:false
+                fitnessValidation: false
             })
         }
-        
+
         if (heightInch == '') {
             this.setState({
                 heightUnitValidation: true
@@ -225,7 +225,7 @@ class Macrocalculator extends React.Component {
                 currentWeightUnitValidation: false
             })
         }
-        
+
         if (activityLevel == '') {
             this.setState({
                 activityLevelValidation: true
@@ -1092,7 +1092,7 @@ class Macrocalculator extends React.Component {
         }
     }
 
-   
+
     componentWillUnmount() {
         // Remove the event listener
         this.focusListener.remove();
@@ -1148,7 +1148,7 @@ class Macrocalculator extends React.Component {
                 gain: false,
                 maintain: false,
                 fitnessGoal: 'lose weight',
-                showDesiredBtn:true
+                showDesiredBtn: true
             })
         }
         else if (result == 'gain') {
@@ -1157,7 +1157,7 @@ class Macrocalculator extends React.Component {
                 gain: true,
                 maintain: false,
                 fitnessGoal: 'gain weight',
-                showDesiredBtn:true
+                showDesiredBtn: true
             })
         }
         else if (result == 'maintain') {
@@ -1166,7 +1166,7 @@ class Macrocalculator extends React.Component {
                 gain: false,
                 maintain: true,
                 fitnessGoal: 'maintain weight',
-                showDesiredBtn:false
+                showDesiredBtn: false
 
             })
         }
@@ -1179,7 +1179,7 @@ class Macrocalculator extends React.Component {
             male, female, moderate, sedentary, light, extreme, calculteCalries, fatMass, proteins, carbohydrates,
             dob, date, currentCalories, currentCarbohy, currentProteins, currentMass, showCurrentMacro,
             impClick, metrilClick, unitValue, unitValidation, height, mild, extremeBtn, normal, desiredUnitValue, desiredUnitValidation,
-            fitnessGoal, showDesiredBtn,fitnessValidation,lose,gain,maintain,currentDate
+            fitnessGoal, showDesiredBtn, fitnessValidation, lose, gain, maintain, currentDate
         } = this.state;
         console.log('date >>>', date)
         console.log('fitness goal >', fitnessGoal)
@@ -1201,10 +1201,38 @@ class Macrocalculator extends React.Component {
                                 <View>
                                     <Text style={styles.currentMacroText}>Your Current Macro *</Text>
                                     <View style={styles.inputCaloriesContainer}>
-                                        <TextInput placeholder={"e.g 1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={currentCalories + ' Kcal calories'} />
+
+                                        <Text
+                                            style={styles.inputCaloriesStyleOne}
+                                        >
+                                            {currentCalories + ' Kcal calories'}
+                                        </Text>
+                                        <Text
+                                            // placeholder={"e.g 149 g\nCarbohydrates"} 
+                                            style={styles.inputCaloriesStyleTwo}
+                                        // value={carbohydrates + ' g Carbohyderates'}
+                                        >
+                                            {currentCarbohy + ' g Carbohyderates'}
+                                        </Text>
+                                        <Text
+                                            // placeholder={"e.g 107 g\Protein"} 
+                                            style={styles.inputCaloriesStyleThree}
+                                        // value={proteins + ' g Proteins'} 
+                                        >
+                                            {currentProteins + ' g Proteins'}
+                                        </Text>
+                                        <Text
+                                            //  placeholder={"e.g 51 g\nFat"} 
+                                            style={styles.inputCaloriesStyleFour}
+                                        // value={fatMass + ' g Fat'}
+                                        >
+                                            {currentMass + ' g Fat'}
+                                        </Text>
+
+                                        {/* <TextInput placeholder={"e.g 1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={currentCalories + ' Kcal calories'} />
                                         <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={currentCarbohy + ' g Carbohyderates'} />
                                         <TextInput placeholder={"e.g 107 g\Protein"} style={styles.inputCaloriesStyleThree} value={currentProteins + ' g Proteins'} />
-                                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={currentMass + ' g Fat'} />
+                                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={currentMass + ' g Fat'} /> */}
 
                                     </View>
                                 </View>
@@ -1271,7 +1299,7 @@ class Macrocalculator extends React.Component {
                             showDesiredBtn ?
                                 <View>
                                     <View style={{ marginTop: 8 }}>
-                                        <Text style={styles.unitPara}>What is your desired deficit</Text>
+                                        <Text style={styles.unitPara}>What is your desired sirplus</Text>
                                     </View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
                                         <TouchableOpacity
@@ -1310,7 +1338,7 @@ class Macrocalculator extends React.Component {
                             <Text style={styles.textStyle}>Date Of Birth</Text>
                         </View>
                         <View style={styles.ageInputContainer}>
-                        <DatePicker
+                            <DatePicker
                                 style={{ width: 200 }}
                                 date={dob} //initial date from state
                                 mode="date" //The enum of date, datetime and time
@@ -1327,9 +1355,9 @@ class Macrocalculator extends React.Component {
                                         height: 1,
                                     },
                                     dateInput: {
-                                        backgroundColor:'white',
+                                        backgroundColor: 'white',
                                         //opacity:0.4
-                                        color:'black'
+                                        color: 'black'
                                     }
                                 }}
                                 onDateChange={
@@ -1458,7 +1486,7 @@ class Macrocalculator extends React.Component {
                                                     <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                                 </TouchableOpacity>
                                                 <View style={styles.textInputContainer}>
-                                                    <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                                    <TextInput keyboardType='numeric' maxLength={5} placeholder='0' style={styles.textInputStyleParent}
                                                         type="number"
                                                         onChangeText={(currentWeight) => this.setState({ currentWeight: currentWeight })}
                                                         value={this.state.currentWeight}
@@ -1503,7 +1531,8 @@ class Macrocalculator extends React.Component {
                                                     <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                                 </TouchableOpacity>
                                                 <View style={styles.textInputContainer}>
-                                                    <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                                    <TextInput keyboardType='numeric' maxLength={5} placeholder='0'
+                                                        style={styles.textInputStyleParent}
                                                         type="number"
                                                         onChangeText={(currentWeight) => this.setState({ currentWeight: currentWeight })}
                                                         value={this.state.currentWeight}
@@ -1627,10 +1656,32 @@ class Macrocalculator extends React.Component {
                         <Text style={styles.macroTextStyle}>Your Daily Macros*</Text>
                     </View>
                     <View style={styles.inputCaloriesContainer}>
-                        <TextInput placeholder={"e.g 1640 Kcl\nCalories"} style={styles.inputCaloriesStyleOne} value={calculteCalries + ' Kcal calories'} />
-                        <TextInput placeholder={"e.g 149 g\nCarbohydrates"} style={styles.inputCaloriesStyleTwo} value={carbohydrates + ' g Carbohyderates'} />
-                        <TextInput placeholder={"e.g 107 g\Protein"} style={styles.inputCaloriesStyleThree} value={proteins + ' g Proteins'} />
-                        <TextInput placeholder={"e.g 51 g\nFat"} style={styles.inputCaloriesStyleFour} value={fatMass + ' g Fat'} />
+                        <Text
+                            style={styles.inputCaloriesStyleOne}
+                        >
+                            {calculteCalries + ' Kcal calories'}
+                        </Text>
+                        <Text
+                            // placeholder={"e.g 149 g\nCarbohydrates"} 
+                            style={styles.inputCaloriesStyleTwo}
+                        // value={carbohydrates + ' g Carbohyderates'}
+                        >
+                            {carbohydrates + ' g Carbohyderates'}
+                        </Text>
+                        <Text
+                            // placeholder={"e.g 107 g\Protein"} 
+                            style={styles.inputCaloriesStyleThree}
+                        // value={proteins + ' g Proteins'} 
+                        >
+                            {proteins + ' g Proteins'}
+                        </Text>
+                        <Text
+                            //  placeholder={"e.g 51 g\nFat"} 
+                            style={styles.inputCaloriesStyleFour}
+                        // value={fatMass + ' g Fat'}
+                        >
+                            {fatMass + ' g Fat'}
+                        </Text>
 
                     </View>
                     <View style={styles.lastParaContainer}>

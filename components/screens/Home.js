@@ -5,7 +5,8 @@ import styles from '../Styling/HomeStyle';
 import HttpUtils from '../Services/HttpUtils';
 import AsyncStorage from '@react-native-community/async-storage';
 // import firebase from 'react-native-firebase';
-import HandleBack from '../BackHandler/BackHandler';
+import HandleBack from '../buttons/backBtn';
+// import HandleBack from '../BackHandler/BackHandler';
 //import { StackActions, NavigationActions } from 'react-navigation';
 
 const { height } = Dimensions.get('window');
@@ -31,7 +32,7 @@ class Homescreen extends React.Component {
       stepsPercentage:''
 
     }
-    //console.log('constructor method run here')
+    console.log('constructor method run here')
   }
 
 
@@ -237,6 +238,10 @@ class Homescreen extends React.Component {
   else if (e == 'Macrocalculator'){
       navigate('Macrocalculator')
   }
+  else if (e == 'CalculateBMI'){
+    navigate('BMICalculator')
+
+  }
 
   }
 
@@ -262,7 +267,7 @@ class Homescreen extends React.Component {
   getDaysData = () => {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', (res) => {
-      BackHandler.addEventListener("hardwareBackPress", this.onBack)
+      // BackHandler.addEventListener("hardwareBackPress", this.onBack)
       this.getUserData();
       this.getTodayOrYesterdayExcersice();
       this.setState({
@@ -271,17 +276,17 @@ class Homescreen extends React.Component {
       //this.getBmiData();
     });
   }
-  componentDidMount(){
-         BackHandler.addEventListener('hardwareBackPress',this.handleBackButton);
-         this.willBlur = this.props.navigation.addListener("willBlur", payload =>
-         BackHandler.removeEventListener("hardwareBackPress", this.onBack),
-       );
-  }
-  componentWillUnmount() {
-    this.didFocus.remove();
-    this.willBlur.remove();
-    BackHandler.removeEventListener("hardwareBackPress", this.onBack);
-  }
+  // componentDidMount(){
+  //        BackHandler.addEventListener('hardwareBackPress',this.handleBackButton);
+  //        this.willBlur = this.props.navigation.addListener("willBlur", payload =>
+  //        BackHandler.removeEventListener("hardwareBackPress", this.onBack),
+  //      );
+  // }
+  // componentWillUnmount() {
+  //   this.didFocus.remove();
+  //   this.willBlur.remove();
+  //   BackHandler.removeEventListener("hardwareBackPress", this.onBack);
+  // }
 
 
   handleBackButton = async () => {
@@ -300,7 +305,7 @@ class Homescreen extends React.Component {
   }
 
   onBack = () => {
-    if (this.state.homeScreen == true) {
+    if (this.state.homeScreen) {
       return true;
     }
     return false;
@@ -311,9 +316,9 @@ class Homescreen extends React.Component {
   render() {
     const { todayData, yestertdayData, pedometerData, goalSteps, userCurrentWeight, currentUserBMI,fitnessGoal,stepsPercentage } = this.state;
     const { navigate } = this.props.navigation;
-    //console.log('current steps home >>',stepsPercentage)
+    console.log('Home Screen >>',this.state.homeScreen);
     return (
-      // <HandleBack onBack={this.onBack}>
+      <HandleBack onBack={this.onBack}>
       <View style={styles.container}>
         <View style={styles.headingContainer}>
           <Text style={styles.textStyleOne}>GetFit</Text>
@@ -392,11 +397,22 @@ class Homescreen extends React.Component {
                 <Text style={{ color: '#FFFFFF', fontFamily: 'MontserratLight', fontSize: 12, marginTop: 20, marginLeft: 14 }}>View detailed report</Text>
                 <Image source={require('../icons/forward-arrow.png')} style={styles.lastArrow} />
               </TouchableOpacity>
+              <TouchableOpacity style={styles.bmiCard}
+               onPress={this.changeRout.bind(this, 'CalculateBMI')}>
+                <Text style={styles.bmiHeading}>
+                     Calculate {'\n'}BMI
+                </Text>
+                <View>
+                <Image source={require('../icons/forward-arrow.png')} style={styles.lastArrow} />
+                </View>
+              </TouchableOpacity>
+              <View style={{marginVertical:20}}></View>
             </View>
+            
           </View>
         </ScrollView>
       </View>
-      // </HandleBack>  
+      </HandleBack>  
     );
   }
 }

@@ -44,10 +44,11 @@ getPaymentKey = async () =>{
          <View style={styles.container}>
            <View style={styles.childContainer}>
                 <View style={styles.heading}><Text style={styles.headingText}>More Options</Text></View>
-                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('Macrocalculator')}}><Text style={styles.forText}>Calculate Macro</Text></TouchableOpacity></View>
-                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('BMICalculator')}}><Text style={styles.forText}>BMI Calculator</Text></TouchableOpacity></View>
-                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('Profile')}}><Text style={styles.forText}>Profile</Text></TouchableOpacity></View>
-                <View style={{flex:0.6,flexDirection:'row'}}>
+                {/* <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('Macrocalculator')}}><Text style={styles.forText}>Calculate Macro</Text></TouchableOpacity></View>
+                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('BMICalculator')}}><Text style={styles.forText}>BMI Calculator</Text></TouchableOpacity></View> */}
+                <View style={styles.itemsContainer}>
+                <View style={{flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('Profile')}}><Text style={styles.forText}>Profile</Text></TouchableOpacity></View>
+                <View style={{flexDirection:'row'}}>
                   <TouchableOpacity
                   onPress={this.paymentScreen} 
                   // onPress={()=>{navigate('Payment'),{stripeKey:publicKeys}} }
@@ -55,15 +56,17 @@ getPaymentKey = async () =>{
                   <Text style={styles.forText}>Payment </Text></TouchableOpacity></View>
                 {/* <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity  onPress={()=>{navigate('InvoicesScreen')}}><Text style={styles.forText}>Invoices</Text></TouchableOpacity></View>
                 <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity  onPress={()=>{navigate('LogMeasurementsScreen')}}><Text style={styles.forText}>Log Measurements</Text></TouchableOpacity></View> */}
-                <View style={{flex:0.6,flexDirection:'row'}}>
+                <View style={{flexDirection:'row'}}>
                   <TouchableOpacity onPress={()=>{navigate('Invoices')}}>
                   <Text style={styles.forText}>Invoices</Text>
                   </TouchableOpacity></View>
-                <View style={{flex:0.6,flexDirection:'row'}}>
+                <View style={{flexDirection:'row'}}>
                   <TouchableOpacity onPress={()=>{navigate('ShowMeasurementsScreen')}}>
                     <Text style={styles.forText}>Measurements Logs</Text>
                   </TouchableOpacity></View>
-                <View style={{flex:0.6,flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('SettingScreen')}}><Text style={styles.forText}>Settings</Text></TouchableOpacity></View>
+                <View style={{flexDirection:'row'}}><TouchableOpacity onPress={()=>{navigate('SettingScreen')}}><Text style={styles.forText}>Settings</Text></TouchableOpacity></View>
+                </View>
+                
            </View>
            {/* <Button title='Create Account' onPress={()=>navigate('Signup')}/>  */}
          </View>

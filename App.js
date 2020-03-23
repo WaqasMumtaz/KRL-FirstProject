@@ -6,10 +6,15 @@ import SplashScreen from 'react-native-splash-screen'
 import * as firebase from 'firebase';
 import config from './Config/ApiKeys';
 const db = firebase.database();
+// import HandleBack from './components/buttons/backBtn';
 
 class App extends Component {
   constructor(props) {
     super(props);
+      
+      this.state={
+        home:false
+      }
 
     if (!firebase.apps.length) {
       firebase.initializeApp(config);
@@ -80,9 +85,16 @@ class App extends Component {
   //     })
   //   }
   // };
+  // onBack = ()=>{
+  //   if(this.state.home){
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   render() {
     return <AppContainer />
+    
   }
 }
 

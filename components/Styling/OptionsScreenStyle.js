@@ -11,13 +11,11 @@ const styles = StyleSheet.create({
       height:screenHight
     },
     childContainer:{
-      flex:0.7,
       justifyContent:'flex-start',
      // backgroundColor: '#deb887',
       marginHorizontal:20
     },
     heading:{
-      flex:1,
       flexDirection:'row',
       marginTop:10
       //backgroundColor:'red'
@@ -28,6 +26,13 @@ const styles = StyleSheet.create({
       // textAlign: 'center',
       // margin: 10,
       color:'#000000'
+    },
+    itemsContainer:{
+      height:'50%',
+      // paddingVertical:15,
+      // backgroundColor:'red',
+      justifyContent:'space-between',
+      marginTop:50
     },
     
     forText: {

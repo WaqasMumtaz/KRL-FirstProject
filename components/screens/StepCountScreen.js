@@ -15,13 +15,16 @@ import { NativeAppEventEmitter } from 'react-native';
 import { SensorManager } from 'NativeModules';
 import GoogleFit, { Scopes } from 'react-native-google-fit'
 import { NativeModules } from 'react-native';
-import { thisExpression } from '@babel/types';
+// import { thisExpression } from '@babel/types';
 import OverlayLoader from '../Loader/OverlaySpinner';
 //import { TextInput } from 'react-native-gesture-handler';
-const rnHealthKit = NativeModules.RNHealthKit;
+const googleFit = NativeModules.RNGoogleFit;
+const RNHealthKit = NativeModules.RNHealthKit;
 import ToggleSwitch from 'toggle-switch-react-native';
 // Import the react-native-pedometer module
-var Pedometer = require('react-native-pedometer');
+// var Pedometer = require('react-native-pedometer');
+var Pedometer = require('./Pedometer');
+import moment from 'moment';
 
 const { heightDimension } = Dimensions.get('window');
 const date = new Date().getDate();
@@ -100,7 +103,7 @@ export default class StepCountScreen extends React.Component {
                                 console.log('authorized >>>', res)
                                 //alert(`${res.message}`)
                                 GoogleFit.observeSteps((res) => {
-                                    // console.log('google fit steps', res)
+                                     console.log('google fit steps', res)
                                     // const dataObj = {
                                     //     pedometerData: res,
                                     // }
@@ -163,7 +166,7 @@ export default class StepCountScreen extends React.Component {
                             ],
                         }
 
-                        rnHealthKit.authorize(options)
+                        RNHealthKit.authorize(options)
                             .then((res) => {
                                 console.log('authorized >>>', res)
                                 rnHealthKit.observeSteps((res) => {
@@ -384,7 +387,18 @@ export default class StepCountScreen extends React.Component {
     }
 
 
-    _startPedometer() {
+    componentDidMount(){
+        console.log('ComponentDidmount Function');
+        SensorManager.startStepCounter(1000);
+        DeviceEventEmitter.addListener(
+            'StepHistoryChangedEvent',(data)=>{
+                console.log('History Steps Data >', data);
+            }
+            
+        );
+    }
+
+     _startPedometer() {
         const { params } = this.props.navigation.state;
         console.log('Pedometer Function')
         // this.setState({ tapLoad: false,})
@@ -395,10 +409,48 @@ export default class StepCountScreen extends React.Component {
 
         //console.log('watch time >>', this.state.timeWatch)
         // start tracking from current time
-        
+        // console.log('GoogLe Fit Api >>', googleFit);
+    //    googleFit.getDailySteps((data)=>{
+    //         console.log('Fit Data >>', data);
+    //     })
+    //    Start New Pedometer Function
+        // observeSteps = (callback)=>{
+        // DeviceEventEmitter.addListener(
+        //     'StepChangedEvent',
+        //     (steps) => callback(steps),
+        //     (steps) => console.log('StepChangedEvent', steps)
+        // );
+        // console.log(googleFit.observeSteps());
+
+        //  }
+
+        // authorize=()=>{
+        //    console.log('authrize user >>', googleFit.authorize());
+        // }
 
         //Sensor Manager For Stepcount
+        // const options = {
+        //     scopes: [
+        //         Scopes.FITNESS_ACTIVITY_READ_WRITE,
+        //         Scopes.FITNESS_BODY_READ_WRITE,
+        //     ],
+        // }
 
+        // googleFit.authorize(options)
+        //                     .then((res) => {
+        //                         console.log('authorized >>>', res)
+        //                         rnHealthKit.observeSteps((res) => {
+        //                          console.log('google Fit Response >>',res)
+        //                             // this.setState({ pedometerData: res.steps })
+        //                         })
+
+
+        //                     })
+        //                     .catch((err) => {
+        //                         console.log('err >>> ', err)
+        //                     })
+
+        console.log('Sensnor Manager >>',SensorManager);
         SensorManager.startStepCounter(1000);
         DeviceEventEmitter.addListener('StepCounter', (data) => {
             console.log('sensor manager data -->>', data)
