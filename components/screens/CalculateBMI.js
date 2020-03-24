@@ -327,7 +327,8 @@ class BMICalculator extends React.Component {
                                         <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
                                     <View style={styles.textInputContainer}>
-                                        <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                        <TextInput keyboardType='numeric' maxLength={5} placeholder='0' 
+                                            style={styles.textInputStyleParent}
                                             type="number"
                                             onChangeText={(weight) => this.setState({ weight: weight })}
                                             value={this.state.weight}

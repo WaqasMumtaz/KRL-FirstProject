@@ -69,7 +69,7 @@ class ResetpasswordScreen extends React.Component {
                 const emailContents = getEmails.content;
                 console.log('email contents >>>',emailContents)
                 const dataUser = await HttpUtilsFile.post('postemail', userEmail)
-                console.log(dataUser)
+                console.log('Post email >>',dataUser)
                 let resetCode = dataUser.code; 
                 let emailSentMsg = dataUser.data;
                 if (emailCode) {
