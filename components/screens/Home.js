@@ -25,11 +25,19 @@ class Homescreen extends React.Component {
       userAllData: [],
       allDataUser: [],
       userCurrentWeight: '',
+      measurementsWeight:'',
       excerciseArry: [],
       bmiData: [],
       currentUserBMI: '',
       fitnessGoal:'',
-      stepsPercentage:''
+      stepsPercentage:'',
+      macroArray: [],
+      showCurrentMacro: false,
+      currentCalories: '',
+      currentCarbohy: '',
+      currentProteins: '',
+      currentMass: ''
+
 
     }
     console.log('constructor method run here')
@@ -178,7 +186,7 @@ class Homescreen extends React.Component {
                       // console.log('Current User Weight >>',data.weight)
                         // dataArr = [...dataArr, data]
                         this.setState({
-                          userCurrentWeight: data.weight
+                          measurementsWeight: data.weight
                         })
                     }
                 }
@@ -269,6 +277,7 @@ class Homescreen extends React.Component {
     this.focusListener = navigation.addListener('didFocus', (res) => {
       // BackHandler.addEventListener("hardwareBackPress", this.onBack)
       this.getUserData();
+      this.macroGet();
       this.getTodayOrYesterdayExcersice();
       this.setState({
         homeScreen:true
@@ -276,18 +285,32 @@ class Homescreen extends React.Component {
       //this.getBmiData();
     });
   }
-  // componentDidMount(){
-  //        BackHandler.addEventListener('hardwareBackPress',this.handleBackButton);
-  //        this.willBlur = this.props.navigation.addListener("willBlur", payload =>
-  //        BackHandler.removeEventListener("hardwareBackPress", this.onBack),
-  //      );
-  // }
-  // componentWillUnmount() {
-  //   this.didFocus.remove();
-  //   this.willBlur.remove();
-  //   BackHandler.removeEventListener("hardwareBackPress", this.onBack);
-  // }
 
+  // Specific user get macro data
+  macroGet = async () => {
+    const { userId } = this.state;
+    let userObj = {
+      userId: userId
+    }
+    const specificMacro = await HttpUtils.post('getmacros', userObj);
+    if (specificMacro.code == 200) {
+      this.setState({
+        macroArray: specificMacro.content
+      }, () => {
+        const userMacroData = this.state.macroArray;
+        for (var i in userMacroData) {
+          this.setState({
+            showCurrentMacro: true,
+            currentCalories: userMacroData[i].calculteCalries,
+            currentCarbohy: userMacroData[i].carbohydrates,
+            currentProteins: userMacroData[i].proteins,
+            currentMass: userMacroData[i].fatMass
+          })
+        }
+      })
+    }
+  }
+ 
 
   handleBackButton = async () => {
    // console.log('pressed back button')
@@ -314,7 +337,11 @@ class Homescreen extends React.Component {
 
 
   render() {
-    const { todayData, yestertdayData, pedometerData, goalSteps, userCurrentWeight, currentUserBMI,fitnessGoal,stepsPercentage } = this.state;
+    const { todayData, yestertdayData, pedometerData, 
+      currentCalories, currentCarbohy, currentProteins,
+      currentMass, showCurrentMacro,
+      goalSteps, userCurrentWeight,measurementsWeight, currentUserBMI,
+      fitnessGoal,stepsPercentage } = this.state;
     const { navigate } = this.props.navigation;
     console.log('Home Screen >>',this.state.homeScreen);
     return (
@@ -330,6 +357,47 @@ class Homescreen extends React.Component {
           <TouchableOpacity style={{ marginLeft: 20 }}><Image source={require('../icons/right.png')} style={styles.forImgs} /></TouchableOpacity>
         </View> */}
         <ScrollView style={{ flex: 1, backgroundColor: 'white', height: height }} contentContainerStyle={{ flexGrow: 1 }}  >
+
+{/* Show current user macros */}
+
+{
+            showCurrentMacro ?
+              <View>
+                <Text style={styles.currentMacroText}>Your Current Macro *</Text>
+                <View style={styles.inputCaloriesContainer}>
+
+                  <Text
+                    style={styles.inputCaloriesStyleOne}
+                  >
+                    {currentCalories + ' Kcal calories'}
+                  </Text>
+                  <Text
+                    // placeholder={"e.g 149 g\nCarbohydrates"} 
+                    style={styles.inputCaloriesStyleTwo}
+                  // value={carbohydrates + ' g Carbohyderates'}
+                  >
+                    {currentCarbohy + ' g Carbohyderates'}
+                  </Text>
+                  <Text
+                    // placeholder={"e.g 107 g\Protein"} 
+                    style={styles.inputCaloriesStyleThree}
+                  // value={proteins + ' g Proteins'} 
+                  >
+                    {currentProteins + ' g Proteins'}
+                  </Text>
+                  <Text
+                    //  placeholder={"e.g 51 g\nFat"} 
+                    style={styles.inputCaloriesStyleFour}
+                  // value={fatMass + ' g Fat'}
+                  >
+                    {currentMass + ' g Fat'}
+                  </Text>
+                </View>
+              </View>
+              :
+              null
+          }
+
           <View style={styles.cardsContainer}>
             <View style={styles.childContainerOne}>
               <TouchableOpacity style={styles.goalSetCard} TouchableOpacity={0.6} onPress={() => navigate('Setupscreen1')}>
@@ -342,6 +410,8 @@ class Homescreen extends React.Component {
                 <Text style={styles.weightLabel}>current weight</Text>
                 <Text style={styles.bmiText}>{currentUserBMI == '' ? 0 : currentUserBMI}</Text>
                 <Text style={styles.weightLabel}>current BMI</Text>
+                <Text style={styles.measurementWeight}>{measurementsWeight == '' ? 0 : measurementsWeight}</Text>
+                <Text style={styles.weightLabel}>measurements weight</Text>
               </View>
               <TouchableOpacity style={styles.cardOne} onPress={() => { navigate('AddExercise') }}>
                 <Image source={require('../icons/log-exer.png')} style={styles.imgsStyle} />

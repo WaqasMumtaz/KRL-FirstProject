@@ -445,7 +445,7 @@ class Reportscreen extends React.Component {
             </View>
             <View style={styles.dateAndMonth}>
               <Text maxLength={3} style={styles.dateAndMonthShow}>
-                {elem.monthName}
+                {elem.monthName.substring(0,3)}
               </Text>
               <Text style={styles.dateNumber}>
                 {elem.dayOfMonth}
