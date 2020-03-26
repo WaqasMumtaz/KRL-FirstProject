@@ -36,72 +36,72 @@ class Login extends React.Component {
       passwordNotMatch: '',
       psswrdNotMatchShow: false,
       emailAndPasswrd: false,
-      deviceToken:''
+      deviceToken: ''
 
     }
     this.checkUserLogin()
   }
-  componentWillMount(){
+  componentWillMount() {
     this.getTokenPermission();
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.focusListener.remove();
   }
 
   // Start here firebase push notification
-getTokenPermission=()=>{
-  const { navigation } = this.props;
+  getTokenPermission = () => {
+    const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', () => {
       this.checkPermission();
     });
-}
- componentDidMount() {
-  this.checkPermission();
-  
-}
+  }
+  componentDidMount() {
+    this.checkPermission();
 
-   //1
-   checkPermission = async () =>{
+  }
+
+  //1
+  checkPermission = async () => {
     //  console.log('permission function run here')
     const enabled = await firebasePushNotification.messaging().hasPermission();
     if (enabled) {
-        this.getToken();
+      this.getToken();
     } else {
-        this.requestPermission();
+      this.requestPermission();
     }
   }
 
-   //3
-    getToken = async ()=>{
+  //3
+  getToken = async () => {
     let fcmToken = await AsyncStorage.getItem('fcmToken');
     if (!fcmToken) {
-        fcmToken = await firebasePushNotification.messaging().getToken();
-        if (fcmToken) {
-            // user has a device token
-            this.setState({
-              deviceToken:fcmToken
-            })
-            await AsyncStorage.setItem('fcmToken', fcmToken);
-        }
+      fcmToken = await firebasePushNotification.messaging().getToken();
+      if (fcmToken) {
+        // user has a device token
+        this.setState({
+          deviceToken: fcmToken
+        })
+        await AsyncStorage.setItem('fcmToken', fcmToken);
+      }
     }
     else {
       this.setState({
-        deviceToken:fcmToken
+        deviceToken: fcmToken
       })
       await AsyncStorage.setItem('fcmToken', fcmToken);
     }
   }
 
-    //2
-   requestPermission= async ()=>{
+  //2
+  requestPermission = async () => {
     try {
-        await firebasePushNotification.messaging().requestPermission();
-        // User has authorised
-       // console.log('request permission user authorised');
-        this.getToken();
+      await firebasePushNotification.messaging().requestPermission();
+      // User has authorised
+      // console.log('request permission user authorised');
+      this.getToken();
     } catch (error) {
-        // User has rejected permissions
-        console.log('permission rejected');
+      // User has rejected permissions
+      console.log('permission rejected');
     }
   }
 
@@ -118,7 +118,7 @@ getTokenPermission=()=>{
       this.setState({
         isLoading: false
       })
-      navigate('BottomTabe',this.props.navigation.push('HomeScreen'))
+      navigate('BottomTabe', this.props.navigation.push('HomeScreen'))
     }
     else {
       this.setState({
@@ -128,10 +128,24 @@ getTokenPermission=()=>{
     }
   }
 
+  abc = (trainyData, comp) => {
+    console.log('Compare Argument >>', comp);
+    //store the comparison  values in array
+    const unique = trainyData.map(e => e[comp]).
+      // store the keys of the unique objects
+      map((e, i, final) => final.indexOf(e) === i && i)
+      // eliminate the dead keys & return unique objects
+      .filter((e) => trainyData[e]).map(e => trainyData[e]);
+
+
+    console.log('Unique Array  In Function >>', unique);
+    return unique
+
+  }
 
   loginFunc = async () => {
     const { navigate } = this.props.navigation;
-    const { email, password, emailValidate, passwrdValidate ,deviceToken} = this.state;
+    const { email, password, emailValidate, passwrdValidate, deviceToken } = this.state;
     if (email == '' || password == '') {
       Alert.alert('Please Fill All Fields')
       if (emailValidate !== true || passwrdValidate !== true) {
@@ -145,7 +159,7 @@ getTokenPermission=()=>{
       const userObj = {
         email: email,
         password: password,
-        deviceToken:deviceToken
+        deviceToken: deviceToken
         // type:'trainny'
       }
       try {
@@ -172,11 +186,12 @@ getTokenPermission=()=>{
               myProfile.userId = dataUser._id;
               myProfile.type = dataUser.type;
               AsyncStorage.setItem('myProfile', JSON.stringify(myProfile));
-              console.log('profile data >>>',myProfile)
+              console.log('profile data >>>', myProfile)
             }
             const assignTrainerName = dataUser.assignTrainner;
             if (assignTrainerName) {
               let opponentData = dataUser.trainnerProfileData;
+              console.log('Oponent Data >>', opponentData);
               if (opponentData.length > 0) {
                 //console.log('Assign Trainer Condition Successfully')
                 opponentData[0].type = "Coach";
@@ -189,17 +204,25 @@ getTokenPermission=()=>{
                   name: assignTrainerName
                 }
                 opponentData.push(opponentDataObj);
+                console.log('Oponent Data >>', opponentData);
                 await AsyncStorage.setItem('opponentProfile', JSON.stringify(opponentData));
               }
             }
             else if (dataUser.assignTrainny) {
               if (dataUser.assignTrainny.length > 0) {
                 let trainyData = dataUser.assignTrainny;
+                const uniq = new Set(trainyData.map(e => JSON.stringify(e)));
+                // console.log('Uniq >>', uniq)
+                const res = Array.from(uniq).map(e => JSON.parse(e));
+                // console.log('Uniq Array >>', res);
+                // console.log('Simple Trainny Data >>', trainyData);
                 let traineeDataArr = [];
-                for (var i in trainyData) {
-                  trainyData[i].type = 'Trainee'
-                  traineeDataArr.push(trainyData[i])
+                for (var i in res) {
+                  res[i].type = 'Trainee'
+                  traineeDataArr.push(res[i])
+
                 }
+                console.log('Trainee Data >>', traineeDataArr);
                 AsyncStorage.setItem('opponentProfile', JSON.stringify(traineeDataArr));
               }
             }
@@ -286,11 +309,14 @@ getTokenPermission=()=>{
     })
   }
 
-  
+
 
   render() {
     const { navigate } = this.props.navigation;
-    const { email, password, psswrdInstruction, isLoading, passwordNotMatch, psswrdNotMatchShow, emailAndPasswrd } = this.state;
+    const { email, password, psswrdInstruction, isLoading,
+      passwordNotMatch, psswrdNotMatchShow, emailAndPasswrd } = this.state;
+    // console.log('Unique Array  In Render Method >>', unique);
+
     return (
       <ScrollView style={{ flex: 1, backgroundColor: 'black', height: height }} contentContainerStyle={{ flexGrow: 1 }} >
         <View style={styles.loginTextContainer}>

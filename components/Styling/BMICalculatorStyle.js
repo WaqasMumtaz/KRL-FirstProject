@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     },
     bmiInputContainer: {
         flexDirection: 'row',
-        flex: 6,
+        flex: 1,
         //backgroundColor:'white',
         //marginTop: 5
     },
@@ -238,9 +238,9 @@ const styles = StyleSheet.create({
           justifyContent:'space-between'
       },
       buttonContainer:{
-          flex:5,
+          flex:3,
           marginBottom:12,
-          marginTop:12
+          marginTop:30
       },
       caloriesBtnStyle:{
         flex:2,
@@ -248,7 +248,8 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         backgroundColor: '#FF6200',
         alignItems:'center',
-        borderRadius:5
+        borderRadius:5,
+
       },
       spinerContainer:{
         // flex: 1,

@@ -1,19 +1,19 @@
 import React from 'react';
-import { 
-    Text, 
+import {
+    Text,
     Alert,
-    View, 
-    ScrollView, 
-    Button, 
-    Image, 
-    Dimensions, 
-    TextInput, 
-    TouchableOpacity, 
-    Picker, 
+    View,
+    ScrollView,
+    Button,
+    Image,
+    Dimensions,
+    TextInput,
+    TouchableOpacity,
+    Picker,
     StyleSheet,
     ActivityIndicator,
-    } from 'react-native';
-import Toast, {DURATION} from 'react-native-easy-toast'
+} from 'react-native';
+import Toast, { DURATION } from 'react-native-easy-toast'
 import styles from '../Styling/BMICalculatorStyle';
 import CaloriesSetupBtn from '../buttons/setUpBtn';
 import InputImgsScreen from '../screens/InputImgs';
@@ -44,14 +44,16 @@ class BMICalculator extends React.Component {
             time: '',
             mgs: false,
             hitApi: false,
-            heightValidation:false,
-            heightUnitValidation:false,
-            weightValidation:false,
-            weightUnitValidation:false,
-            isLoading:false,
+            heightValidation: false,
+            heightUnitValidation: false,
+            weightValidation: false,
+            weightUnitValidation: false,
+            isLoading: false,
             position: 'top',
-            style:{},
-            toast:false
+            style: {},
+            toast: false,
+            weightStatus: '',
+            div: false
         }
     }
     componentDidMount() {
@@ -122,20 +124,20 @@ class BMICalculator extends React.Component {
     }
 
     //calculate the BMI
-    toastFunction=(text , position , duration ,withStyle )=>{
+    toastFunction = (text, position, duration, withStyle) => {
         this.setState({
             position: position,
         })
-        if(withStyle){
+        if (withStyle) {
             this.refs.toastWithStyle.show(text, duration);
-        }else {
+        } else {
             this.refs.toast.show(text, duration);
         }
     }
 
     calculateBmi = async () => {
         const { height, weight, heightUnit, weightUnit, userId, date, time, hitApi } = this.state;
-        this.setState({isLoading:true})
+        this.setState({ isLoading: true })
         let bmiData = {};
         let bmiValue;
         bmiData.height = height
@@ -145,63 +147,127 @@ class BMICalculator extends React.Component {
         bmiData.userId = userId;
         bmiData.date = date;
         bmiData.time = time;
-        if(height == 0){
+        if (height == 0) {
             this.setState({
-                heightValidation:true,
-                isLoading:false
+                heightValidation: true,
+                isLoading: false
             })
         }
-        if(heightUnit == 0){
+        if (heightUnit == 0) {
             this.setState({
-             heightUnitValidation:true ,
-             isLoading:false  
+                heightUnitValidation: true,
+                isLoading: false
             })
         }
-        if(weight == 0){
-          this.setState({
-              weightValidation:true,
-              isLoading:false
-          })
+        if (weight == 0) {
+            this.setState({
+                weightValidation: true,
+                isLoading: false
+            })
         }
-        if(weightUnit == 0){
-        this.setState({
-            weightUnitValidation:true,
-            isLoading:false
-        })
+        if (weightUnit == 0) {
+            this.setState({
+                weightUnitValidation: true,
+                isLoading: false
+            })
         }
-        
-       else if (heightUnit == 'inches' && weightUnit == 'pound') {
+
+        else if (heightUnit == 'inches' && weightUnit == 'pound') {
             bmiValue = (weight / height / height) * 703
             let bmiVal = Math.round(bmiValue.toString());
             bmiData.bmi = bmiVal;
-            console.log('bmiValue >>>',bmiVal)
+            console.log('bmiValue >>>', bmiVal)
+            if (bmiVal < 19) {
+                // console.log('Underweight');
+                this.setState({
+                    weightStatus: 'Underweight',
+                    div: true
+                })
+            }
+            else if (bmiVal == 19 && bmiVal <= 25) {
+                // console.log('Normal weight ');
+                this.setState({
+                    weightStatus: 'Normal weight',
+                    div: true
+                })
 
+            }
+            else if (bmiVal == 25 && bmiVal <= 30) {
+                // console.log('Overweight');
+                this.setState({
+                    weightStatus: 'Overweight',
+                    div: true
+                })
+
+            }
+            else if (bmiVal == 30 || bmiVal > 30) {
+                // console.log('Obesity');
+                this.setState({
+                    weightStatus: 'Obesity',
+                    div: true
+
+                })
+
+            }
             this.setState({
                 bmi: bmiVal,
                 mgs: false,
                 hitApi: true
             })
-             //AsyncStorage.setItem('bmiData',JSON.stringify(bmiVal))
+            //AsyncStorage.setItem('bmiData',JSON.stringify(bmiVal))
             let dataUser = await HttpUtils.post('bmilogs', bmiData)
             console.log(dataUser, 'dataUser');
             let userCode = dataUser.code;
             let userMsg = dataUser.msg;
-            if(userCode){
-               this.setState({
-                   isLoading:false
-               }, ()=>{
-                  this.toastFunction(userMsg,this.state.position , DURATION.LENGTH_LONG,true)
-                  //this.setState({toast:true})
-               })
-               
+            if (userCode) {
+                this.setState({
+                    isLoading: false
+                }, () => {
+                    this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true)
+                    //this.setState({toast:true})
+                })
+
             }
         }
-        
+
         else if (heightUnit == 'centimeter' && weightUnit == 'kg') {
             bmiValue = (weight / height / height) * 10000
             let bmiVal = Math.round(bmiValue.toString());
             bmiData.bmi = bmiVal;
-            console.log('bmiValue >>>',bmiVal)
+            console.log('bmiValue >>>', bmiVal, 85)
+            if (bmiVal < 19) {
+                //  console.log('Underweight');
+                this.setState({
+                    weightStatus: 'Underweight',
+                    div: true
+                })
+            }
+            else if (bmiVal == 19 && bmiVal <= 25) {
+                // console.log('Normal weight ');
+                this.setState({
+                    weightStatus: 'Normal weight',
+                    div: true
+
+                })
+
+            }
+            else if (bmiVal == 25 && bmiVal <= 30) {
+                console.log('Overweight');
+                this.setState({
+                    weightStatus: 'Overweight',
+                    div: true
+
+                })
+
+            }
+            else if (bmiVal == 30 || bmiVal > 30) {
+                // console.log('Obesity');
+                this.setState({
+                    weightStatus: 'Obesity',
+                    div: true
+                })
+
+            }
             this.setState({
                 bmi: bmiVal,
                 mgs: false,
@@ -211,14 +277,14 @@ class BMICalculator extends React.Component {
             console.log(dataUser, 'dataUser');
             let userCode = dataUser.code;
             let userMsg = dataUser.msg;
-            if(userCode){
-               this.setState({
-                   isLoading:false
-               }, ()=>{
-                this.toastFunction(userMsg,this.state.position , DURATION.LENGTH_LONG,true)
-                //this.setState({toast:true})
-               })
-               
+            if (userCode) {
+                this.setState({
+                    isLoading: false
+                }, () => {
+                    this.toastFunction(userMsg, this.state.position, DURATION.LENGTH_LONG, true)
+                    //this.setState({toast:true})
+                })
+
             }
         }
         else if (heightUnit == 'inches' && weightUnit == 'kg') {
@@ -227,7 +293,7 @@ class BMICalculator extends React.Component {
                 mgs: true,
                 bmi: '',
                 hitApi: false,
-                isLoading:false
+                isLoading: false
             })
         }
         else if (heightUnit == 'centimeter' && weightUnit == 'pound') {
@@ -236,7 +302,7 @@ class BMICalculator extends React.Component {
                 mgs: true,
                 bmi: '',
                 hitApi: false,
-                isLoading:false
+                isLoading: false
             })
         }
 
@@ -247,18 +313,20 @@ class BMICalculator extends React.Component {
         // }
     }
     render() {
-        const { 
-            showMgs, 
+        const {
+            showMgs,
             mgs,
             heightValidation,
             heightUnitValidation,
             weightValidation,
             weightUnitValidation,
             isLoading,
-            toast ,
-            bmi
-           } = this.state;
-           console.log('state bmi >>>',Number(bmi))
+            toast,
+            bmi,
+            weightStatus,
+            div
+        } = this.state;
+        console.log('state bmi >>>', Number(bmi))
         return (
             // <View style={styles.mainContainer}>
             <ScrollView style={{ flex: 1, backgroundColor: 'white', height: heightDimension }} contentContainerStyle={{ flexGrow: 1 }}  >
@@ -272,17 +340,17 @@ class BMICalculator extends React.Component {
                         <Text style={styles.textStyle}>Enter your height and weight below to calculate your BMI </Text>
                     </View>
                     <View style={styles.inputMainContainer}>
-                    <Text style={styles.textStyle}>Height</Text>
-                    <View style={styles.heightContainer}>
-                        <View style={styles.inputContainer}>
-                           <View style={styles.container}>
-                           <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
-                                       onPress={this.decrementHeight}
-                                        >
+                        <Text style={styles.textStyle}>Height</Text>
+                        <View style={styles.heightContainer}>
+                            <View style={styles.inputContainer}>
+                                <View style={styles.container}>
+                                    <TouchableOpacity style={styles.touchableOpacityOne} activeOpacity={0.8}
+                                        onPress={this.decrementHeight}
+                                    >
                                         <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
                                     <View style={styles.textInputContainer}>
-                                        <TextInput keyboardType='numeric' maxLength={3} placeholder='0' style={styles.textInputStyleParent}
+                                        <TextInput keyboardType='numeric' maxLength={6} placeholder='0' style={styles.textInputStyleParent}
                                             type="number"
                                             onChangeText={(height) => this.setState({ height: height })}
                                             value={this.state.height}
@@ -290,12 +358,12 @@ class BMICalculator extends React.Component {
                                     </View>
                                     <TouchableOpacity style={styles.touchableOpacityTwo} activeOpacity={0.8}
                                         onPress={this.increamentHeight}>
-                                        
+
                                         <Image source={require('../icons/plus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
-                        <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
+                            <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
                                 <Picker selectedValue={this.state.heightUnit}
                                     onValueChange={this.updateHeight}
                                     style={styles.pickerStyle}>
@@ -304,8 +372,8 @@ class BMICalculator extends React.Component {
                                     <Picker.Item label="Centimeter" value="centimeter" />
                                 </Picker>
                             </View>
-                    </View>
-                    <View style={styles.showValidationContainer}>
+                        </View>
+                        <View style={styles.showValidationContainer}>
                             {heightValidation ?
                                 <Text style={styles.validationInstruction}>
                                     Please fill your height
@@ -327,7 +395,7 @@ class BMICalculator extends React.Component {
                                         <Image source={require('../icons/minus-gray.png')} style={styles.forImg} />
                                     </TouchableOpacity>
                                     <View style={styles.textInputContainer}>
-                                        <TextInput keyboardType='numeric' maxLength={5} placeholder='0' 
+                                        <TextInput keyboardType='numeric' maxLength={5} placeholder='0'
                                             style={styles.textInputStyleParent}
                                             type="number"
                                             onChangeText={(weight) => this.setState({ weight: weight })}
@@ -341,7 +409,7 @@ class BMICalculator extends React.Component {
                                 </View>
                             </View>
                             <View style={{ borderRadius: 4, borderColor: '#e5e5e5', overflow: 'hidden', marginTop: 5, height: 40 }}>
-                            <Picker selectedValue={this.state.weightUnit}
+                                <Picker selectedValue={this.state.weightUnit}
                                     onValueChange={this.updateWeight}
                                     style={styles.pickerStyle}>
                                     <Picker.Item label='Select an option...' value='0' />
@@ -351,25 +419,25 @@ class BMICalculator extends React.Component {
                             </View>
                         </View>
                         <View style={styles.showValidationContainer}>
-                        {weightValidation ?
-                                    <Text style={styles.validationInstruction}>
-                                        Please fill your weight
-                                    </Text>
-                                : null}
-                                {weightUnitValidation ?
+                            {weightValidation ?
                                 <Text style={styles.validationInstruction}>
-                                        Please select weight unit
+                                    Please fill your weight
                                     </Text>
                                 : null}
-                                {mgs ?
-                            <Text style={styles.validationInstruction}>
-                                {showMgs}
-                            </Text>
-                            : null}
+                            {weightUnitValidation ?
+                                <Text style={styles.validationInstruction}>
+                                    Please select weight unit
+                                    </Text>
+                                : null}
+                            {mgs ?
+                                <Text style={styles.validationInstruction}>
+                                    {showMgs}
+                                </Text>
+                                : null}
                         </View>
 
 
-                        
+
                     </View>
                     <View>
                         {/* {mgs ?
@@ -389,21 +457,37 @@ class BMICalculator extends React.Component {
                             {bmi}
                         </Text>
                     </View>
-                    {isLoading ? <OverlayLoader/>: null}
+
+                    {
+                        div ?
+                            <View>
+                                <Text style={styles.bmiTextStyle}>Weight Status</Text>
+                                <View style={styles.weightStatusStyle}>
+                                    <Text style={styles.inputStyle}>
+                                        {weightStatus}
+                                    </Text>
+                                </View>
+                            </View>
+                            :
+                            null
+                    }
+
+
+                    {isLoading ? <OverlayLoader /> : null}
                     <View style={styles.buttonContainer}>
                         {/* {toast ? <ToastComponent pressFunc={this.toastFunction.bind(this, 'Success',this.state.position , DURATION.LENGTH_LONG,true)}/> : null} */}
-                    <CaloriesSetupBtn title="Calculate BMI"
+                        <CaloriesSetupBtn title="Calculate BMI"
                             onPress={this.calculateBmi}
                             caloriesBtnStyle={styles.caloriesBtnStyle} />
                     </View>
-                    <Toast ref="toastWithStyle" 
-                    style={{backgroundColor:'#FF6200'}} 
-                    position={this.state.position}
-                    positionValue={50}
-                    fadeInDuration={750}
-                    fadeOutDuration={1000}
-                    opacity={0.8}
-                    textStyle={{color:'white',fontFamily: 'MontserratLight',}}
+                    <Toast ref="toastWithStyle"
+                        style={{ backgroundColor: '#FF6200' }}
+                        position={this.state.position}
+                        positionValue={50}
+                        fadeInDuration={750}
+                        fadeOutDuration={1000}
+                        opacity={0.8}
+                        textStyle={{ color: 'white', fontFamily: 'MontserratLight', }}
                     />
                 </View>
             </ScrollView>
