@@ -78,6 +78,7 @@ class Login extends React.Component {
       fcmToken = await firebasePushNotification.messaging().getToken();
       if (fcmToken) {
         // user has a device token
+        console.log('Token fcm >>', fcmToken);
         this.setState({
           deviceToken: fcmToken
         })
@@ -85,6 +86,7 @@ class Login extends React.Component {
       }
     }
     else {
+      console.log('Token fcm >>', fcmToken);
       this.setState({
         deviceToken: fcmToken
       })
@@ -128,20 +130,6 @@ class Login extends React.Component {
     }
   }
 
-  abc = (trainyData, comp) => {
-    console.log('Compare Argument >>', comp);
-    //store the comparison  values in array
-    const unique = trainyData.map(e => e[comp]).
-      // store the keys of the unique objects
-      map((e, i, final) => final.indexOf(e) === i && i)
-      // eliminate the dead keys & return unique objects
-      .filter((e) => trainyData[e]).map(e => trainyData[e]);
-
-
-    console.log('Unique Array  In Function >>', unique);
-    return unique
-
-  }
 
   loginFunc = async () => {
     const { navigate } = this.props.navigation;

@@ -343,7 +343,7 @@ class Homescreen extends React.Component {
       goalSteps, userCurrentWeight,measurementsWeight, currentUserBMI,
       fitnessGoal,stepsPercentage } = this.state;
     const { navigate } = this.props.navigation;
-    console.log('Home Screen >>',this.state.homeScreen);
+    // console.log('Home Screen >>',this.state.homeScreen);
     return (
       <HandleBack onBack={this.onBack}>
       <View style={styles.container}>

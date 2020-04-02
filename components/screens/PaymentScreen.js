@@ -772,13 +772,20 @@ class Payment extends React.Component {
                 : null}
             </View>
             <View style={styles.fileUploadContainer}>
-              <TouchableOpacity style={styles.fileRecipet}>
+              <View style={styles.fileRecipet}>
                 {receiptImg == '' ?
                   <Text style={styles.textStyle}>Upload Receipt</Text>
                   :
-                  <Image source={{ uri: `${receiptImg}` }} style={styles.reciptImg} />
+                  
+                  <View style={styles.reciptImg}>
+                     <Image 
+                  source={{ uri: `${receiptImg}` }} 
+                  resizeMode='contain'
+                  />
+                  </View>
+                 
                 }
-              </TouchableOpacity>
+              </View>
               <TouchableOpacity style={styles.imgFile} onPress={this.choosePhotoFunc}>
                 <Text style={styles.textStyle}>Upload Photo</Text>
               </TouchableOpacity>

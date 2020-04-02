@@ -90,97 +90,156 @@ export default class StepCountScreen extends React.Component {
                 if (this.state.onOffToggle != false) {
                     //Use Google Fit Api 
 
-
-                    if (Platform.OS === 'android') {
-                        const options = {
-                            scopes: [
-                                Scopes.FITNESS_ACTIVITY_READ_WRITE,
-                                Scopes.FITNESS_BODY_READ_WRITE,
-                            ],
-                        }
-                        GoogleFit.authorize(options)
-                            .then((res) => {
-                                console.log('authorized >>>', res)
-                                //alert(`${res.message}`)
-                                GoogleFit.observeSteps((res) => {
-                                     console.log('google fit steps', res)
-                                    // const dataObj = {
-                                    //     pedometerData: res,
-                                    // }
-                                    params.pedometerFun(res.steps)
-                                    this.setState({ pedometerData: res.steps }, () => {
-                                        if (res.steps > Number(1)) {
-                                            //this.countStepTime()
-                                            if (this.state.eightToSixteen == true) {
-                                                this.setState({
-                                                    firstValue: res.steps
-                                                })
-                                            }
-                                            else if (this.state.sixteenTo23 == true) {
-                                                this.setState({
-                                                    secondValue: res.steps
-                                                })
-                                            }
-                                            else if (this.state.oneToEight == true) {
-                                                this.setState({
-                                                    thirdValue: res.steps
-                                                })
-
-                                            }
-                                            const multiplySteps = res.steps / Number(this.state.goalSteps);
-                                            //console.log('multiply >>',multiplySteps);
-                                            const divideSteps = multiplySteps * 100;
-                                            //console.log('divided >>',divideSteps )
-                                            const roundedValue = Math.round(divideSteps);
-                                            //console.log('percentage steps >>',roundedValue)
-                                            this.setState({
-                                                stepsPercentage: roundedValue
-                                            })
+                    const options = {
+                        scopes: [
+                            Scopes.FITNESS_ACTIVITY_READ_WRITE,
+                            Scopes.FITNESS_BODY_READ_WRITE,
+                        ],
+                    }
 
 
-                                        }
-                                        if (res.steps != 0 && Number(this.state.goalSteps) != 0) {
-                                            if (res.steps == Number(this.state.goalSteps)) {
-                                                console.log('steps match ')
+                    GoogleFit.onAuthorize(() => {
+                        console.log('AUTH SUCCESS');
+                    });
 
-                                            }
-                                        }
+                    GoogleFit.onAuthorizeFailure(() => {
+                        console.log('AUTH ERROR');
+                    });
 
+                    GoogleFit.authorize(options)
+                        .then((res) => {
+                            console.log('authorized google fit >>>', res)
+                            if (res.success) {
+                                console.log('Authorization success and run if condition ')
+                                const option = {
+                                    startDate: moment(new Date()).startOf('day').toISOString(), //ISO Time String
+                                    endDate: moment(new Date()).endOf('day').toISOString()
+                                }
+                                // let dayStart = moment(new Date()).startOf('day').toISOString(); //ISO Time String
+                                // let dayEnd = moment(new Date()).endOf('day').toISOString();//ISO Time String
+                                // console.log('Day Start >>', dayStart);
+                                 console.log('Day End >>', option);
 
+                                console.log('GoogleFit >>', GoogleFit);
+                                GoogleFit.observeSteps(()=>{
+                                    console.log('Observe History Function run')
+                                    // console.log('ObserveHistory >>', res);
+                                })
+
+                                GoogleFit.getDailyStepCountSamples(option).then((res)=>{
+                                    console.log('Daily steps >>> ', res);
+                                    res && res.map((item, index)=>{
+                                        item.steps.map((item,i)=>{
+                                        console.log('Steps Value >>', item.value);
+                                        this.setState({ pedometerData: item.value })
+                                        });
                                     })
-                                })
+                                }) 
+                                // GoogleFit.getDailyCalorieSamples(option, (err, res) => {
+                                //     console.log('Calories .>',res);
+                                //   });
+                                        
+                                      
 
-                            })
+                            }
+                            //alert(`${res.message}`)
 
-                            .catch((err) => {
-                                console.log('err >>> ', err)
-                            })
-
-
-                    }
-                    else if (Platform.OS === 'ios') {
-                        const options = {
-                            scopes: [
-                                Scopes.FITNESS_ACTIVITY_READ_WRITE,
-                                Scopes.FITNESS_BODY_READ_WRITE,
-                            ],
-                        }
-
-                        RNHealthKit.authorize(options)
-                            .then((res) => {
-                                console.log('authorized >>>', res)
-                                rnHealthKit.observeSteps((res) => {
-                                    // console.log(res)
-                                    this.setState({ pedometerData: res.steps })
-                                })
+                        })
+                        .catch((err) => {
+                            console.log('err >>> ', err)
+                        })
 
 
-                            })
-                            .catch((err) => {
-                                console.log('err >>> ', err)
-                            })
+                    // if (Platform.OS === 'android') {
+                    //     const options = {
+                    //         scopes: [
+                    //             Scopes.FITNESS_ACTIVITY_READ_WRITE,
+                    //             Scopes.FITNESS_BODY_READ_WRITE,
+                    //         ],
+                    //     }
+                    //     GoogleFit.authorize(options)
+                    //         .then((res) => {
+                    //             console.log('authorized >>>', res)
+                    //             //alert(`${res.message}`)
+                    //             GoogleFit.observeSteps((res) => {
+                    //                  console.log('google fit steps', res)
+                    //                 // const dataObj = {
+                    //                 //     pedometerData: res,
+                    //                 // }
+                    //                 params.pedometerFun(res.steps)
+                    //                 this.setState({ pedometerData: res.steps }, () => {
+                    //                     if (res.steps > Number(1)) {
+                    //                         //this.countStepTime()
+                    //                         if (this.state.eightToSixteen == true) {
+                    //                             this.setState({
+                    //                                 firstValue: res.steps
+                    //                             })
+                    //                         }
+                    //                         else if (this.state.sixteenTo23 == true) {
+                    //                             this.setState({
+                    //                                 secondValue: res.steps
+                    //                             })
+                    //                         }
+                    //                         else if (this.state.oneToEight == true) {
+                    //                             this.setState({
+                    //                                 thirdValue: res.steps
+                    //                             })
 
-                    }
+                    //                         }
+                    //                         const multiplySteps = res.steps / Number(this.state.goalSteps);
+                    //                         //console.log('multiply >>',multiplySteps);
+                    //                         const divideSteps = multiplySteps * 100;
+                    //                         //console.log('divided >>',divideSteps )
+                    //                         const roundedValue = Math.round(divideSteps);
+                    //                         //console.log('percentage steps >>',roundedValue)
+                    //                         this.setState({
+                    //                             stepsPercentage: roundedValue
+                    //                         })
+
+
+                    //                     }
+                    //                     if (res.steps != 0 && Number(this.state.goalSteps) != 0) {
+                    //                         if (res.steps == Number(this.state.goalSteps)) {
+                    //                             console.log('steps match ')
+
+                    //                         }
+                    //                     }
+
+
+                    //                 })
+                    //             })
+
+                    //         })
+
+                    //         .catch((err) => {
+                    //             console.log('err >>> ', err)
+                    //         })
+
+
+                    // }
+                    // else if (Platform.OS === 'ios') {
+                    //     const options = {
+                    //         scopes: [
+                    //             Scopes.FITNESS_ACTIVITY_READ_WRITE,
+                    //             Scopes.FITNESS_BODY_READ_WRITE,
+                    //         ],
+                    //     }
+
+                    //     RNHealthKit.authorize(options)
+                    //         .then((res) => {
+                    //             console.log('authorized >>>', res)
+                    //             rnHealthKit.observeSteps((res) => {
+                    //                 // console.log(res)
+                    //                 this.setState({ pedometerData: res.steps })
+                    //             })
+
+
+                    //         })
+                    //         .catch((err) => {
+                    //             console.log('err >>> ', err)
+                    //         })
+
+                    // }
                 }
             })
     }
@@ -356,23 +415,23 @@ export default class StepCountScreen extends React.Component {
     }
 
     sendDataPedometer = async () => {
-            const currentDayOfWeek = new Date().getDay() + 1;
-            const currentDate = new Date().getDate();
-            let currentMonth = new Date().getMonth() + 1;
-            const currentYear = new Date().getFullYear();
-            console.log('current week >>', currentDayOfWeek);
-            console.log('currentDate >>', currentDate);
-            console.log('currentMont >>', currentMonth);
-            console.log('currentYear >>', currentYear);
+        const currentDayOfWeek = new Date().getDay() + 1;
+        const currentDate = new Date().getDate();
+        let currentMonth = new Date().getMonth() + 1;
+        const currentYear = new Date().getFullYear();
+        console.log('current week >>', currentDayOfWeek);
+        console.log('currentDate >>', currentDate);
+        console.log('currentMont >>', currentMonth);
+        console.log('currentYear >>', currentYear);
         const dataPost = {
             userId: this.state.currentUserId,
             time: this.state.curTime,
             date: currentDate,
             stepCount: this.state.pedometerData,
             dailGoal: this.state.goalSteps,
-            dayOfWeek:currentDayOfWeek,
-            month:currentMonth,
-            year:currentYear
+            dayOfWeek: currentDayOfWeek,
+            month: currentMonth,
+            year: currentYear
         }
         try {
             let postedData = await HttpUtilsFile.post('pedometer', dataPost)
@@ -387,18 +446,18 @@ export default class StepCountScreen extends React.Component {
     }
 
 
-    componentDidMount(){
+    componentDidMount() {
         console.log('ComponentDidmount Function');
         SensorManager.startStepCounter(1000);
         DeviceEventEmitter.addListener(
-            'StepHistoryChangedEvent',(data)=>{
+            'StepHistoryChangedEvent', (data) => {
                 console.log('History Steps Data >', data);
             }
-            
+
         );
     }
 
-     _startPedometer() {
+    _startPedometer() {
         const { params } = this.props.navigation.state;
         console.log('Pedometer Function')
         // this.setState({ tapLoad: false,})
@@ -410,10 +469,10 @@ export default class StepCountScreen extends React.Component {
         //console.log('watch time >>', this.state.timeWatch)
         // start tracking from current time
         // console.log('GoogLe Fit Api >>', googleFit);
-    //    googleFit.getDailySteps((data)=>{
-    //         console.log('Fit Data >>', data);
-    //     })
-    //    Start New Pedometer Function
+        //    googleFit.getDailySteps((data)=>{
+        //         console.log('Fit Data >>', data);
+        //     })
+        //    Start New Pedometer Function
         // observeSteps = (callback)=>{
         // DeviceEventEmitter.addListener(
         //     'StepChangedEvent',
@@ -450,8 +509,9 @@ export default class StepCountScreen extends React.Component {
         //                         console.log('err >>> ', err)
         //                     })
 
-        console.log('Sensnor Manager >>',SensorManager);
+        console.log('Sensnor Manager >>', SensorManager);
         SensorManager.startStepCounter(1000);
+
         DeviceEventEmitter.addListener('StepCounter', (data) => {
             console.log('sensor manager data -->>', data)
             params.pedometerFun(data.steps)
@@ -1119,11 +1179,18 @@ export default class StepCountScreen extends React.Component {
                         <Text style={{ color: 'white' }}>Graph Stepcount</Text>
                     </View> */}
                         {/* <Linechart/> */}
+                        <View style={{ marginTop: 12 }}>
+                            <Text
+                            // style={{fontSize:12,}}
+                            >
+                                Graph shows are taking place according to the time
+                            </Text>
+                        </View>
                         <View style={{
                             borderWidth: 2,
-                            borderColor: 'black', height: 220
+                            borderColor: '#a6a6a6', height: 220
                             , marginHorizontal: 30, marginTop: 30,
-                            backgroundColor: 'black'
+                            backgroundColor: '#a6a6a6'
                         }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ height: 220, width: 100, padding: 20 }}>

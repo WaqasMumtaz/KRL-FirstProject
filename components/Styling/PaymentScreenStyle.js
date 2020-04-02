@@ -199,8 +199,11 @@ const styles = StyleSheet.create({
         height: 45,
         width: 130,
         justifyContent: 'center',
+        // alignItems:'center',
+        // alignSelf:'center',
+        // borderRadius:130/2
         // flexDirection:'row',
-
+    //    backgroundColor:'red'
     },
     imgFile: {
         height: 45,
@@ -217,7 +220,10 @@ const styles = StyleSheet.create({
     reciptImg: {
         width: 150,
         height: 150,
-        borderRadius: 150 / 2
+        borderRadius: 150/2,
+        alignSelf: 'stretch',
+        borderColor:'black',
+        borderWidth:2
     },
     validationInstruction:{
         color: '#FF6200',
